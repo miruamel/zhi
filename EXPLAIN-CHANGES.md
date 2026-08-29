@@ -24,6 +24,11 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 
 
 ## [0.1.0] - 2026-08-29
+### fix
+- engine/eval, engine/loop/wiring, docs/adr: split test files -> subdir test/ + ADR exception -> exceptions/; hapus file lama tertinggal dari git mv (stash/pop) — penuhi invariant files/dir <=5 (architecture-guard main RED sebelum fix, run 33271624792, memblokir semua merge) (@zhi)
+### ci
+- .github/workflows/architecture.yml: pelanggaran diatasi via split vertikal (AGENTS.md), bukan weaken konvensi (@zhi)
+## [0.1.0] - 2026-08-29
 ### refactor
 - engine/loop/wiring/handlers: EXECUTE bungkus deps.generate dalam withResilience (retry max 3 + CircuitBreaker + classifyError dari engine/resil) — modul resil (dibangun untuk loop) kini terpakai; generate gagal -> DLQ -> BUDGET_OUT -> RECOVER (bounded, no infinite spin) (@zhi)
 ### test
