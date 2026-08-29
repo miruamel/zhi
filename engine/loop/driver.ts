@@ -47,10 +47,13 @@ export class LoopDriver {
 
   /** @brief Jalankan siklus hingga DONE.
    * @param {Partial<Record<LoopState, StateHandler>>} handlers - handler per state aktif.
-   * @throws {Error} bila state tak punya handler atau transisi ilegal.
-   */
-  async run(handlers: Partial<Record<LoopState, StateHandler>>): Promise<void> {
+   * @param {number} maxSteps - batas iterasi (cegah loop tak berhingga). Default 64.
+   * @throws {Error} bila state tak punya handler, transisi ilegal, atau budget habis.
+   * @since 0.1.0 */
+  async run(handlers: Partial<Record<LoopState, StateHandler>>, maxSteps = 64): Promise<void> {
+    let steps = 0;
     while (!this.finished) {
+      if (++steps > maxSteps) throw new Error('loop: budget exceeded');
       const h = handlers[this.state];
       if (!h) throw new Error(`loop: no handler for state ${this.state}`);
       const ev = await h(this.state);
