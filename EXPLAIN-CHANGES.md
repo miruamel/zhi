@@ -23,6 +23,14 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 ## Template PR
 
 ## [0.1.0] - 2026-08-29
+### feat
+- engine/loop/wiring/handlers: LoopDeps.isolate?/commit?/prOpen?/ciWatch? dipanggil di ISOLATE/COMMIT/PR_OPEN/CI_WATCH — loop kini otonom isolate branch, buka PR, pantau CI (ADR-005) (@zhi)
+- engine/loop/wiring/git: adapter deterministik gitIsolate/ghPrOpen/ghCiWatch via git/gh CLI (@zhi)
+- src/cli: mode autonom (ZHI_AUTO_PR=1) pasang adapter git/gh; mode offline (default) tanpa ciWatch -> CI dianggap green (@zhi)
+### refactor
+- engine/loop/wiring/handlers: hapus referensi deps.ciGreen() (tidak ada di interface) -> CI_WATCH pakai ciWatch? (@zhi)
+
+## [0.1.0] - 2026-08-29
 ### ci
 - .github/workflows/architecture.yml: Setup Zig ganti setup-zig@v1 -> download langsung Zig 0.16.0 dari ziglang.org (mirror action hanya punya <=0.14.0; 0.14.0 tolak -dynamic wasm32-freestanding) (@zhi)
 ### fix

@@ -16,6 +16,10 @@ export interface LoopContext {
   aggregate?: AggregateResult;
   /** @brief Hasil eval-gate (EVALUATE). */
   eval?: EvalOutput;
+  /** @brief Branch hasil ISOLATE (bila deps.isolate ada). */
+  branch?: string;
+  /** @brief URL PR hasil PR_OPEN (bila deps.prOpen ada). */
+  prUrl?: string;
   /** @brief Pesan error terakhir. */
   error?: string;
   /** @brief Budget komputasi terpakai. */
