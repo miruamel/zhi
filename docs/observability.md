@@ -35,7 +35,7 @@ Zhi berjalan otonom; tanpa observability, kegagalan tak terlihat. Semua sinyal d
 ## Tracing
 
 - `stepId` korelasi lintas modul: setiap log/metric membawa `stepId` agar alur satu step bisa di-follow dari `loop` → `build` → `critic` → `eval`.
-- `runId` korelasi lintas step dalam satu `runLoop`.
+- `runId` korelasi lintas step dalam satu `LoopDriver.run`.
 
 ## v1
 

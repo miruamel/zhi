@@ -9,7 +9,7 @@ zhi run "tambah validasi email di auth.ts, test hijau, buka PR" \
   --repo ./myapp --base main --budget 150000
 ```
 
-`cli.ts` bangun `Goal { text, repo:"./myapp", base:"main", budget:150000 }` → `loop.runLoop(goal, ctx)`.
+`cli.ts` bangun `Goal { text, repo:"./myapp", base:"main", budget:150000 }` → `LoopDriver.run(buildHandlers(goal, ctx))`.
 
 ## 1. PLAN (orch)
 
@@ -58,7 +58,7 @@ zhi run "tambah validasi email di auth.ts, test hijau, buka PR" \
 
 - `commit(worktree)` → commit di `wt-<runId>`, branch `zhi/email-validation-<runId>`.
 
-## 8. PR_OPEN (tools/git gh)
+## 8. PR_OPEN (wiring/git gh)
 
 - `gh pr create` → `PR #42` (url di `LoopReport.prUrl`). Status ke TUI.
 

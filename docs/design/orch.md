@@ -2,7 +2,7 @@
 
 ## Tujuan
 
-Ubah goal berbahasa alami menjadi **DAG step** yang bebas siklus, terurut, dan ber-budget. Jantung perencanaan Zhi. Dihitung sekali di state `PLAN`, lalu dikonsumsi `loop/pipeline.ts`.
+Ubah goal berbahasa alami menjadi **DAG step** yang bebas siklus, terurut, dan ber-budget. Jantung perencanaan Zhi. Dihitung sekali di state `PLAN`, lalu dikonsumsi `loop/wiring/handlers.ts`.
 
 ## Komponen
 
