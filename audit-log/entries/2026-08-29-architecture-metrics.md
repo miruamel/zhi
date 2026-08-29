@@ -76,6 +76,32 @@ All invariants unchanged: 0 god-file, 0 circular, 0 skipped-layer, 0 deep-relati
 Only `audit-log/entries`(17) + `docs/design`(10) exceed 5 files/dir — ADR-006/ADR-005
 allowlisted. Root `.`(6) exempt §6.2. `engine/resil`(5) at limit. No action.
 
+## Refresh — re-scan 2026-08-29 (mandate #12 resume signal, §6.14)
+
+Re-ran §6.14 dengan `scripts/ci/architecture/metrics.ts` (scanner repeatable baru) + `check-circular.ts`.
+Method: SLOC = baris non-blank non-komentar (ts/js/zig); depth = segmen path dari repo root;
+scan roots = src, engine, native, scripts; `audit-log`/`docs` di-exclude (ADR-005/006 exempt, non-code).
+
+| Metric | Value | Target | Status |
+|---|---|---|---|
+| codeFiles | 33 | — | — |
+| sloc.avg | 32 | <75 | ✅ |
+| sloc.max | 84 (`scripts/ci/architecture/check-circular.ts`) | ≤200 | ✅ |
+| godFiles | 0 | 0 | ✅ |
+| depth.min | 2 (`src/cli.ts`) | ≥4 | ⚠️ ADR-007 exempt |
+| depth.max | 6 | 6–10 | ✅ |
+| depth.avg | 3.2 | 6–10 | ⚠️ ADR-007 band |
+| fatDirs (scanned roots) | 0 | ≤5 | ✅ |
+| circular deps | 0 | 0 | ✅ (check-circular.ts exit 0) |
+| skipped-layer | 0 | 0 | ✅ (layer-edge check) |
+| deep-relative (>3 naik) | 0 | 0 | ✅ |
+
+`bun test` → 59 pass / 0 fail / 128 expect / 13 files. All green.
+
+Conclusion: tidak ada pelanggaran §6.14. depth.min 2 = `src/cli.ts` boot entry, ADR-007-exempt.
+`audit-log/entries`(18) + `docs/design`(10) >5 file/dir tapi ADR-006/005-exempt dan di-exclude dari
+code scan. Tidak ada remediasi.
+
 ## Status
 
 Resolved (local). Push deferred per §2.11 network stall.
