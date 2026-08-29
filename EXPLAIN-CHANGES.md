@@ -24,6 +24,18 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 
 ## [0.1.0] - 2026-08-29
 ### feat
+- engine/eval: pipeline evaluasi nyata — test.ts (bun test di worktree), security.ts (scanSecrets grep secret, fail-closed), index.ts (evaluate -> gate) (@zhi)
+- engine/loop/wiring/handlers: LoopDeps.eval? dipanggil di EVALUATE bila ctx.worktree ada; hasil jadi qualityGateGreen di gatePass (@zhi)
+- src/cli: autonomousDeps pasang eval adapter (evaluate di worktree) (@zhi)
+### test
+- engine/eval/test.test: runTests pass/fail via temp worktree (@zhi)
+- engine/eval/security.test: scanSecrets detect api key / clean (@zhi)
+- engine/eval/index.test: evaluate pass clean / block secret (@zhi)
+### docs
+- docs/design/eval.md: interface runEval -> evaluate(worktree); v1 = test+security+gate, sandbox = git worktree (@zhi)
+
+## [0.1.0] - 2026-08-29
+### feat
 - engine/loop/wiring/git: gitIsolate kini buat git worktree terpisah (bukan branch di working tree) — selaras security.md §Sandbox; tambah gitCommit (add -A + commit di worktree) (@zhi)
 - engine/loop/wiring/handlers: ISOLATE set ctx.worktree + ctx.branch; EXECUTE generate tulis scaffold ke worktree; COMMIT/PR_OPEN jalan di dalam worktree (path dialirkan via ctx.worktree) (@zhi)
 - src/cli: generate adapter tulis file scaffold ke worktree bila disediakan; autonomousDeps pasang gitCommit/ghPrOpen(worktree) (@zhi)
