@@ -23,6 +23,18 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 ## Template PR
 
 ## [0.1.0] - 2026-08-29
+### feat
+- engine/loop/wiring/git: gitIsolate kini buat git worktree terpisah (bukan branch di working tree) — selaras security.md §Sandbox; tambah gitCommit (add -A + commit di worktree) (@zhi)
+- engine/loop/wiring/handlers: ISOLATE set ctx.worktree + ctx.branch; EXECUTE generate tulis scaffold ke worktree; COMMIT/PR_OPEN jalan di dalam worktree (path dialirkan via ctx.worktree) (@zhi)
+- src/cli: generate adapter tulis file scaffold ke worktree bila disediakan; autonomousDeps pasang gitCommit/ghPrOpen(worktree) (@zhi)
+### test
+- engine/loop/wiring/git.test: integrasi gitIsolate+gitCommit di temp repo (worktree terbuat, commit di dalamnya) (@zhi)
+- engine/loop/wiring/handlers.test: assert ctx.worktree + commit/prOpen terima path worktree (@zhi)
+- engine/loop/wiring/integration.test: ciGreen -> ciWatch (kontrak LoopDeps baru) (@zhi)
+### docs
+- README + ARCHITECTURE: "branch git terisolasi" -> "git worktree terpisah" (akurat dgn impl) (@zhi)
+
+## [0.1.0] - 2026-08-29
 ### docs
 - README Status: koreksi generate/ISOLATE/PR_OPEN/CI_WATCH masih stub + "81 pass" -> nyata (ADR-005) + 96 pass; "git worktree" -> "branch git" (@zhi)
 - docs/design/loop.md: Interface (runLoop -> buildHandlers/LoopDriver), Files (pipeline.ts/index.ts -> wiring/handlers.ts/context.ts/git.ts/driver.ts), ref knowledge/git.ts -> wiring/git.ts (@zhi)

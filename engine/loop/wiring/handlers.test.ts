@@ -43,19 +43,24 @@ describe('loop wiring', () => {
     expect(ctx.aggregate?.passed).toBe(false);
   });
 
-  it('ISOLATE sets ctx.branch and PR_OPEN sets ctx.prUrl when deps provided', async () => {
+  it('ISOLATE sets ctx.worktree+branch and COMMIT/PR_OPEN run inside worktree', async () => {
     const ctx: LoopContext = { goal: 'build auth' };
     const driver = new LoopDriver();
     let isolated = false;
+    let committed = '';
     let opened = '';
     await driver.run(buildHandlers(ctx, stubDeps({
-      isolate: () => { isolated = true; return 'feat/build-auth'; },
-      prOpen: (_t, _b) => { opened = 'https://github.com/miruamel/zhi/pull/9'; return opened; },
+      isolate: () => { isolated = true; return '/tmp/wt-auth'; },
+      commit: (wt) => { committed = wt; },
+      prOpen: (wt, _t, _b) => { opened = wt; return 'https://github.com/miruamel/zhi/pull/9'; },
       ciWatch: () => 'green',
     })));
     expect(driver.current).toBe(LoopState.DONE);
     expect(isolated).toBe(true);
+    expect(ctx.worktree).toBe('/tmp/wt-auth');
     expect(ctx.branch).toBe('feat/build-auth');
+    expect(committed).toBe('/tmp/wt-auth');
+    expect(opened).toBe('/tmp/wt-auth');
     expect(ctx.prUrl).toBe('https://github.com/miruamel/zhi/pull/9');
   });
 

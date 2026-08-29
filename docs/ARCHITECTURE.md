@@ -28,12 +28,12 @@ Zhi adalah **terminal coding agent** yang menjalankan siklus dev secara otonom: 
 
 1. **INTAKE** — `cli.ts` terima goal (teks) + flag (repo, base branch, budget). Masuk `loop/driver.ts`.
 2. **PLAN** — `orch/parse.ts` tokenisasi goal → `orch/dag.ts` bangun DAG step + `cycle detect` + `dependency resolver`. `orch/budget.ts` alokasi token per step. `orch/scheduler.ts` urutkan (priority queue).
-3. **ISOLATE** — `wiring/git.ts` (`gitIsolate`) buat **branch** terisolasi dari main. Semua eksekusi terjadi di branch, main repo aman.
+3. **ISOLATE** — `wiring/git.ts` (`gitIsolate`) buat **git worktree** terisolasi dari main. Semua eksekusi terjadi di worktree, main repo aman.
 4. **EXECUTE** — `build/generate.ts` panggil `model/router.ts` (stream via `model/stream.ts` Zig) untuk tulis/edit file. `build/verify.ts` self-verify syntax. `build/context.ts` jaga konteks muat (prompt compression bila loop panjang).
 5. **CRITIQUE** — `critic/cache.ts` cek semantic cache (embedding similarity dari `knowledge/vectors.ts`). `critic/critics.ts` jalan 12 kritikus. `critic/aggregate.ts` hitung weighted Pareto → skor layak-commit.
 6. **EVALUATE** — `eval/index.ts` picu `eval/sandbox.ts` (worktree lokal dulu; container belakangan) → `eval/test.ts` (build + unit + integration) → `eval/security.ts` (SAST/DAST + secret) → `eval/gate.ts` (perf bench + compliance + quality gate).
 7. **GATE** — `loop/states.ts` cek: critic Pareto ≥ threshold **DAN** eval quality-gate hijau.
-   - **yes** → `COMMIT` (`wiring/git.ts` commit di branch).
+   - **yes** → `COMMIT` (`wiring/git.ts` commit di worktree).
    - **no** → `RECOVER` (`resil/`).
 8. **PR_OPEN** — `wiring/git.ts` (`ghPrOpen`) buka PR dari branch. Status ke `tui/`.
 9. **CI_WATCH** — `wiring/git.ts` (`ghCiWatch`) pantau CI. Fail → balik ke `EXECUTE` dengan error sebagai konteks (bounded). Pass → `DONE`.

@@ -1,6 +1,6 @@
 # Zhi (志)
 
-Terminal coding agent dengan **autonomous-loop engine** dan **multi-critic plant** (12 kritikus + meta-aggregator Pareto). Zhi mengambil goal berbahasa alami, merencanakannya sebagai DAG, mengeksekusi di branch git terisolasi, menilai lewat 12 kritikus + toolchain evaluasi, lalu commit + buka PR + pantau CI — berdiri sendiri sampai goal terpenuhi tanpa intervensi manusia di setiap step.
+Terminal coding agent dengan **autonomous-loop engine** dan **multi-critic plant** (12 kritikus + meta-aggregator Pareto). Zhi mengambil goal berbahasa alami, merencanakannya sebagai DAG, mengeksekusi di git worktree terpisah, menilai lewat 12 kritikus + toolchain evaluasi, lalu commit + buka PR + pantau CI — berdiri sendiri sampai goal terpenuhi tanpa intervensi manusia di setiap step.
 
 ## Mengapa ada Zhi
 
