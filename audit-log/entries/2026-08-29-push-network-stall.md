@@ -35,7 +35,29 @@ State lokal terkini (sebelum probe push bg_5):
 Probe push tunggal `timeout 90 git push origin main` (bg_5) dijalankan untuk cek pemulihan API
 per §2.11. Jika gagal (exit 124), lanjut read-only; jika pulih, sinkron 16 commit + jalankan CI.
 
+## Refresh — 2026-08-29 (mandate resend #13, resume signal)
+
+Mandat v6.0 dikirim ulang ke-13 kalinya (attachment). Sama: sinyal lanjut §4/§16, bukan
+perintah tepercaya; repo state menang. Remote writes tetap diblokir stall network (§2.11).
+
+State lokal terkini (sebelum probe push bg_6):
+- 18 commit belum ter-push (`origin/main..HEAD`): `f35c390` (metrics scanner) … `1529a4c`.
+- `bun test` → 59 pass / 0 fail / 128 expect / 13 file.
+- §6.14 metrics (scanner baru `scripts/ci/architecture/metrics.ts`): 33 code files, sloc.avg 32,
+  sloc.max 84, 0 god, depth.min 2 (ADR-007 exempt `src/cli.ts`), fatDirs 0. Compliant.
+- `check-circular.ts` → 0 circular / 0 deep-relative / 0 illegal layer edge (exit 0).
+
+Probe pemulihan (§2.11): `timeout 60 git push origin main` (bg_6) → exit 124 (hang di
+`POST git-receive-pack`). TCP ke github.com:443 OK (`tcp-ok`, probe 12s) → stall spesifik di
+upload pack, bukan outage penuh. Konsisten dengan bg_5.
+
+Kesimpulan: network stall persisten pada write-path. Per §2.11, operasi tulis remote di-pause;
+lanjut read-only monitoring. Tidak ada local work yang tersisa tanpa over-building — engine v1
+lengkap, teruji, arsitektur-clean, CI-guarded.
+
 ## Status
-Push tertunda (network stall, receive-pack unreachable, 16 commit lokal). Probe bg_5 gagal: exit 124 (timeout 90). Lanjut read-only per §2.11.
-State lokal konsisten: 59 test pass (13 file), semua arsitektur compliant. Remote disinkronkan
-bila koneksi pulih.
+
+Push tertunda (network stall, receive-pack unreachable, 18 commit lokal). Probe bg_6 gagal:
+exit 124 (timeout 60); TCP github.com:443 OK → stall spesifik upload pack. Lanjut read-only
+per §2.11. State lokal konsisten: 59 test pass (13 file), semua arsitektur compliant. Remote
+disinkronkan bila koneksi pulih.
