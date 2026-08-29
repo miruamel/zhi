@@ -1,0 +1,13 @@
+{
+  "name": "zhi",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "maturity": "experimental",
+  "description": "Autonomous terminal coding agent with multi-critic loop engine (Bun-native TS).",
+  "scripts": {
+    "test": "bun test",
+    "arch:check": "bun run scripts/ci/architecture/check-circular.ts"
+  },
+  "license": "MIT"
+}
