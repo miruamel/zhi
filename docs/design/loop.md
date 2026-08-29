@@ -25,16 +25,26 @@ Transisi (lihat `ARCHITECTURE.md` §7):
 ## Interface
 
 ```ts
-/** @brief Jalankan loop otonom sampai goal terpenuhi atau budget habis.
- * @param {Goal} goal - teks + flag (repo, base, budget).
- * @param {LoopCtx} ctx - dependency injection semua modul.
- * @return {LoopReport} status akhir + langkah + skor.
- * @throw {never} kegagalan ditangani via RESIL, tidak lempar ke caller.
+/** @brief Bangun handler loop per state via dependency injection.
+ * @param {LoopContext} ctx - konteks mutable loop (goal/plan/code/...).
+ * @param {LoopDeps} deps - adapter: plan/generate/critique/compress wajib;
+ *        isolate?/commit?/prOpen?/ciWatch? opsional (git/gh nyata bila ZHI_AUTO_PR=1).
+ * @return {Record<LoopState, Handler>} map handler per state.
  * @see docs/design/orch.md docs/design/critic.md
  * @since 0.1.0 */
-export async function runLoop(goal: Goal, ctx: LoopCtx): Promise<LoopReport>
+export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Record<LoopState, Handler>
 
-/** @brief Gate sebelum COMMIT: critic Pareto >= threshold DAN eval quality-gate hijau.
+/** @brief Runner state machine; jalankan sampai DONE atau budget habis.
+ * @param {Record<LoopState, Handler>} handlers - hasil buildHandlers.
+ * @param {number} [budget=100] - max transisi sebelum throw 'loop: budget exceeded'.
+ * @return {Promise<void>} mutasi ctx ke status akhir.
+ * @since 0.1.0 */
+export class LoopDriver {
+  get current(): LoopState
+  async run(handlers: Record<LoopState, Handler>, budget?: number): Promise<void>
+}
+
+/** @brief Gate sebelum COMMIT: critic Pareto >= threshold (eval quality-gate menyusul).
  * @param {LoopState} state
  * @return {boolean} layak commit.
  * @since 0.1.0 */
@@ -43,20 +53,22 @@ export function gatePass(state: LoopState): boolean
 
 ## Files
 
-- `index.ts` — `runLoop` + types `Goal`, `LoopCtx`, `LoopReport`.
+- `driver.ts` — `LoopDriver` runner state machine (transisi + budget guard).
 - `states.ts` — `LoopState` enum + `transitions` map + `gatePass`.
-- `pipeline.ts` — wiring pemanggilan modul per state (memanggil `orch`, `build`, `critic`, `eval`, `resil`, `knowledge`, `model`, `tools/git`).
+- `wiring/handlers.ts` — `buildHandlers(ctx, deps)` menjahit handler per state via `LoopDeps`.
+- `wiring/context.ts` — `LoopContext` (goal/plan/code/critiques/aggregate/eval/branch/prUrl/error/budgetUsed).
+- `wiring/git.ts` — adapter deterministik `gitIsolate`/`ghPrOpen`/`ghCiWatch` (git/gh CLI).
 
 ## Edge cases
 
 - Goal ambigu → `PLAN` gagal → `RECOVER` → (bila tidak bisa) `DONE(PARTIAL)` + laporan.
 - Budget habis di `EXECUTE` → `RECOVER` → `DONE(PARTIAL)`.
 - CI merah setelah PR → balik `EXECUTE` dengan error context (bounded retry via `resil/retry.ts`).
-- Worktree conflict → `ISOLATE` ulang di branch baru (`knowledge/git.ts`).
+- Branch conflict → ISOLATE ulang di branch baru (`wiring/git.ts`).
 
 ## v1
 
-Konkret: state machine + `pipeline.ts` + `gatePass` + recover wiring. Paralel antar-step belakangan (`orch/scheduler.ts` sudah siap, loop jalan **serial** dulu).
+Konkret: state machine + `wiring/handlers.ts` + `gatePass` + recover wiring. Paralel antar-step belakangan (`orch/scheduler.ts` sudah siap, loop jalan **serial** dulu).
 
 ## Cross-link
 
