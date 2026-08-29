@@ -1,12 +1,13 @@
 # audit-log
 
-Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`). Dipelihara per mandat v6.0 §13.
+Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` private). Dipelihara per mandat v6.0 §13.
 
 ## Entri
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
 - `2026-08-29-remediation-docs.md` — Remediasi docs: nest guides, ADR-005 untuk `docs/design/`.
 - `2026-08-29-governance-ci.md` — CI architecture guard; rekomendasi LICENSE (P3).
 - `2026-08-29-ci-lint-fix.md` — Self-review: hapus `*.py` dari guard; `bun test` ditunda.
+- `2026-08-29-ci-fix-git-exclusion.md` — CI merah karena `.git` di-scan; perbaiki prune.
 
 ## Invarian yang dilacak
 Rata-rata SLOC/file, SLOC maks, file/dir (≤5), kedalaman nesting (≥4), jumlah god-file, jumlah flat-dir, circular dependency, kebocoran secret.
