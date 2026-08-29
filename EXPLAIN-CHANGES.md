@@ -23,6 +23,12 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 ## Template PR
 
 ## [0.1.0] - 2026-08-29
+### docs
+- README Status: koreksi generate/ISOLATE/PR_OPEN/CI_WATCH masih stub + "81 pass" -> nyata (ADR-005) + 96 pass; "git worktree" -> "branch git" (@zhi)
+- docs/design/loop.md: Interface (runLoop -> buildHandlers/LoopDriver), Files (pipeline.ts/index.ts -> wiring/handlers.ts/context.ts/git.ts/driver.ts), ref knowledge/git.ts -> wiring/git.ts (@zhi)
+- docs/ARCHITECTURE.md: 10 ref loop usang (pipeline.ts/loop/index.ts/runLoop/knowledge/git.ts/tools/git.ts -> wiring/handlers.ts/driver.ts/wiring/git.ts) (@zhi)
+
+## [0.1.0] - 2026-08-29
 ### feat
 - engine/loop/wiring/handlers: LoopDeps.isolate?/commit?/prOpen?/ciWatch? dipanggil di ISOLATE/COMMIT/PR_OPEN/CI_WATCH — loop kini otonom isolate branch, buka PR, pantau CI (ADR-005) (@zhi)
 - engine/loop/wiring/git: adapter deterministik gitIsolate/ghPrOpen/ghCiWatch via git/gh CLI (@zhi)
