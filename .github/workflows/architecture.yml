@@ -8,13 +8,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Files per directory (<=5; ADR-005/ADR-006 allow docs/design, audit-log/entries)
+      - name: Files per directory (<=5; root exempt §6.2; ADR-005/ADR-006 allow docs/design, audit-log/entries)
         run: |
           violations=0
           while IFS= read -r d; do
             c=$(find "$d" -maxdepth 1 -type f | wc -l)
             if [ "$c" -gt 5 ]; then
-              case "$d" in ./docs/design|./audit-log/entries) continue ;; esac
+              case "$d" in .|./docs/design|./audit-log/entries) continue ;; esac
               echo "VIOLATION: $d ($c files > 5)"; violations=1
             fi
           done < <(find . -type d \( -name .git -o -name node_modules -o -name .github \) -prune -o -type d -print)

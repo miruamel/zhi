@@ -7,9 +7,9 @@ Audit ulang pasca-push `miruamel/zhi` (private, 6 commit). Temuan: repositori ta
 Pilih **MIT** (permissif, standar OSS riset, reversibel). Author: `miruamel`, tahun 2026. Repositori tetap private; lisensi siap bila suatu saat di-flip ke public.
 
 ## Tindakan
-1. Tambah `LICENSE` (MIT) di root (root kini 5 file ≤5, patuh).
+1. Tambah `LICENSE` (MIT) di root (root kini 6 file: AGENTS.md, AGENTS.Style.md, README.md, EXPLAIN-CHANGES.md, LICENSE, .gitignore — diizinkan §6.2).
 2. `ADR-006` di `docs/adr/exceptions/` — justifikasi exception batas 5-file untuk `audit-log/entries/` (banyak file kecil sejenis, §6.2). `docs/adr/` tetap 5 file + 1 subdir.
-3. Update CI guard mengizinkan `./audit-log/entries` (selain `./docs/design`).
+3. Update CI guard mengizinkan `./audit-log/entries` dan root `.` (§6.2: root boleh >5 file config) selain `./docs/design`.
 4. Update `README.md` (bagian Lisensi) + index `audit-log/README.md`.
 5. Commit + push; verifikasi CI hijau.
 
