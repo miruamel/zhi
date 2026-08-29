@@ -154,3 +154,7 @@ flowchart TD
 ## Yang sengaja di-drop (YAGNI)
 
 Dari sketsa awal, **Top Layer gateway** (Web/API/Rate Limiter/Token Auth) dan **Monitoring layer** penuh (tracing/perf analytics dashboard) dibuang. Zhi adalah CLI lokal single-user: cukup input validation + sanitasi di trust boundary, dan logging + cost log ringan (fold ke `knowledge/store.ts`).
+
+## Lisensi
+
+Zhi dirilis di bawah **MIT License**. Lihat `LICENSE`. Repositori saat ini private; lisensi berlaku saat diakses publik.
