@@ -17,7 +17,7 @@ sequenceDiagram
   participant G as tools/git (gh)
 
   U->>CLI: zhi run "<goal>"
-  CLI->>L: runLoop(goal, ctx)
+  CLI->>L: LoopDriver.run(goal, ctx)
   L->>O: parseGoal + buildDag + allocate + schedule
   O-->>L: Dag (steps)
   L->>K: makeWorktree(base)

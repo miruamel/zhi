@@ -1,6 +1,6 @@
 # design/data-model.md — Shared Contracts
 
-Tipe bersama yang dipakai lintas modul. Semua modul berkomunikasi lewat kontrak ini (dependency injection di `loop/pipeline.ts`). Field wajib diberi `@brief`.
+Tipe bersama yang dipakai lintas modul. Semua modul berkomunikasi lewat kontrak ini (dependency injection di `loop/wiring/handlers.ts`). Field wajib diberi `@brief`.
 
 ## Goal & Intent
 
