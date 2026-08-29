@@ -26,3 +26,9 @@ jobs:
             -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 \
             | xargs -0 wc -l 2>/dev/null | awk '$1>200{print "VIOLATION SLOC:", $2; exit 1}'
           echo "ok: no code file exceeds 200 lines"
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: bun test
+        run: bun test
