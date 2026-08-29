@@ -56,11 +56,12 @@ describe('loop integration', () => {
     await expect(driver.run(handlers)).rejects.toThrow(/no handler for state EXECUTE/);
   });
 
-  it('guards infinite recover loop via budget', async () => {
+  it('aborts gracefully after recover budget (no infinite spin)', async () => {
     const ctx: LoopContext = { goal: 'x' };
     const driver = new LoopDriver();
-    await expect(driver.run(buildHandlers(ctx, deps({ critique: () => low })), 8)).rejects.toThrow(
-      /budget exceeded/,
-    );
+    await driver.run(buildHandlers(ctx, deps({ critique: () => low })));
+    expect(driver.finished).toBe(true);
+    expect(ctx.attempts).toBe(3);
+    expect(ctx.error).toMatch(/recover exhausted/);
   });
 });

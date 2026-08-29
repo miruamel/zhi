@@ -19,7 +19,7 @@ Transisi (lihat `ARCHITECTURE.md` §7):
 - `RECOVER → EXECUTE` (bounded retry)
 - `COMMIT → PR_OPEN`
 - `PR_OPEN → CI_WATCH`
-- `CI_WATCH → EXECUTE` (CI merah, dengan error context) | `CI_WATCH → DONE` (CI hijau)
+- `CI_WATCH → RECOVER` (CI merah, bounded) | `CI_WATCH → DONE` (CI hijau)
 - budget habis di mana pun → `RECOVER` → `DONE(PARTIAL)` + laporan
 
 ## Interface
