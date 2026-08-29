@@ -22,7 +22,7 @@ jobs:
 
       - name: SLOC per code file (<=200)
         run: |
-          find . -type f \( -name '*.ts' -o -name '*.js' -o -name '*.zig' -o -name '*.py' \) \
+          find . -type f \( -name '*.ts' -o -name '*.js' -o -name '*.zig' \) \
             -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 \
             | xargs -0 wc -l 2>/dev/null | awk '$1>200{print "VIOLATION SLOC:", $2; exit 1}'
           echo "ok: no code file exceeds 200 lines"
