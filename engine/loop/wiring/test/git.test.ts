@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'bun:test';
-import { branchSlug, worktreePath, gitIsolate, gitCommit } from './git';
+import { branchSlug, worktreePath, gitIsolate, gitCommit } from '../git';
 import { mkdtempSync, existsSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';

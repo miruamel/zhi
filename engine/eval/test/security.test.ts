@@ -3,7 +3,7 @@ import { describe, it, expect } from 'bun:test';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { scanSecrets } from './security';
+import { scanSecrets } from '../security';
 
 function tmp(): string {
   return mkdtempSync(join(tmpdir(), 'zhi-sec-'));

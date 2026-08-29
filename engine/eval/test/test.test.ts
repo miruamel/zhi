@@ -3,7 +3,7 @@ import { describe, it, expect } from 'bun:test';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { runTests } from './test';
+import { runTests } from '../test';
 
 describe('runTests', () => {
   it('passes with a passing test', () => {
