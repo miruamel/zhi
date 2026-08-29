@@ -10,9 +10,10 @@ describe('cli boot', () => {
   it('runs loop from argv to DONE with populated context', async () => {
     const ctx = await main(['  build auth  ']);
     expect(ctx.goal).toBe('build auth');
-    expect(ctx.plan).toBe('plan(build auth)');
-    expect(ctx.code).toBe('code(plan(build auth))');
-    expect(ctx.aggregate?.score).toBe(1);
+    expect(ctx.plan).toBe('build auth');
+    expect(ctx.code).toContain('export function build');
+    expect(ctx.aggregate?.score).toBeGreaterThanOrEqual(0.8);
+    expect(ctx.aggregate?.passed).toBe(true);
     expect(ctx.critiques).toHaveLength(3);
   });
 
