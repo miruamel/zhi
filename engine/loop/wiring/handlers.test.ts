@@ -40,6 +40,17 @@ describe('loop wiring', () => {
     expect(ctx.error).toMatch(/recover exhausted/);
   });
 
+  it('EXECUTE failure (generate throws) retries then aborts gracefully', async () => {
+    const ctx: LoopContext = { goal: 'x' };
+    const driver = new LoopDriver();
+    await driver.run(buildHandlers(ctx, stubDeps({
+      generate: () => { throw new Error('model timeout'); },
+    })));
+    expect(driver.finished).toBe(true);
+    expect(ctx.attempts).toBe(3);
+    expect(ctx.error).toMatch(/recover exhausted/);
+  });
+
   it('ISOLATE sets ctx.worktree+branch and COMMIT/PR_OPEN run inside worktree', async () => {
     const ctx: LoopContext = { goal: 'build auth' };
     const driver = new LoopDriver();

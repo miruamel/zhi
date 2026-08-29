@@ -2,13 +2,19 @@
 import { LoopState, LoopEvent, gatePass } from '../states';
 import { aggregate, type Critique } from '../../critic/aggregate';
 import { gate, type EvalOutput } from '../../eval/gate';
-import { classifyError } from '../../resil/recover';
+import { classifyError, withResilience, CircuitBreaker, type DLQEntry } from '../../resil';
 import type { LoopContext } from './context';
 import { branchSlug } from './git';
 import type { StateHandler } from '../driver';
 
 /** @brief Batas retry recovery sebelum abort (selaras resil maxAttempts=3, ADR-003). @since 0.1.0 */
 const MAX_RECOVER = 3;
+
+/** @brief Batas retry generate per EXECUTE (selaras resil default). @since 0.1.0 */
+const GENERATE_RETRY = 3;
+
+/** @brief True bila hasil withResilience adalah DLQ (gagal definitif). @since 0.1.0 */
+const isDLQ = (r: string | DLQEntry): r is DLQEntry => typeof r === 'object' && r !== null && 'error' in r;
 
 /** @brief Dependensi injeksi untuk state LLM-dependent + ambang. @since 0.1.0 */
 export interface LoopDeps {
@@ -41,6 +47,7 @@ export interface LoopDeps {
  * @see docs/design/loop.md
  * @since 0.1.0 */
 export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<LoopState, StateHandler>> {
+  const breaker = new CircuitBreaker({ windowSize: 5, openThreshold: 0.5 });
   return {
     [LoopState.INTAKE]: () => {
       ctx.goal = deps.ingest(ctx.goal);
@@ -57,9 +64,13 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<
       }
       return LoopEvent.ISOLATED;
     },
-    [LoopState.EXECUTE]: () => {
-      const raw = deps.generate(ctx.plan ?? '', ctx.worktree);
-      ctx.code = deps.compress ? deps.compress(raw) : raw;
+    [LoopState.EXECUTE]: async () => {
+      const res = await withResilience(async () => deps.generate(ctx.plan ?? '', ctx.worktree), { breaker, maxAttempts: GENERATE_RETRY });
+      if (isDLQ(res)) {
+        ctx.error = `generate failed after ${GENERATE_RETRY} retry: ${res.error}`;
+        return LoopEvent.BUDGET_OUT;
+      }
+      ctx.code = deps.compress ? deps.compress(res) : res;
       return LoopEvent.EXECUTED;
     },
     [LoopState.CRITIQUE]: () => {

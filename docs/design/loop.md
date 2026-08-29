@@ -63,6 +63,7 @@ export function gatePass(state: LoopState): boolean
 
 - Goal ambigu → `PLAN` gagal → `RECOVER` → (bila tidak bisa) `DONE(PARTIAL)` + laporan.
 - Budget habis di `EXECUTE` → `RECOVER` → `DONE(PARTIAL)`.
+- `generate` gagal (throw) di `EXECUTE` → `withResilience` retry (max 3) + `CircuitBreaker` → DLQ → `BUDGET_OUT` → `RECOVER` (bounded, no infinite spin; selaras `resil/retry.ts` + `resil/breaker.ts`) (@zhi)
 - CI merah setelah PR → balik `EXECUTE` dengan error context (bounded retry via `resil/retry.ts`).
 - Branch conflict → ISOLATE ulang di branch baru (`wiring/git.ts`).
 
