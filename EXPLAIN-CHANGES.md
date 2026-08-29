@@ -22,13 +22,21 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 
 ## Template PR
 
-```
 ## [0.1.0] - 2026-08-29
 ### feat
-- loop conductor state machine INTAKE→DONE — jahit orch/build/critic/eval/resil (@zhi)
+- src/cli: LoopDeps.generate sekarang memanggil engine/build/generate via adapter planSymbol — EXECUTE route ke modul nyata (generate itu sendiri masih stub) (@zhi)
+### test
+- src/cli.test: perbarui kontrak code ke stub fungsi + assert gate-pass (score>=0.8, passed) (@zhi)
+
+## [0.1.0] - 2026-08-29
+### feat
+- engine/orch: planner (parseGoal, buildDag, topoSort+CycleError, allocate, schedule) — tutup gap PLAN state, hasilkan DAG rencana nyata (@zhi)
+- src/cli: LoopDeps.plan sekarang memanggil orch (parseGoal→buildDag→allocate→schedule) (@zhi)
+### test
+- engine/orch/orch.test.ts: parse/constraint, buildDag chain, topoSort cycle, allocate proporsional, schedule order (@zhi)
+- src/cli.test: perbarui kontrak plan/code ke output DAG nyata (@zhi)
 ### docs
-- ARCHITECTURE.md + design/* + ADR-001..004 — spesifikasi engine (@zhi)
-```
+- README Status: koreksi "Docs-only" -> prototype terimplementasi (@zhi)
 
 ## Verifikasi
 

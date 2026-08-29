@@ -134,7 +134,7 @@ flowchart TD
 
 ## Status
 
-**Docs-only.** Kode menyusul setelah spesifikasi stabil. Semua file di `engine/`, `native/`, `src/` saat ini kosong — hanya struktur direktori.
+**Prototype terimplementasi (experimental).** Mayoritas modul engine sudah ada dengan test hijau (`bun test` 81 pass). `engine/orch/` (planner: parseGoal/buildDag/allocate/schedule) dan `engine/loop/` (conductor state machine) sudah nyata; `generate`/`ISOLATE`/`PR_OPEN`/`CI_WATCH` masih stub deterministik (tanpa LLM/git-worktree/PR/CI nyata) — lihat `ponytail:` di `src/cli.ts`.
 
 ## Cara baca docs
 
