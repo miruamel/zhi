@@ -5,6 +5,7 @@ import { parseGoal } from '../engine/orch/parse';
 import { buildDag } from '../engine/orch/dag';
 import { allocate, schedule } from '../engine/orch/schedule';
 import { generate as scaffold } from '../engine/build/generate';
+import { verify } from '../engine/build/verify';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
 import { composeCritiques } from '../engine/critic/plant/compose';
 import type { LoopContext } from '../engine/loop/wiring/context';
@@ -27,7 +28,15 @@ function offlineDeps(threshold: number): LoopDeps {
         .map((s) => s.label)
         .join(' -> ');
     },
-    generate: (p) => scaffold({ domain: planSymbol(p) }).map((f) => `// ${f.path}\n${f.content}`).join('\n'),
+    generate: (p) => {
+      const files = scaffold({ domain: planSymbol(p) });
+      const report = verify(files);
+      const body = files.map((f) => `// ${f.path}\n${f.content}`).join('\n');
+      const verdict = report.ok
+        ? '// verify: ok'
+        : `// verify: FAIL\n${report.violations.map((v) => `//   - ${v}`).join('\n')}`;
+      return `${body}\n${verdict}`;
+    },
     critique: (code) => composeCritiques([{ path: 'generated.ts', content: code }]),
     ciGreen: () => true,
     paretoThreshold: threshold,

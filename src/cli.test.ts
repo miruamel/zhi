@@ -12,6 +12,7 @@ describe('cli boot', () => {
     expect(ctx.goal).toBe('build auth');
     expect(ctx.plan).toBe('build auth');
     expect(ctx.code).toContain('engine/build/handlers/index.ts');
+    expect(ctx.code).toContain('verify: ok');
     expect(ctx.aggregate?.score).toBeGreaterThanOrEqual(0.8);
     expect(ctx.aggregate?.passed).toBe(true);
     expect(ctx.critiques).toHaveLength(3);

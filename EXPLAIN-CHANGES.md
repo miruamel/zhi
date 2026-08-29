@@ -24,6 +24,14 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 
 ## [0.1.0] - 2026-08-29
 ### feat
+- engine/build/verify: verifikasi statis scaffold (<=5 file/dir, @brief wajib, no deep-relative import) — generate kini terverifikasi (@zhi)
+- src/cli: LoopDeps.generate jalankan verify, lampirkan `// verify: ok`/`FAIL` ke output EXECUTE (@zhi)
+### test
+- engine/build/verify.test: pass / missing @brief / >5 file per dir / deep import (@zhi)
+- src/cli.test: ctx.code berisi `verify: ok` (@zhi)
+
+## [0.1.0] - 2026-08-29
+### feat
 - engine/build/generate: scaffold modul domain fractal (handlers/services/utils/constants + barrel) per AGENTS.md, return ScaffoldFile[] — generate kini nyata (deterministik, tanpa LLM) (@zhi)
 - src/cli: LoopDeps.generate serialize scaffold via adapter planSymbol — EXECUTE hasilkan struktur modul nyata (@zhi)
 ### test
