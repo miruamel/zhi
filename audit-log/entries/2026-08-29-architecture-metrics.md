@@ -133,3 +133,31 @@ metrics.ts scanner now counted in codeFiles (33). No SLOC/structure regression.
 
 Resolved (local). 22 commits unpushed (last `668bd28`); push deferred per §2.11 network stall
 (`git push` exit 124 at POST git-receive-pack; TCP :443 OK). Sync when network recovers.
+
+## Refresh — re-scan 2026-08-29 (mandate #17 + #18 resume signals, §6.14)
+
+Re-ran `bun test` + `git status` to confirm green. No code changes since #16 refresh
+(HEAD `09e6331`); metrics identical to #16 scan below.
+
+| Metric | Value | Target | Status |
+|--------|-------|--------|--------|
+| codeFiles | 33 | — | ok |
+| sloc.avg | 32 | <75 | ok |
+| sloc.max | 84 (scripts/ci/architecture/check-circular.ts) | ≤200 | ok |
+| godFiles | 0 | 0 | ok |
+| depth.min | 2 (src/cli.ts, ADR-007-exempt) | ≥4 | exempt |
+| depth.max | 6 | 6–10 | ok |
+| depth.avg | 3.2 | 6–10 | exempt (ADR-007 band 2–3) |
+| fatDirs | 0 (code) | 0 | ok |
+| circular / skipped-layer / deep-relative | 0 | 0 | ok (check-circular.ts) |
+
+`bun test` → 59 pass / 0 fail / 128 expect / 13 files. All green.
+
+§5.5 ADR template validated this cycle: ADR-005/006/007 all carry judul, tanggal,
+status, konteks, keputusan, alternatif, konsekuensi, penulis, review-date → compliant.
+
+## Status
+
+Resolved (local). 23 commits unpushed (last `09e6331`); push deferred per §2.11
+network stall (`git push` exit 124 at POST git-receive-pack; TCP :443 OK). Sync when
+network recovers.
