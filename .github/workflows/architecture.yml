@@ -1,0 +1,28 @@
+name: architecture-guard
+
+on: [push, pull_request]
+
+jobs:
+  invariants:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Files per directory (<=5; ADR-005 allows docs/design)
+        run: |
+          violations=0
+          while IFS= read -r d; do
+            c=$(find "$d" -maxdepth 1 -type f | wc -l)
+            if [ "$c" -gt 5 ]; then
+              if [ "$d" = "./docs/design" ]; then continue; fi
+              echo "VIOLATION: $d ($c files > 5)"; violations=1
+            fi
+          done < <(find . -type d -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/.github/*')
+          exit $violations
+
+      - name: SLOC per code file (<=200)
+        run: |
+          find . -type f \( -name '*.ts' -o -name '*.js' -o -name '*.zig' -o -name '*.py' \) \
+            -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 \
+            | xargs -0 wc -l 2>/dev/null | awk '$1>200{print "VIOLATION SLOC:", $2; exit 1}'
+          echo "ok: no code file exceeds 200 lines"
