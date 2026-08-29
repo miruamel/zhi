@@ -3,7 +3,7 @@ import { describe, it, expect } from 'bun:test';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { evaluate } from './index';
+import { evaluate } from '../index';
 
 describe('evaluate', () => {
   it('passes on clean worktree', () => {

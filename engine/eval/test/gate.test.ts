@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test';
-import { gate } from './gate';
+import { gate } from '../gate';
 
 describe('eval gate', () => {
   it('passes when score >= threshold and no blockers', () => {

@@ -1,10 +1,10 @@
 /** @brief Integration: jalankan loop utuh via driver+wiring+states. @since 0.1.0 */
 import { describe, it, expect } from 'bun:test';
-import { LoopDriver } from '../driver';
-import { LoopState } from '../states';
-import { buildHandlers, type LoopDeps } from './handlers';
-import type { LoopContext } from './context';
-import type { Critique } from '../../critic/aggregate';
+import { LoopDriver } from '../../driver';
+import { LoopState } from '../../states';
+import { buildHandlers, type LoopDeps } from '../handlers';
+import type { LoopContext } from '../context';
+import type { Critique } from '../../../critic/aggregate';
 
 const high: Critique[] = [{ name: 'security', score: 1, weight: 1, findings: [] }];
 const low: Critique[] = [{ name: 'security', score: 0, weight: 1, findings: ['fail'] }];
