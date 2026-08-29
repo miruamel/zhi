@@ -4,13 +4,13 @@ import { LoopDriver } from '../engine/loop/driver';
 import { parseGoal } from '../engine/orch/parse';
 import { buildDag } from '../engine/orch/dag';
 import { allocate, schedule } from '../engine/orch/schedule';
-import { generate as genStub } from '../engine/build/generate';
+import { generate as scaffold } from '../engine/build/generate';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
 import { composeCritiques } from '../engine/critic/plant/compose';
 import type { LoopContext } from '../engine/loop/wiring/context';
-// ponytail: PLAN + EXECUTE sekarang nyata (orch + engine/build). generate/ciGreen
-// masih stub deterministik (tanpa LLM/git/CI nyata). Upgrade: ganti generate dengan
-// backend kode LLM (design/build.md) dan ciGreen dengan watcher CI bila env ZHI_LLM_ENDPOINT terisi.
+// ponytail: PLAN + EXECUTE sekarang nyata (orch + engine/build scaffolder).
+// ciGreen masih stub deterministik (tanpa CI nyata). Upgrade: ganti ciGreen
+// dengan watcher CI bila env ZHI_LLM_ENDPOINT terisi; generate LLM-ready via model/router.
 /** @brief Derivasi identifier simbol dari plan (token pertama). @since 0.1.0 */
 function planSymbol(plan: string): string {
   const head = plan.split(/[\s>]+/)[0] ?? '';
@@ -27,7 +27,7 @@ function offlineDeps(threshold: number): LoopDeps {
         .map((s) => s.label)
         .join(' -> ');
     },
-    generate: (p) => genStub({ name: planSymbol(p), kind: 'function' }),
+    generate: (p) => scaffold({ domain: planSymbol(p) }).map((f) => `// ${f.path}\n${f.content}`).join('\n'),
     critique: (code) => composeCritiques([{ path: 'generated.ts', content: code }]),
     ciGreen: () => true,
     paretoThreshold: threshold,

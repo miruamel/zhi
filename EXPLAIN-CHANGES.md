@@ -24,6 +24,14 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 
 ## [0.1.0] - 2026-08-29
 ### feat
+- engine/build/generate: scaffold modul domain fractal (handlers/services/utils/constants + barrel) per AGENTS.md, return ScaffoldFile[] — generate kini nyata (deterministik, tanpa LLM) (@zhi)
+- src/cli: LoopDeps.generate serialize scaffold via adapter planSymbol — EXECUTE hasilkan struktur modul nyata (@zhi)
+### test
+- engine/build/generate.test: scaffold 5 file, Doxygen header, <=5 file guard (@zhi)
+- src/cli.test: ctx.code berisi path scaffold engine/build/* (@zhi)
+
+## [0.1.0] - 2026-08-29
+### feat
 - src/cli: LoopDeps.generate sekarang memanggil engine/build/generate via adapter planSymbol — EXECUTE route ke modul nyata (generate itu sendiri masih stub) (@zhi)
 ### test
 - src/cli.test: perbarui kontrak code ke stub fungsi + assert gate-pass (score>=0.8, passed) (@zhi)
