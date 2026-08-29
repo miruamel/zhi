@@ -17,6 +17,14 @@ export interface LoopDeps {
   critique: (code: string) => Critique[];
   /** @brief Kompres kode hasil EXECUTE agar muat context window (opsional). */
   compress?: (code: string) => string;
+  /** @brief Isolasi kerja ke branch baru dari main (ISOLATE, opsional). @return {string} nama branch. */
+  isolate?: () => string;
+  /** @brief Commit lokal hasil EXECUTE (COMMIT, opsional). */
+  commit?: () => void;
+  /** @brief Buka PR via gh (PR_OPEN, opsional). @return {string} URL PR. */
+  prOpen?: (title: string, body: string) => string;
+  /** @brief Pantau status CI (CI_WATCH, opsional). @return {'green'|'red'|'pending'}. */
+  ciWatch?: () => 'green' | 'red' | 'pending';
   /** @brief Ambang Pareto layak-commit (EVALUATE). */
   paretoThreshold: number;
 }
@@ -37,7 +45,10 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<
       ctx.plan = deps.plan(ctx.goal);
       return LoopEvent.PLAN_OK;
     },
-    [LoopState.ISOLATE]: () => LoopEvent.ISOLATED,
+    [LoopState.ISOLATE]: () => {
+      if (deps.isolate) ctx.branch = deps.isolate();
+      return LoopEvent.ISOLATED;
+    },
     [LoopState.EXECUTE]: () => {
       const raw = deps.generate(ctx.plan ?? '');
       ctx.code = deps.compress ? deps.compress(raw) : raw;
@@ -58,8 +69,17 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<
       return ok ? LoopEvent.GATE_PASS : LoopEvent.GATE_FAIL;
     },
     [LoopState.RECOVER]: () => LoopEvent.RECOVERED,
-    [LoopState.COMMIT]: () => LoopEvent.COMMITTED,
-    [LoopState.PR_OPEN]: () => LoopEvent.PR_OPENED,
-    [LoopState.CI_WATCH]: () => (deps.ciGreen() ? LoopEvent.CI_GREEN : LoopEvent.CI_RED),
+    [LoopState.COMMIT]: () => {
+      if (deps.commit) deps.commit();
+      return LoopEvent.COMMITTED;
+    },
+    [LoopState.PR_OPEN]: () => {
+      if (deps.prOpen) ctx.prUrl = deps.prOpen(ctx.goal ?? 'autoloop', ctx.plan ?? '');
+      return LoopEvent.PR_OPENED;
+    },
+    [LoopState.CI_WATCH]: () => {
+      const st = deps.ciWatch ? deps.ciWatch() : 'green';
+      return st === 'green' ? LoopEvent.CI_GREEN : LoopEvent.CI_RED;
+    },
   };
 }
