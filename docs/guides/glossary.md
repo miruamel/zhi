@@ -6,7 +6,7 @@ Istilah Zhi. Pakai konsisten di seluruh docs & kode.
 |---|---|
 | **Zhi (志)** | Nama project: terminal coding agent dengan autonomous-loop engine + multi-critic plant. |
 | **Conductor** | `engine/loop/` — state machine yang menjahit semua modul menjadi satu siklus otonom. |
-| **Loop** | Satu eksekusi penuh `runLoop(goal)` dari `INTAKE` sampai `DONE`. |
+| **Loop** | Satu eksekusi penuh `LoopDriver.run(goal)` dari `INTAKE` sampai `DONE`. |
 | **Goal** | Input berbahasa alami dari user (`Goal` di `data-model.md`). |
 | **Intent** | Hasil `parseGoal`: action + targets + constraints terstruktur. |
 | **DAG** | Directed Acyclic Graph dari `Step`; direncanakan `orch`, dijalankan `loop`. |

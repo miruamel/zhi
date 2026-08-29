@@ -5,7 +5,7 @@ Zhi sendiri harus teruji sebelum bisa menjalankan loop terpercaya. Strategi: uni
 ## Prinsip
 
 - **Gate yang di-enforce harus di-test**: `gatePass`, `aggregate` Pareto, `retry` budget, `cycle` detect — punya test yang gagal pada bug masuk akal.
-- **Modul di-injeksi**: `loop/pipeline.ts` menerima `LoopCtx` (semua modul). Integration test pasang **fake** modul untuk isolasi.
+- **Modul di-injeksi**: `loop/wiring/handlers.ts` menerima `LoopCtx` (semua modul). Integration test pasang **fake** modul untuk isolasi.
 - **Deterministik**: test tidak bergantung model nyata (pakai stub `model/router` yang return fixture).
 - Target coverage **80%** (sama dengan eval gate yang Zhi enforce).
 
@@ -26,7 +26,7 @@ Zhi sendiri harus teruji sebelum bisa menjalankan loop terpercaya. Strategi: uni
 
 ## Integration (loop)
 
-- `loop/index.ts` di-test dengan `LoopCtx` berisi **fake** `orch/build/critic/eval/resil/knowledge/model`.
+- `loop/driver.ts` di-test dengan `LoopCtx` berisi **fake** `orch/build/critic/eval/resil/knowledge/model`.
 - Skenario: happy path → `LoopReport.status==='done'` + `prUrl`.
 - Skenario: test fail → `resil` patch → pass (bounded).
 - Skenario: test fail ×3 → DLQ → `DONE(partial)`.
