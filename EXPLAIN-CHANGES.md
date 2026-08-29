@@ -23,6 +23,13 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 ## Template PR
 
 ## [0.1.0] - 2026-08-29
+### ci
+- .github/workflows/architecture.yml: Setup Zig ganti setup-zig@v1 -> download langsung Zig 0.16.0 dari ziglang.org (mirror action hanya punya <=0.14.0; 0.14.0 tolak -dynamic wasm32-freestanding) (@zhi)
+### fix
+- native/stream/build.sh: zig build-lib -dynamic -rdynamic -fPIC (wasm reactor import memory, sesuai wrapper engine/model/stream.ts) — 0.14.0 CI tolak -dynamic; 0.16.0 wajib (@zhi)
+- native/stream/parse.zig: buang no-op main() (dead code; build-lib -dynamic tak butuh) (@zhi)
+
+## [0.1.0] - 2026-08-29
 ### feat
 - engine/build/context/compress: kompres konteks by budget + weight (pertahankan entri prioritas) — tutup trio build v1 (generate/verify/compress) (@zhi)
 - engine/loop/wiring/handlers: LoopDeps.compress? dipanggil di EXECUTE (opsional) — jaga context window loop panjang (@zhi)
