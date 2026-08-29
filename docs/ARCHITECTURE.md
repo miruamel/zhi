@@ -13,7 +13,7 @@ Zhi adalah **terminal coding agent** yang menjalankan siklus dev secara otonom: 
 
 | Subgraph | Modul | Peran |
 |---|---|---|
-| LOOP | `engine/loop/` | Conductor state machine; menjahit semua modul lewat `pipeline.ts`. |
+| LOOP | `engine/loop/` | Conductor state machine; menjahit semua modul lewat `wiring/handlers.ts` (LoopDeps DI). |
 | ORCH | `engine/orch/` | Ubah goal → DAG step; alokasi budget/token; jadwalkan (serial dulu, paralel belakangan). |
 | BUILD | `engine/build/` | Generate multi-file; petakan inter-file dep; self-verify; kelola konteks (prompt compression). |
 | CRITIC | `engine/critic/` | 12 kritikus + semantic cache + meta-aggregator Pareto. |
@@ -26,22 +26,22 @@ Zhi adalah **terminal coding agent** yang menjalankan siklus dev secara otonom: 
 
 ## 3. Alur eksekusi utama (happy path)
 
-1. **INTAKE** — `cli.ts` terima goal (teks) + flag (repo, base branch, budget). Masuk `loop/index.ts`.
+1. **INTAKE** — `cli.ts` terima goal (teks) + flag (repo, base branch, budget). Masuk `loop/driver.ts`.
 2. **PLAN** — `orch/parse.ts` tokenisasi goal → `orch/dag.ts` bangun DAG step + `cycle detect` + `dependency resolver`. `orch/budget.ts` alokasi token per step. `orch/scheduler.ts` urutkan (priority queue).
-3. **ISOLATE** — `knowledge/git.ts` buat **git worktree** terisolasi dari base branch. Semua eksekusi terjadi di worktree, main repo aman.
+3. **ISOLATE** — `wiring/git.ts` (`gitIsolate`) buat **branch** terisolasi dari main. Semua eksekusi terjadi di branch, main repo aman.
 4. **EXECUTE** — `build/generate.ts` panggil `model/router.ts` (stream via `model/stream.ts` Zig) untuk tulis/edit file. `build/verify.ts` self-verify syntax. `build/context.ts` jaga konteks muat (prompt compression bila loop panjang).
 5. **CRITIQUE** — `critic/cache.ts` cek semantic cache (embedding similarity dari `knowledge/vectors.ts`). `critic/critics.ts` jalan 12 kritikus. `critic/aggregate.ts` hitung weighted Pareto → skor layak-commit.
 6. **EVALUATE** — `eval/index.ts` picu `eval/sandbox.ts` (worktree lokal dulu; container belakangan) → `eval/test.ts` (build + unit + integration) → `eval/security.ts` (SAST/DAST + secret) → `eval/gate.ts` (perf bench + compliance + quality gate).
 7. **GATE** — `loop/states.ts` cek: critic Pareto ≥ threshold **DAN** eval quality-gate hijau.
-   - **yes** → `COMMIT` (`knowledge/git.ts` commit di worktree).
+   - **yes** → `COMMIT` (`wiring/git.ts` commit di branch).
    - **no** → `RECOVER` (`resil/`).
-8. **PR_OPEN** — `tools/git.ts` (gh) buka PR dari worktree branch. Status ke `tui/`.
-9. **CI_WATCH** — `eval/` + `tools/git.ts` (`gh run_watch`) pantau CI. Fail → balik ke `EXECUTE` dengan error sebagai konteks (bounded). Pass → `DONE`.
+8. **PR_OPEN** — `wiring/git.ts` (`ghPrOpen`) buka PR dari branch. Status ke `tui/`.
+9. **CI_WATCH** — `wiring/git.ts` (`ghCiWatch`) pantau CI. Fail → balik ke `EXECUTE` dengan error sebagai konteks (bounded). Pass → `DONE`.
 
 ## 4. Feedback loops (dashed)
 
 - **`K1 -.-> C0`** — Vector DB (`knowledge/vectors.ts`) feed semantic cache (`critic/cache.ts`): prompt mirip tidak perlu di-kritik ulang penuh.
-- **`K2 -.-> B3`** — Git-native history (`knowledge/git.ts`) feed inter-file dep mapper (`build/generate.ts`): pahami struktur repo sebelum generate.
+- **`K2 -.-> B3`** — Git-native history (`wiring/git.ts`) feed inter-file dep mapper (`build/generate.ts`): pahami struktur repo sebelum generate.
 - **`R3 -.-> L1`** — Retry budget habis (`resil/retry.ts`) → replan (`orch/`) dari awal dengan konteks kegagalan.
 - **`E9 -.-> C4`** — Eval quality-gate (`eval/gate.ts`) feed meta-critic (`critic/aggregate.ts`): bobot kritikus bisa disesuaikan dari hasil eval.
 - **`M2 -.-> N1`** — Model stream (`model/stream.ts`) pakai Zig WASM parse (`native/stream/parse.wasm`).
@@ -75,7 +75,7 @@ TUI tidak mengambil keputusan — hanya visualisasi. Keputusan di `loop/` + `cri
 `engine/loop/states.ts` mendefinisikan `LoopState`:
 `INTAKE | PLAN | ISOLATE | EXECUTE | CRITIQUE | EVALUATE | RECOVER | COMMIT | PR_OPEN | CI_WATCH | DONE`.
 
-Transisi dikendalikan `loop/index.ts` (`runLoop`):
+Transisi dikendalikan `driver.ts` (`LoopDriver`) + `wiring/handlers.ts` (`buildHandlers`):
 - `EVALUATE → COMMIT` hanya bila `gatePass(state) === true`.
 - `EVALUATE → RECOVER` bila gagal; `RECOVER → EXECUTE` setelah strategi recovery dipilih (bounded).
 - `CI_WATCH → EXECUTE` bila CI merah (dengan error context); `CI_WATCH → DONE` bila hijau.
@@ -84,13 +84,13 @@ Transisi dikendalikan `loop/index.ts` (`runLoop`):
 ## 8. v1 scope (konkret vs stub)
 
 **Konkret di v1:**
-- `loop/*` (state machine + pipeline + gate + recover wiring).
+- `loop/*` (state machine + `wiring/handlers.ts` + gate + recover wiring).
 - `orch/dag.ts` (parser + DAG + cycle + dep + priority + budget).
 - `build/generate.ts` + `build/verify.ts` + `build/context.ts`.
 - `critic/cache.ts` + `critic/critics.ts` (Security/Perf/Testing/Style konkret) + `critic/aggregate.ts`.
 - `eval/test.ts` + `eval/security.ts` + `eval/gate.ts`.
 - `resil/*` (breaker + retry + recover).
-- `knowledge/git.ts` + `knowledge/store.ts`.
+- `wiring/git.ts` + `knowledge/store.ts`.
 - `model/router.ts` + `model/stream.ts`.
 - `src/cli.ts` + `src/tui/index.tsx`.
 

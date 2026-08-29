@@ -1,6 +1,6 @@
 # Zhi (志)
 
-Terminal coding agent dengan **autonomous-loop engine** dan **multi-critic plant** (12 kritikus + meta-aggregator Pareto). Zhi mengambil goal berbahasa alami, merencanakannya sebagai DAG, mengeksekusi di git worktree terisolasi, menilai lewat 12 kritikus + toolchain evaluasi, lalu commit + buka PR + pantau CI — berdiri sendiri sampai goal terpenuhi tanpa intervensi manusia di setiap step.
+Terminal coding agent dengan **autonomous-loop engine** dan **multi-critic plant** (12 kritikus + meta-aggregator Pareto). Zhi mengambil goal berbahasa alami, merencanakannya sebagai DAG, mengeksekusi di branch git terisolasi, menilai lewat 12 kritikus + toolchain evaluasi, lalu commit + buka PR + pantau CI — berdiri sendiri sampai goal terpenuhi tanpa intervensi manusia di setiap step.
 
 ## Mengapa ada Zhi
 
@@ -134,7 +134,7 @@ flowchart TD
 
 ## Status
 
-**Prototype terimplementasi (experimental).** Mayoritas modul engine sudah ada dengan test hijau (`bun test` 81 pass). `engine/orch/` (planner: parseGoal/buildDag/allocate/schedule) dan `engine/loop/` (conductor state machine) sudah nyata; `generate`/`ISOLATE`/`PR_OPEN`/`CI_WATCH` masih stub deterministik (tanpa LLM/git-worktree/PR/CI nyata) — lihat `ponytail:` di `src/cli.ts`.
+**Prototype terimplementasi (experimental).** Mayoritas modul engine sudah ada dengan test hijau (`bun test` 96 pass). `engine/orch/` (planner: parseGoal/buildDag/allocate/schedule) dan `engine/loop/` (conductor state machine) sudah nyata; `generate`/`verify`/`compress` (`engine/build`) sudah nyata; `ISOLATE`/`PR_OPEN`/`CI_WATCH` di-wiring via adapter git/gh opsional (`engine/loop/wiring/git.ts`, aktif bila `ZHI_AUTO_PR=1`) — lihat ADR-005. Mode offline (default) tanpa `ciWatch` → CI dianggap green (aman untuk test/smoke).
 
 ## Cara baca docs
 
