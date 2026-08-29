@@ -105,3 +105,31 @@ code scan. Tidak ada remediasi.
 ## Status
 
 Resolved (local). Push deferred per §2.11 network stall.
+
+## Refresh — re-scan 2026-08-29 (mandate #16 resume signal, §6.14)
+
+Re-ran `scripts/ci/architecture/metrics.ts` + `check-circular.ts` (§6.10/§6.11). Method: SLOC = baris
+non-blank non-komentar (ts/js/zig); depth = segmen path dari repo root; scan roots = src, engine,
+native, scripts; `audit-log`/`docs` di-exclude (ADR-005/006 exempt, non-code).
+
+| Metric | Value | Target | Status |
+|--------|-------|--------|--------|
+| codeFiles | 33 | — | ok (was 32; +1 `package.json` not code, +`metrics.ts` counted) |
+| sloc.avg | 32 | <75 | ok |
+| sloc.max | 84 | ≤200 | ok (`scripts/ci/architecture/check-circular.ts`) |
+| godFiles | 0 | 0 | ok |
+| depth.min | 2 | ≥4 | ADR-007-exempt (`src/cli.ts` boot entry) |
+| depth.max | 6 | 6–10 | ok |
+| depth.avg | 3.2 | 6–10 | ADR-007 band (engine/src/native shallow roots) |
+| fatDirs | 0 | 0 | ok |
+| circular / skipped-layer / deep-relative | 0 | 0 | ok (`check-circular.ts`) |
+
+`bun test` → 59 pass / 0 fail / 128 expect / 13 files. All green.
+
+Delta vs prior refresh: `package.json` added (v0.1.0 experimental, zero deps) — config, not code;
+metrics.ts scanner now counted in codeFiles (33). No SLOC/structure regression.
+
+## Status
+
+Resolved (local). 22 commits unpushed (last `668bd28`); push deferred per §2.11 network stall
+(`git push` exit 124 at POST git-receive-pack; TCP :443 OK). Sync when network recovers.
