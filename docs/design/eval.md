@@ -6,44 +6,44 @@ Verifikasi hasil lewat **toolchain nyata** (build, test, scan) — gate berbasis
 
 ## Komponen
 
-- `index.ts` (Pipeline Orchestrator + Quality Gate): jahit tahapan → `EvalReport`.
-- `sandbox.ts` (Container Sandbox) — **stub v1** (pakai worktree lokal).
-- `test.ts` (Build/Compile + Unit + Integration Test).
-- `security.ts` (SAST/DAST + Secret Detection).
-- `gate.ts` (Perf Benchmark + Compliance + Quality Gate).
+- `index.ts` (Pipeline Orchestrator): `evaluate(worktree)` jahit test + security → `gate` → `EvalOutput`.
+- `test.ts` (Unit/Integration): `runTests(worktree)` jalankan `bun test` di worktree (regresi gate).
+- `security.ts` (Secret Detection): `scanSecrets(worktree)` grep pola secret (fail-closed bila grep error).
+- `gate.ts` (Quality Gate): `gate(input, threshold)` — lulus bila tanpa blocker DAN score >= threshold.
+- `sandbox` = git worktree terpisah (`loop/wiring/git.ts` `gitIsolate`), bukan modul tersendiri.
 
 ## Interface
 
 ```ts
-/** @brief Jalankan toolchain evaluasi penuh.
- * @param {FileChange[]} changes
- * @return {EvalReport} per-tahap status + gatePass.
+/** @brief Jalankan toolchain evaluasi: test + secret-scan -> gate.
+ * @param {string} worktree - path worktree terisolasi.
+ * @return {EvalOutput} passed + reasons (blocker bila test gagal / secret bocor).
  * @throw {never} kegagalan dikembalikan sebagai status, bukan lempar.
  * @since 0.1.0 */
-export async function runEval(changes: FileChange[]): Promise<EvalReport>
+export function evaluate(worktree: string): EvalOutput
 ```
 
 ## Alur
 
-1. `sandbox` (v1: worktree lokal) isolasi eksekusi.
-2. `test` → build + unit + integration.
-3. `security` → SAST/DAST + secret scan.
-4. `gate` → perf bench + compliance + quality gate (coverage ≥80%, lint bersih, secret bersih).
-5. `index` gabung → `EvalReport.gatePass`.
+1. `sandbox` (git worktree via `gitIsolate`) isolasi eksekusi.
+2. `test` → `bun test` di worktree.
+3. `security` → secret scan.
+4. `gate` → quality gate (tanpa blocker + score >= threshold).
+5. `index` gabung → `EvalOutput.passed`.
 
 ## Gate (v1)
 
-`gatePass = buildOk ∧ testOk ∧ secretClean ∧ lintClean ∧ coverage≥0.8`.
+`gatePass = paretoScore >= threshold ∧ qualityGateGreen` di `loop/states.ts`. `qualityGateGreen = eval.passed` (tanpa blocker: test hijau + secret bersih).
 
 ## Edge cases
 
-- Build gagal → `gatePass=false` → loop `RECOVER`.
-- Secret terdeteksi → auto-fail keras (seperti Security critic).
-- Test flaky → `test.ts` retry 1x sebelum gagal.
+- Test gagal → `eval.passed=false` → loop `RECOVER`.
+- Secret terdeteksi → auto-fail keras (blocker).
+- grep error → fail-closed (blocker).
 
 ## v1
 
-Konkret: `test` + `security` + `gate`. `sandbox` **stub** (worktree lokal cukup; container bila kelak jalan kode tak-terpercaya).
+Konkret: `evaluate(worktree)` = `runTests` (bun test di worktree) + `scanSecrets` (grep secret, fail-closed) → `gate`. Sandbox = git worktree (`gitIsolate`), bukan container. Loop panggil via `LoopDeps.eval?` di state EVALUATE; bila `ctx.worktree` ada, hasilnya jadi `qualityGateGreen` di `gatePass`.
 
 ## Cross-link
 

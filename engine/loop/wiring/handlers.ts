@@ -1,7 +1,7 @@
 /** @brief Jahit state loop ke modul engine (critic/eval). @since 0.1.0 */
 import { LoopState, LoopEvent, gatePass } from '../states';
 import { aggregate, type Critique } from '../../critic/aggregate';
-import { gate } from '../../eval/gate';
+import { gate, type EvalOutput } from '../../eval/gate';
 import type { LoopContext } from './context';
 import { branchSlug } from './git';
 import type { StateHandler } from '../driver';
@@ -24,6 +24,8 @@ export interface LoopDeps {
   /** @brief Buka PR via gh dari dalam worktree (PR_OPEN, opsional). @return {string} URL PR. */
   prOpen?: (worktree: string, title: string, body: string) => string;
   ciWatch?: () => 'green' | 'red' | 'pending';
+  /** @brief Evaluasi worktree (test + secret-scan) di EVALUATE (opsional). @return {EvalOutput} hasil gate. */
+  eval?: (worktree: string) => EvalOutput;
   /** @brief Ambang Pareto layak-commit (EVALUATE). */
   paretoThreshold: number;
 }
@@ -62,7 +64,9 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<
       return LoopEvent.CRITIQUED;
     },
     [LoopState.EVALUATE]: () => {
-      ctx.eval = gate({ score: ctx.aggregate?.score ?? 0, criteria: [], blockers: [] });
+      ctx.eval = deps.eval && ctx.worktree
+        ? deps.eval(ctx.worktree)
+        : gate({ score: ctx.aggregate?.score ?? 0, criteria: [], blockers: [] });
       const ok = gatePass(LoopState.EVALUATE, {
         paretoScore: ctx.aggregate?.score ?? 0,
         paretoThreshold: deps.paretoThreshold,

@@ -11,6 +11,7 @@ import { verify } from '../engine/build/verify';
 import { compress } from '../engine/build/context/compress';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
 import { gitIsolate, ghPrOpen, ghCiWatch } from '../engine/loop/wiring/git';
+import { evaluate } from '../engine/eval/index';
 import { composeCritiques } from '../engine/critic/plant/compose';
 // ponytail: ISOLATE buat git worktree terpisah (security.md §Sandbox); generate
 // tulis scaffold ke sana; commit/prOpen jalan di dalam worktree. EXECUTE nyata
@@ -62,6 +63,7 @@ function autonomousDeps(base: LoopDeps, goal: string): LoopDeps {
     isolate: () => gitIsolate(goal),
     commit: (wt) => gitCommit(wt, 'chore: autoloop generated changes'),
     prOpen: (wt, t, b) => ghPrOpen(wt, t, b),
+    eval: (wt) => evaluate(wt),
   };
 }
 
