@@ -81,5 +81,18 @@ if (cycles.length) { bad = 1; console.log('CIRCULAR DEPENDENCY:'); cycles.forEac
 else console.log('ok: 0 circular dependency');
 if (deep.length) { bad = 1; console.log('DEEP RELATIVE IMPORT (>3 naik):'); deep.forEach((d) => console.log('  ' + d)); }
 else console.log('ok: 0 deep relative import');
+// Validasi arah layer (mandate §6.11 skipped-layer; AGENTS.md layer-first)
+const layerOf = (abs: string): string => abs.replace(ROOT + '/', '').split('/')[0];
+const ILLEGAL: Record<string, string[]> = { engine: ['src'], src: ['native'], native: ['engine', 'src'] };
+const layerBad: string[] = [];
+for (const [from, tos] of graph) {
+  const fl = layerOf(from);
+  for (const to of tos) {
+    const tl = layerOf(to);
+    if (ILLEGAL[fl]?.includes(tl)) layerBad.push(`${from.replace(ROOT + '/', '')} -> ${to.replace(ROOT + '/', '')} (${fl}->${tl})`);
+  }
+}
+if (layerBad.length) { bad = 1; console.log('SKIPPED/ILLEGAL LAYER EDGE:'); layerBad.forEach((e) => console.log('  ' + e)); }
+else console.log('ok: 0 illegal layer edge');
 
 process.exit(bad);
