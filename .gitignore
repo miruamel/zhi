@@ -1,0 +1,20 @@
+# Build artifacts
+native/out/
+*.wasm
+
+# Dependencies
+node_modules/
+.bun/
+
+# Env & secrets
+.env
+.env.*
+*.local
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Logs
+*.log
