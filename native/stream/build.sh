@@ -7,5 +7,4 @@ mkdir -p ../out
 zig build-lib parse.zig \
   -target wasm32-freestanding \
   -O ReleaseSmall \
-  -dynamic -rdynamic -fPIC \
   -femit-bin=../out/stream.wasm
