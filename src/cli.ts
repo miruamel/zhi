@@ -1,19 +1,33 @@
 #!/usr/bin/env bun
 /** @brief Entry CLI Zhi: argv -> boot loop otonom. @since 0.1.0 */
 import { LoopDriver } from '../engine/loop/driver';
+import { parseGoal } from '../engine/orch/parse';
+import { buildDag } from '../engine/orch/dag';
+import { allocate, schedule } from '../engine/orch/schedule';
+import { generate as genStub } from '../engine/build/generate';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
 import { composeCritiques } from '../engine/critic/plant/compose';
 import type { LoopContext } from '../engine/loop/wiring/context';
-
-// ponytail: plan/generate masih stub deterministik (tanpa LLM). critique SEKARANG
-// nyata: menjalankan multi-critic plant (sloc + todo + imports) pada artefak.
-// Upgrade: ganti plan/generate dengan backend nyata (route() + client HTTP)
-// bila env ZHI_LLM_ENDPOINT terisi.
+// ponytail: PLAN + EXECUTE sekarang nyata (orch + engine/build). generate/ciGreen
+// masih stub deterministik (tanpa LLM/git/CI nyata). Upgrade: ganti generate dengan
+// backend kode LLM (design/build.md) dan ciGreen dengan watcher CI bila env ZHI_LLM_ENDPOINT terisi.
+/** @brief Derivasi identifier simbol dari plan (token pertama). @since 0.1.0 */
+function planSymbol(plan: string): string {
+  const head = plan.split(/[\s>]+/)[0] ?? '';
+  const cleaned = head.replace(/[^a-zA-Z0-9_]/g, '');
+  return /^[a-zA-Z_]/.test(cleaned) ? cleaned : 'main';
+}
 function offlineDeps(threshold: number): LoopDeps {
   return {
     ingest: (g) => g.trim(),
-    plan: (g) => `plan(${g})`,
-    generate: (p) => `code(${p})`,
+    plan: (g) => {
+      const dag = buildDag(parseGoal(g));
+      const alloc = allocate(dag, 1000);
+      return schedule(dag, alloc)
+        .map((s) => s.label)
+        .join(' -> ');
+    },
+    generate: (p) => genStub({ name: planSymbol(p), kind: 'function' }),
     critique: (code) => composeCritiques([{ path: 'generated.ts', content: code }]),
     ciGreen: () => true,
     paretoThreshold: threshold,
