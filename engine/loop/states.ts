@@ -53,7 +53,7 @@ export const transitions: Record<LoopState, Partial<Record<LoopEvent, LoopState>
   [LoopState.RECOVER]: { [LoopEvent.RECOVERED]: LoopState.EXECUTE, [LoopEvent.BUDGET_OUT]: LoopState.DONE },
   [LoopState.COMMIT]: { [LoopEvent.COMMITTED]: LoopState.PR_OPEN },
   [LoopState.PR_OPEN]: { [LoopEvent.PR_OPENED]: LoopState.CI_WATCH },
-  [LoopState.CI_WATCH]: { [LoopEvent.CI_GREEN]: LoopState.DONE, [LoopEvent.CI_RED]: LoopState.EXECUTE },
+  [LoopState.CI_WATCH]: { [LoopEvent.CI_GREEN]: LoopState.DONE, [LoopEvent.CI_RED]: LoopState.RECOVER },
   [LoopState.DONE]: {},
 };
 

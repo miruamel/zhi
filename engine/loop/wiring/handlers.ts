@@ -2,9 +2,13 @@
 import { LoopState, LoopEvent, gatePass } from '../states';
 import { aggregate, type Critique } from '../../critic/aggregate';
 import { gate, type EvalOutput } from '../../eval/gate';
+import { classifyError } from '../../resil/recover';
 import type { LoopContext } from './context';
 import { branchSlug } from './git';
 import type { StateHandler } from '../driver';
+
+/** @brief Batas retry recovery sebelum abort (selaras resil maxAttempts=3, ADR-003). @since 0.1.0 */
+const MAX_RECOVER = 3;
 
 /** @brief Dependensi injeksi untuk state LLM-dependent + ambang. @since 0.1.0 */
 export interface LoopDeps {
@@ -74,7 +78,20 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<
       });
       return ok ? LoopEvent.GATE_PASS : LoopEvent.GATE_FAIL;
     },
-    [LoopState.RECOVER]: () => LoopEvent.RECOVERED,
+    [LoopState.RECOVER]: () => {
+      ctx.attempts = (ctx.attempts ?? 0) + 1;
+      const signal = [
+        ctx.eval ? ctx.eval.reasons.join(' ') : '',
+        ctx.aggregate ? `pareto ${ctx.aggregate.score} < ${deps.paretoThreshold}` : '',
+      ].filter(Boolean).join(' | ');
+      const classified = classifyError(signal);
+      const exhausted = ctx.attempts >= MAX_RECOVER;
+      if (classified.fatal || exhausted) {
+        ctx.error = classified.fatal ? `fatal: ${signal}` : `recover exhausted after ${ctx.attempts} attempt(s)`;
+        return LoopEvent.BUDGET_OUT;
+      }
+      return LoopEvent.RECOVERED;
+    },
     [LoopState.COMMIT]: () => {
       if (deps.commit && ctx.worktree) deps.commit(ctx.worktree);
       return LoopEvent.COMMITTED;

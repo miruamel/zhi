@@ -26,4 +26,6 @@ export interface LoopContext {
   error?: string;
   /** @brief Budget komputasi terpakai. */
   budgetUsed?: number;
+  /** @brief Jumlah recovery yang sudah dicoba (RECOVER). */
+  attempts?: number;
 }

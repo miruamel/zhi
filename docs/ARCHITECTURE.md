@@ -78,7 +78,7 @@ TUI tidak mengambil keputusan — hanya visualisasi. Keputusan di `loop/` + `cri
 Transisi dikendalikan `driver.ts` (`LoopDriver`) + `wiring/handlers.ts` (`buildHandlers`):
 - `EVALUATE → COMMIT` hanya bila `gatePass(state) === true`.
 - `EVALUATE → RECOVER` bila gagal; `RECOVER → EXECUTE` setelah strategi recovery dipilih (bounded).
-- `CI_WATCH → EXECUTE` bila CI merah (dengan error context); `CI_WATCH → DONE` bila hijau.
+- `CI_WATCH → RECOVER` bila CI merah (bounded); `CI_WATCH → DONE` bila hijau.
 - Budget habis di mana pun → `RECOVER` lalu (bila tidak bisa) `DONE` dengan status `PARTIAL` + laporan.
 
 ## 8. v1 scope (konkret vs stub)

@@ -30,8 +30,8 @@ describe('loop state machine', () => {
     expect(transition(LoopState.PLAN, LoopEvent.CI_RED)).toBeNull();
   });
 
-  it('CI red loops back to EXECUTE', () => {
-    expect(transition(LoopState.CI_WATCH, LoopEvent.CI_RED)).toBe(LoopState.EXECUTE);
+  it('CI red routes to RECOVER (bounded, not blind EXECUTE)', () => {
+    expect(transition(LoopState.CI_WATCH, LoopEvent.CI_RED)).toBe(LoopState.RECOVER);
   });
 
   it('budget out from PLAN/EXECUTE/RECOVER routes to RECOVER/DONE', () => {
