@@ -26,6 +26,12 @@ jobs:
             -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 \
             | xargs -0 wc -l 2>/dev/null | awk '$2 != "total" && $1>200{print "VIOLATION SLOC:", $2; exit 1}'
           echo "ok: no code file exceeds 200 lines"
+      - name: Setup Zig
+        uses: mlugg/setup-zig@v1
+        with:
+          version: 0.16.0
+      - name: Build native wasm (stream)
+        run: cd native/stream && bash build.sh
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
