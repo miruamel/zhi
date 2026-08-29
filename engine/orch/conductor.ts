@@ -11,14 +11,20 @@ export type NextAction = 'generate' | 'critique' | 'eval' | 'done';
  * @since 0.1.0 */
 export function nextAction(state: LoopState): NextAction {
   switch (state) {
-    case 'idle':
+    case LoopState.INTAKE:
+    case LoopState.PLAN:
+    case LoopState.ISOLATE:
+    case LoopState.EXECUTE:
+    case LoopState.RECOVER:
       return 'generate';
-    case 'generated':
+    case LoopState.CRITIQUE:
       return 'critique';
-    case 'critiqued':
+    case LoopState.EVALUATE:
       return 'eval';
-    case 'evaluated':
-    case 'done':
+    case LoopState.COMMIT:
+    case LoopState.PR_OPEN:
+    case LoopState.CI_WATCH:
+    case LoopState.DONE:
       return 'done';
   }
 }
