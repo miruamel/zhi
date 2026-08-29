@@ -3,6 +3,7 @@ import { LoopState, LoopEvent, gatePass } from '../states';
 import { aggregate, type Critique } from '../../critic/aggregate';
 import { gate } from '../../eval/gate';
 import type { LoopContext } from './context';
+import { branchSlug } from './git';
 import type { StateHandler } from '../driver';
 
 /** @brief Dependensi injeksi untuk state LLM-dependent + ambang. @since 0.1.0 */
@@ -11,19 +12,17 @@ export interface LoopDeps {
   ingest: (goal: string) => string;
   /** @brief Buat rencana dari goal (PLAN). */
   plan: (goal: string) => string;
-  /** @brief Generate kode dari rencana (EXECUTE). */
-  generate: (plan: string) => string;
-  /** @brief Jalankan critic plant pada kode (CRITIQUE). */
+  /** @brief Generate kode dari rencana (EXECUTE). Bila worktree diberi, tulis file ke sana. */
+  generate: (plan: string, worktree?: string) => string;
   critique: (code: string) => Critique[];
   /** @brief Kompres kode hasil EXECUTE agar muat context window (opsional). */
   compress?: (code: string) => string;
-  /** @brief Isolasi kerja ke branch baru dari main (ISOLATE, opsional). @return {string} nama branch. */
+  /** @brief Isolasi kerja ke git worktree terpisah (ISOLATE, opsional). @return {string} path worktree absolut. */
   isolate?: () => string;
-  /** @brief Commit lokal hasil EXECUTE (COMMIT, opsional). */
-  commit?: () => void;
-  /** @brief Buka PR via gh (PR_OPEN, opsional). @return {string} URL PR. */
-  prOpen?: (title: string, body: string) => string;
-  /** @brief Pantau status CI (CI_WATCH, opsional). @return {'green'|'red'|'pending'}. */
+  /** @brief Commit hasil EXECUTE di dalam worktree (COMMIT, opsional). */
+  commit?: (worktree: string) => void;
+  /** @brief Buka PR via gh dari dalam worktree (PR_OPEN, opsional). @return {string} URL PR. */
+  prOpen?: (worktree: string, title: string, body: string) => string;
   ciWatch?: () => 'green' | 'red' | 'pending';
   /** @brief Ambang Pareto layak-commit (EVALUATE). */
   paretoThreshold: number;
@@ -46,11 +45,14 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<
       return LoopEvent.PLAN_OK;
     },
     [LoopState.ISOLATE]: () => {
-      if (deps.isolate) ctx.branch = deps.isolate();
+      if (deps.isolate) {
+        ctx.worktree = deps.isolate();
+        ctx.branch = branchSlug(ctx.goal);
+      }
       return LoopEvent.ISOLATED;
     },
     [LoopState.EXECUTE]: () => {
-      const raw = deps.generate(ctx.plan ?? '');
+      const raw = deps.generate(ctx.plan ?? '', ctx.worktree);
       ctx.code = deps.compress ? deps.compress(raw) : raw;
       return LoopEvent.EXECUTED;
     },
@@ -70,11 +72,11 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<
     },
     [LoopState.RECOVER]: () => LoopEvent.RECOVERED,
     [LoopState.COMMIT]: () => {
-      if (deps.commit) deps.commit();
+      if (deps.commit && ctx.worktree) deps.commit(ctx.worktree);
       return LoopEvent.COMMITTED;
     },
     [LoopState.PR_OPEN]: () => {
-      if (deps.prOpen) ctx.prUrl = deps.prOpen(ctx.goal ?? 'autoloop', ctx.plan ?? '');
+      if (deps.prOpen && ctx.worktree) ctx.prUrl = deps.prOpen(ctx.worktree, ctx.goal ?? 'autoloop', ctx.plan ?? '');
       return LoopEvent.PR_OPENED;
     },
     [LoopState.CI_WATCH]: () => {
