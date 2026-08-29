@@ -29,18 +29,15 @@ describe('loop wiring', () => {
     expect(ctx.eval?.passed).toBe(true);
   });
 
-  it('throws on non-terminating gate-fail cycle (budget guard)', async () => {
+  it('aborts gracefully after recover budget (no infinite spin)', async () => {
     const ctx: LoopContext = { goal: 'x' };
     const driver = new LoopDriver();
-    await expect(
-      driver.run(
-        buildHandlers(ctx, stubDeps({
-          critique: () => [{ name: 'security', score: 0.5, weight: 1, findings: [] }],
-        })),
-        8,
-      ),
-    ).rejects.toThrow('loop: budget exceeded');
-    expect(ctx.aggregate?.passed).toBe(false);
+    await driver.run(buildHandlers(ctx, stubDeps({
+      critique: () => [{ name: 'security', score: 0.5, weight: 1, findings: [] }],
+    })));
+    expect(driver.finished).toBe(true);
+    expect(ctx.attempts).toBe(3);
+    expect(ctx.error).toMatch(/recover exhausted/);
   });
 
   it('ISOLATE sets ctx.worktree+branch and COMMIT/PR_OPEN run inside worktree', async () => {
@@ -64,7 +61,7 @@ describe('loop wiring', () => {
     expect(ctx.prUrl).toBe('https://github.com/miruamel/zhi/pull/9');
   });
 
-  it('CI_WATCH routes to DONE on green, RECOVER on red', async () => {
+  it('CI_WATCH routes to DONE on green, recovers then aborts on persistent red', async () => {
     const green: LoopContext = { goal: 'g' };
     const d1 = new LoopDriver();
     await d1.run(buildHandlers(green, stubDeps({ ciWatch: () => 'green' })));
@@ -72,8 +69,8 @@ describe('loop wiring', () => {
 
     const red: LoopContext = { goal: 'g' };
     const d2 = new LoopDriver();
-    await expect(
-      d2.run(buildHandlers(red, stubDeps({ ciWatch: () => 'red' })), 8),
-    ).rejects.toThrow('loop: budget exceeded');
+    await d2.run(buildHandlers(red, stubDeps({ ciWatch: () => 'red' })));
+    expect(d2.finished).toBe(true);
+    expect(red.attempts).toBe(3);
   });
 });

@@ -23,6 +23,16 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 ## Template PR
 
 ## [0.1.0] - 2026-08-29
+### fix
+- engine/loop/states: CI_RED kini route ke RECOVER (bukan EXECUTE) — selaras ADR-005; cegah blind retry CI merah (@zhi)
+- engine/loop/wiring/handlers: RECOVER pakai classifyError (resil/recover) + attempt cap (MAX_RECOVER=3) -> BUDGET_OUT (graceful DONE) bila fatal/exhausted; ctx.attempts + ctx.error terisi (@zhi)
+- engine/loop/wiring/context: LoopContext.attempts? ditambah (@zhi)
+### test
+- engine/loop/wiring/handlers.test + integration.test: assert graceful DONE (attempts=3, error) bukan throw budget; states.test: CI_RED -> RECOVER (@zhi)
+### docs
+- ARCHITECTURE.md + loop.md: CI_WATCH merah -> RECOVER (bounded) (@zhi)
+
+## [0.1.0] - 2026-08-29
 ### feat
 - engine/eval: pipeline evaluasi nyata — test.ts (bun test di worktree), security.ts (scanSecrets grep secret, fail-closed), index.ts (evaluate -> gate) (@zhi)
 - engine/loop/wiring/handlers: LoopDeps.eval? dipanggil di EVALUATE bila ctx.worktree ada; hasil jadi qualityGateGreen di gatePass (@zhi)
