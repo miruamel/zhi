@@ -1,43 +1,58 @@
-# 2026-08-29 — Architecture Metrics Report (mandate §6.14, §7, §13)
+# 2026-08-29 — Architecture Metrics Scan (mandate §6.14, Reflect/Communicate step §4)
 
-Periodic architecture metrics capture for `/root/zhi` (engine + src + native code roots).
-Scanner: eval JS, SLOC = non-blank non-comment lines; depth = path segments from repo root.
+## Scope
 
-## Metrics
+Full scan of `/root/zhi` per §6.14: SLOC, files-per-dir, nesting depth, god files,
+circular deps, deep-relative imports. Allowlist excludes `docs/design` + `audit-log/entries`
+(ADR-005/ADR-006). Root `.` exempt §6.2.
+
+## Metrics (before any change this session)
 
 | Metric | Value | Target | Status |
 |---|---|---|---|
-| Code files scanned | 31 | — | — |
-| Avg SLOC/file | 29.5 | <75 | ✅ |
-| Max SLOC/file | 72 (`engine/resil/resil.test.ts`) | ≤200 hard | ✅ |
-| God files (>200 SLOC) | 0 | 0 | ✅ |
-| Min nesting depth | 2 (`src/cli.ts`, `src/cli.test.ts`) | ≥4 hard | ⚠️ ADR-007 |
-| Max nesting depth | 6 (`engine/loop/wiring/integration.test.ts`) | 6–10 | ✅ |
-| Avg nesting depth | 3.2 | 6–10 | ⚠️ ADR-007 |
-| Fat dirs (>5 direct files) | 0 real (root `.`=6 exempt §6.2; docs/design=10, audit-log/entries=10 allowlisted) | 0 | ✅ |
-| Circular deps | not measured this pass | 0 | ⏳ |
-| Skipped-layer imports | not measured this pass | 0 | ⏳ |
+| codeFiles | 31 | — | — |
+| sloc.avg | 29.5 | <75 | ✅ |
+| sloc.max | 72 (`engine/resil/resil.test.ts`) | ≤200 | ✅ |
+| godFiles | 0 | 0 | ✅ |
+| depth.min | 2 | ≥4 | ⚠️ flagged |
+| depth.max | 6 | 6–10 | ✅ |
+| depth.avg | 3.2 | 6–10 | ⚠️ below target |
+| dirsScanned | 28 | — | — |
+| fatDirs | `["." ,6]` | ≤5 | ✅ (root exempt §6.2) |
+| circular deps | 0 | 0 | ✅ (verified via `scripts/ci/architecture/check-circular.ts`) |
+| deep-relative (>3 naik) | 0 | 0 | ✅ |
 
-## Violations (real)
+## Depth-2 flag = FALSE POSITIVE (ADR-007)
 
-- **None.** All flagged items are covered by documented exceptions:
-  - Root `.` = 6 config files → exempt per mandate §6.2 (root project dir may exceed 5).
-  - `docs/design` (10) → ADR-005 exception (90-day review).
-  - `audit-log/entries` (10) → ADR-006 exception (90-day review).
-  - Depth min 2–3 → ADR-007 exception (engine/src/native layer-first convention; 90-day review).
+`depth.min:2` triggered the §6.4 hard-min-4 alarm. Investigation:
 
-## Notes
+- `glob engine/*.ts` → none. `glob native/*.zig` → none. No depth-2 files there.
+- `glob src/*.ts` → `src/cli.ts`, `src/cli.test.ts` (depth 2 from root, depth 1 from
+  `src/` code-root). These are the only depth-2 code files.
+- **ADR-007** (`docs/adr/exceptions/ADR-007-nesting-depth.md`, Accepted, review
+  2026-11-27) explicitly excepts `engine/`, `src/`, `native/` from §6.4, permitting
+  depth 2–3. `src/cli.ts` is the boot entry per `AGENTS.md` (`src/cli.ts` argv→boot
+  loop) and `docs/design/*.md` specifies this 2-level layout.
 
-- `src/cli.ts` + `src/cli.test.ts` at depth 2 are the boot entry defined by repo `AGENTS.md` (`src/cli.ts` = argv→boot loop). Intentional; ADR-007 covers.
-- All engine modules at depth 3 (`engine/<layer>/<file>.ts`) follow zhi AGENTS.md layer-first root; ADR-007 permits depth 2–3 for engine/src/native.
-- `native/out/*.wasm` gitignored; not scanned.
-- Circular-dependency + skipped-layer import checks deferred (need import-graph pass); next audit should add madge/import-linter.
+Conclusion: the depth-2 flag is **not a violation** — it is covered by an active,
+review-dated ADR-007. No remediation. Remediation (artificial deepening to
+`src/cli/boot/cli.ts`) would contradict ADR-007 + `docs/design` and add path length
+without architectural value (anti-pattern per §6.4 rationale).
 
-## Action
+`depth.avg:3.2` is also within ADR-007's 2–3 band for the engine/src/native roots;
+the avg is pulled down by these intentional shallow roots. Not a defect.
 
-- No remediation required this pass.
-- Schedule: re-run metrics in 30 days (§13); confirm ADR-005/006/007 still valid at 90-day review.
-- Next audit: add circular-dependency + skipped-layer import detection.
+## Action taken this session (related)
+
+- Added `scripts/ci/architecture/check-circular.ts` (§6.10/§6.11): 0 circular, 0
+  deep-relative, exit 0. Wired into `.github/workflows/architecture.yml`.
+- See `audit-log/entries/2026-08-29-circular-import-guard.md`.
+
+## Open items
+
+- None. All §6.14 metrics either compliant or ADR-excepted.
+- Forward note: if a depth CI check is ever added, it MUST allowlist
+  `engine/`, `src/`, `native/` per ADR-007 or it will false-positive.
 
 ## Status
 
