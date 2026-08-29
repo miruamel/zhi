@@ -22,6 +22,14 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 
 ## Template PR
 
+
+## [0.1.0] - 2026-08-29
+### refactor
+- engine/loop/wiring/handlers: EXECUTE bungkus deps.generate dalam withResilience (retry max 3 + CircuitBreaker + classifyError dari engine/resil) — modul resil (dibangun untuk loop) kini terpakai; generate gagal -> DLQ -> BUDGET_OUT -> RECOVER (bounded, no infinite spin) (@zhi)
+### test
+- engine/loop/wiring/handlers.test: assert generate throw -> loop retry lalu abort graceful (attempts=3, error /recover exhausted/) (@zhi)
+### docs
+- docs/design/loop.md: edge case EXECUTE generate-failure via withResilience (@zhi)
 ## [0.1.0] - 2026-08-29
 ### fix
 - engine/loop/states: CI_RED kini route ke RECOVER (bukan EXECUTE) — selaras ADR-005; cegah blind retry CI merah (@zhi)
