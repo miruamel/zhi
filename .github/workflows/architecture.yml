@@ -26,10 +26,13 @@ jobs:
             -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 \
             | xargs -0 wc -l 2>/dev/null | awk '$2 != "total" && $1>200{print "VIOLATION SLOC:", $2; exit 1}'
           echo "ok: no code file exceeds 200 lines"
-      - name: Setup Zig
-        uses: mlugg/setup-zig@v1
-        with:
-          version: 0.15.2
+      - name: Setup Zig 0.16.0 (direct download; setup-zig mirror lacks 0.16.0)
+        run: |
+          ZIG_VER=0.16.0
+          URL="https://ziglang.org/download/${ZIG_VER}/zig-x86_64-linux-${ZIG_VER}.tar.xz"
+          curl -fsSL "$URL" -o /tmp/zig.tar.xz
+          tar -xf /tmp/zig.tar.xz -C /opt
+          echo "/opt/zig-x86_64-linux-${ZIG_VER}" >> "$GITHUB_PATH"
       - name: Build native wasm (stream)
         run: cd native/stream && bash build.sh
       - name: Setup Bun

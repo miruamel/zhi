@@ -36,4 +36,8 @@ export fn parse_sse(
     return written;
 }
 
+/// @brief Entry no-op agar `zig build-exe` menghasilkan wasm module
+/// (bukan ar archive). Tidak dipanggil oleh wrapper JS; hanya `parse_sse` yang diekspor.
+pub fn main() void {}
+
 const std = @import("std");
