@@ -10,7 +10,7 @@ function stubDeps(over: Partial<LoopDeps> = {}): LoopDeps {
     plan: (g) => `plan:${g}`,
     generate: (p) => `code:${p}`,
     critique: () => [{ name: 'security', score: 0.9, weight: 1, findings: [] }],
-    ciGreen: () => true,
+    ciWatch: () => 'green',
     paretoThreshold: 0.8,
     ...over,
   };
@@ -41,5 +41,34 @@ describe('loop wiring', () => {
       ),
     ).rejects.toThrow('loop: budget exceeded');
     expect(ctx.aggregate?.passed).toBe(false);
+  });
+
+  it('ISOLATE sets ctx.branch and PR_OPEN sets ctx.prUrl when deps provided', async () => {
+    const ctx: LoopContext = { goal: 'build auth' };
+    const driver = new LoopDriver();
+    let isolated = false;
+    let opened = '';
+    await driver.run(buildHandlers(ctx, stubDeps({
+      isolate: () => { isolated = true; return 'feat/build-auth'; },
+      prOpen: (_t, _b) => { opened = 'https://github.com/miruamel/zhi/pull/9'; return opened; },
+      ciWatch: () => 'green',
+    })));
+    expect(driver.current).toBe(LoopState.DONE);
+    expect(isolated).toBe(true);
+    expect(ctx.branch).toBe('feat/build-auth');
+    expect(ctx.prUrl).toBe('https://github.com/miruamel/zhi/pull/9');
+  });
+
+  it('CI_WATCH routes to DONE on green, RECOVER on red', async () => {
+    const green: LoopContext = { goal: 'g' };
+    const d1 = new LoopDriver();
+    await d1.run(buildHandlers(green, stubDeps({ ciWatch: () => 'green' })));
+    expect(d1.current).toBe(LoopState.DONE);
+
+    const red: LoopContext = { goal: 'g' };
+    const d2 = new LoopDriver();
+    await expect(
+      d2.run(buildHandlers(red, stubDeps({ ciWatch: () => 'red' })), 8),
+    ).rejects.toThrow('loop: budget exceeded');
   });
 });

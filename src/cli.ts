@@ -8,11 +8,12 @@ import { generate as scaffold } from '../engine/build/generate';
 import { verify } from '../engine/build/verify';
 import { compress } from '../engine/build/context/compress';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
+import { gitIsolate, ghPrOpen, ghCiWatch } from '../engine/loop/wiring/git';
 import { composeCritiques } from '../engine/critic/plant/compose';
-import type { LoopContext } from '../engine/loop/wiring/context';
-// ponytail: PLAN + EXECUTE sekarang nyata (orch + engine/build scaffolder).
-// ciGreen masih stub deterministik (tanpa CI nyata). Upgrade: ganti ciGreen
-// dengan watcher CI bila env ZHI_LLM_ENDPOINT terisi; generate LLM-ready via model/router.
+// ponytail: PLAN + EXECUTE nyata (orch + engine/build scaffolder).
+// CI_WATCH opsional: tanpa ciWatch -> loop anggap green (mode offline, aman untuk
+// test/smoke). Mode autonom (buka PR + pantau CI) aktif bila env ZHI_AUTO_PR=1;
+// adapter git/gh di engine/loop/wiring/git.ts (deterministik, egress-aware).
 /** @brief Derivasi identifier simbol dari plan (token pertama). @since 0.1.0 */
 function planSymbol(plan: string): string {
   const head = plan.split(/[\s>]+/)[0] ?? '';
@@ -41,8 +42,17 @@ function offlineDeps(threshold: number): LoopDeps {
     critique: (code) => composeCritiques([{ path: 'generated.ts', content: code }]),
     compress: (code) =>
       compress({ entries: [{ key: 'code', weight: 1, text: code }], budget: 20000 }).entries[0]?.text ?? '',
-    ciGreen: () => true,
     paretoThreshold: threshold,
+  };
+}
+/** @brief Deeps otonom (git/gh nyata) bila ZHI_AUTO_PR=1; else offline. @since 0.1.0 */
+function autonomousDeps(base: LoopDeps, goal: string): LoopDeps {
+  if (process.env.ZHI_AUTO_PR !== '1') return base;
+  return {
+    ...base,
+    isolate: () => gitIsolate(goal),
+    prOpen: (title, body) => ghPrOpen(title, body),
+    ciWatch: () => ghCiWatch(),
   };
 }
 
@@ -63,7 +73,7 @@ export async function main(argv: string[]): Promise<LoopContext> {
   if (!goal) throw new Error('cli: goal kosong');
   const ctx: LoopContext = { goal };
   const driver = new LoopDriver();
-  await driver.run(buildHandlers(ctx, offlineDeps(threshold)));
+  await driver.run(buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal)));
   return ctx;
 }
 
