@@ -7,6 +7,7 @@ mkdir -p ../out
 zig build-lib parse.zig \
   -target wasm32-freestanding \
   -O ReleaseSmall \
+  -dynamic -rdynamic -fPIC \
   -femit-bin=../out/stream.wasm
 # Self-diagnose: -femit-bin path may be ignored on some Zig versions
 # (wasm emitted to default name in CWD). Verify magic, fallback to copy.

@@ -29,7 +29,7 @@ jobs:
       - name: Setup Zig
         uses: mlugg/setup-zig@v1
         with:
-          version: 0.14.0
+          version: 0.15.2
       - name: Build native wasm (stream)
         run: cd native/stream && bash build.sh
       - name: Setup Bun
