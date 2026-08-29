@@ -17,7 +17,7 @@ jobs:
               if [ "$d" = "./docs/design" ]; then continue; fi
               echo "VIOLATION: $d ($c files > 5)"; violations=1
             fi
-          done < <(find . -type d -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/.github/*')
+          done < <(find . -type d \( -name .git -o -name node_modules -o -name .github \) -prune -o -type d -print)
           exit $violations
 
       - name: SLOC per code file (<=200)
