@@ -18,6 +18,8 @@ export interface LoopContext {
   eval?: EvalOutput;
   /** @brief Branch hasil ISOLATE (bila deps.isolate ada). */
   branch?: string;
+  /** @brief Path worktree terisolasi hasil ISOLATE (bila deps.isolate ada). */
+  worktree?: string;
   /** @brief URL PR hasil PR_OPEN (bila deps.prOpen ada). */
   prUrl?: string;
   /** @brief Pesan error terakhir. */

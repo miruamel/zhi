@@ -1,6 +1,8 @@
 #!/usr/bin/env bun
 /** @brief Entry CLI Zhi: argv -> boot loop otonom. @since 0.1.0 */
 import { LoopDriver } from '../engine/loop/driver';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { parseGoal } from '../engine/orch/parse';
 import { buildDag } from '../engine/orch/dag';
 import { allocate, schedule } from '../engine/orch/schedule';
@@ -10,10 +12,10 @@ import { compress } from '../engine/build/context/compress';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
 import { gitIsolate, ghPrOpen, ghCiWatch } from '../engine/loop/wiring/git';
 import { composeCritiques } from '../engine/critic/plant/compose';
-// ponytail: PLAN + EXECUTE nyata (orch + engine/build scaffolder).
-// CI_WATCH opsional: tanpa ciWatch -> loop anggap green (mode offline, aman untuk
-// test/smoke). Mode autonom (buka PR + pantau CI) aktif bila env ZHI_AUTO_PR=1;
-// adapter git/gh di engine/loop/wiring/git.ts (deterministik, egress-aware).
+// ponytail: ISOLATE buat git worktree terpisah (security.md §Sandbox); generate
+// tulis scaffold ke sana; commit/prOpen jalan di dalam worktree. EXECUTE nyata
+// via engine/build scaffolder. CI_WATCH opsional: tanpa ciWatch -> green (offline).
+// Mode autonom (buka PR + pantau CI) aktif bila ZHI_AUTO_PR=1.
 /** @brief Derivasi identifier simbol dari plan (token pertama). @since 0.1.0 */
 function planSymbol(plan: string): string {
   const head = plan.split(/[\s>]+/)[0] ?? '';
@@ -30,9 +32,16 @@ function offlineDeps(threshold: number): LoopDeps {
         .map((s) => s.label)
         .join(' -> ');
     },
-    generate: (p) => {
+    generate: (p, wt) => {
       const files = scaffold({ domain: planSymbol(p) });
       const report = verify(files);
+      if (wt) {
+        for (const f of files) {
+          const fp = join(wt, f.path);
+          mkdirSync(dirname(fp), { recursive: true });
+          writeFileSync(fp, f.content);
+        }
+      }
       const body = files.map((f) => `// ${f.path}\n${f.content}`).join('\n');
       const verdict = report.ok
         ? '// verify: ok'
@@ -51,8 +60,8 @@ function autonomousDeps(base: LoopDeps, goal: string): LoopDeps {
   return {
     ...base,
     isolate: () => gitIsolate(goal),
-    prOpen: (title, body) => ghPrOpen(title, body),
-    ciWatch: () => ghCiWatch(),
+    commit: (wt) => gitCommit(wt, 'chore: autoloop generated changes'),
+    prOpen: (wt, t, b) => ghPrOpen(wt, t, b),
   };
 }
 
