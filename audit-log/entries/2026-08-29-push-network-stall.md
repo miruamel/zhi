@@ -57,7 +57,7 @@ lengkap, teruji, arsitektur-clean, CI-guarded.
 
 ## Status
 
-Push tertunda (network stall, receive-pack unreachable, 18 commit lokal). Probe bg_6 gagal:
+Push tertunda (network stall, receive-pack unreachable, 19 commit lokal). Probe bg_6 + bg_4 gagal:
 exit 124 (timeout 60); TCP github.com:443 OK → stall spesifik upload pack. Lanjut read-only
 per §2.11. State lokal konsisten: 59 test pass (13 file), semua arsitektur compliant. Remote
 disinkronkan bila koneksi pulih.
