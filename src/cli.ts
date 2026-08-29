@@ -6,6 +6,7 @@ import { buildDag } from '../engine/orch/dag';
 import { allocate, schedule } from '../engine/orch/schedule';
 import { generate as scaffold } from '../engine/build/generate';
 import { verify } from '../engine/build/verify';
+import { compress } from '../engine/build/context/compress';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
 import { composeCritiques } from '../engine/critic/plant/compose';
 import type { LoopContext } from '../engine/loop/wiring/context';
@@ -38,6 +39,8 @@ function offlineDeps(threshold: number): LoopDeps {
       return `${body}\n${verdict}`;
     },
     critique: (code) => composeCritiques([{ path: 'generated.ts', content: code }]),
+    compress: (code) =>
+      compress({ entries: [{ key: 'code', weight: 1, text: code }], budget: 20000 }).entries[0]?.text ?? '',
     ciGreen: () => true,
     paretoThreshold: threshold,
   };

@@ -15,8 +15,8 @@ export interface LoopDeps {
   generate: (plan: string) => string;
   /** @brief Jalankan critic plant pada kode (CRITIQUE). */
   critique: (code: string) => Critique[];
-  /** @brief Cek CI hijau (CI_WATCH). */
-  ciGreen: () => boolean;
+  /** @brief Kompres kode hasil EXECUTE agar muat context window (opsional). */
+  compress?: (code: string) => string;
   /** @brief Ambang Pareto layak-commit (EVALUATE). */
   paretoThreshold: number;
 }
@@ -39,7 +39,8 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<
     },
     [LoopState.ISOLATE]: () => LoopEvent.ISOLATED,
     [LoopState.EXECUTE]: () => {
-      ctx.code = deps.generate(ctx.plan ?? '');
+      const raw = deps.generate(ctx.plan ?? '');
+      ctx.code = deps.compress ? deps.compress(raw) : raw;
       return LoopEvent.EXECUTED;
     },
     [LoopState.CRITIQUE]: () => {

@@ -24,6 +24,16 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 
 ## [0.1.0] - 2026-08-29
 ### feat
+- engine/build/context/compress: kompres konteks by budget + weight (pertahankan entri prioritas) — tutup trio build v1 (generate/verify/compress) (@zhi)
+- engine/loop/wiring/handlers: LoopDeps.compress? dipanggil di EXECUTE (opsional) — jaga context window loop panjang (@zhi)
+- src/cli: adapter compress (budget 20000, no-op untuk output saat ini) (@zhi)
+### fix
+- src/cli: offlineDeps kehilangan `paretoThreshold` (terhapus edit) -> gate EVALUATE selalu GATE_FAIL -> loop RECOVER tak berhingga; dikembalikan (@zhi)
+### test
+- engine/build/context/compress.test: drop/truncate by budget + weight, empty (@zhi)
+
+## [0.1.0] - 2026-08-29
+### feat
 - engine/build/verify: verifikasi statis scaffold (<=5 file/dir, @brief wajib, no deep-relative import) — generate kini terverifikasi (@zhi)
 - src/cli: LoopDeps.generate jalankan verify, lampirkan `// verify: ok`/`FAIL` ke output EXECUTE (@zhi)
 ### test
