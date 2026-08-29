@@ -12,7 +12,8 @@ describe('cli boot', () => {
     expect(ctx.goal).toBe('build auth');
     expect(ctx.plan).toBe('plan(build auth)');
     expect(ctx.code).toBe('code(plan(build auth))');
-    expect(ctx.aggregate?.score).toBe(0.9);
+    expect(ctx.aggregate?.score).toBe(1);
+    expect(ctx.critiques).toHaveLength(3);
   });
 
   it('throws on empty goal', async () => {

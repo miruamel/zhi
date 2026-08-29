@@ -2,17 +2,19 @@
 /** @brief Entry CLI Zhi: argv -> boot loop otonom. @since 0.1.0 */
 import { LoopDriver } from '../engine/loop/driver';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
+import { composeCritiques } from '../engine/critic/plant/compose';
 import type { LoopContext } from '../engine/loop/wiring/context';
 
-// ponytail: stub offline deterministik. Upgrade: ganti dengan backend nyata
-// (route() + client HTTP) bila env ZHI_LLM_ENDPOINT terisi. Saat ini generate/
-// plan/critique hanya untuk smoke + verifikasi pipeline tanpa LLM.
+// ponytail: plan/generate masih stub deterministik (tanpa LLM). critique SEKARANG
+// nyata: menjalankan multi-critic plant (sloc + todo + imports) pada artefak.
+// Upgrade: ganti plan/generate dengan backend nyata (route() + client HTTP)
+// bila env ZHI_LLM_ENDPOINT terisi.
 function offlineDeps(threshold: number): LoopDeps {
   return {
     ingest: (g) => g.trim(),
     plan: (g) => `plan(${g})`,
     generate: (p) => `code(${p})`,
-    critique: () => [{ name: 'security', score: 0.9, weight: 1, findings: [] }],
+    critique: (code) => composeCritiques([{ path: 'generated.ts', content: code }]),
     ciGreen: () => true,
     paretoThreshold: threshold,
   };
