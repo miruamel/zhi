@@ -21,21 +21,23 @@ const LAYERS = ['handlers', 'services', 'utils', 'constants'] as const;
 /** @brief Scaffold modul domain fractal (belum ditulis ke disk).
  * @param {GenSpec} spec - spesifikasi domain.
  * @param {ModelInvoker} [invoker] - bila ada, isi file dihasilkan via model; else deterministik @brief.
- * @return {ScaffoldFile[]} daftar file hasil scaffold.
+ * @return {Promise<ScaffoldFile[]>} daftar file hasil scaffold.
  * @see docs/design/build.md
  * @since 0.1.0 */
-export function generate(spec: GenSpec, invoker?: ModelInvoker): ScaffoldFile[] {
+export async function generate(spec: GenSpec, invoker?: ModelInvoker): Promise<ScaffoldFile[]> {
   const d = spec.domain;
-  const files: ScaffoldFile[] = LAYERS.map((layer) => ({
-    path: `engine/${d}/${layer}/index.ts`,
-    content: invoker
-      ? invoker.invoke(`Generate ${layer} module for domain ${d} (AGENTS.md fractal).`)
-      : `/** @brief ${d} ${layer}. @since 0.1.0 */\n`,
-  }));
+  const files: ScaffoldFile[] = await Promise.all(
+    LAYERS.map(async (layer) => ({
+      path: `engine/${d}/${layer}/index.ts`,
+      content: invoker
+        ? await invoker.invoke(`Generate ${layer} module for domain ${d} (AGENTS.md fractal).`)
+        : `/** @brief ${d} ${layer}. @since 0.1.0 */\n`,
+    })),
+  );
   files.push({
     path: `engine/${d}/index.ts`,
     content: invoker
-      ? invoker.invoke(`Generate barrel index for domain ${d}.`)
+      ? await invoker.invoke(`Generate barrel index for domain ${d}.`)
       : `/** @brief Modul ${d}. @since 0.1.0 */\n`,
   });
   return files;
