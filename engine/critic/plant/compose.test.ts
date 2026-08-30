@@ -5,12 +5,12 @@ import { aggregate } from '../aggregate';
 
 test('compose runs all six critics', () => {
   const cr = composeCritiques([{ path: 'engine/foo/a.ts', content: 'export const x = 1;\n' }]);
-  expect(cr).toHaveLength(6);
-  expect(cr.map((c) => c.name).sort()).toEqual(['architecture', 'imports', 'maintainability', 'privacy', 'sloc', 'todo']);
+  expect(cr).toHaveLength(7);
+  expect(cr.map((c) => c.name).sort()).toEqual(['architecture', 'doc', 'imports', 'maintainability', 'privacy', 'sloc', 'todo']);
 });
 
 test('compose clean files aggregate to score 1 (gate pass)', () => {
-  const cr = composeCritiques([{ path: 'a.ts', content: 'export const x = 1;\n' }]);
+  const cr = composeCritiques([{ path: 'a.ts', content: '/** @brief X. */\nexport const x = 1;\n' }]);
   const r = aggregate(cr, 0.7);
   expect(r.score).toBe(1);
   expect(r.passed).toBe(true);
