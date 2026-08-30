@@ -11,6 +11,7 @@ import { verify } from '../engine/build/verify';
 import { compress } from '../engine/build/context/compress';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
 import { LoopMetrics } from '../engine/loop/observability/metrics';
+import { LoopLogger } from '../engine/loop/observability/logger';
 import { gitIsolate, ghPrOpen, ghCiWatch } from '../engine/loop/wiring/git';
 import { evaluate } from '../engine/eval/index';
 import { composeCritiques } from '../engine/critic/plant/compose';
@@ -89,7 +90,8 @@ export async function main(argv: string[]): Promise<LoopContext> {
   if (!goal) throw new Error('cli: goal kosong');
   const ctx: LoopContext = { goal };
   const metrics = new LoopMetrics();
-  const driver = new LoopDriver();
+  const logger = new LoopLogger();
+  const driver = new LoopDriver({ onTransition: (from, ev, to) => logger.transition(from, ev, to) });
   await driver.run(buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics));
   const s = metrics.summary();
   console.log(`[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}`);

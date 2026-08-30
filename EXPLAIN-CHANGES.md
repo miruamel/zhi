@@ -1,6 +1,12 @@
 # EXPLAIN-CHANGES.md
 
 Standar changelog Zhi. Setiap perubahan signifikan (PR yang mengubah behavior, API, atau arsitektur) WAJIB mencatat di sini, di bagian atas, sebelum merge.
+## [0.6.0] - 2026-08-30
+### feat
+- engine/loop/observability/logger: LoopLogger — log terstruktur JSON per transisi dengan correlation ID (runId); sink default console.log (@zhi)
+- src/cli: main() pasang onTransition → logger.transition (trace lintas state, §8.2) (@zhi)
+### test
+- engine/loop/observability/logger.test: emit JSON ber-runId + generate runId (@zhi)
 ## [0.5.0] - 2026-08-30
 ### feat
 - engine/loop/observability/metrics: LoopMetrics (akumulator StageRecord + summary) + timedStage(stage, fn, metrics) bungkus StateHandler dengan latency/error (@zhi)
