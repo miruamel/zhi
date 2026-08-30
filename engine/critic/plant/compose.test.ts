@@ -3,10 +3,10 @@ import { test, expect } from 'bun:test';
 import { composeCritiques } from './compose';
 import { aggregate } from '../aggregate';
 
-test('compose runs all three critics', () => {
+test('compose runs all four critics', () => {
   const cr = composeCritiques([{ path: 'a.ts', content: 'export const x = 1;\n' }]);
-  expect(cr).toHaveLength(3);
-  expect(cr.map((c) => c.name).sort()).toEqual(['imports', 'sloc', 'todo']);
+  expect(cr).toHaveLength(4);
+  expect(cr.map((c) => c.name).sort()).toEqual(['imports', 'maintainability', 'sloc', 'todo']);
 });
 
 test('compose clean files aggregate to score 1 (gate pass)', () => {

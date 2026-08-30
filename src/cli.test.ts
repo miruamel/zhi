@@ -15,7 +15,8 @@ describe('cli boot', () => {
     expect(ctx.code).toContain('verify: ok');
     expect(ctx.aggregate?.score).toBeGreaterThanOrEqual(0.8);
     expect(ctx.aggregate?.passed).toBe(true);
-    expect(ctx.critiques).toHaveLength(3);
+    expect(ctx.critiques).toHaveLength(4);
+    expect(ctx.critiques.map((c) => c.name)).toContain('maintainability');
   });
 
   it('throws on empty goal', async () => {
