@@ -1,6 +1,6 @@
 # Zhi (志)
 
-Terminal coding agent dengan **autonomous-loop engine** dan **multi-critic plant** (12 kritikus + meta-aggregator Pareto). Zhi mengambil goal berbahasa alami, merencanakannya sebagai DAG, mengeksekusi di git worktree terpisah, menilai lewat 12 kritikus + toolchain evaluasi, lalu commit + buka PR + pantau CI — berdiri sendiri sampai goal terpenuhi tanpa intervensi manusia di setiap step.
+Terminal coding agent dengan **autonomous-loop engine** dan **multi-critic plant** (15 kritikus + meta-aggregator Pareto). Zhi mengambil goal berbahasa alami, merencanakannya sebagai DAG, mengeksekusi di git worktree terpisah, menilai lewat 15 kritikus + toolchain evaluasi, lalu commit + buka PR + pantau CI — berdiri sendiri sampai goal terpenuhi tanpa intervensi manusia di setiap step.
 
 ## Mengapa ada Zhi
 
@@ -9,7 +9,17 @@ Tool agent saat ini (Claude Code, OMP, OpenCode, Aider, KiloCode, Hermes) sebagi
 Dua pilar kecanggihan:
 
 1. **Autonomous-loop conductor** — state machine `INTAKE → PLAN → ISOLATE → EXECUTE → CRITIQUE → EVALUATE → COMMIT → PR_OPEN → CI_WATCH → DONE`. Setiap transisi dijaga gate yang *machine-decidable* (build hijau, test hijau, lint bersih, secret-scan bersih, quality-gate lolos). Recovery *bounded* (circuit breaker + retry max-3), bukan spin tak terbatas.
-2. **Multi-critic plant** — 12 kritikus (Security, Perf, Architecture, Testing, Doc, DevOps, Legal, Privacy, Style, DX, Accessibility, Maintainability) menilai hasil, lalu `aggregate.ts` menghitung *weighted Pareto frontier* untuk memutus layak-commit atau tidak. Keputusan terukur, bukan vibes.
+2. **Multi-critic plant** — 15 kritikus (Security, Perf, Architecture, Testing, Doc, DevOps, Legal, Privacy, Style, DX, Accessibility, Maintainability, SLOC, Imports, Todo) menilai hasil, lalu `aggregate.ts` menghitung *weighted Pareto frontier* untuk memutus layak-commit atau tidak. Keputusan terukur, bukan vibes.
+
+## Quickstart
+
+```bash
+bun install
+bun test                   # jalankan seluruh test suite
+bun run cli "<goal>"       # satu siklus loop (offline, tanpa PR)
+bun run cli critique:repo  # audit higienitas repo (DevOps/Legal/DX/Testing)
+bun run arch:check         # guard arsitektur (circular / illegal layer edge)
+```
 
 ## Arsitektur (ringkas)
 
@@ -124,7 +134,7 @@ flowchart TD
 | loop | `engine/loop/` | Conductor state machine; menjahit semua modul | 
 | orch | `engine/orch/` | Task parser, DAG builder, cycle detect, budget/token, scheduler | 
 | build | `engine/build/` | Multi-file generator, inter-file dep mapper, self-verify, context | 
-| critic | `engine/critic/` | 12 kritikus + semantic cache + meta-aggregator Pareto | 
+| critic | `engine/critic/` | 15 kritikus + semantic cache + meta-aggregator Pareto |
 | eval | `engine/eval/` | Sandbox, build/test, SAST/secret, perf, compliance, quality gate | 
 | resil | `engine/resil/` | Circuit breaker, retry budget, DLQ, recovery | 
 | knowledge | `engine/knowledge/` | Vector DB, git-native index, KB, version history | 
@@ -134,7 +144,7 @@ flowchart TD
 
 ## Status
 
-**Prototype terimplementasi (experimental).** Mayoritas modul engine sudah ada dengan test hijau (`bun test` 96 pass). `engine/orch/` (planner: parseGoal/buildDag/allocate/schedule) dan `engine/loop/` (conductor state machine) sudah nyata; `generate`/`verify`/`compress` (`engine/build`) sudah nyata; `ISOLATE`/`PR_OPEN`/`CI_WATCH` di-wiring via adapter git/gh opsional (`engine/loop/wiring/git.ts`, aktif bila `ZHI_AUTO_PR=1`) — lihat ADR-005. Mode offline (default) tanpa `ciWatch` → CI dianggap green (aman untuk test/smoke).
+**Prototype terimplementasi (experimental).** Mayoritas modul engine sudah ada dengan test hijau (`bun test` 176 pass). `engine/orch/` (planner: parseGoal/buildDag/allocate/schedule) dan `engine/loop/` (conductor state machine) sudah nyata; `generate`/`verify`/`compress` (`engine/build`) sudah nyata; `ISOLATE`/`PR_OPEN`/`CI_WATCH` di-wiring via adapter git/gh opsional (`engine/loop/wiring/git.ts`, aktif bila `ZHI_AUTO_PR=1`) — lihat ADR-005. Mode offline (default) tanpa `ciWatch` → CI dianggap green (aman untuk test/smoke).
 
 ## Cara baca docs
 

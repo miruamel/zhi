@@ -8,9 +8,13 @@ import { architectureCritic } from './architecture/critic';
 import { privacyCritic } from './privacy/critic';
 import { docCritic } from './doc/critic';
 import { accessibilityCritic } from './accessibility/critic';
+import { securityCritic } from './security/critic';
+import { perfCritic } from './perf/critic';
+import { styleCritic } from './style/critic';
 import { devopsCritic } from './hygiene/devops/critic';
 import { legalCritic } from './hygiene/legal/critic';
 import { dxCritic } from './hygiene/dx/critic';
+import { testingCritic } from './hygiene/testing/critic';
 
 /** @brief Jalankan semua critic plant pada kumpulan file.
  * @param {FileRecord[]} files - artefak yang diaudit.
@@ -18,7 +22,7 @@ import { dxCritic } from './hygiene/dx/critic';
  * @see docs/design/critic.md
  * @since 0.1.0 */
 export function composeCritiques(files: FileRecord[]): Critique[] {
-  return [slocCritic(files), todoCritic(files), importsCritic(files), maintainabilityCritic(files), architectureCritic(files), privacyCritic(files), docCritic(files), accessibilityCritic(files)];
+  return [slocCritic(files), todoCritic(files), importsCritic(files), maintainabilityCritic(files), architectureCritic(files), privacyCritic(files), docCritic(files), accessibilityCritic(files), securityCritic(files), perfCritic(files), styleCritic(files)];
 }
 
 /** @brief Jalankan critic repo-hygiene (DevOps/Legal/DX) pada root repo.
@@ -27,5 +31,5 @@ export function composeCritiques(files: FileRecord[]): Critique[] {
  * @see docs/design/critic.md
  * @since 0.2.0 */
 export function composeHygiene(root: string): Critique[] {
-  return [devopsCritic(root), legalCritic(root), dxCritic(root)];
+  return [devopsCritic(root), legalCritic(root), dxCritic(root), testingCritic(root)];
 }
