@@ -26,6 +26,10 @@ Menilai hasil `generate` lewat kritikus konkret, lalu `aggregate` menghitung sko
 | devops | CI config (.github/workflows atau scripts/ci) + .gitignore ada | 1 | `plant/hygiene/devops/critic.ts` |
 | legal | LICENSE + README.md ada | 1 | `plant/hygiene/legal/critic.ts` |
 | dx | README quickstart/usage + AGENTS.md + package.json test script | 0.8 | `plant/hygiene/dx/critic.ts` |
+| security | sink injeksi (eval, new Function, innerHTML=, dangerouslySetInnerHTML, child_process.exec/execSync) | 1.5 | `plant/security/critic.ts` |
+| perf | debugger / console.* di generated code | 1 | `plant/perf/critic.ts` |
+| style | `: any` / `as any` / `@ts-ignore` / `@ts-nocheck` | 1 | `plant/style/critic.ts` |
+| testing | tiap source di src/ + engine/ tanpa test sibling | 1 | `plant/hygiene/testing/critic.ts` |
 
 ## Interface
 
@@ -57,7 +61,7 @@ export function aggregate(critiques: Critique[], threshold?: number): AggregateR
 
 - `critiques` kosong → `aggregate` fail-closed (`passed: false`, `score: 0`).
 - `architecture` guard error (spawn / signal / stderr) → `score: 0` + finding; agregasi lainnya tidak dibatalkan.
-Kritikus konkret saat ini: 11 (8 single-file via `composeCritiques` + 3 repo-wide via `composeHygiene`: devops, legal, dx). `composeCritiques` mengevaluasi SATU file generated (`src/cli.ts:57`); `composeHygiene(root)` mengevaluasi root repo (jalankan via `bun run cli critique:repo`). Sisa roadmap: Security (tumpang-tindih privacy), Perf, Testing, Style — butuh keputusan semantik per-kritikus (ADR singkat) sebelum naik konkret.
+Kritikus konkret saat ini: 15 (11 single-file via `composeCritiques` + 4 repo-wide via `composeHygiene`: devops, legal, dx, testing). Seluruh roadmap v0.2.0 + stub v0.1.0 (Security/Perf/Testing/Style) lulus graduasi. `composeCritiques` mengevaluasi SATU file generated (`src/cli.ts:57`); `composeHygiene(root)` mengevaluasi root repo (jalankan via `bun run cli critique:repo`).
 ## Roadmap
 
 Kritikus tambahan (Doc, DevOps, Legal, Privacy, DX, Accessibility, Security, Perf, Testing, Style) direncanakan naik stub→konkret bertahap di `docs/guides/roadmap.md` v0.2.0+. Setiap penambahan = direktori `plant/<name>/` baru + daftarkan di `composeCritiques` + test. Keputusan semantik per-kritikus (apa yang diukur, bobot, penalti) layak ADR singkat.
