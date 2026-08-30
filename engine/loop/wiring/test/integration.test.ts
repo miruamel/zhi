@@ -5,6 +5,7 @@ import { LoopState } from '../../states';
 import { buildHandlers, type LoopDeps } from '../handlers';
 import type { LoopContext } from '../context';
 import type { Critique } from '../../../critic/aggregate';
+import { LoopMetrics } from '../../observability/metrics';
 
 const high: Critique[] = [{ name: 'security', score: 1, weight: 1, findings: [] }];
 const low: Critique[] = [{ name: 'security', score: 0, weight: 1, findings: ['fail'] }];
@@ -63,5 +64,14 @@ describe('loop integration', () => {
     expect(driver.finished).toBe(true);
     expect(ctx.attempts).toBe(3);
     expect(ctx.error).toMatch(/recover exhausted/);
+  });
+  it('records per-stage metrics when metrics passed', async () => {
+    const ctx: LoopContext = { goal: 'g' };
+    const metrics = new LoopMetrics();
+    const driver = new LoopDriver();
+    await driver.run(buildHandlers(ctx, deps({ critique: () => high }), metrics));
+    expect(metrics.stages.length).toBeGreaterThan(0);
+    expect(metrics.summary().errors).toBe(0);
+    expect(metrics.stages.every((r) => r.ok)).toBe(true);
   });
 });

@@ -1,6 +1,15 @@
 # EXPLAIN-CHANGES.md
 
 Standar changelog Zhi. Setiap perubahan signifikan (PR yang mengubah behavior, API, atau arsitektur) WAJIB mencatat di sini, di bagian atas, sebelum merge.
+## [0.5.0] - 2026-08-30
+### feat
+- engine/loop/observability/metrics: LoopMetrics (akumulator StageRecord + summary) + timedStage(stage, fn, metrics) bungkus StateHandler dengan latency/error (@zhi)
+- engine/loop/wiring/handlers: buildHandlers(ctx, deps, metrics?) — bila metrics diberi, setiap handler dibungkus timedStage (non-breaking; tanpa metrics identik) (@zhi)
+- src/cli: main() cetak `[metrics] stages=.. errors=.. totalMs=..` pasca-run loop (@zhi)
+### test
+- engine/loop/observability/metrics.test: LoopMetrics.summary + timedStage ok/error (@zhi)
+- engine/loop/wiring/test/integration.test: buildHandlers isi metrics per-stage bila diberi (@zhi)
+- docs/adr/ADR-007-loop-metrics.md: keputusan observability loop (risiko menengah, §2.2/§8.2) (@zhi)
 ## [0.4.0] - 2026-08-30
 ### feat
 - engine/model/invoker: CloudModelInvoker.stream(prompt) — SSE chat/completions → token per yield, berhenti di [DONE]; ModelInvoker.stream? opsional (stub lokal tak implement) (@zhi)
