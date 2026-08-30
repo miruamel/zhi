@@ -1,6 +1,16 @@
 # EXPLAIN-CHANGES.md
 
 Standar changelog Zhi. Setiap perubahan signifikan (PR yang mengubah behavior, API, atau arsitektur) WAJIB mencatat di sini, di bagian atas, sebelum merge.
+## [0.1.0] - 2026-08-30
+### feat
+- engine/critic/plant/architecture: architectureCritic() delegasi ke scripts/ci/architecture/check-circular.ts via spawnSync (sumber tunggal aturan layer; no re-implement). Exit 0 → score 1; non-zero → score 0 + finding berisi stdout guard. Mandate §6.11 + ADR-001 dipindah ke plant sehingga CRITIQUE stage menangkap drift arsitektural sebelum EVALUATE (@zhi)
+- engine/critic/plant/compose: composeCritiques() tambah architectureCritic() — 5 critics (sloc/todo/imports/maintainability/architecture, weight 1.5 untuk imports + architecture) (@zhi)
+- docs/design/critic.md: baris 3 (Architecture) stub → konkret; kalimat v1 daftar konkret tambah Architecture (@zhi)
+### test
+- engine/critic/plant/compose.test: perbarui ke 5 critics (sebelumnya 4) — assert 5th critic name=architecture dengan skor numerik (tanpa assert repo state, dijaga CI architecture-guard) (@zhi)
+- src/cli.test: ctx.critiques length 4 → 5 (@zhi)
+### docs
+- docs/adr/ADR-008-architecture-critic.md: keputusan promosi + delegasi (risiko menengah, §2.2) (@zhi)
 ## [0.6.0] - 2026-08-30
 ### feat
 - engine/loop/observability/logger: LoopLogger — log terstruktur JSON per transisi dengan correlation ID (runId); sink default console.log (@zhi)
