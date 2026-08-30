@@ -1,6 +1,6 @@
 /** @brief Test LocalStubInvoker + selectInvoker. @since 0.2.0 */
 import { test, expect } from 'bun:test';
-import { LocalStubInvoker, selectInvoker } from './invoker';
+import { LocalStubInvoker, selectInvoker } from '../invoker';
 
 test('LocalStubInvoker.invoke returns deterministic stub with prompt', async () => {
   const out = await new LocalStubInvoker().invoke('make a thing');
