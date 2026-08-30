@@ -24,6 +24,12 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 
 
 ## [0.1.0] - 2026-08-29
+### feat
+- engine/model/invoker: ModelInvoker seam + LocalStubInvoker (tanpa LLM/secret) — generate kini model-pluggable; backend cloud/lokal (route() 9router/omp/local) ditunda di balik seam (@zhi)
+- engine/build/generate: terima invoker? opsional; isi file via model bila ada, else deterministik @brief (@zhi)
+- src/cli: deps.generate panggil scaffold dengan LocalStubInvoker (default no-secret) (@zhi)
+### test
+- engine/build/generate.test: assert isi via invoker berisi [local-stub] (@zhi)
 ### fix
 - engine/eval, engine/loop/wiring, docs/adr: split test files -> subdir test/ + ADR exception -> exceptions/; hapus file lama tertinggal dari git mv (stash/pop) — penuhi invariant files/dir <=5 (architecture-guard main RED sebelum fix, run 33271624792, memblokir semua merge) (@zhi)
 ### ci

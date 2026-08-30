@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'bun:test';
 import { generate } from './generate';
+import { LocalStubInvoker } from '../model/invoker';
 
 describe('build generate', () => {
   it('scaffolds fractal domain module (handlers/services/utils/constants + barrel)', () => {
@@ -19,5 +20,11 @@ describe('build generate', () => {
 
   it('produces exactly 5 files (<=5 per-dir guard)', () => {
     expect(generate({ domain: 'x' })).toHaveLength(5);
+  });
+  it('uses ModelInvoker when provided (model-pluggable seam)', () => {
+    const invoker = new LocalStubInvoker();
+    for (const f of generate({ domain: 'auth' }, invoker)) {
+      expect(f.content).toContain('[local-stub]');
+    }
   });
 });
