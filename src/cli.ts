@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /** @brief Entry CLI Zhi: argv -> boot loop otonom. @since 0.1.0 */
 import { LoopDriver } from '../engine/loop/driver';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { parseGoal } from '../engine/orch/parse';
 import { buildDag } from '../engine/orch/dag';
@@ -122,12 +122,22 @@ async function genCommand(args: string[]): Promise<LoopContext> {
   return { goal: domain };
 }
 
-/** @brief Subcommand critique:repo: jalankan hygiene repo-wide (DevOps/Legal/DX) pada cwd.
+/** @brief Subcommand critique:repo: jalankan hygiene repo-wide pada repo root.
  * @return {Promise<LoopContext>} konteks minimal (goal=critique:repo). @since 0.2.0 */
 async function critiqueRepoCommand(): Promise<LoopContext> {
-  const critiques = composeHygiene(process.cwd());
+  // ponytail: resolve ke repo root via marker AGENTS.md/package.json agar tetap benar
+  // bila dijalankan dari subdir (bukan sekadar process.cwd()). Fallback cwd bila tak ditemukan.
+  let root = process.cwd();
+  let dir = root;
+  while (true) {
+    if (existsSync(join(dir, 'AGENTS.md')) || existsSync(join(dir, 'package.json'))) { root = dir; break; }
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  const critiques = composeHygiene(root);
   const res = aggregate(critiques, 0.7);
-  console.log(JSON.stringify({ critiques: res.byCritic, score: res.score, passed: res.passed, findings: res.findings }, null, 2));
+  console.log(JSON.stringify({ root, critiques: res.byCritic, score: res.score, passed: res.passed, findings: res.findings }, null, 2));
   return { goal: 'critique:repo' };
 }
 
