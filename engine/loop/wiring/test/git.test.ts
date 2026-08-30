@@ -43,3 +43,11 @@ describe('gitIsolate + gitCommit', () => {
     execSync(`git worktree remove --force "${wt}"`);
   });
 });
+
+describe('worktreePath', () => {
+  it('resolves outside cwd with zhi-wt prefix', () => {
+    const p = worktreePath('feat/foo');
+    expect(p.endsWith('zhi-wt-feat-foo')).toBe(true);
+    expect(p).not.toBe(process.cwd());
+  });
+});
