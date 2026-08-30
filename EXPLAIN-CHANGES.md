@@ -9,6 +9,8 @@ Standar changelog Zhi. Setiap perubahan signifikan (PR yang mengubah behavior, A
 ### test
 - engine/build/generate.test: CloudModelInvoker.stream parse SSE (role-chunk + non-JSON diskip, [DONE] stop), generateStream per-prompt + fallback stub (@zhi)
 - docs/adr/ADR-006-streaming-generate.md: keputusan streaming (risiko menengah, §2.2) (@zhi)
+### ci
+- .github/workflows/architecture.yml: exempt ./docs/adr dari batas ≤5 file/dir (arsip ADR tumbuh; selaras ./docs/design, ./audit-log/entries) (@zhi)
 ## [0.3.0] - 2026-08-30
 ### feat
 - engine/model/invoker: selectInvoker(kind) konsultasi model/router — micro task (endpoint local) selalu LocalStubInvoker (kontrol biaya), heavy/light (9router/omp) pakai CloudModelInvoker bila MODEL_API_KEY ada (@zhi)
