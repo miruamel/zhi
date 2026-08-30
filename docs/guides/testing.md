@@ -26,7 +26,7 @@ Zhi sendiri harus teruji sebelum bisa menjalankan loop terpercaya. Strategi: uni
 
 ## Integration (loop)
 
-- `loop/driver.ts` di-test dengan `LoopCtx` berisi **fake** `orch/build/critic/eval/resil/knowledge/model`.
+- `engine/loop/driver.ts` di-test dengan `LoopCtx` berisi **fake** `orch/build/critic/eval/resil/knowledge/model`.
 - Skenario: happy path → `LoopReport.status==='done'` + `prUrl`.
 - Skenario: test fail → `resil` patch → pass (bounded).
 - Skenario: test fail ×3 → DLQ → `DONE(partial)`.
