@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 import { parseGoal } from '../engine/orch/parse';
 import { buildDag } from '../engine/orch/dag';
 import { allocate, schedule } from '../engine/orch/schedule';
-import { generate as scaffold } from '../engine/build/generate';
+import { generate as scaffold, generateStream } from '../engine/build/generate';
 import { verify } from '../engine/build/verify';
 import { compress } from '../engine/build/context/compress';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
@@ -83,12 +83,35 @@ export function parseArgs(argv: string[]): { goal: string; threshold: number } {
  * @return {Promise<LoopContext>} konteks akhir loop (sampai DONE).
  * @since 0.1.0 */
 export async function main(argv: string[]): Promise<LoopContext> {
+  if (argv[0] === 'gen') return genCommand(argv.slice(1));
   const { goal, threshold } = parseArgs(argv);
   if (!goal) throw new Error('cli: goal kosong');
   const ctx: LoopContext = { goal };
   const driver = new LoopDriver();
   await driver.run(buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal)));
   return ctx;
+}
+/** @brief Subcommand gen: scaffold domain langsung; --stream alirkan token (bila key).
+ * @param {string[]} args - [domain] [--stream]
+ * @return {Promise<LoopContext>} konteks minimal (goal=domain). @since 0.4.0 */
+async function genCommand(args: string[]): Promise<LoopContext> {
+  const domain = args.find((a) => !a.startsWith('--')) ?? '';
+  if (!domain) throw new Error('cli: gen butuh <domain>');
+  const stream = args.includes('--stream');
+  const invoker = selectInvoker();
+  if (stream) {
+    for await (const tok of generateStream({ domain }, invoker)) process.stdout.write(tok);
+    process.stdout.write('\n');
+  } else {
+    const files = await scaffold({ domain }, invoker);
+    const report = verify(files);
+    const body = files.map((f) => `// ${f.path}\n${f.content}`).join('\n');
+    const verdict = report.ok
+      ? '// verify: ok'
+      : `// verify: FAIL\n${report.violations.map((v) => `//   - ${v}`).join('\n')}`;
+    process.stdout.write(`${body}\n${verdict}\n`);
+  }
+  return { goal: domain };
 }
 
 // ponytail: jalankan hanya bila dieksekusi langsung (bukan saat diimpor test).
