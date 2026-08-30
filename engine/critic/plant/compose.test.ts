@@ -1,6 +1,6 @@
 /** @brief Test composer plant + integrasi aggregate. @since 0.1.0 */
 import { test, expect } from 'bun:test';
-import { composeCritiques } from './compose';
+import { composeCritiques, composeHygiene } from './compose';
 import { aggregate } from '../aggregate';
 
 test('compose runs all eight critics', () => {
@@ -43,4 +43,12 @@ test('compose severe violations fail even lenient gate', () => {
   const r = aggregate(cr, 0.7);
   expect(r.score).toBeLessThan(0.7);
   expect(r.passed).toBe(false);
+});
+
+test('composeHygiene runs three repo-wide critics on real root', () => {
+  const cr = composeHygiene(process.cwd());
+  expect(cr).toHaveLength(3);
+  expect(cr.map((c) => c.name).sort()).toEqual(['devops', 'dx', 'legal']);
+  const r = aggregate(cr, 0.7);
+  expect(r.passed).toBe(true);
 });
