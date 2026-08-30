@@ -23,3 +23,11 @@ describe('scanSecrets', () => {
     expect(scanSecrets(d).leaked).toBe(false);
   });
 });
+
+describe('scanSecrets (extra)', () => {
+  it('nonexistent worktree -> fail-closed (leaked)', () => {
+    const r = scanSecrets('/nonexistent/path/zhi-xyz');
+    expect(r.leaked).toBe(true);
+    expect(r.findings[0]).toContain('scan error');
+  });
+});
