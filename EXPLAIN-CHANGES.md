@@ -23,6 +23,15 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 ## Template PR
 
 
+## [0.2.0] - 2026-08-30
+### feat
+- engine/critic/plant/maintainability: promosi critic Maintainability stub → konkret (deteksi duplikasi baris kode, DRY) — jalankan di composeCritiques; skor 1 bila 0 dup, penalty rasio salinan redundan (@zhi)
+### test
+- engine/critic/plant/maintainability/critic.test: codeLines filter + no-dup score 1 + dup penalty (@zhi)
+- engine/critic/plant/compose.test: assert 4 critic (tambah maintainability) (@zhi)
+### docs
+- docs/design/critic.md: baris Maintainability konkret; perbarui catatan v1 (9/12 konkret) (@zhi)
+
 ## [0.1.0] - 2026-08-29
 ### feat
 - engine/model/invoker: ModelInvoker seam + LocalStubInvoker (tanpa LLM/secret) — generate kini model-pluggable; backend cloud/lokal (route() 9router/omp/local) ditunda di balik seam (@zhi)
