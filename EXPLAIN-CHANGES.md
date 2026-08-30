@@ -1,6 +1,12 @@
 # EXPLAIN-CHANGES.md
 
 Standar changelog Zhi. Setiap perubahan signifikan (PR yang mengubah behavior, API, atau arsitektur) WAJIB mencatat di sini, di bagian atas, sebelum merge.
+## [0.3.0] - 2026-08-30
+### feat
+- engine/model/invoker: selectInvoker(kind) konsultasi model/router — micro task (endpoint local) selalu LocalStubInvoker (kontrol biaya), heavy/light (9router/omp) pakai CloudModelInvoker bila MODEL_API_KEY ada (@zhi)
+### test
+- engine/model/router.test: selectInvoker route micro→stub (even with key), heavy→cloud (key), fallback stub tanpa key (@zhi)
+
 
 ## Format
 

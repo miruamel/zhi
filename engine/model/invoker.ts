@@ -1,4 +1,5 @@
 /** @brief Invoker yang memanggil model untuk menghasilkan teks/kode. @since 0.1.0 */
+import { route, type TaskKind } from './router';
 
 /** @brief Kontrak pemanggilan model (LLM) untuk satu generasi.
  * @since 0.1.0 */
@@ -68,16 +69,16 @@ export class CloudModelInvoker implements ModelInvoker {
   }
 }
 
-/** @brief Pilih backend: cloud bila MODEL_API_KEY ada, else stub lokal.
+/** @brief Pilih backend via model/router: micro (endpoint local) selalu stub lokal;
+ * heavy/light (9router/omp) pakai cloud bila MODEL_API_KEY ada, else stub.
+ * @param {TaskKind} [kind='generate'] - jenis task (route menentukan endpoint).
  * @return {ModelInvoker} invoker aktif. @since 0.1.0 */
-export function selectInvoker(): ModelInvoker {
-  const key = process.env.MODEL_API_KEY;
-  if (key) {
-    return new CloudModelInvoker({
-      apiKey: key,
-      baseUrl: process.env.MODEL_BASE_URL,
-      model: process.env.MODEL_NAME,
-    });
-  }
-  return new LocalStubInvoker();
+export function selectInvoker(kind: TaskKind = 'generate'): ModelInvoker {
+  const backend = route(kind);
+  if (backend.endpoint === 'local' || !process.env.MODEL_API_KEY) return new LocalStubInvoker();
+  return new CloudModelInvoker({
+    apiKey: process.env.MODEL_API_KEY,
+    baseUrl: process.env.MODEL_BASE_URL,
+    model: process.env.MODEL_NAME,
+  });
 }
