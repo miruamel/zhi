@@ -25,7 +25,7 @@ Menilai hasil `generate` lewat **12 kritikus**, lalu meta-aggregator menghitung 
 | 9 | Style | lint, konvensi (`AGENTS.md`) | konkret |
 | 10 | DX | ergonomi API publik | stub |
 | 11 | Accessibility | ARIA, kontras (bila UI) | stub |
-| 12 | Maintainability | duplikasi, kompleksitas siklomatik | stub |
+| 12 | Maintainability | duplikasi baris kode (siklomatik ditunda) | konkret |
 
 ## Interface
 
@@ -62,8 +62,7 @@ export function aggregate(scores: CriticScore[]): Aggregate
 - Satu kritikus error → skor `abstain`, tidak membatalkan agregasi.
 
 ## v1
-
-Konkret: `cache` + Security/Perf/Testing/Style + `aggregate`. 8 sisanya **stub** di registry (impl `not-implemented`, return `abstain` + `upgrade path`).
+Konkret: `cache` + Security/Perf/Testing/Style/Maintainability + `aggregate`. 7 sisanya **stub** di registry (Architecture, Doc, DevOps, Legal, Privacy, DX, Accessibility; impl `not-implemented`, return `abstain` + `upgrade path`).
 
 ## Cross-link
 
