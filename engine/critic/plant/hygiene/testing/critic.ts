@@ -15,7 +15,7 @@ function sources(root: string): string[] {
       for (const name of readdirSync(dir)) {
         const full = join(dir, name);
         if (statSync(full).isDirectory()) walk(full);
-        else if (CODE_EXT[full.slice(full.lastIndexOf('.'))] && !/\.test\.(ts|tsx|js|jsx)$/.test(name)) out.push(full);
+  else if (CODE_EXT[full.slice(full.lastIndexOf('.'))] && !/\.test\.(ts|tsx|js|jsx)$/.test(name) && !/^test\.(ts|tsx|js|jsx)$/.test(name)) out.push(full);
       }
     };
     walk(base);
