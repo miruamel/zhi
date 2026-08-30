@@ -23,7 +23,7 @@ export interface LoopDeps {
   /** @brief Buat rencana dari goal (PLAN). */
   plan: (goal: string) => string;
   /** @brief Generate kode dari rencana (EXECUTE). Bila worktree diberi, tulis file ke sana. */
-  generate: (plan: string, worktree?: string) => string;
+  generate: (plan: string, worktree?: string) => Promise<string>;
   critique: (code: string) => Critique[];
   /** @brief Kompres kode hasil EXECUTE agar muat context window (opsional). */
   compress?: (code: string) => string;
@@ -65,7 +65,7 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<
       return LoopEvent.ISOLATED;
     },
     [LoopState.EXECUTE]: async () => {
-      const res = await withResilience(async () => deps.generate(ctx.plan ?? '', ctx.worktree), { breaker, maxAttempts: GENERATE_RETRY });
+      const res = await withResilience(() => deps.generate(ctx.plan ?? '', ctx.worktree), { breaker, maxAttempts: GENERATE_RETRY });
       if (isDLQ(res)) {
         ctx.error = `generate failed after ${GENERATE_RETRY} retry: ${res.error}`;
         return LoopEvent.BUDGET_OUT;

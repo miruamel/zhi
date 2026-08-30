@@ -13,7 +13,7 @@ import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
 import { gitIsolate, ghPrOpen, ghCiWatch } from '../engine/loop/wiring/git';
 import { evaluate } from '../engine/eval/index';
 import { composeCritiques } from '../engine/critic/plant/compose';
-import { LocalStubInvoker } from '../engine/model/invoker';
+import { selectInvoker } from '../engine/model/invoker';
 // ponytail: ISOLATE buat git worktree terpisah (security.md §Sandbox); generate
 // tulis scaffold ke sana; commit/prOpen jalan di dalam worktree. EXECUTE nyata
 // via engine/build scaffolder. CI_WATCH opsional: tanpa ciWatch -> green (offline).
@@ -34,9 +34,10 @@ function offlineDeps(threshold: number): LoopDeps {
         .map((s) => s.label)
         .join(' -> ');
     },
-    generate: (p, wt) => {
-      // ponytail: LocalStubInvoker = default no-secret; backend cloud/lokal (route() 9router/omp/local) ditunda di balik ModelInvoker seam.
-      const files = scaffold({ domain: planSymbol(p) }, new LocalStubInvoker());
+    generate: async (p, wt) => {
+      // ponytail: selectInvoker() -> CloudModelInvoker bila MODEL_API_KEY ada (backend nyata
+      // OpenAI-compat), else LocalStubInvoker (no-secret). Seam di engine/model/invoker.
+      const files = await scaffold({ domain: planSymbol(p) }, selectInvoker());
       const report = verify(files);
       if (wt) {
         for (const f of files) {

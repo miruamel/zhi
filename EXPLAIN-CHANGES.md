@@ -23,6 +23,15 @@ Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 ## Template PR
 
 
+## [0.1.0] - 2026-08-30
+### feat
+- engine/model/invoker: tambah CloudModelInvoker (OpenAI-compat chat/completions) + selectInvoker() — backend nyata di balik ModelInvoker seam; cloud aktif bila MODEL_API_KEY ada, else LocalStubInvoker (no-secret) (@zhi)
+- engine/build/generate: jadikan async (await invoker.invoke) — ModelInvoker.invoke kini Promise<string> (@zhi)
+- engine/loop/wiring/handlers: LoopDeps.generate bertipe Promise<string>; EXECUTE await via withResilience (flatten Promise) (@zhi)
+- src/cli: deps.generate pakai selectInvoker() (env-driven) (@zhi)
+### test
+- engine/build/generate.test: async + assert CloudModelInvoker parse chat/completions + throw non-2xx + selectInvoker env-switch (@zhi)
+
 ## [0.1.0] - 2026-08-29
 ### feat
 - engine/model/invoker: ModelInvoker seam + LocalStubInvoker (tanpa LLM/secret) — generate kini model-pluggable; backend cloud/lokal (route() 9router/omp/local) ditunda di balik seam (@zhi)
