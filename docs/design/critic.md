@@ -2,67 +2,59 @@
 
 ## Tujuan
 
-Menilai hasil `generate` lewat **12 kritikus**, lalu meta-aggregator menghitung *weighted Pareto frontier* untuk memutus layak-commit atau tidak. Dijalankan di state `CRITIQUE`, sebelum `EVALUATE`.
+Menilai hasil `generate` lewat kritikus konkret, lalu `aggregate` menghitung skor berbobot untuk memutus layak-commit atau tidak. Dijalankan di state `CRITIQUE`, sebelum `EVALUATE`.
 
-## Komponen
+## Komponen (implementasi aktual)
 
-- `cache.ts` (Semantic Cache): similarity embedding dari `knowledge/vectors.ts`.
-- `critics.ts` (12 Critics registry): tiap kritikus = `(FileChange[], Ctx) => CriticScore`.
-- `aggregate.ts` (Meta-Critic Weighted Pareto): gabung skor → keputusan.
+- `plant/<name>/critic.ts` — tiap kritikus = `(FileRecord[]) => Critique` (pure function, sync).
+- `plant/compose.ts` — `composeCritiques(files)` menjalankan semua kritikus terdaftar → `Critique[]`.
+- `aggregate.ts` — `aggregate(critiques, threshold)` → skor berbobot + gate `passed`.
 
-## 12 Kritikus
+## Kritikus terimplementasi (konkret)
 
-| # | Kritikus | Cek | v1 |
+| Kritikus | Cek | Berat | Sumber |
 |---|---|---|---|
-| 3 | Architecture | batas layer, coupling, SRP | konkret (deep-relative + illegal layer edge, mirrors CI guard) |
-| 2 | Perf | regresi perf, algoritma mahal, N+1 | konkret |
-| 4 | Testing | cakupan test, assertion bermakna | konkret |
-| 5 | Doc | docstring publik, `EXPLAIN-CHANGES.md` | stub |
-| 6 | DevOps | CI, Dockerfile, script deploy | stub |
-| 7 | Legal | lisensi, kode copyleft/third-party | stub |
-| 8 | Privacy | PII, logging sensitif | stub |
-| 9 | Style | lint, konvensi (`AGENTS.md`) | konkret |
-| 10 | DX | ergonomi API publik | stub |
-| 11 | Accessibility | ARIA, kontras (bila UI) | stub |
-| 12 | Maintainability | duplikasi baris kode (siklomatik ditunda) | konkret |
+| architecture | circular dep, deep-relative, illegal layer edge (mirror CI guard `scripts/ci/architecture/check-circular.ts`) | 1.5 | `plant/architecture/critic.ts` |
+| sloc | SLOC per file ≤200 (mandate §6.3) | 1 | `plant/sloc/critic.ts` |
+| imports | deep-relative import >3 level (mandate §6.7, §6.11) | 1.5 | `plant/imports/critic.ts` |
+| maintainability | duplikasi baris kode (mandate §6, DRY) | 1 | `plant/maintainability/critic.ts` |
+| todo | marker TODO/FIXME/XXX (mandate §6 cleanliness) | 1 | `plant/todo/critic.ts` |
 
 ## Interface
 
 ```ts
-/** @brief Jalankan semua kritikus (cache-aware).
- * @param {FileChange[]} changes @param {Ctx} ctx
- * @return {CriticScore[]} skor per kritikus (0..1) + alasan.
+/** @brief Jalankan semua kritikus plant pada kumpulan file.
+ * @param {FileRecord[]} files
+ * @return {Critique[]} hasil tiap critic (siap di-aggregate).
  * @since 0.1.0 */
-export async function runCritics(changes: FileChange[], ctx: Ctx): Promise<CriticScore[]>
+export function composeCritiques(files: FileRecord[]): Critique[]
 
-/** @brief Agregasi Pareto berbobot -> layak commit?
- * @param {CriticScore[]} scores
- * @return {Aggregate} pass + alasan + skor gabungan.
+/** @brief Agregasi berbobot -> layak commit?
+ * @param {Critique[]} critiques @param {number} [threshold=0.7]
+ * @return {AggregateResult} pass + skor + findings.
  * @since 0.1.0 */
-export function aggregate(scores: CriticScore[]): Aggregate
+export function aggregate(critiques: Critique[], threshold?: number): AggregateResult
 ```
 
 ## Alur
 
-1. `cache.ts` cek similarity; bila mirip hasil lama → pakai skor cache (hindari eksekusi mahal).
-2. `critics.ts` jalan (konkret via tool; stub via rule ringan / `abstain`).
-3. `aggregate.ts` hitung Pareto: tidak ada kritikus di bawah **floor** DAN mayoritas di atas **target** → `pass`.
+1. `composeCritiques` jalan semua kritikus konkret (sync, pure function; `architecture` delegasi ke CI guard via `spawnSync`).
+2. `aggregate` hitung rata-rata berbobot; `passed` bila `score >= threshold` (default 0.7).
 
-## Threshold (v1)
+## Threshold
 
-- Security < floor → **auto-fail** (tidak peduli Pareto).
-- Rata-rata berbobot ≥ 0.7 → `pass`.
-- Detail bobot + floor di `ADR-002`.
+- Rata-rata berbobot ≥ 0.7 → `pass` (default).
+- Satu kritikus error (`architecture` guard gagal spawn) → skor 0 + finding `infra error`; kritikus lain tetap jalan.
 
 ## Edge cases
 
-- Semua stub (belum diimplementasi) → `aggregate` abstain → fallback ke eval gate (`eval/gate.ts`).
-- Cache hit → skip eksekusi mahal.
-- Satu kritikus error → skor `abstain`, tidak membatalkan agregasi.
+- `critiques` kosong → `aggregate` fail-closed (`passed: false`, `score: 0`).
+- `architecture` guard error (spawn / signal / stderr) → `score: 0` + finding; agregasi lainnya tidak dibatalkan.
 
-## v1
-Konkret: `cache` + Security/Perf/Testing/Style/Maintainability/Architecture + `aggregate`. 6 sisanya **stub** di registry (Doc, DevOps, Legal, Privacy, DX, Accessibility; impl `not-implemented`, return `abstain` + `upgrade path`).
+## Roadmap
+
+Kritikus tambahan (Doc, DevOps, Legal, Privacy, DX, Accessibility, Security, Perf, Testing, Style) direncanakan naik stub→konkret bertahap di `docs/guides/roadmap.md` v0.2.0+. Setiap penambahan = direktori `plant/<name>/` baru + daftarkan di `composeCritiques` + test. Keputusan semantik per-kritikus (apa yang diukur, bobot, penalti) layak ADR singkat.
 
 ## Cross-link
 
-`ARCHITECTURE.md` §3, §4; `design/eval.md`; `design/knowledge.md`; `docs/adr/ADR-002-critic-pareto.md`.
+`ARCHITECTURE.md` §3, §4; `design/eval.md`; `docs/adr/ADR-002-critic-pareto.md`; `docs/guides/roadmap.md`.
