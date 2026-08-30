@@ -3,10 +3,10 @@ import { test, expect } from 'bun:test';
 import { composeCritiques } from './compose';
 import { aggregate } from '../aggregate';
 
-test('compose runs all five critics', () => {
+test('compose runs all six critics', () => {
   const cr = composeCritiques([{ path: 'engine/foo/a.ts', content: 'export const x = 1;\n' }]);
-  expect(cr).toHaveLength(5);
-  expect(cr.map((c) => c.name).sort()).toEqual(['architecture', 'imports', 'maintainability', 'sloc', 'todo']);
+  expect(cr).toHaveLength(6);
+  expect(cr.map((c) => c.name).sort()).toEqual(['architecture', 'imports', 'maintainability', 'privacy', 'sloc', 'todo']);
 });
 
 test('compose clean files aggregate to score 1 (gate pass)', () => {
@@ -17,11 +17,11 @@ test('compose clean files aggregate to score 1 (gate pass)', () => {
   expect(r.findings).toHaveLength(0);
 });
 
-test('compose detects violations across all three critics', () => {
+test('compose detects violations across critics', () => {
   const cr = composeCritiques([
     { path: 'big.ts', content: 'x\n'.repeat(210) },
-    { path: 'todo.ts', content: '// TODO: x\n// FIXME: y\n' },
-    { path: 'imp.ts', content: "import { x } from '../../../../d';\n" },
+    { path: 'todo.ts', content: '// TODO: x\n// FIXME: y\n// TODO: z\n// FIXME: w\n' },
+    { path: 'imp.ts', content: "import { x } from '../../../../d';\nimport { y } from '../../../../e';\n" },
   ]);
   const r = aggregate(cr, 0.7);
   expect(r.score).toBeLessThan(1);
@@ -38,7 +38,7 @@ test('compose severe violations fail even lenient gate', () => {
   const cr = composeCritiques([
     { path: 'god.ts', content: 'x\n'.repeat(400) },
     { path: 'mess.ts', content: '// TODO\n// FIXME\n// XXX\n// TODO\n// FIXME\n' },
-    { path: 'deep.ts', content: "import { a } from '../../../../../a';\nimport { b } from '../../../../../b';\n" },
+    { path: 'deep.ts', content: "import { a } from '../../../../../a';\nimport { b } from '../../../../../b';\nimport { c } from '../../../../../c';\n" },
   ]);
   const r = aggregate(cr, 0.7);
   expect(r.score).toBeLessThan(0.7);
