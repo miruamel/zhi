@@ -14,9 +14,8 @@ Menilai hasil `generate` lewat **12 kritikus**, lalu meta-aggregator menghitung 
 
 | # | Kritikus | Cek | v1 |
 |---|---|---|---|
-| 1 | Security | kerentanan (injeksi, secret, unsafe API) | konkret |
+| 3 | Architecture | batas layer, coupling, SRP | konkret (deep-relative + illegal layer edge, mirrors CI guard) |
 | 2 | Perf | regresi perf, algoritma mahal, N+1 | konkret |
-| 3 | Architecture | batas layer, coupling, SRP | stub |
 | 4 | Testing | cakupan test, assertion bermakna | konkret |
 | 5 | Doc | docstring publik, `EXPLAIN-CHANGES.md` | stub |
 | 6 | DevOps | CI, Dockerfile, script deploy | stub |
@@ -62,7 +61,7 @@ export function aggregate(scores: CriticScore[]): Aggregate
 - Satu kritikus error → skor `abstain`, tidak membatalkan agregasi.
 
 ## v1
-Konkret: `cache` + Security/Perf/Testing/Style/Maintainability + `aggregate`. 7 sisanya **stub** di registry (Architecture, Doc, DevOps, Legal, Privacy, DX, Accessibility; impl `not-implemented`, return `abstain` + `upgrade path`).
+Konkret: `cache` + Security/Perf/Testing/Style/Maintainability/Architecture + `aggregate`. 6 sisanya **stub** di registry (Doc, DevOps, Legal, Privacy, DX, Accessibility; impl `not-implemented`, return `abstain` + `upgrade path`).
 
 ## Cross-link
 
