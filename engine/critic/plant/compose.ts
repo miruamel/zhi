@@ -5,6 +5,7 @@ import { todoCritic } from './todo/critic';
 import { importsCritic } from './imports/critic';
 import { maintainabilityCritic } from './maintainability/critic';
 import { architectureCritic } from './architecture/critic';
+import { privacyCritic } from './privacy/critic';
 
 /** @brief Jalankan semua critic plant pada kumpulan file.
  * @param {FileRecord[]} files - artefak yang diaudit.
@@ -12,5 +13,5 @@ import { architectureCritic } from './architecture/critic';
  * @see docs/design/critic.md
  * @since 0.1.0 */
 export function composeCritiques(files: FileRecord[]): Critique[] {
-  return [slocCritic(files), todoCritic(files), importsCritic(files), maintainabilityCritic(files), architectureCritic(files)];
+  return [slocCritic(files), todoCritic(files), importsCritic(files), maintainabilityCritic(files), architectureCritic(files), privacyCritic(files)];
 }
