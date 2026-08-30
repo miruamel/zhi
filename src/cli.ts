@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /** @brief Entry CLI Zhi: argv -> boot loop otonom. @since 0.1.0 */
 import { LoopDriver } from '../engine/loop/driver';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { parseGoal } from '../engine/orch/parse';
 import { buildDag } from '../engine/orch/dag';
@@ -14,7 +14,8 @@ import { LoopMetrics } from '../engine/loop/observability/metrics';
 import { LoopLogger } from '../engine/loop/observability/logger';
 import { gitIsolate, ghPrOpen, ghCiWatch } from '../engine/loop/wiring/git';
 import { evaluate } from '../engine/eval/index';
-import { composeCritiques } from '../engine/critic/plant/compose';
+import { composeCritiques, composeHygiene } from '../engine/critic/plant/compose';
+import { aggregate } from '../engine/critic/aggregate';
 import { selectInvoker } from '../engine/model/invoker';
 // ponytail: ISOLATE buat git worktree terpisah (security.md §Sandbox); generate
 // tulis scaffold ke sana; commit/prOpen jalan di dalam worktree. EXECUTE nyata
@@ -86,6 +87,7 @@ export function parseArgs(argv: string[]): { goal: string; threshold: number } {
  * @since 0.1.0 */
 export async function main(argv: string[]): Promise<LoopContext> {
   if (argv[0] === 'gen') return genCommand(argv.slice(1));
+  if (argv[0] === 'critique:repo') return critiqueRepoCommand();
   const { goal, threshold } = parseArgs(argv);
   if (!goal) throw new Error('cli: goal kosong');
   const ctx: LoopContext = { goal };
@@ -118,6 +120,25 @@ async function genCommand(args: string[]): Promise<LoopContext> {
     process.stdout.write(`${body}\n${verdict}\n`);
   }
   return { goal: domain };
+}
+
+/** @brief Subcommand critique:repo: jalankan hygiene repo-wide pada repo root.
+ * @return {Promise<LoopContext>} konteks minimal (goal=critique:repo). @since 0.2.0 */
+async function critiqueRepoCommand(): Promise<LoopContext> {
+  // ponytail: resolve ke repo root via marker AGENTS.md/package.json agar tetap benar
+  // bila dijalankan dari subdir (bukan sekadar process.cwd()). Fallback cwd bila tak ditemukan.
+  let root = process.cwd();
+  let dir = root;
+  while (true) {
+    if (existsSync(join(dir, 'AGENTS.md')) || existsSync(join(dir, 'package.json'))) { root = dir; break; }
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  const critiques = composeHygiene(root);
+  const res = aggregate(critiques, 0.7);
+  console.log(JSON.stringify({ root, critiques: res.byCritic, score: res.score, passed: res.passed, findings: res.findings }, null, 2));
+  return { goal: 'critique:repo' };
 }
 
 // ponytail: jalankan hanya bila dieksekusi langsung (bukan saat diimpor test).
