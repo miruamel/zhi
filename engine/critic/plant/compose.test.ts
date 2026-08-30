@@ -3,10 +3,10 @@ import { test, expect } from 'bun:test';
 import { composeCritiques } from './compose';
 import { aggregate } from '../aggregate';
 
-test('compose runs all six critics', () => {
+test('compose runs all eight critics', () => {
   const cr = composeCritiques([{ path: 'engine/foo/a.ts', content: 'export const x = 1;\n' }]);
-  expect(cr).toHaveLength(7);
-  expect(cr.map((c) => c.name).sort()).toEqual(['architecture', 'doc', 'imports', 'maintainability', 'privacy', 'sloc', 'todo']);
+  expect(cr).toHaveLength(8);
+  expect(cr.map((c) => c.name).sort()).toEqual(['accessibility', 'architecture', 'doc', 'imports', 'maintainability', 'privacy', 'sloc', 'todo']);
 });
 
 test('compose clean files aggregate to score 1 (gate pass)', () => {
@@ -37,7 +37,7 @@ test('compose detects violations across critics', () => {
 test('compose severe violations fail even lenient gate', () => {
   const cr = composeCritiques([
     { path: 'god.ts', content: 'x\n'.repeat(400) },
-    { path: 'mess.ts', content: '// TODO\n// FIXME\n// XXX\n// TODO\n// FIXME\n' },
+    { path: 'mess.ts', content: '// TODO\n// FIXME\n// XXX\n// TODO\n// FIXME\nconst cfg = { password: "supersecretvalue123" };\n' },
     { path: 'deep.ts', content: "import { a } from '../../../../../a';\nimport { b } from '../../../../../b';\nimport { c } from '../../../../../c';\n" },
   ]);
   const r = aggregate(cr, 0.7);
