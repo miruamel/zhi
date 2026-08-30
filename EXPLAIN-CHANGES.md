@@ -1,6 +1,14 @@
 # EXPLAIN-CHANGES.md
 
 Standar changelog Zhi. Setiap perubahan signifikan (PR yang mengubah behavior, API, atau arsitektur) WAJIB mencatat di sini, di bagian atas, sebelum merge.
+## [0.4.0] - 2026-08-30
+### feat
+- engine/model/invoker: CloudModelInvoker.stream(prompt) — SSE chat/completions → token per yield, berhenti di [DONE]; ModelInvoker.stream? opsional (stub lokal tak implement) (@zhi)
+- engine/build/generate: generateStream(spec, invoker?) — alirkan token plan per prompt (4 layer + barrel); fallback batch chunk bila invoker tak stream (@zhi)
+- src/cli: subcommand `gen <domain> [--stream]` — scaffold domain langsung; --stream alirkan token live (bila MODEL_API_KEY) (@zhi)
+### test
+- engine/build/generate.test: CloudModelInvoker.stream parse SSE (role-chunk + non-JSON diskip, [DONE] stop), generateStream per-prompt + fallback stub (@zhi)
+- docs/adr/ADR-006-streaming-generate.md: keputusan streaming (risiko menengah, §2.2) (@zhi)
 ## [0.3.0] - 2026-08-30
 ### feat
 - engine/model/invoker: selectInvoker(kind) konsultasi model/router — micro task (endpoint local) selalu LocalStubInvoker (kontrol biaya), heavy/light (9router/omp) pakai CloudModelInvoker bila MODEL_API_KEY ada (@zhi)

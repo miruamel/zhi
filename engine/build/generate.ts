@@ -42,3 +42,20 @@ export async function generate(spec: GenSpec, invoker?: ModelInvoker): Promise<S
   });
   return files;
 }
+/** @brief Stream generasi modul domain (token plan). Fallback batch bila invoker tak stream.
+ * @param {GenSpec} spec - spesifikasi domain.
+ * @param {ModelInvoker} [invoker] - bila ada & stream, alirkan token; else batch.
+ * @return {AsyncGenerator<string>} token plan (atau satu chunk batch). @since 0.4.0 */
+export async function* generateStream(spec: GenSpec, invoker?: ModelInvoker): AsyncGenerator<string> {
+  const d = spec.domain;
+  const prompts = [
+    ...LAYERS.map((l) => `Generate ${l} module for domain ${d} (AGENTS.md fractal).`),
+    `Generate barrel index for domain ${d}.`,
+  ];
+  if (!invoker?.stream) {
+    const files = await generate(spec, invoker);
+    yield files.map((f) => `// ${f.path}\n${f.content}`).join('\n');
+    return;
+  }
+  for (const p of prompts) yield* invoker.stream(p);
+}
