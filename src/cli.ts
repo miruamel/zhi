@@ -10,6 +10,7 @@ import { generate as scaffold, generateStream } from '../engine/build/generate';
 import { verify } from '../engine/build/verify';
 import { compress } from '../engine/build/context/compress';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
+import { LoopMetrics } from '../engine/loop/observability/metrics';
 import { gitIsolate, ghPrOpen, ghCiWatch } from '../engine/loop/wiring/git';
 import { evaluate } from '../engine/eval/index';
 import { composeCritiques } from '../engine/critic/plant/compose';
@@ -87,8 +88,11 @@ export async function main(argv: string[]): Promise<LoopContext> {
   const { goal, threshold } = parseArgs(argv);
   if (!goal) throw new Error('cli: goal kosong');
   const ctx: LoopContext = { goal };
+  const metrics = new LoopMetrics();
   const driver = new LoopDriver();
-  await driver.run(buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal)));
+  await driver.run(buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics));
+  const s = metrics.summary();
+  console.log(`[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}`);
   return ctx;
 }
 /** @brief Subcommand gen: scaffold domain langsung; --stream alirkan token (bila key).
