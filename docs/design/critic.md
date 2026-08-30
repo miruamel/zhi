@@ -19,6 +19,9 @@ Menilai hasil `generate` lewat kritikus konkret, lalu `aggregate` menghitung sko
 | imports | deep-relative import >3 level (mandate §6.7, §6.11) | 1.5 | `plant/imports/critic.ts` |
 | maintainability | duplikasi baris kode (mandate §6, DRY) | 1 | `plant/maintainability/critic.ts` |
 | todo | marker TODO/FIXME/XXX (mandate §6 cleanliness) | 1 | `plant/todo/critic.ts` |
+| privacy | kebocoran secret high-confidence (private key, AKIA, JWT, DB URL, hardcoded cred) | 1.5 | `plant/privacy/critic.ts` |
+| doc | export publik tanpa `@brief` (AGENTS.Style.md) | 1 | `plant/doc/critic.ts` |
+| accessibility | `<img>` tanpa `alt`, `onClick` tanpa keyboard handler (WCAG 2.1 AA) | 1 | `plant/accessibility/critic.ts` |
 
 ## Interface
 
@@ -50,7 +53,7 @@ export function aggregate(critiques: Critique[], threshold?: number): AggregateR
 
 - `critiques` kosong → `aggregate` fail-closed (`passed: false`, `score: 0`).
 - `architecture` guard error (spawn / signal / stderr) → `score: 0` + finding; agregasi lainnya tidak dibatalkan.
-
+Kritikus konkret saat ini: 8 (architecture, sloc, imports, maintainability, todo, privacy, doc, accessibility). Sisa roadmap: DevOps, Legal, DX, Security, Perf, Testing, Style. Catatan scope: `composeCritiques` mengevaluasi **SATU file generated** (`src/cli.ts:57`), sehingga kritikus bersifat content-based per-artefak. DevOps/Legal/DX (LICENSE root, CI config, README) adalah repo-hygiene yang butuh scan repo-wide — butuh stage scan terpisah, bukan kritikus single-file ini. Security tumpang-tindih dengan privacy; Perf/Testing/Style butuh keputusan semantik per-kritikus (ADR singkat) sebelum naik konkret.
 ## Roadmap
 
 Kritikus tambahan (Doc, DevOps, Legal, Privacy, DX, Accessibility, Security, Perf, Testing, Style) direncanakan naik stub→konkret bertahap di `docs/guides/roadmap.md` v0.2.0+. Setiap penambahan = direktori `plant/<name>/` baru + daftarkan di `composeCritiques` + test. Keputusan semantik per-kritikus (apa yang diukur, bobot, penalti) layak ADR singkat.
