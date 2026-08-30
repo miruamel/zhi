@@ -35,8 +35,8 @@ Zhi dikirim bertahap. Setiap rilis naik maturity per `AGENTS.md` §Maturity. Exp
 
 ## v0.3.0 — Experimental → Stable candidate
 
-- `knowledge/vectors.ts` + `native/embed/embed.wasm` → Vector DB + semantic cache (`critic/cache`).
-- `knowledge/docs.ts` (KB docs/API) + `knowledge/versions.ts` (OpenAPI history).
+- `knowledge/vectors.ts` — **graduated** (VectorStore in-memory + cosine search, PR #31). `native/embed/embed.wasm` ditunda: butuh model embedding (Zig) sebelum semantic cache `critic/cache` bermakna.
+- `knowledge/docs.ts` (KB docs/API) + `knowledge/versions.ts` (OpenAPI history) — menunggu sumber input (OpenAPI spec / doc corpus).
 - Cross-session learning: ledger dipakai untuk tingkatkan prompt/route.
 
 ## v1.0.0 — Stable
