@@ -1,6 +1,6 @@
-/** @brief Critic: Testing hygiene repo-wide (source dengan export runtime butuh test sibling). @since 0.2.0 */
+/** @brief Critic: Testing hygiene repo-wide (setiap source dir punya test). @since 0.2.0 */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import type { Critique } from '../../../aggregate';
 
 const CODE_EXT: Record<string, true> = { '.ts': true, '.tsx': true, '.js': true, '.jsx': true };
@@ -40,15 +40,25 @@ function sources(root: string): string[] {
   return out;
 }
 
-/** @brief Testing critic: tiap source non-trivial tanpa test sibling = finding. Penalti 0.2, floor 0, bobot 1.0.
+/** @brief Directory sumber punya setidaknya satu test file — co-located ATAU di subdir test/.
+ * Mengakomodasi konvensi repo: test terkonsolidasi (resil.test.ts) maupun per-source di test/.
+ * @param {string} src @return {boolean} */
+function dirHasTests(src: string): boolean {
+  const dir = dirname(src);
+  if (readdirSync(dir).some((f) => /\.test\.(ts|tsx|js|jsx)$/.test(f))) return true;
+  const testDir = join(dir, 'test');
+  if (existsSync(testDir) && readdirSync(testDir).some((f) => /\.test\.(ts|tsx|js|jsx)$/.test(f))) return true;
+  return false;
+}
+
+/** @brief Testing critic: tiap source non-trivial di dir tanpa test = finding. Penalti 0.2, floor 0, bobot 1.0.
  * @param {string} root - path repo (bukan per-file).
  * @return {Critique} hasil critic.
  * @since 0.2.0 */
 export function testingCritic(root: string): Critique {
   const findings: string[] = [];
   for (const src of sources(root)) {
-    const testPath = src.replace(/(\.(ts|tsx|js|jsx))$/, '.test$1');
-    if (!existsSync(testPath)) findings.push(`${relative(root, src)} missing test sibling`);
+    if (!dirHasTests(src)) findings.push(`${relative(root, src)} has no test coverage`);
   }
   const score = Math.max(0, 1 - 0.2 * findings.length);
   return { name: 'testing', score, weight: 1.0, findings };

@@ -68,3 +68,21 @@ test('file with exported function flagged', () => {
   const c = testingCritic(r);
   expect(c.findings.some((f) => f.includes('svc.ts'))).toBe(true);
 });
+
+test('source in dir with test/ subdir not flagged', () => {
+  const r = tmp();
+  mkdirSync(join(r, 'src', 'test'), { recursive: true });
+  writeFileSync(join(r, 'src', 'foo.ts'), 'export const foo = 1;\n');
+  writeFileSync(join(r, 'src', 'test', 'foo.test.ts'), 'import { test } from "bun:test";\n');
+  const c = testingCritic(r);
+  expect(c.findings.some((f) => f.includes('foo.ts'))).toBe(false);
+});
+
+test('source covered by consolidated co-located test not flagged', () => {
+  const r = tmp();
+  mkdirSync(join(r, 'src'), { recursive: true });
+  writeFileSync(join(r, 'src', 'breaker.ts'), 'export class Breaker {}\n');
+  writeFileSync(join(r, 'src', 'resil.test.ts'), 'import { test } from "bun:test";\n');
+  const c = testingCritic(r);
+  expect(c.findings.some((f) => f.includes('breaker.ts'))).toBe(false);
+});
