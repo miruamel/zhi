@@ -74,3 +74,68 @@ describe('withResilience', () => {
     expect((r as DLQEntry).error).toContain('fatal quota');
   });
 });
+
+describe('CircuitBreaker (extra)', () => {
+  it('trims oldest call from window', () => {
+    const b = new CircuitBreaker({ windowSize: 2, openThreshold: 0.5 });
+    b.record(false); // [false]
+    b.record(true); // [false, true] -> 1/2
+    b.record(true); // [true, true] -> oldest shifted, 0/2
+    expect(b.isOpen()).toBe(false);
+  });
+  it('reset clears calls', () => {
+    const b = new CircuitBreaker({ windowSize: 2, openThreshold: 0.5 });
+    b.record(false); b.record(false);
+    expect(b.isOpen()).toBe(true);
+    b.reset();
+    expect(b.isOpen()).toBe(false);
+  });
+});
+
+describe('retryWithBudget (extra)', () => {
+  it('respects custom maxAttempts', async () => {
+    let n = 0;
+    const r = await retryWithBudget(async () => { n++; throw new Error('x'); }, 1);
+    expect(r.attempts).toBe(1);
+    expect(n).toBe(1);
+  });
+  it('DLQ carries attempts + timestamp', async () => {
+    const r = await retryWithBudget(async () => { throw new Error('always'); }, 3);
+    expect(r.dlq?.attempts).toBe(3);
+    expect(typeof r.dlq?.at).toBe('number');
+  });
+});
+
+describe('classifyError (extra)', () => {
+  it('fatal for timeout/quota', () => {
+    expect(classifyError('timeout exceeded').fatal).toBe(true);
+    expect(classifyError('quota exceeded').strategy).toBe('abort');
+  });
+  it('replan for ambig/parse', () => {
+    expect(classifyError('ambig detected').strategy).toBe('replan');
+    expect(classifyError('parse detected').fatal).toBe(false);
+  });
+  it('handles null/undefined without crash', () => {
+    expect(classifyError(undefined).strategy).toBe('patch');
+    expect(classifyError(null).fatal).toBe(false);
+  });
+});
+
+describe('withResilience (extra)', () => {
+  it('records true on success', async () => {
+    const b = new CircuitBreaker({ windowSize: 3, openThreshold: 0.9 });
+    const r = await withResilience(async () => 7, { breaker: b });
+    expect(r).toBe(7);
+    expect(b.isOpen()).toBe(false);
+  });
+  it('records false on failure', async () => {
+    const b = new CircuitBreaker({ windowSize: 3, openThreshold: 0.9 });
+    const r = await withResilience(async () => { throw new Error('boom'); }, { breaker: b });
+    expect((r as DLQEntry).error).toContain('boom');
+    expect(b.isOpen()).toBe(false);
+  });
+  it('returns DLQ without breaker', async () => {
+    const r = await withResilience(async () => { throw new Error('fatal'); });
+    expect((r as DLQEntry).error).toContain('fatal');
+  });
+});
