@@ -22,10 +22,16 @@ Zhi dikirim bertahap. Setiap rilis naik maturity per `AGENTS.md` §Maturity. Exp
 
 ## v0.2.0 — Experimental (depth)
 
-- `orch/scheduler.ts` paralel antar-step (conflict resolver sudah ada).
+- `orch/scheduler.ts` paralel antar-step — **DITUNDA** (lihat Catatan v0.2.0): `buildDag` hanya hasilkan rantai linier, thus no parallel steps; conflict resolver belum ada (roadmap keliru "sudah ada").
 - 8 kritikus sisa naik dari stub → konkret bertahap (Architecture, Doc, DevOps, Privacy, DX, Accessibility, Maintainability, Legal).
 - `eval/sandbox.ts` container (untuk kode tak-terpercaya).
 - `build/sanitize.ts` (AST/PII/XSS) — bila Zhi terima input web.
+
+### Catatan v0.2.0
+- **Parallel scheduler ditunda.** `buildDag` (dag.ts) hanya menghasilkan rantai linier (`s{i}` depends on `s{i-1}`), sehingga tidak ada step independen yang bisa dijalankan paralel. Roadmap menyatakan "conflict resolver sudah ada" — **tidak akurat**: tidak ada conflict resolver di `types.ts`/`dag.ts`/`schedule.ts`. Menambah resolver sekarang = dead code (tidak ada branch untuk di-resolve). Ditunda ke v1.0.0 (Multi-PR orchestration), di mana wave paralel menjadi bermakna.
+- **Sandbox container** (`eval/sandbox.ts`) butuh runtime container; belum diprioritaskan di env ini.
+- **Sanitize** (`build/sanitize.ts`) bersifat kondisional: hanya bila Zhi menerima input web (AST/PII/XSS). Belum aktif.
+- Semua 11 single-file critic + 4 repo-wide hygiene (devops/legal/dx/testing) sudah lulus; testing gap tertutup (PR #23–#28). Kritik `testing` sekarang = 0 findings di `main`.
 
 ## v0.3.0 — Experimental → Stable candidate
 
