@@ -26,7 +26,7 @@ Zhi adalah **terminal coding agent** yang menjalankan siklus dev secara otonom: 
 
 ## 3. Alur eksekusi utama (happy path)
 
-1. **INTAKE** — `cli.ts` terima goal (teks) + flag (repo, base branch, budget). Masuk `loop/driver.ts`.
+1. **INTAKE** — `cli.ts` terima goal (teks) + flag (repo, base branch, budget). Masuk `engine/loop/driver.ts`.
 2. **PLAN** — `orch/parse.ts` tokenisasi goal → `orch/dag.ts` bangun DAG step + `cycle detect` + `dependency resolver`. `orch/budget.ts` alokasi token per step. `orch/scheduler.ts` urutkan (priority queue).
 3. **ISOLATE** — `wiring/git.ts` (`gitIsolate`) buat **git worktree** terisolasi dari main. Semua eksekusi terjadi di worktree, main repo aman.
 4. **EXECUTE** — `build/generate.ts` panggil `model/router.ts` (stream via `model/stream.ts` Zig) untuk tulis/edit file. `build/verify.ts` self-verify syntax. `build/context.ts` jaga konteks muat (prompt compression bila loop panjang).
@@ -75,7 +75,7 @@ TUI tidak mengambil keputusan — hanya visualisasi. Keputusan di `loop/` + `cri
 `engine/loop/states.ts` mendefinisikan `LoopState`:
 `INTAKE | PLAN | ISOLATE | EXECUTE | CRITIQUE | EVALUATE | RECOVER | COMMIT | PR_OPEN | CI_WATCH | DONE`.
 
-Transisi dikendalikan `driver.ts` (`LoopDriver`) + `wiring/handlers.ts` (`buildHandlers`):
+Transisi dikendalikan `engine/loop/driver.ts` (`LoopDriver`) + `engine/loop/wiring/handlers.ts` (`buildHandlers`):
 - `EVALUATE → COMMIT` hanya bila `gatePass(state) === true`.
 - `EVALUATE → RECOVER` bila gagal; `RECOVER → EXECUTE` setelah strategi recovery dipilih (bounded).
 - `CI_WATCH → RECOVER` bila CI merah (bounded); `CI_WATCH → DONE` bila hijau.
