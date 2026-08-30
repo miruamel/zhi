@@ -1,6 +1,6 @@
 /** @brief Contract test LoopContext (pure type). @since 0.2.0 */
 import { test, expect } from 'bun:test';
-import type { LoopContext } from './context';
+import type { LoopContext } from '../context';
 
 test('LoopContext requires goal, accepts optional fields', () => {
   const ctx: LoopContext = { goal: 'deploy cli' };
