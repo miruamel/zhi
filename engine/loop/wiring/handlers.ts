@@ -6,6 +6,7 @@ import { classifyError, withResilience, CircuitBreaker, type DLQEntry } from '..
 import type { LoopContext } from './context';
 import { branchSlug } from './git';
 import type { StateHandler } from '../driver';
+import { LoopMetrics, timedStage } from '../observability/metrics';
 
 /** @brief Batas retry recovery sebelum abort (selaras resil maxAttempts=3, ADR-003). @since 0.1.0 */
 const MAX_RECOVER = 3;
@@ -46,9 +47,9 @@ export interface LoopDeps {
  * @return {Partial<Record<LoopState, StateHandler>>} handler tiap state aktif.
  * @see docs/design/loop.md
  * @since 0.1.0 */
-export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<LoopState, StateHandler>> {
+export function buildHandlers(ctx: LoopContext, deps: LoopDeps, metrics?: LoopMetrics): Partial<Record<LoopState, StateHandler>> {
   const breaker = new CircuitBreaker({ windowSize: 5, openThreshold: 0.5 });
-  return {
+  const raw: Partial<Record<LoopState, StateHandler>> = {
     [LoopState.INTAKE]: () => {
       ctx.goal = deps.ingest(ctx.goal);
       return LoopEvent.GOAL_READY;
@@ -116,4 +117,11 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Partial<Record<
       return st === 'green' ? LoopEvent.CI_GREEN : LoopEvent.CI_RED;
     },
   };
+  if (!metrics) return raw;
+  const wrapped: Partial<Record<LoopState, StateHandler>> = {};
+  for (const k of Object.keys(raw) as LoopState[]) {
+    const h = raw[k];
+    if (h) wrapped[k] = timedStage(k, h, metrics);
+  }
+  return wrapped;
 }
