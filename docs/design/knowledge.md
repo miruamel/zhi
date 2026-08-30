@@ -8,7 +8,7 @@ Simpan state lintas-step dan lintas-sesi: index git-native, ledger task, KB docs
 
 - `index.ts` (Store + Ledger): append-only task ledger (`KB/ledger/*.jsonl` + `KB/index.json`), mirip pola yuxi.
 - `git.ts` (Git-Native Repo indexed): worktree creation, diff, commit, history index untuk dep mapper `build`.
-- `vectors.ts` (Vector DB code embeddings) — **stub v1** (butuh `native/embed`).
+- `vectors.ts` (VectorStore in-memory + cosine search) — **graduated v0.3.0** (embeddings via `native/embed` menyusul).
 - `docs.ts` (Knowledge Base docs/API) — **stub v1**.
 - `versions.ts` (Version History OpenAPI) — **stub v1**.
 
@@ -38,7 +38,7 @@ export function appendLedger(entry: LedgerEntry): void
 - `loop` panggil `makeWorktree` di `ISOLATE`.
 - `build` baca `indexRepo` untuk dep map.
 - `loop` `appendLedger` tiap step (audit trail).
-- `critic/cache` baca `vectors` (stub → cache kosong di v1).
+- `critic/cache` baca `vectors` (menyusul setelah `native/embed` tersedia).
 
 ## Edge cases
 
@@ -48,7 +48,7 @@ export function appendLedger(entry: LedgerEntry): void
 
 ## v1
 
-Konkret: `git` (worktree + index + commit) + `store/ledger`. `vectors`/`docs`/`versions` **stub** (Vector DB menunggu `native/embed`).
+- Konkret: `git` (worktree + index + commit) + `store/ledger` + `vectors` (store in-memory). `docs`/`versions` **stub** (menunggu sumber OpenAPI/docs).
 
 ## Cross-link
 
