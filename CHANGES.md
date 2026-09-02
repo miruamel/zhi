@@ -14,7 +14,12 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
-## [Unreleased]
+## [0.1.1] - 2026-09-02
+
+### Security
+
+- **vitest `^2.0.0` → `^3.2.6`** — closes [CVE-2026-47429](https://github.com/vitest-dev/vitest/security/advisories/GHSA-5xrq-8626-4rwp) (CVSS 9.8 critical). Vitest UI server arbitrary file read + write + execute via path traversal when network-exposed (`--api.host`). Although zhi runs vitest locally only (private), public repo + critical severity = P0 fix per mandate §7.2. Patched in 3.2.6 with `allowWrite`/`allowExec` gates (default off for non-localhost).
+- `npm audit`: 0 vulnerabilities (prod + dev).
 
 ### Changed
 
@@ -57,5 +62,6 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 First tagged baseline. See [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md) for the full 2026-08-29 → 2026-08-30 development log (15 entries; note: that history uses inconsistent version headers `[0.1.0]` duplicated and a non-monotonic `0.1.0..0.6.0` block — preserved as-is for authorial record).
 
-[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/miruamel/zhi/releases/tag/v0.1.1
 [0.1.0]: https://github.com/miruamel/zhi/releases/tag/v0.1.0
