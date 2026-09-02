@@ -14,9 +14,11 @@ fix(critic): koreksi bobot Security floor 0.5
 docs(adr): ADR-002 critic Pareto
 ```
 
-## 2. EXPLAIN-CHANGES wajib
+## 2. CHANGES.md wajib
 
-Setiap PR yang mengubah **behavior / API / arsitektur** WAJIB update `EXPLAIN-CHANGES.md` (top-first) sebelum merge. Lihat `EXPLAIN-CHANGES.md` §Format. Docs-only PR dikecualikan.
+Setiap PR yang mengubah **behavior / API / arsitektur** WAJIB update `CHANGES.md` (top-first, di bawah `## [Unreleased]`) sebelum merge. Format: Keep a Changelog (section Added/Changed/Fixed/Removed/Security). Docs-only PR dikecualikan. Versi di-bump per SemVer saat release (lihat §5).
+
+Historical archive sebelum rename 2026-09-02: `docs/archive/EXPLAIN-CHANGES.md`.
 
 ## 3. Doc-style gate
 
@@ -29,6 +31,7 @@ Satu commit = satu perubahan kohesif. Jangan campur refactor + feat. File per co
 ## 5. Maturity & version
 
 Root `package.json` deklarasikan `"maturity"`. Zhi mulai `experimental` (`0.y.z`):
+
 - breaking change = **minor** (bukan major).
 - minor = batch per milestone, bukan 1-fitur-1-minor.
 - PATCH = zero behavior change.
@@ -43,11 +46,11 @@ Default **tanpa** `Co-Authored-By` trailer (sesuai ECC `includeCoAuthoredBy: fal
 - [ ] `tsc --noEmit` / typecheck lolos
 - [ ] `gate.ts` (eval) hijau: build ∧ test ∧ lint ∧ secret ∧ quality-gate
 - [ ] `@brief` ada di simbol publik baru
-- [ ] `EXPLAIN-CHANGES.md` updated (bila behavior berubah)
+- [ ] `CHANGES.md` updated di `## [Unreleased]` (bila behavior berubah)
 - [ ] Cross-link docs relevan terupdate
 
 ## References
 
 - `AGENTS.md` §Doc standard, §Maturity
 - `AGENTS.Style.md`
-- `EXPLAIN-CHANGES.md`
+- `CHANGES.md` (historical: `docs/archive/EXPLAIN-CHANGES.md`)

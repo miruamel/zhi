@@ -28,6 +28,7 @@ Zhi dikirim bertahap. Setiap rilis naik maturity per `AGENTS.md` §Maturity. Exp
 - `build/sanitize.ts` (AST/PII/XSS) — bila Zhi terima input web.
 
 ### Catatan v0.2.0
+
 - **Parallel scheduler ditunda.** `buildDag` (dag.ts) hanya menghasilkan rantai linier (`s{i}` depends on `s{i-1}`), sehingga tidak ada step independen yang bisa dijalankan paralel. Roadmap menyatakan "conflict resolver sudah ada" — **tidak akurat**: tidak ada conflict resolver di `types.ts`/`dag.ts`/`schedule.ts`. Menambah resolver sekarang = dead code (tidak ada branch untuk di-resolve). Ditunda ke v1.0.0 (Multi-PR orchestration), di mana wave paralel menjadi bermakna.
 - **Sandbox container** (`eval/sandbox.ts`) butuh runtime container; belum diprioritaskan di env ini.
 - **Sanitize** (`build/sanitize.ts`) bersifat kondisional: hanya bila Zhi menerima input web (AST/PII/XSS). Belum aktif.
@@ -50,8 +51,8 @@ Zhi dikirim bertahap. Setiap rilis naik maturity per `AGENTS.md` §Maturity. Exp
 
 - Setiap minor = batch milestone, bukan 1-fitur-1-minor.
 - Major butuh RFC + migration guide + §27 dwell (lihat `AGENTS.md`).
-- `EXPLAIN-CHANGES.md` di-update tiap rilis.
+- `CHANGES.md` di-update tiap rilis (Keep a Changelog + SemVer; historical archive di `docs/archive/EXPLAIN-CHANGES.md`).
 
 ## Cross-link
 
-`ARCHITECTURE.md` §8 (v1 scope), `AGENTS.md` §Maturity, `design/*.md`, `testing.md`, `EXPLAIN-CHANGES.md`.
+`ARCHITECTURE.md` §8 (v1 scope), `AGENTS.md` §Maturity, `design/*.md`, `testing.md`, `CHANGES.md`.
