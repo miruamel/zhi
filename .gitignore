@@ -11,7 +11,8 @@ native/.zig-cache/
 # Dependencies
 node_modules/
 .bun/
-bun.lock
+
+# Bun lockfile tracked untuk reproducible builds (CI bun install --frozen-lockfile)
 
 # Env & secrets
 .env
