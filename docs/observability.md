@@ -17,19 +17,19 @@ Zhi berjalan otonom; tanpa observability, kegagalan tak terlihat. Semua sinyal d
 
 ## Metrics (dalam proses)
 
-| Metrik | Sumber | Kegunaan |
-|---|---|---|
-| `tokens_used` | model/stream | budget tracking (`orch/budget`). |
-| `step_duration` | tiap modul | deteksi langkah lambat. |
-| `critic_scores` | critic/aggregate | tren kualitas antar-run. |
-| `eval_stage_duration` | eval/* | regresi toolchain. |
-| `retry_count` | resil/retry | spin detection (alert bila mendekati max-3). |
-| `dlq_size` | resil/recover | kegagalan final. |
+| Metrik                | Sumber           | Kegunaan                                     |
+| --------------------- | ---------------- | -------------------------------------------- |
+| `tokens_used`         | model/stream     | budget tracking (`orch/budget`).             |
+| `step_duration`       | tiap modul       | deteksi langkah lambat.                      |
+| `critic_scores`       | critic/aggregate | tren kualitas antar-run.                     |
+| `eval_stage_duration` | eval/*           | regresi toolchain.                           |
+| `retry_count`         | resil/retry      | spin detection (alert bila mendekati max-3). |
+| `dlq_size`            | resil/recover    | kegagalan final.                             |
 
 ## Cost tracking
 
 - `model/router` catat token per `Backend.tier` → `cost = tokens × price[tier]` (tabel harga di `zhi.config.ts.model`).
-- Ringkasan di `LoopReport.tokensUsed` + estimasi cost → tampil di TUI (pane Log) dan `EXPLAIN-CHANGES` bila melampaui budget.
+- Ringkasan di `LoopReport.tokensUsed` + estimasi cost → tampil di TUI (pane Log) dan `CHANGES.md` bila melampaui budget.
 - `orch/budget` potong step bila sisa budget < estimasi minimal (cegah over-spend).
 
 ## Tracing

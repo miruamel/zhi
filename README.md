@@ -4,12 +4,12 @@ Terminal coding agent dengan **autonomous-loop engine** dan **multi-critic plant
 
 ## Mengapa ada Zhi
 
-Tool agent saat ini (Claude Code, OMP, OpenCode, Aider, KiloCode, Hermes) sebagian besar adalah *chat wrapper* dengan tool calls. Perbedaannya tipis. Zhi mengambil sudut tajam yang belum dimenangkan: **loop yang benar-benar menutup siklus dev dengan gate berbasis kode**, bukan cuma generate diff.
+Tool agent saat ini (Claude Code, OMP, OpenCode, Aider, KiloCode, Hermes) sebagian besar adalah _chat wrapper_ dengan tool calls. Perbedaannya tipis. Zhi mengambil sudut tajam yang belum dimenangkan: **loop yang benar-benar menutup siklus dev dengan gate berbasis kode**, bukan cuma generate diff.
 
 Dua pilar kecanggihan:
 
-1. **Autonomous-loop conductor** — state machine `INTAKE → PLAN → ISOLATE → EXECUTE → CRITIQUE → EVALUATE → COMMIT → PR_OPEN → CI_WATCH → DONE`. Setiap transisi dijaga gate yang *machine-decidable* (build hijau, test hijau, lint bersih, secret-scan bersih, quality-gate lolos). Recovery *bounded* (circuit breaker + retry max-3), bukan spin tak terbatas.
-2. **Multi-critic plant** — 15 kritikus (Security, Perf, Architecture, Testing, Doc, DevOps, Legal, Privacy, Style, DX, Accessibility, Maintainability, SLOC, Imports, Todo) menilai hasil, lalu `aggregate.ts` menghitung *weighted Pareto frontier* untuk memutus layak-commit atau tidak. Keputusan terukur, bukan vibes.
+1. **Autonomous-loop conductor** — state machine `INTAKE → PLAN → ISOLATE → EXECUTE → CRITIQUE → EVALUATE → COMMIT → PR_OPEN → CI_WATCH → DONE`. Setiap transisi dijaga gate yang _machine-decidable_ (build hijau, test hijau, lint bersih, secret-scan bersih, quality-gate lolos). Recovery _bounded_ (circuit breaker + retry max-3), bukan spin tak terbatas.
+2. **Multi-critic plant** — 15 kritikus (Security, Perf, Architecture, Testing, Doc, DevOps, Legal, Privacy, Style, DX, Accessibility, Maintainability, SLOC, Imports, Todo) menilai hasil, lalu `aggregate.ts` menghitung _weighted Pareto frontier_ untuk memutus layak-commit atau tidak. Keputusan terukur, bukan vibes.
 
 ## Quickstart
 
@@ -129,18 +129,18 @@ flowchart TD
 
 ## Modul
 
-| Modul | Path | Tanggung jawab |
-|---|---|---|
-| loop | `engine/loop/` | Conductor state machine; menjahit semua modul | 
-| orch | `engine/orch/` | Task parser, DAG builder, cycle detect, budget/token, scheduler | 
-| build | `engine/build/` | Multi-file generator, inter-file dep mapper, self-verify, context | 
-| critic | `engine/critic/` | 15 kritikus + semantic cache + meta-aggregator Pareto |
-| eval | `engine/eval/` | Sandbox, build/test, SAST/secret, perf, compliance, quality gate | 
-| resil | `engine/resil/` | Circuit breaker, retry budget, DLQ, recovery | 
-| knowledge | `engine/knowledge/` | Vector DB, git-native index, KB, version history | 
-| model | `engine/model/` | Router LLM (9router/OMP/local), stream Zig, context | 
-| native | `native/` | Zig→WASM hot path: stream parse, diff, embed | 
-| src | `src/` | `cli.ts` entry + `tui/` ink viewer | 
+| Modul     | Path                | Tanggung jawab                                                    |
+| --------- | ------------------- | ----------------------------------------------------------------- |
+| loop      | `engine/loop/`      | Conductor state machine; menjahit semua modul                     |
+| orch      | `engine/orch/`      | Task parser, DAG builder, cycle detect, budget/token, scheduler   |
+| build     | `engine/build/`     | Multi-file generator, inter-file dep mapper, self-verify, context |
+| critic    | `engine/critic/`    | 15 kritikus + semantic cache + meta-aggregator Pareto             |
+| eval      | `engine/eval/`      | Sandbox, build/test, SAST/secret, perf, compliance, quality gate  |
+| resil     | `engine/resil/`     | Circuit breaker, retry budget, DLQ, recovery                      |
+| knowledge | `engine/knowledge/` | Vector DB, git-native index, KB, version history                  |
+| model     | `engine/model/`     | Router LLM (9router/OMP/local), stream Zig, context               |
+| native    | `native/`           | Zig→WASM hot path: stream parse, diff, embed                      |
+| src       | `src/`              | `cli.ts` entry + `tui/` ink viewer                                |
 
 ## Status
 
@@ -152,7 +152,7 @@ flowchart TD
 2. `docs/design/*.md` — spesifikasi per modul (interface, alur, edge case, v1 vs later).
 3. `docs/adr/*.md` — keputusan arsitektur (ADR) yang tidak bisa dibalik mudah.
 4. `AGENTS.md` + `AGENTS.Style.md` — konvensi layer & standar dokumentasi (Doxygen Universal).
-5. `EXPLAIN-CHANGES.md` — format changelog per perubahan.
+5. `CHANGES.md` — format changelog per perubahan (Keep a Changelog + SemVer; historical archive di `docs/archive/EXPLAIN-CHANGES.md`).
 
 ## Konvensi singkat
 
