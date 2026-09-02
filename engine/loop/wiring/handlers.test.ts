@@ -8,7 +8,7 @@ function stubDeps(over: Partial<LoopDeps> = {}): LoopDeps {
   return {
     ingest: (g) => g.trim(),
     plan: (g) => `plan:${g}`,
-    generate: (p) => `code:${p}`,
+    generate: async (p) => `code:${p}`,
     critique: () => [{ name: 'security', score: 0.9, weight: 1, findings: [] }],
     ciWatch: () => 'green',
     paretoThreshold: 0.8,
@@ -32,9 +32,14 @@ describe('loop wiring', () => {
   it('aborts gracefully after recover budget (no infinite spin)', async () => {
     const ctx: LoopContext = { goal: 'x' };
     const driver = new LoopDriver();
-    await driver.run(buildHandlers(ctx, stubDeps({
-      critique: () => [{ name: 'security', score: 0.5, weight: 1, findings: [] }],
-    })));
+    await driver.run(
+      buildHandlers(
+        ctx,
+        stubDeps({
+          critique: () => [{ name: 'security', score: 0.5, weight: 1, findings: [] }],
+        }),
+      ),
+    );
     expect(driver.finished).toBe(true);
     expect(ctx.attempts).toBe(3);
     expect(ctx.error).toMatch(/recover exhausted/);
@@ -43,9 +48,16 @@ describe('loop wiring', () => {
   it('EXECUTE failure (generate throws) retries then aborts gracefully', async () => {
     const ctx: LoopContext = { goal: 'x' };
     const driver = new LoopDriver();
-    await driver.run(buildHandlers(ctx, stubDeps({
-      generate: () => { throw new Error('model timeout'); },
-    })));
+    await driver.run(
+      buildHandlers(
+        ctx,
+        stubDeps({
+          generate: () => {
+            throw new Error('model timeout');
+          },
+        }),
+      ),
+    );
     expect(driver.finished).toBe(true);
     expect(ctx.attempts).toBe(3);
     expect(ctx.error).toMatch(/recover exhausted/);
@@ -57,12 +69,25 @@ describe('loop wiring', () => {
     let isolated = false;
     let committed = '';
     let opened = '';
-    await driver.run(buildHandlers(ctx, stubDeps({
-      isolate: () => { isolated = true; return '/tmp/wt-auth'; },
-      commit: (wt) => { committed = wt; },
-      prOpen: (wt, _t, _b) => { opened = wt; return 'https://github.com/miruamel/zhi/pull/9'; },
-      ciWatch: () => 'green',
-    })));
+    await driver.run(
+      buildHandlers(
+        ctx,
+        stubDeps({
+          isolate: () => {
+            isolated = true;
+            return '/tmp/wt-auth';
+          },
+          commit: (wt) => {
+            committed = wt;
+          },
+          prOpen: (wt, _t, _b) => {
+            opened = wt;
+            return 'https://github.com/miruamel/zhi/pull/9';
+          },
+          ciWatch: () => 'green',
+        }),
+      ),
+    );
     expect(driver.current).toBe(LoopState.DONE);
     expect(isolated).toBe(true);
     expect(ctx.worktree).toBe('/tmp/wt-auth');

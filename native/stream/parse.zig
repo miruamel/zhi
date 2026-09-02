@@ -6,28 +6,39 @@
 /// @param out_cap kapasitas buffer output
 /// @return byte ditulis; jika out_cap kurang, hasil terpotong
 export fn parse_sse(
-    input: [*]const u8,
+    input_ptr: [*]const u8,
     input_len: usize,
-    out: [*]u8,
+    out_ptr: [*]u8,
     out_cap: usize,
 ) usize {
     var written: usize = 0;
     var i: usize = 0;
     while (i < input_len) : (i += 1) {
-        var j = i;
-        while (j < input_len and input[j] != '\n') : (j += 1) {}
-        const line = input[i..j];
-        if (line.len >= 5 and std.mem.eql(u8, line[0..5], "data:")) {
-            var start: usize = 5;
-            while (start < line.len and line[start] == ' ') : (start += 1) {}
-            const val = line[start..];
-            var k: usize = 0;
-            while (k < val.len and written < out_cap) : (k += 1) {
-                out[written] = val[k];
+        // Cari end-of-line.
+        var j: usize = i;
+        while (j < input_len and input_ptr[j] != '\n') : (j += 1) {}
+        // Cek prefix "data:" (5 byte).
+        if (j - i >= 5 and
+            input_ptr[i] == 'd' and
+            input_ptr[i + 1] == 'a' and
+            input_ptr[i + 2] == 't' and
+            input_ptr[i + 3] == 'a' and
+            input_ptr[i + 4] == ':')
+        {
+            var start: usize = i + 5;
+            // Strip satu leading space (opsional).
+            if (start < j and input_ptr[start] == ' ') {
+                start += 1;
+            }
+            // Copy payload.
+            var k: usize = start;
+            while (k < j and written < out_cap) : (k += 1) {
+                out_ptr[written] = input_ptr[k];
                 written += 1;
             }
+            // Trailing newline.
             if (written < out_cap) {
-                out[written] = '\n';
+                out_ptr[written] = '\n';
                 written += 1;
             }
         }
@@ -35,5 +46,3 @@ export fn parse_sse(
     }
     return written;
 }
-
-const std = @import("std");

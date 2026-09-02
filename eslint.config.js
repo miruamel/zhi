@@ -1,4 +1,5 @@
 import jsdoc from 'eslint-plugin-jsdoc';
+import tsParser from '@typescript-eslint/parser';
 
 /** @brief ESLint flat config untuk Zhi (Yan v2.0.0 adapted). @since 0.1.0 */
 export default [
@@ -13,13 +14,19 @@ export default [
       'scripts/ci/architecture/metrics.ts',
       '.tsbuildinfo',
       'bun.lock',
+      'coverage/**',
+      'dist/**',
     ],
   },
   {
-    files: ['src/**/*.ts', 'engine/**/*.ts', 'tests/**/*.ts'],
+    files: ['src/**/*.ts', 'engine/**/*.ts', 'tests/**/*.ts', 'scripts/**/*.ts'],
     languageOptions: {
-      ecmaVersion: 2024,
-      sourceType: 'module',
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2024,
+        sourceType: 'module',
+        ecmaFeatures: { jsx: false },
+      },
       globals: {
         console: 'readonly',
         process: 'readonly',
@@ -52,7 +59,7 @@ export default [
       'no-unused-vars': 'off',
       'no-console': 'off',
       'prefer-const': 'warn',
-      'eqeqeq': ['error', 'always', { null: 'ignore' }],
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
     },
   },
 ];

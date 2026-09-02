@@ -1,9 +1,13 @@
 import { describe, it, expect } from 'bun:test';
 import { main, parseArgs } from './cli';
+import type { Critique } from '../engine/critic/aggregate';
 
 describe('cli boot', () => {
   it('parses goal and threshold', () => {
-    expect(parseArgs(['build auth', '--threshold=0.9'])).toEqual({ goal: 'build auth', threshold: 0.9 });
+    expect(parseArgs(['build auth', '--threshold=0.9'])).toEqual({
+      goal: 'build auth',
+      threshold: 0.9,
+    });
     expect(parseArgs(['  '])).toEqual({ goal: '  ', threshold: 0.8 });
   });
 
@@ -16,7 +20,7 @@ describe('cli boot', () => {
     expect(ctx.aggregate?.score).toBeGreaterThanOrEqual(0.8);
     expect(ctx.aggregate?.passed).toBe(true);
     expect(ctx.critiques).toHaveLength(11);
-    expect(ctx.critiques.map((c) => c.name)).toContain('maintainability');
+    expect(ctx.critiques?.map((c: Critique) => c.name)).toContain('maintainability');
   });
 
   it('throws on empty goal', async () => {
