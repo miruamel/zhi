@@ -7,22 +7,22 @@ Spesifikasi arsitektur sistem penuh. Melengkapi `README.md` (ringkas) dan `docs/
 Zhi adalah **terminal coding agent** yang menjalankan siklus dev secara otonom: dari goal berbahasa alami sampai PR merge, dengan gate berbasis kode di tiap transisi. Berbeda dari chat-wrapper (Claude Code/OMP/OpenCode/Aider/KiloCode/Hermes) karena dua pilar:
 
 - **Conductor loop** yang menutup siklus (`COMMIT` + `PR_OPEN` + `CI_WATCH`), bukan berhenti di diff.
-- **Multi-critic plant** yang memutus layak-commit lewat 12 kritikus + *weighted Pareto*, bukan satu model call.
+- **Multi-critic plant** yang memutus layak-commit lewat 12 kritikus + _weighted Pareto_, bukan satu model call.
 
 ## 2. Komponen utama
 
-| Subgraph | Modul | Peran |
-|---|---|---|
-| LOOP | `engine/loop/` | Conductor state machine; menjahit semua modul lewat `wiring/handlers.ts` (LoopDeps DI). |
-| ORCH | `engine/orch/` | Ubah goal → DAG step; alokasi budget/token; jadwalkan (serial dulu, paralel belakangan). |
-| BUILD | `engine/build/` | Generate multi-file; petakan inter-file dep; self-verify; kelola konteks (prompt compression). |
-| CRITIC | `engine/critic/` | 12 kritikus + semantic cache + meta-aggregator Pareto. |
-| EVAL | `engine/eval/` | Toolchain: sandbox, build/test, SAST/secret, perf, compliance, quality gate. |
-| RESIL | `engine/resil/` | Circuit breaker, retry budget (max-3), DLQ, recovery. |
-| KNOWLEDGE | `engine/knowledge/` | Vector DB, git-native index, KB docs/API, version history. |
-| MODEL | `engine/model/` | Router LLM (9router/OMP/local, tier heavy/light/micro), stream Zig, context. |
-| NATIVE | `native/` | Zig→WASM: stream parse, diff, embed. |
-| SRC | `src/` | `cli.ts` entry + `tui/` ink viewer. |
+| Subgraph  | Modul               | Peran                                                                                          |
+| --------- | ------------------- | ---------------------------------------------------------------------------------------------- |
+| LOOP      | `engine/loop/`      | Conductor state machine; menjahit semua modul lewat `wiring/handlers.ts` (LoopDeps DI).        |
+| ORCH      | `engine/orch/`      | Ubah goal → DAG step; alokasi budget/token; jadwalkan (serial dulu, paralel belakangan).       |
+| BUILD     | `engine/build/`     | Generate multi-file; petakan inter-file dep; self-verify; kelola konteks (prompt compression). |
+| CRITIC    | `engine/critic/`    | 12 kritikus + semantic cache + meta-aggregator Pareto.                                         |
+| EVAL      | `engine/eval/`      | Toolchain: sandbox, build/test, SAST/secret, perf, compliance, quality gate.                   |
+| RESIL     | `engine/resil/`     | Circuit breaker, retry budget (max-3), DLQ, recovery.                                          |
+| KNOWLEDGE | `engine/knowledge/` | Vector DB, git-native index, KB docs/API, version history.                                     |
+| MODEL     | `engine/model/`     | Router LLM (9router/OMP/local, tier heavy/light/micro), stream Zig, context.                   |
+| NATIVE    | `native/`           | Zig→WASM: stream parse, diff, embed.                                                           |
+| SRC       | `src/`              | `cli.ts` entry + `tui/` ink viewer.                                                            |
 
 ## 3. Alur eksekusi utama (happy path)
 
@@ -49,11 +49,11 @@ Zhi adalah **terminal coding agent** yang menjalankan siklus dev secara otonom: 
 
 ## 5. Native hot paths (Zig → WASM)
 
-| Modul | File | Why Zig |
-|---|---|---|
+| Modul        | File                      | Why Zig                                                                        |
+| ------------ | ------------------------- | ------------------------------------------------------------------------------ |
 | Stream parse | `native/stream/parse.zig` | SSE chunk → token + tool-call extract; CPU-bound, harus deterministik & cepat. |
-| Diff | `native/diff/diff.zig` | Unified diff compute antar revision; hot saat eval bandingkan before/after. |
-| Embed | `native/embed/embed.zig` | Code embedding untuk Vector DB; matriks berat, WASM isolasi aman. |
+| Diff         | `native/diff/diff.zig`    | Unified diff compute antar revision; hot saat eval bandingkan before/after.    |
+| Embed        | `native/embed/embed.zig`  | Code embedding untuk Vector DB; matriks berat, WASM isolasi aman.              |
 
 Setiap `native/<area>/build.zig` emit `native/out/<name>.wasm` (gitignored). TS wrapper `engine/<area>/zigBridge.ts` panggil `WebAssembly.instantiate`. Konsumer import wrapper, bukan `.wasm`.
 
@@ -76,6 +76,7 @@ TUI tidak mengambil keputusan — hanya visualisasi. Keputusan di `loop/` + `cri
 `INTAKE | PLAN | ISOLATE | EXECUTE | CRITIQUE | EVALUATE | RECOVER | COMMIT | PR_OPEN | CI_WATCH | DONE`.
 
 Transisi dikendalikan `engine/loop/driver.ts` (`LoopDriver`) + `engine/loop/wiring/handlers.ts` (`buildHandlers`):
+
 - `EVALUATE → COMMIT` hanya bila `gatePass(state) === true`.
 - `EVALUATE → RECOVER` bila gagal; `RECOVER → EXECUTE` setelah strategi recovery dipilih (bounded).
 - `CI_WATCH → RECOVER` bila CI merah (bounded); `CI_WATCH → DONE` bila hijau.
@@ -84,6 +85,7 @@ Transisi dikendalikan `engine/loop/driver.ts` (`LoopDriver`) + `engine/loop/wiri
 ## 8. v1 scope (konkret vs stub)
 
 **Konkret di v1:**
+
 - `loop/*` (state machine + `wiring/handlers.ts` + gate + recover wiring).
 - `orch/dag.ts` (parser + DAG + cycle + dep + priority + budget).
 - `build/generate.ts` + `build/verify.ts` + `build/context.ts`.
@@ -95,6 +97,7 @@ Transisi dikendalikan `engine/loop/driver.ts` (`LoopDriver`) + `engine/loop/wiri
 - `src/cli.ts` + `src/tui/index.tsx`.
 
 **Stub (interface siap, impl belakangan) — ponytail:**
+
 - `build/sanitize.ts` (AST/PII/XSS) — belakangan; input dari user trust boundary, bukan untrusted web.
 - 8 kritikus sisa (Architecture/Doc/DevOps/Legal/Privacy/DX/Accessibility/Maintainability) — daftar di `critic/critics.ts` sebagai registry dengan impl `not-implemented` + upgrade path.
 - `eval/sandbox.ts` container — v1 pakai worktree lokal; container bila jalan kode tak-terpercaya.

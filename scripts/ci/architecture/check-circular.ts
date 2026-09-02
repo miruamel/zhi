@@ -26,7 +26,8 @@ function collect(): string[] {
 
 /** @brief Parse specifier import relatif dari isi file. @param {string} src @return {string[]} specifier */
 function specs(src: string): string[] {
-  const re = /(?:import|export)[^'"]*?from\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)|@import\(\s*['"]([^'"]+)['"]\s*\)/g;
+  const re =
+    /(?:import|export)[^'"]*?from\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)|@import\(\s*['"]([^'"]+)['"]\s*\)/g;
   const out: string[] = [];
   let m: RegExpExecArray | null;
   while ((m = re.exec(src))) out.push(m[1] ?? m[2] ?? m[3] ?? '');
@@ -58,7 +59,9 @@ for (const f of files) {
 }
 
 // DFS detect siklus
-const WHITE = 0, GRAY = 1, BLACK = 2;
+const WHITE = 0,
+  GRAY = 1,
+  BLACK = 2;
 const color = new Map<string, number>();
 const cycles: string[] = [];
 const stack: string[] = [];
@@ -68,7 +71,13 @@ const dfs = (n: string): void => {
   for (const d of graph.get(n) ?? []) {
     if (color.get(d) === GRAY) {
       const i = stack.indexOf(d);
-      cycles.push(stack.slice(i).concat(d).map((p) => p.replace(ROOT + '/', '')).join(' -> '));
+      cycles.push(
+        stack
+          .slice(i)
+          .concat(d)
+          .map((p) => p.replace(ROOT + '/', ''))
+          .join(' -> '),
+      );
     } else if (color.get(d) === WHITE) dfs(d);
   }
   stack.pop();
@@ -77,22 +86,38 @@ const dfs = (n: string): void => {
 for (const f of files) if (color.get(f) === WHITE) dfs(f);
 
 let bad = 0;
-if (cycles.length) { bad = 1; console.log('CIRCULAR DEPENDENCY:'); cycles.forEach((c) => console.log('  ' + c)); }
-else console.log('ok: 0 circular dependency');
-if (deep.length) { bad = 1; console.log('DEEP RELATIVE IMPORT (>3 naik):'); deep.forEach((d) => console.log('  ' + d)); }
-else console.log('ok: 0 deep relative import');
+if (cycles.length) {
+  bad = 1;
+  console.log('CIRCULAR DEPENDENCY:');
+  cycles.forEach((c) => console.log('  ' + c));
+} else console.log('ok: 0 circular dependency');
+if (deep.length) {
+  bad = 1;
+  console.log('DEEP RELATIVE IMPORT (>3 naik):');
+  deep.forEach((d) => console.log('  ' + d));
+} else console.log('ok: 0 deep relative import');
 // Validasi arah layer (mandate §6.11 skipped-layer; AGENTS.md layer-first)
 const layerOf = (abs: string): string => abs.replace(ROOT + '/', '').split('/')[0];
-const ILLEGAL: Record<string, string[]> = { engine: ['src'], src: ['native'], native: ['engine', 'src'] };
+const ILLEGAL: Record<string, string[]> = {
+  engine: ['src'],
+  src: ['native'],
+  native: ['engine', 'src'],
+};
 const layerBad: string[] = [];
 for (const [from, tos] of graph) {
   const fl = layerOf(from);
   for (const to of tos) {
     const tl = layerOf(to);
-    if (ILLEGAL[fl]?.includes(tl)) layerBad.push(`${from.replace(ROOT + '/', '')} -> ${to.replace(ROOT + '/', '')} (${fl}->${tl})`);
+    if (ILLEGAL[fl]?.includes(tl))
+      layerBad.push(
+        `${from.replace(ROOT + '/', '')} -> ${to.replace(ROOT + '/', '')} (${fl}->${tl})`,
+      );
   }
 }
-if (layerBad.length) { bad = 1; console.log('SKIPPED/ILLEGAL LAYER EDGE:'); layerBad.forEach((e) => console.log('  ' + e)); }
-else console.log('ok: 0 illegal layer edge');
+if (layerBad.length) {
+  bad = 1;
+  console.log('SKIPPED/ILLEGAL LAYER EDGE:');
+  layerBad.forEach((e) => console.log('  ' + e));
+} else console.log('ok: 0 illegal layer edge');
 
 process.exit(bad);

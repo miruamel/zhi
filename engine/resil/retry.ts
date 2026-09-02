@@ -27,7 +27,10 @@ export interface RetryResult<T> {
  * @param {number} maxAttempts - batas retry (default 3).
  * @return {Promise<RetryResult<T>>} hasil atau DLQ.
  * @since 0.1.0 */
-export async function retryWithBudget<T>(fn: () => Promise<T>, maxAttempts = 3): Promise<RetryResult<T>> {
+export async function retryWithBudget<T>(
+  fn: () => Promise<T>,
+  maxAttempts = 3,
+): Promise<RetryResult<T>> {
   let lastErr: unknown;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {

@@ -19,18 +19,18 @@ Simpan state lintas-step dan lintas-sesi: index git-native, ledger task, KB docs
  * @param {string} repoPath
  * @return {RepoIndex} struktur + history ter-index.
  * @since 0.1.0 */
-export function indexRepo(repoPath: string): RepoIndex
+export function indexRepo(repoPath: string): RepoIndex;
 
 /** @brief Buat worktree terisolasi dari base branch.
  * @param {string} base
  * @return {string} path worktree.
  * @since 0.1.0 */
-export function makeWorktree(base: string): string
+export function makeWorktree(base: string): string;
 
 /** @brief Append entry ledger (append-only).
  * @param {LedgerEntry} entry
  * @since 0.1.0 */
-export function appendLedger(entry: LedgerEntry): void
+export function appendLedger(entry: LedgerEntry): void;
 ```
 
 ## Alur

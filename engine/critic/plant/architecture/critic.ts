@@ -20,7 +20,7 @@ function countSection(stdout: string, header: string): number {
   const re = new RegExp(`^${header}:\\n((?:  .+\\n?)*)`, 'm');
   const m = stdout.match(re);
   if (!m || !m[1]) return 0;
-  return m[1].split('\n').filter(l => l.startsWith('  ') && l.length > 2).length;
+  return m[1].split('\n').filter((l) => l.startsWith('  ') && l.length > 2).length;
 }
 
 /** @brief Parse stdout guard: hitung pelanggaran per kategori. @param {string} stdout @param {string} stderr @return {GuardReport} @since 0.1.0 */
@@ -76,6 +76,7 @@ export function architectureCritic(_files: FileRecord[]): Critique {
   if (report.circular) findings.push(`circular dependency: ${report.circular} cycle(s)`);
   if (report.deep) findings.push(`deep relative import: ${report.deep} violation(s)`);
   if (report.illegal) findings.push(`illegal layer edge: ${report.illegal} violation(s)`);
-  if (findings.length === 0) findings.push('guard exited non-zero but no violations parsed (unknown drift)');
+  if (findings.length === 0)
+    findings.push('guard exited non-zero but no violations parsed (unknown drift)');
   return { name: 'architecture', score, weight: 1.5, findings };
 }

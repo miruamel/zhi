@@ -36,14 +36,14 @@ State di-pass dari `loop` via callback `onState(state: LoopState, payload)`. TUI
 
 ## Keybindings
 
-| Key | Aksi |
-|---|---|
-| `q` | quit (loop tetap jalan di background; konfirmasi bila belum DONE). |
-| `space` | pause/resume render (bukan pause loop). |
-| `l` | toggle full Log view. |
-| `c` | toggle Critics detail. |
-| `p` | toggle PR/CI detail. |
-| `ctrl+c` | abort loop (trigger `resil` abort → DONE partial + laporan). |
+| Key      | Aksi                                                               |
+| -------- | ------------------------------------------------------------------ |
+| `q`      | quit (loop tetap jalan di background; konfirmasi bila belum DONE). |
+| `space`  | pause/resume render (bukan pause loop).                            |
+| `l`      | toggle full Log view.                                              |
+| `c`      | toggle Critics detail.                                             |
+| `p`      | toggle PR/CI detail.                                               |
+| `ctrl+c` | abort loop (trigger `resil` abort → DONE partial + laporan).       |
 
 ## Behavior
 

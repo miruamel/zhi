@@ -24,7 +24,8 @@ function depthOf(dag: Dag): Map<string, number> {
   const depth = new Map<string, number>();
   for (const id of dag.order) {
     const node = dag.nodes.find((n) => n.id === id)!;
-    const d = node.deps.length === 0 ? 0 : Math.max(...node.deps.map((d) => (depth.get(d) ?? 0) + 1));
+    const d =
+      node.deps.length === 0 ? 0 : Math.max(...node.deps.map((d) => (depth.get(d) ?? 0) + 1));
     depth.set(id, d);
   }
   return depth;

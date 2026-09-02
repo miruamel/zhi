@@ -8,7 +8,8 @@ test('importsCritic alias path scores 1', () => {
 });
 
 test('importsCritic shallow relative ≤3 ok', () => {
-  const src = "import { a } from './b';\nimport { c } from '../c';\nimport { d } from '../../d';\nimport { e } from '../../../e';\n";
+  const src =
+    "import { a } from './b';\nimport { c } from '../c';\nimport { d } from '../../d';\nimport { e } from '../../../e';\n";
   const c = importsCritic([{ path: 'a.ts', content: src }]);
   expect(c.score).toBe(1);
 });

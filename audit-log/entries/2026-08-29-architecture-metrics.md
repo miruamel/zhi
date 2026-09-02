@@ -8,19 +8,19 @@ circular deps, deep-relative imports. Allowlist excludes `docs/design` + `audit-
 
 ## Metrics (before any change this session)
 
-| Metric | Value | Target | Status |
-|---|---|---|---|
-| codeFiles | 31 | — | — |
-| sloc.avg | 29.5 | <75 | ✅ |
-| sloc.max | 72 (`engine/resil/resil.test.ts`) | ≤200 | ✅ |
-| godFiles | 0 | 0 | ✅ |
-| depth.min | 2 | ≥4 | ⚠️ flagged |
-| depth.max | 6 | 6–10 | ✅ |
-| depth.avg | 3.2 | 6–10 | ⚠️ below target |
-| dirsScanned | 28 | — | — |
-| fatDirs | `["." ,6]` | ≤5 | ✅ (root exempt §6.2) |
-| circular deps | 0 | 0 | ✅ (verified via `scripts/ci/architecture/check-circular.ts`) |
-| deep-relative (>3 naik) | 0 | 0 | ✅ |
+| Metric                  | Value                             | Target | Status                                                        |
+| ----------------------- | --------------------------------- | ------ | ------------------------------------------------------------- |
+| codeFiles               | 31                                | —      | —                                                             |
+| sloc.avg                | 29.5                              | <75    | ✅                                                            |
+| sloc.max                | 72 (`engine/resil/resil.test.ts`) | ≤200   | ✅                                                            |
+| godFiles                | 0                                 | 0      | ✅                                                            |
+| depth.min               | 2                                 | ≥4     | ⚠️ flagged                                                    |
+| depth.max               | 6                                 | 6–10   | ✅                                                            |
+| depth.avg               | 3.2                               | 6–10   | ⚠️ below target                                               |
+| dirsScanned             | 28                                | —      | —                                                             |
+| fatDirs                 | `["." ,6]`                        | ≤5     | ✅ (root exempt §6.2)                                         |
+| circular deps           | 0                                 | 0      | ✅ (verified via `scripts/ci/architecture/check-circular.ts`) |
+| deep-relative (>3 naik) | 0                                 | 0      | ✅                                                            |
 
 ## Depth-2 flag = FALSE POSITIVE (ADR-007)
 
@@ -53,24 +53,25 @@ the avg is pulled down by these intentional shallow roots. Not a defect.
 - None. All §6.14 metrics either compliant or ADR-excepted.
 - Forward note: if a depth CI check is ever added, it MUST allowlist
   `engine/`, `src/`, `native/` per ADR-007 or it will false-positive.
+
 ## Refresh — re-scan 2026-08-29 (post layer-edge guard + integration test)
 
 Re-ran §6.14 scan after adding `engine/loop/wiring/integration.test.ts` and extending
 `scripts/ci/architecture/check-circular.ts` (layer-edge validation). Method: awk SLOC
 (blank + `//`/`*` comment lines stripped), path-level depth.
 
-| Metric | Value | Target | Status |
-|---|---|---|---|
-| codeFiles | 32 | — | — |
-| sloc.avg | 35.4 | <75 | ✅ |
-| sloc.max | 88 | ≤200 | ✅ |
-| godFiles | 0 | 0 | ✅ |
-| depth.min | 3 | ≥4 | ⚠️ ADR-007 (engine/src/native exempt) |
-| depth.max | 7 | 6–10 | ✅ |
-| depth.avg | 4.2 | 6–10 | ⚠️ ADR-007 band |
-| circular deps | 0 | 0 | ✅ (check-circular.ts) |
-| skipped-layer | 0 | 0 | ✅ (layer-edge check added) |
-| deep-relative (>3 naik) | 0 | 0 | ✅ |
+| Metric                  | Value | Target | Status                                |
+| ----------------------- | ----- | ------ | ------------------------------------- |
+| codeFiles               | 32    | —      | —                                     |
+| sloc.avg                | 35.4  | <75    | ✅                                    |
+| sloc.max                | 88    | ≤200   | ✅                                    |
+| godFiles                | 0     | 0      | ✅                                    |
+| depth.min               | 3     | ≥4     | ⚠️ ADR-007 (engine/src/native exempt) |
+| depth.max               | 7     | 6–10   | ✅                                    |
+| depth.avg               | 4.2   | 6–10   | ⚠️ ADR-007 band                       |
+| circular deps           | 0     | 0      | ✅ (check-circular.ts)                |
+| skipped-layer           | 0     | 0      | ✅ (layer-edge check added)           |
+| deep-relative (>3 naik) | 0     | 0      | ✅                                    |
 
 All invariants unchanged: 0 god-file, 0 circular, 0 skipped-layer, 0 deep-relative.
 Only `audit-log/entries`(17) + `docs/design`(10) exceed 5 files/dir — ADR-006/ADR-005
@@ -82,19 +83,19 @@ Re-ran §6.14 dengan `scripts/ci/architecture/metrics.ts` (scanner repeatable ba
 Method: SLOC = baris non-blank non-komentar (ts/js/zig); depth = segmen path dari repo root;
 scan roots = src, engine, native, scripts; `audit-log`/`docs` di-exclude (ADR-005/006 exempt, non-code).
 
-| Metric | Value | Target | Status |
-|---|---|---|---|
-| codeFiles | 33 | — | — |
-| sloc.avg | 32 | <75 | ✅ |
-| sloc.max | 84 (`scripts/ci/architecture/check-circular.ts`) | ≤200 | ✅ |
-| godFiles | 0 | 0 | ✅ |
-| depth.min | 2 (`src/cli.ts`) | ≥4 | ⚠️ ADR-007 exempt |
-| depth.max | 6 | 6–10 | ✅ |
-| depth.avg | 3.2 | 6–10 | ⚠️ ADR-007 band |
-| fatDirs (scanned roots) | 0 | ≤5 | ✅ |
-| circular deps | 0 | 0 | ✅ (check-circular.ts exit 0) |
-| skipped-layer | 0 | 0 | ✅ (layer-edge check) |
-| deep-relative (>3 naik) | 0 | 0 | ✅ |
+| Metric                  | Value                                            | Target | Status                        |
+| ----------------------- | ------------------------------------------------ | ------ | ----------------------------- |
+| codeFiles               | 33                                               | —      | —                             |
+| sloc.avg                | 32                                               | <75    | ✅                            |
+| sloc.max                | 84 (`scripts/ci/architecture/check-circular.ts`) | ≤200   | ✅                            |
+| godFiles                | 0                                                | 0      | ✅                            |
+| depth.min               | 2 (`src/cli.ts`)                                 | ≥4     | ⚠️ ADR-007 exempt             |
+| depth.max               | 6                                                | 6–10   | ✅                            |
+| depth.avg               | 3.2                                              | 6–10   | ⚠️ ADR-007 band               |
+| fatDirs (scanned roots) | 0                                                | ≤5     | ✅                            |
+| circular deps           | 0                                                | 0      | ✅ (check-circular.ts exit 0) |
+| skipped-layer           | 0                                                | 0      | ✅ (layer-edge check)         |
+| deep-relative (>3 naik) | 0                                                | 0      | ✅                            |
 
 `bun test` → 59 pass / 0 fail / 128 expect / 13 files. All green.
 
@@ -112,17 +113,17 @@ Re-ran `scripts/ci/architecture/metrics.ts` + `check-circular.ts` (§6.10/§6.11
 non-blank non-komentar (ts/js/zig); depth = segmen path dari repo root; scan roots = src, engine,
 native, scripts; `audit-log`/`docs` di-exclude (ADR-005/006 exempt, non-code).
 
-| Metric | Value | Target | Status |
-|--------|-------|--------|--------|
-| codeFiles | 33 | — | ok (was 32; +1 `package.json` not code, +`metrics.ts` counted) |
-| sloc.avg | 32 | <75 | ok |
-| sloc.max | 84 | ≤200 | ok (`scripts/ci/architecture/check-circular.ts`) |
-| godFiles | 0 | 0 | ok |
-| depth.min | 2 | ≥4 | ADR-007-exempt (`src/cli.ts` boot entry) |
-| depth.max | 6 | 6–10 | ok |
-| depth.avg | 3.2 | 6–10 | ADR-007 band (engine/src/native shallow roots) |
-| fatDirs | 0 | 0 | ok |
-| circular / skipped-layer / deep-relative | 0 | 0 | ok (`check-circular.ts`) |
+| Metric                                   | Value | Target | Status                                                         |
+| ---------------------------------------- | ----- | ------ | -------------------------------------------------------------- |
+| codeFiles                                | 33    | —      | ok (was 32; +1 `package.json` not code, +`metrics.ts` counted) |
+| sloc.avg                                 | 32    | <75    | ok                                                             |
+| sloc.max                                 | 84    | ≤200   | ok (`scripts/ci/architecture/check-circular.ts`)               |
+| godFiles                                 | 0     | 0      | ok                                                             |
+| depth.min                                | 2     | ≥4     | ADR-007-exempt (`src/cli.ts` boot entry)                       |
+| depth.max                                | 6     | 6–10   | ok                                                             |
+| depth.avg                                | 3.2   | 6–10   | ADR-007 band (engine/src/native shallow roots)                 |
+| fatDirs                                  | 0     | 0      | ok                                                             |
+| circular / skipped-layer / deep-relative | 0     | 0      | ok (`check-circular.ts`)                                       |
 
 `bun test` → 59 pass / 0 fail / 128 expect / 13 files. All green.
 
@@ -139,17 +140,17 @@ Resolved (local). 22 commits unpushed (last `668bd28`); push deferred per §2.11
 Re-ran `bun test` + `git status` to confirm green. No code changes since #16 refresh
 (HEAD `09e6331`); metrics identical to #16 scan below.
 
-| Metric | Value | Target | Status |
-|--------|-------|--------|--------|
-| codeFiles | 33 | — | ok |
-| sloc.avg | 32 | <75 | ok |
-| sloc.max | 84 (scripts/ci/architecture/check-circular.ts) | ≤200 | ok |
-| godFiles | 0 | 0 | ok |
-| depth.min | 2 (src/cli.ts, ADR-007-exempt) | ≥4 | exempt |
-| depth.max | 6 | 6–10 | ok |
-| depth.avg | 3.2 | 6–10 | exempt (ADR-007 band 2–3) |
-| fatDirs | 0 (code) | 0 | ok |
-| circular / skipped-layer / deep-relative | 0 | 0 | ok (check-circular.ts) |
+| Metric                                   | Value                                          | Target | Status                    |
+| ---------------------------------------- | ---------------------------------------------- | ------ | ------------------------- |
+| codeFiles                                | 33                                             | —      | ok                        |
+| sloc.avg                                 | 32                                             | <75    | ok                        |
+| sloc.max                                 | 84 (scripts/ci/architecture/check-circular.ts) | ≤200   | ok                        |
+| godFiles                                 | 0                                              | 0      | ok                        |
+| depth.min                                | 2 (src/cli.ts, ADR-007-exempt)                 | ≥4     | exempt                    |
+| depth.max                                | 6                                              | 6–10   | ok                        |
+| depth.avg                                | 3.2                                            | 6–10   | exempt (ADR-007 band 2–3) |
+| fatDirs                                  | 0 (code)                                       | 0      | ok                        |
+| circular / skipped-layer / deep-relative | 0                                              | 0      | ok (check-circular.ts)    |
 
 `bun test` → 59 pass / 0 fail / 128 expect / 13 files. All green.
 

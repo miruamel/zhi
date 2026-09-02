@@ -22,7 +22,19 @@ import { testingCritic } from './hygiene/testing/critic';
  * @see docs/design/critic.md
  * @since 0.1.0 */
 export function composeCritiques(files: FileRecord[]): Critique[] {
-  return [slocCritic(files), todoCritic(files), importsCritic(files), maintainabilityCritic(files), architectureCritic(files), privacyCritic(files), docCritic(files), accessibilityCritic(files), securityCritic(files), perfCritic(files), styleCritic(files)];
+  return [
+    slocCritic(files),
+    todoCritic(files),
+    importsCritic(files),
+    maintainabilityCritic(files),
+    architectureCritic(files),
+    privacyCritic(files),
+    docCritic(files),
+    accessibilityCritic(files),
+    securityCritic(files),
+    perfCritic(files),
+    styleCritic(files),
+  ];
 }
 
 /** @brief Jalankan critic repo-hygiene (DevOps/Legal/DX) pada root repo.

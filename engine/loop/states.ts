@@ -45,15 +45,30 @@ export interface GateInput {
 /** @brief Tabel transisi valid: state -> event -> next state. @since 0.1.0 */
 export const transitions: Record<LoopState, Partial<Record<LoopEvent, LoopState>>> = {
   [LoopState.INTAKE]: { [LoopEvent.GOAL_READY]: LoopState.PLAN },
-  [LoopState.PLAN]: { [LoopEvent.PLAN_OK]: LoopState.ISOLATE, [LoopEvent.BUDGET_OUT]: LoopState.RECOVER },
+  [LoopState.PLAN]: {
+    [LoopEvent.PLAN_OK]: LoopState.ISOLATE,
+    [LoopEvent.BUDGET_OUT]: LoopState.RECOVER,
+  },
   [LoopState.ISOLATE]: { [LoopEvent.ISOLATED]: LoopState.EXECUTE },
-  [LoopState.EXECUTE]: { [LoopEvent.EXECUTED]: LoopState.CRITIQUE, [LoopEvent.BUDGET_OUT]: LoopState.RECOVER },
+  [LoopState.EXECUTE]: {
+    [LoopEvent.EXECUTED]: LoopState.CRITIQUE,
+    [LoopEvent.BUDGET_OUT]: LoopState.RECOVER,
+  },
   [LoopState.CRITIQUE]: { [LoopEvent.CRITIQUED]: LoopState.EVALUATE },
-  [LoopState.EVALUATE]: { [LoopEvent.GATE_PASS]: LoopState.COMMIT, [LoopEvent.GATE_FAIL]: LoopState.RECOVER },
-  [LoopState.RECOVER]: { [LoopEvent.RECOVERED]: LoopState.EXECUTE, [LoopEvent.BUDGET_OUT]: LoopState.DONE },
+  [LoopState.EVALUATE]: {
+    [LoopEvent.GATE_PASS]: LoopState.COMMIT,
+    [LoopEvent.GATE_FAIL]: LoopState.RECOVER,
+  },
+  [LoopState.RECOVER]: {
+    [LoopEvent.RECOVERED]: LoopState.EXECUTE,
+    [LoopEvent.BUDGET_OUT]: LoopState.DONE,
+  },
   [LoopState.COMMIT]: { [LoopEvent.COMMITTED]: LoopState.PR_OPEN },
   [LoopState.PR_OPEN]: { [LoopEvent.PR_OPENED]: LoopState.CI_WATCH },
-  [LoopState.CI_WATCH]: { [LoopEvent.CI_GREEN]: LoopState.DONE, [LoopEvent.CI_RED]: LoopState.RECOVER },
+  [LoopState.CI_WATCH]: {
+    [LoopEvent.CI_GREEN]: LoopState.DONE,
+    [LoopEvent.CI_RED]: LoopState.RECOVER,
+  },
   [LoopState.DONE]: {},
 };
 

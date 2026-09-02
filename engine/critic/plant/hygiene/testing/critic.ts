@@ -47,7 +47,8 @@ function dirHasTests(src: string): boolean {
   const dir = dirname(src);
   if (readdirSync(dir).some((f) => /\.test\.(ts|tsx|js|jsx)$/.test(f))) return true;
   const testDir = join(dir, 'test');
-  if (existsSync(testDir) && readdirSync(testDir).some((f) => /\.test\.(ts|tsx|js|jsx)$/.test(f))) return true;
+  if (existsSync(testDir) && readdirSync(testDir).some((f) => /\.test\.(ts|tsx|js|jsx)$/.test(f)))
+    return true;
   return false;
 }
 

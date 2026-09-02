@@ -3,6 +3,7 @@
 ## Problem / Opportunity
 
 Metrics report `2026-08-29-architecture-metrics.md` deferred two mandated metrics:
+
 - Circular dependency count (target 0, §6.14).
 - Skipped-layer / deep-relative import count (target 0, §6.11).
 
@@ -21,6 +22,7 @@ completeness, not a live defect).
 ## Decision
 
 Add a zero-dependency Bun script that:
+
 1. Walks `engine/`, `src/`, `native/` for `*.ts *.js *.zig`.
 2. Parses `import/export ... from`, dynamic `import()`, and Zig `@import()`.
 3. Resolves relative + `engine/`/`src/` specifiers to repo-absolute paths.

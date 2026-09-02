@@ -2,10 +2,7 @@
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-const PERF_RES: RegExp[] = [
-  /\bdebugger\s*;/,
-  /\bconsole\.(log|debug|warn|error|info)\s*\(/,
-];
+const PERF_RES: RegExp[] = [/\bdebugger\s*;/, /\bconsole\.(log|debug|warn|error|info)\s*\(/];
 
 /** @brief Perf critic: debugger/console.* kurangi 0.15 (floor 0), bobot 1.0.
  * @param {FileRecord[]} files - kumpulan file.

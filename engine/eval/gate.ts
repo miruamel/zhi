@@ -33,7 +33,9 @@ export function gate(input: EvalInput, threshold = 0.7): EvalOutput {
     return { passed: false, score: input.score, reasons };
   }
   const passed = input.score >= threshold;
-  reasons.push(passed ? `score ${input.score} >= ${threshold}` : `score ${input.score} < ${threshold}`);
+  reasons.push(
+    passed ? `score ${input.score} >= ${threshold}` : `score ${input.score} < ${threshold}`,
+  );
   if (input.criteria.length > 0) reasons.push(`criteria met: ${input.criteria.length}`);
   return { passed, score: input.score, reasons };
 }

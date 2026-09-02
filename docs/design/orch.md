@@ -18,26 +18,26 @@ Ubah goal berbahasa alami menjadi **DAG step** yang bebas siklus, terurut, dan b
  * @param {string} goal - teks goal.
  * @return {Intent} intent terstruktur.
  * @since 0.1.0 */
-export function parseGoal(goal: string): Intent
+export function parseGoal(goal: string): Intent;
 
 /** @brief Bangun DAG step dari intent, cek siklus.
  * @param {Intent} intent
  * @return {Dag} node + edge, topologically sorted.
  * @throw {CycleError} bila siklus tak terpecahkan.
  * @since 0.1.0 */
-export function buildDag(intent: Intent): Dag
+export function buildDag(intent: Intent): Dag;
 
 /** @brief Alokasikan token per step dari budget total.
  * @param {Dag} dag @param {number} budget - total token.
  * @return {Map<stepId, number>} alokasi per step.
  * @since 0.1.0 */
-export function allocate(dag: Dag, budget: number): Map<string, number>
+export function allocate(dag: Dag, budget: number): Map<string, number>;
 
 /** @brief Urutkan eksekusi (priority queue by depth + token weight).
  * @param {Dag} dag @param {Map<string,number>} alloc
  * @return {Step[]} urutan eksekusi.
  * @since 0.1.0 */
-export function schedule(dag: Dag, alloc: Map<string, number>): Step[]
+export function schedule(dag: Dag, alloc: Map<string, number>): Step[];
 ```
 
 ## Alur

@@ -43,7 +43,13 @@ describe('orch buildDag', () => {
 });
 
 describe('orch topoSort', () => {
-  const mk = (id: string, deps: string[]): Step => ({ id, label: id, deps, estimate: 1, priority: 0.5 });
+  const mk = (id: string, deps: string[]): Step => ({
+    id,
+    label: id,
+    deps,
+    estimate: 1,
+    priority: 0.5,
+  });
 
   it('orders acyclic graph', () => {
     const nodes = [mk('a', []), mk('b', ['a'])];
@@ -52,7 +58,10 @@ describe('orch topoSort', () => {
 
   it('throws CycleError on cycle', () => {
     const nodes = [mk('a', ['b']), mk('b', ['a'])];
-    const edges = [{ from: 'b', to: 'a' }, { from: 'a', to: 'b' }];
+    const edges = [
+      { from: 'b', to: 'a' },
+      { from: 'a', to: 'b' },
+    ];
     expect(() => topoSort(nodes, edges)).toThrow(CycleError);
   });
 });
@@ -68,7 +77,11 @@ describe('orch allocate', () => {
   });
 
   it('splits equally when estimates are zero', () => {
-    const zero = { nodes: [{ id: 'a', label: 'a', deps: [], estimate: 0, priority: 0.5 }], edges: [], order: ['a'] };
+    const zero = {
+      nodes: [{ id: 'a', label: 'a', deps: [], estimate: 0, priority: 0.5 }],
+      edges: [],
+      order: ['a'],
+    };
     const alloc = allocate(zero, 10);
     expect(alloc.get('a')).toBe(10);
   });
@@ -85,7 +98,13 @@ describe('orch schedule', () => {
 });
 
 describe('orch topoSort (extra)', () => {
-  const mk = (id: string, deps: string[]): Step => ({ id, label: id, deps, estimate: 1, priority: 0.5 });
+  const mk = (id: string, deps: string[]): Step => ({
+    id,
+    label: id,
+    deps,
+    estimate: 1,
+    priority: 0.5,
+  });
   it('skips edges with unknown nodes', () => {
     const nodes = [mk('s0', [])];
     const edges = [{ from: 's0', to: 'ghost' }];

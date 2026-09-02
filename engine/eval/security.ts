@@ -27,7 +27,8 @@ export function scanSecrets(worktree: string): SecretScan {
   args.push(worktree);
   const r = spawnSync('grep', args, { encoding: 'utf8' });
   // ponytail: grep exit 2 = error (dir hilang/permission). Fail-closed -> block.
-  if (r.status === 2) return { leaked: true, findings: [`scan error: ${r.stderr?.trim() || 'grep failed'}`] };
+  if (r.status === 2)
+    return { leaked: true, findings: [`scan error: ${r.stderr?.trim() || 'grep failed'}`] };
   const findings = (r.stdout ?? '').split('\n').filter(Boolean).slice(0, 10);
   return { leaked: findings.length > 0, findings };
 }

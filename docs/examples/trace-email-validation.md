@@ -76,6 +76,7 @@ TUI tampilkan banner hijau + PR link.
 ## Variasi: test gagal (recovery)
 
 Bila `s2` test merah:
+
 - `EVALUATE.gatePass=false` → `RECOVER` → `resil` klasifikasi → `patch`.
 - `build.generate(req + errorContext)` revisi `auth.test.ts` (fiks assertion).
 - `EVALUATE` ulang → pass (atau retry ke-3 gagal → DLQ → `DONE(partial)`).
@@ -83,6 +84,7 @@ Bila `s2` test merah:
 ## Variasi: CI merah
 
 Bila PR #42 CI merah:
+
 - `CI_WATCH → EXECUTE` dengan error context.
 - `build` push fix ke branch PR.
 - `CI_WATCH` ulang → pass.

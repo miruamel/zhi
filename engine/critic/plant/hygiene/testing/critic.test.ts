@@ -40,7 +40,10 @@ test('nested engine sources checked', () => {
 test('pure type file not flagged (no runtime export)', () => {
   const r = tmp();
   mkdirSync(join(r, 'src'), { recursive: true });
-  writeFileSync(join(r, 'src', 'types.ts'), 'export interface X { a: number; }\nexport type Y = string;\n');
+  writeFileSync(
+    join(r, 'src', 'types.ts'),
+    'export interface X { a: number; }\nexport type Y = string;\n',
+  );
   const c = testingCritic(r);
   expect(c.findings).toHaveLength(0);
 });

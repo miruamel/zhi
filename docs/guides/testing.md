@@ -11,18 +11,18 @@ Zhi sendiri harus teruji sebelum bisa menjalankan loop terpercaya. Strategi: uni
 
 ## Unit (per modul)
 
-| Modul | Yang di-test |
-|---|---|
-| `loop/states.ts` | `gatePass` benar tolak bila critic/eval gagal; terima bila lolos. |
-| `orch/dag.ts` | cycle detect pada DAG siklus; topo sort benar. |
-| `orch/budget.ts` | alokasi proporsional; potong bila budget < minimal. |
-| `critic/aggregate.ts` | Security floor auto-fail; abstain fallback; avg ≥0.7 pass. |
-| `critic/critics.ts` | stub return `abstain`; konkret (Security/Perf/Testing/Style) skor masuk akal. |
-| `eval/gate.ts` | `gatePass = build∧test∧secret∧lint∧coverage≥0.8`. |
-| `resil/retry.ts` | retry max-3 lalu DLQ; breaker buka bila error rate >0.5. |
-| `resil/recover.ts` | klasifikasi error → strategi tepat (replan/patch/abort). |
-| `knowledge/git.ts` | worktree terisolasi; commit di worktree bukan main. |
-| `model/router.ts` | route tier benar; fallback ke tier bawah bila backend down. |
+| Modul                 | Yang di-test                                                                  |
+| --------------------- | ----------------------------------------------------------------------------- |
+| `loop/states.ts`      | `gatePass` benar tolak bila critic/eval gagal; terima bila lolos.             |
+| `orch/dag.ts`         | cycle detect pada DAG siklus; topo sort benar.                                |
+| `orch/budget.ts`      | alokasi proporsional; potong bila budget < minimal.                           |
+| `critic/aggregate.ts` | Security floor auto-fail; abstain fallback; avg ≥0.7 pass.                    |
+| `critic/critics.ts`   | stub return `abstain`; konkret (Security/Perf/Testing/Style) skor masuk akal. |
+| `eval/gate.ts`        | `gatePass = build∧test∧secret∧lint∧coverage≥0.8`.                             |
+| `resil/retry.ts`      | retry max-3 lalu DLQ; breaker buka bila error rate >0.5.                      |
+| `resil/recover.ts`    | klasifikasi error → strategi tepat (replan/patch/abort).                      |
+| `knowledge/git.ts`    | worktree terisolasi; commit di worktree bukan main.                           |
+| `model/router.ts`     | route tier benar; fallback ke tier bawah bila backend down.                   |
 
 ## Integration (loop)
 

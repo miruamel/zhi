@@ -3,7 +3,10 @@ import { render, type ViewerState } from './viewer';
 
 const base: ViewerState = {
   loop: 'critiqued',
-  critics: [{ name: 'security', score: 0.9 }, { name: 'perf', score: 0.5 }],
+  critics: [
+    { name: 'security', score: 0.9 },
+    { name: 'perf', score: 0.5 },
+  ],
   evalScore: 0.7,
   evalPassed: true,
   knowledgeCount: 3,

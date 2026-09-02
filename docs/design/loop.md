@@ -32,7 +32,7 @@ Transisi (lihat `ARCHITECTURE.md` §7):
  * @return {Record<LoopState, Handler>} map handler per state.
  * @see docs/design/orch.md docs/design/critic.md
  * @since 0.1.0 */
-export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Record<LoopState, Handler>
+export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Record<LoopState, Handler>;
 
 /** @brief Runner state machine; jalankan sampai DONE atau budget habis.
  * @param {Record<LoopState, Handler>} handlers - hasil buildHandlers.
@@ -40,15 +40,15 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Record<LoopStat
  * @return {Promise<void>} mutasi ctx ke status akhir.
  * @since 0.1.0 */
 export class LoopDriver {
-  get current(): LoopState
-  async run(handlers: Record<LoopState, Handler>, budget?: number): Promise<void>
+  get current(): LoopState;
+  async run(handlers: Record<LoopState, Handler>, budget?: number): Promise<void>;
 }
 
 /** @brief Gate sebelum COMMIT: critic Pareto >= threshold (eval quality-gate menyusul).
  * @param {LoopState} state
  * @return {boolean} layak commit.
  * @since 0.1.0 */
-export function gatePass(state: LoopState): boolean
+export function gatePass(state: LoopState): boolean;
 ```
 
 ## Files
