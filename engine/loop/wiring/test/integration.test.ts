@@ -10,11 +10,14 @@ import { LoopMetrics } from '../../observability/metrics';
 const high: Critique[] = [{ name: 'security', score: 1, weight: 1, findings: [] }];
 const low: Critique[] = [{ name: 'security', score: 0, weight: 1, findings: ['fail'] }];
 
-function deps(opts: { critique: () => Critique[]; ciWatch?: () => 'green' | 'red' | 'pending' }): LoopDeps {
+function deps(opts: {
+  critique: () => Critique[];
+  ciWatch?: () => 'green' | 'red' | 'pending';
+}): LoopDeps {
   return {
     ingest: (g) => g,
     plan: (g) => `plan:${g}`,
-    generate: (p) => `code:${p}`,
+    generate: async (p) => `code:${p}`,
     critique: opts.critique,
     ciWatch: opts.ciWatch ?? (() => 'green'),
     paretoThreshold: 0.5,

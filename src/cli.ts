@@ -10,9 +10,10 @@ import { generate as scaffold, generateStream } from '../engine/build/generate';
 import { verify } from '../engine/build/verify';
 import { compress } from '../engine/build/context/compress';
 import { buildHandlers, type LoopDeps } from '../engine/loop/wiring/handlers';
+import type { LoopContext } from '../engine/loop/wiring/context';
 import { LoopMetrics } from '../engine/loop/observability/metrics';
 import { LoopLogger } from '../engine/loop/observability/logger';
-import { gitIsolate, ghPrOpen, ghCiWatch } from '../engine/loop/wiring/git';
+import { gitIsolate, gitCommit, ghPrOpen } from '../engine/loop/wiring/git';
 import { evaluate } from '../engine/eval/index';
 import { composeCritiques, composeHygiene } from '../engine/critic/plant/compose';
 import { aggregate } from '../engine/critic/aggregate';
@@ -57,7 +58,8 @@ function offlineDeps(threshold: number): LoopDeps {
     },
     critique: (code) => composeCritiques([{ path: 'generated.ts', content: code }]),
     compress: (code) =>
-      compress({ entries: [{ key: 'code', weight: 1, text: code }], budget: 20000 }).entries[0]?.text ?? '',
+      compress({ entries: [{ key: 'code', weight: 1, text: code }], budget: 20000 }).entries[0]
+        ?.text ?? '',
     paretoThreshold: threshold,
   };
 }
@@ -93,7 +95,9 @@ export async function main(argv: string[]): Promise<LoopContext> {
   const ctx: LoopContext = { goal };
   const metrics = new LoopMetrics();
   const logger = new LoopLogger();
-  const driver = new LoopDriver({ onTransition: (from, ev, to) => logger.transition(from, ev, to) });
+  const driver = new LoopDriver({
+    onTransition: (from, ev, to) => logger.transition(from, ev, to),
+  });
   await driver.run(buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics));
   const s = metrics.summary();
   console.log(`[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}`);
@@ -130,21 +134,44 @@ async function critiqueRepoCommand(): Promise<LoopContext> {
   let root = process.cwd();
   let dir = root;
   while (true) {
-    if (existsSync(join(dir, 'AGENTS.md')) || existsSync(join(dir, 'package.json'))) { root = dir; break; }
+    if (existsSync(join(dir, 'AGENTS.md')) || existsSync(join(dir, 'package.json'))) {
+      root = dir;
+      break;
+    }
     const parent = dirname(dir);
     if (parent === dir) break;
     dir = parent;
   }
   const critiques = composeHygiene(root);
   const res = aggregate(critiques, 0.7);
-  console.log(JSON.stringify({ root, critiques: res.byCritic, score: res.score, passed: res.passed, findings: res.findings }, null, 2));
+  console.log(
+    JSON.stringify(
+      {
+        root,
+        critiques: res.byCritic,
+        score: res.score,
+        passed: res.passed,
+        findings: res.findings,
+      },
+      null,
+      2,
+    ),
+  );
   return { goal: 'critique:repo' };
 }
 
 // ponytail: jalankan hanya bila dieksekusi langsung (bukan saat diimpor test).
 if (import.meta.main) {
   main(process.argv.slice(2))
-    .then((ctx) => console.log(JSON.stringify({ goal: ctx.goal, plan: ctx.plan, code: ctx.code, score: ctx.aggregate?.score }, null, 2)))
+    .then((ctx) =>
+      console.log(
+        JSON.stringify(
+          { goal: ctx.goal, plan: ctx.plan, code: ctx.code, score: ctx.aggregate?.score },
+          null,
+          2,
+        ),
+      ),
+    )
     .catch((e) => {
       console.error(String(e));
       process.exit(1);

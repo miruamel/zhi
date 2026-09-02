@@ -1,7 +1,7 @@
 /** @brief Unit: LoopMetrics + timedStage. @since 0.5.0 */
 import { describe, it, expect } from 'bun:test';
 import { LoopMetrics, timedStage } from './metrics';
-import { LoopState } from '../states';
+import { LoopEvent, LoopState } from '../states';
 import type { StateHandler } from '../driver';
 
 describe('LoopMetrics', () => {
@@ -20,10 +20,10 @@ describe('LoopMetrics', () => {
 describe('timedStage', () => {
   it('records ok and returns the event', async () => {
     const m = new LoopMetrics();
-    const h: StateHandler = () => LoopState.GOAL_READY;
+    const h: StateHandler = () => LoopEvent.GOAL_READY;
     const wrapped = timedStage('INTAKE', h, m);
     const ev = await wrapped(LoopState.INTAKE);
-    expect(ev).toBe(LoopState.GOAL_READY);
+    expect(ev).toBe(LoopEvent.GOAL_READY);
     expect(m.stages).toHaveLength(1);
     expect(m.stages[0].ok).toBe(true);
     expect(m.stages[0].ms).toBeGreaterThanOrEqual(0);
