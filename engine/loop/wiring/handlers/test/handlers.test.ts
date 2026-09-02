@@ -1,14 +1,14 @@
 import { describe, it, expect } from 'bun:test';
-import { LoopDriver } from '../driver';
-import { buildHandlers, type LoopDeps } from './handlers';
-import type { LoopContext } from './context';
-import { LoopState } from '../states';
+import { LoopDriver } from '../../../driver';
+import { buildHandlers, type LoopDeps } from '../index';
+import type { LoopContext } from '../../context';
+import { LoopState } from '../../../states';
 
 function stubDeps(over: Partial<LoopDeps> = {}): LoopDeps {
   return {
-    ingest: (g) => g.trim(),
-    plan: (g) => `plan:${g}`,
-    generate: async (p) => `code:${p}`,
+    ingest: (g: string) => g.trim(),
+    plan: (g: string) => `plan:${g}`,
+    generate: async (p: string) => `code:${p}`,
     critique: () => [{ name: 'security', score: 0.9, weight: 1, findings: [] }],
     ciWatch: () => 'green',
     paretoThreshold: 0.8,
@@ -77,10 +77,10 @@ describe('loop wiring', () => {
             isolated = true;
             return '/tmp/wt-auth';
           },
-          commit: (wt) => {
+          commit: (wt: string) => {
             committed = wt;
           },
-          prOpen: (wt, _t, _b) => {
+          prOpen: (wt: string, _t: string, _b: string) => {
             opened = wt;
             return 'https://github.com/miruamel/zhi/pull/9';
           },

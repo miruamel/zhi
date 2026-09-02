@@ -13,6 +13,7 @@ yang **infra-stripped**: tsconfig/eslint/prettier/vitest tidak ada. Gate hijau h
 10+ type errors tersembunyi. Native boundary tidak sesuai AGENTS.md (`engine/<area>/zigBridge.ts`).
 
 Audit menemukan:
+
 1. God files: `src/cli.ts` (179 SLOC), `engine/model/invoker.ts` (140), `engine/loop/wiring/handlers.ts` (141)
 2. Missing infra: tsconfig/eslint/prettier/vitest/commitlint/scripts
 3. Bug: `engine/loop/observability/metrics.test.ts` pakai `LoopState.GOAL_READY` (event, bukan state)
@@ -38,6 +39,7 @@ Pakai `npm install` karena `bun install` di env proot corruption (folder `node_m
 ### 2. Fix 10 TypeScript errors + 4 failing tests (commit `159151a`)
 
 TypeScript strict mode memunculkan bugs yang tersembunyi:
+
 - `metrics.test.ts` import `LoopEvent` (bukan `LoopState.GOAL_READY`)
 - `handlers.test.ts` + `integration.test.ts`: `generate` async return `Promise<string>`
 - `stream.ts`: `WebAssembly.Table` element `'anyfunc'` (TS DOM lib value valid)
@@ -60,6 +62,7 @@ Cross-reference update di 7 file (AGENTS.md, README.md, docs/standards/commit.md
 docs/guides/roadmap.md, docs/observability.md, 2 audit log entries).
 
 Versi di-bump per Conventional Commits aggregated:
+
 - `feat:` → MINOR
 - `fix:` → PATCH
 - `BREAKING CHANGE:` → MAJOR
@@ -132,6 +135,7 @@ engine/model/invoker/
 ## Konsekuensi
 
 **Positif**:
+
 - Gate hijau enforceable (lint 0 errors, typecheck 0 errors, format clean, 221/221 tests)
 - God files terpecah sesuai mandate §6.1
 - Native boundary sesuai AGENTS.md (WASM/TS fallback automatic)
@@ -141,6 +145,7 @@ engine/model/invoker/
 - Loop wakeup agent dimatikan (no more auto-push conflict)
 
 **Risiko**:
+
 - `engine/loop/wiring/handlers.ts` 141 SLOC (acceptable per §6.2 ≤150 max, belum dipecah — fokus P1 lain selesai dulu)
 - `engine/stream/zigBridge.ts` 110 SLOC (target ≤100 ideal, ≤150 max — acceptable)
 - WASM fallback = write barrier workaround, bukan fix. Solusi real perlu investigate kenapa Zig wasm32 byte-write tidak commit di proot env

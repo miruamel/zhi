@@ -1,53 +1,31 @@
-/** @brief Jahit state loop ke modul engine (critic/eval). @since 0.1.0 */
-import { LoopState, LoopEvent, gatePass } from '../states';
-import { aggregate, type Critique } from '../../critic/aggregate';
-import { gate, type EvalOutput } from '../../eval/gate';
-import { classifyError, withResilience, CircuitBreaker, type DLQEntry } from '../../resil';
-import type { LoopContext } from './context';
-import { branchSlug } from './git';
-import type { StateHandler } from '../driver';
-import { LoopMetrics, timedStage } from '../observability/metrics';
-
-/** @brief Batas retry recovery sebelum abort (selaras resil maxAttempts=3, ADR-003). @since 0.1.0 */
-const MAX_RECOVER = 3;
-
-/** @brief Batas retry generate per EXECUTE (selaras resil default). @since 0.1.0 */
-const GENERATE_RETRY = 3;
-
-/** @brief True bila hasil withResilience adalah DLQ (gagal definitif). @since 0.1.0 */
-const isDLQ = (r: string | DLQEntry): r is DLQEntry =>
-  typeof r === 'object' && r !== null && 'error' in r;
-
-/** @brief Dependensi injeksi untuk state LLM-dependent + ambang. @since 0.1.0 */
-export interface LoopDeps {
-  /** @brief Normalisasi goal (INTAKE). */
-  ingest: (goal: string) => string;
-  /** @brief Buat rencana dari goal (PLAN). */
-  plan: (goal: string) => string;
-  /** @brief Generate kode dari rencana (EXECUTE). Bila worktree diberi, tulis file ke sana. */
-  generate: (plan: string, worktree?: string) => Promise<string>;
-  critique: (code: string) => Critique[];
-  /** @brief Kompres kode hasil EXECUTE agar muat context window (opsional). */
-  compress?: (code: string) => string;
-  /** @brief Isolasi kerja ke git worktree terpisah (ISOLATE, opsional). @return {string} path worktree absolut. */
-  isolate?: () => string;
-  /** @brief Commit hasil EXECUTE di dalam worktree (COMMIT, opsional). */
-  commit?: (worktree: string) => void;
-  /** @brief Buka PR via gh dari dalam worktree (PR_OPEN, opsional). @return {string} URL PR. */
-  prOpen?: (worktree: string, title: string, body: string) => string;
-  ciWatch?: () => 'green' | 'red' | 'pending';
-  /** @brief Evaluasi worktree (test + secret-scan) di EVALUATE (opsional). @return {EvalOutput} hasil gate. */
-  eval?: (worktree: string) => EvalOutput;
-  /** @brief Ambang Pareto layak-commit (EVALUATE). */
-  paretoThreshold: number;
-}
-
-/** @brief Bangun handler tiap state yang menutup ctx + deps.
+/**
+ * @brief Bangun handler tiap state yang menutup ctx + deps.
  * @param {LoopContext} ctx - akumulator loop (dimutasi per-state).
  * @param {LoopDeps} deps - injeksi LLM-dependent + ambang.
+ * @param {LoopMetrics} [metrics] - bila diberi, setiap handler dibungkus timedStage.
  * @return {Partial<Record<LoopState, StateHandler>>} handler tiap state aktif.
  * @see docs/design/loop.md
- * @since 0.1.0 */
+ * @since 0.1.0
+ */
+import { aggregate } from '../../../critic/aggregate';
+import { gate } from '../../../eval/gate';
+import { classifyError, CircuitBreaker, withResilience } from '../../../resil';
+import { LoopDriver, type StateHandler } from '../../driver';
+import { LoopEvent, LoopState, gatePass } from '../../states';
+import type { LoopContext } from '../context';
+import { branchSlug } from '../git';
+import { LoopMetrics, timedStage } from '../../observability/metrics';
+import { GENERATE_RETRY, MAX_RECOVER, type LoopDeps } from './types';
+import { isDLQ } from './is-dlq';
+
+/**
+ * @brief Build per-state handlers (INTAKE → DONE) with optional metrics wrapping.
+ * @param {LoopContext} ctx - akumulator loop.
+ * @param {LoopDeps} deps - deps injeksi.
+ * @param {LoopMetrics} [metrics] - optional metrics wrapper.
+ * @return {Partial<Record<LoopState, StateHandler>>} map state → handler.
+ * @since 0.1.0
+ */
 export function buildHandlers(
   ctx: LoopContext,
   deps: LoopDeps,
@@ -139,3 +117,9 @@ export function buildHandlers(
   }
   return wrapped;
 }
+
+// Re-export types untuk konsumer.
+export type { LoopDeps } from './types';
+export { MAX_RECOVER, GENERATE_RETRY } from './types';
+// Silence unused import lint warning (LoopDriver imported via StateHandler type above).
+export type { LoopDriver };
