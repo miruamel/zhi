@@ -14,6 +14,31 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
+## [Unreleased]
+
+### Added
+
+- **npm `@miruamel/zhi` publish pipeline** — `package.json` rename + publishConfig (`provenance: true`, `access: public`); exports map (`.`, `./engine/*`, `./src/*`); `bin: zhi`; files whitelist (`dist`, README, LICENSE, CHANGES, AGENTS); repository/bugs/homepage metadata; engines (`bun >=1.4.0`).
+- `tsconfig.build.json` — emit mode untuk build (declaration + sourcemap ke `dist/`); `scripts/build.ts` orchestrate `rm -rf dist` + `tsc -p tsconfig.build.json`.
+- `.npmrc` (provenance + registry) + `.npmignore` (exclude src/engine/test/docs/native, publish dist only).
+- **GitHub Actions workflows**:
+  - `.github/workflows/ci.yml` — gate (arch + lint + format + typecheck + test) + build (TS + Zig WASM via direct download) pada push/PR main.
+  - `.github/workflows/release.yml` — tag `v*.*.*` push → gate + build + `npm publish --provenance` + GH release (notes auto-extracted dari `CHANGES.md` per-version; tag format divalidasi regex + awk pattern via `-v` flag, **no interpolation**).
+  - `.github/workflows/architecture-guard.sh` — bash checks (files-per-dir ≤5; SLOC ≤150 hard cap per §6.2); exempt `.husky`, `.dist`, `.native/out`, `.github`.
+
+### Changed
+
+- `bun.lock` tracked (was previously `.gitignore`d) — CI `bun install --frozen-lockfile` sekarang reproducible.
+- `package-lock.json` dihapus dari tracking — Bun-native lockfile only (dual lockfile bikin CI fail `Install dependencies` step karena Bun migration attempt).
+- `engine/orch/orch.test.ts` (157 SLOC) dipecah → 5 atomic tests (`parse`, `build-dag`, `topo-sort`, `allocate`, `schedule`; max 35 SLOC per file).
+- `engine/resil/resil.test.ts` (172 SLOC) dipecah → 4 atomic tests (`breaker`, `retry`, `recover`, `with-resilience`; max 59 SLOC per file).
+- Arch metrics: max SLOC turun dari 164 → 118 (`engine/build/generate.test.ts`).
+
+### Fixed
+
+- CI workflow hardening: `release.yml` awk-regex injection (interpolasi `${TAG#v}` unsafely) → tag format validation `^v[0-9]+\.[0-9]+\.[0-9]+$` + awk pattern via `-v` flag.
+- Dual lockfile race condition: workflow `Install dependencies` step sekarang pass (Bun-only lockfile contract).
+
 ## [0.1.1] - 2026-09-02
 
 ### Security
