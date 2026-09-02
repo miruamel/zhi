@@ -19,6 +19,8 @@ export class LoopLogger {
    * @param {string} to - state tujuan.
    */
   transition(from: string, event: string, to: string): void {
-    this.sink(JSON.stringify({ ts: Date.now(), runId: this.runId, from, event, to, kind: 'transition' }));
+    this.sink(
+      JSON.stringify({ ts: Date.now(), runId: this.runId, from, event, to, kind: 'transition' }),
+    );
   }
 }

@@ -1,16 +1,11 @@
-import { describe, it, expect } from 'bun:test';
-import { main, parseArgs } from './cli';
-import type { Critique } from '../engine/critic/aggregate';
+/**
+ * @brief Integration: cli boot main() — full loop run dari argv. @since 0.1.0
+ */
+import { describe, expect, it } from 'bun:test';
+import type { Critique } from '../../../engine/critic/aggregate';
+import { main } from '../index';
 
 describe('cli boot', () => {
-  it('parses goal and threshold', () => {
-    expect(parseArgs(['build auth', '--threshold=0.9'])).toEqual({
-      goal: 'build auth',
-      threshold: 0.9,
-    });
-    expect(parseArgs(['  '])).toEqual({ goal: '  ', threshold: 0.8 });
-  });
-
   it('runs loop from argv to DONE with populated context', async () => {
     const ctx = await main(['  build auth  ']);
     expect(ctx.goal).toBe('build auth');
@@ -25,5 +20,15 @@ describe('cli boot', () => {
 
   it('throws on empty goal', async () => {
     await expect(main([])).rejects.toThrow('cli: goal kosong');
+  });
+
+  it('dispatches gen subcommand', async () => {
+    // gen butuh domain; expect throw bila kosong
+    await expect(main(['gen'])).rejects.toThrow('cli: gen butuh <domain>');
+  });
+
+  it('dispatches critique:repo subcommand', async () => {
+    const ctx = await main(['critique:repo']);
+    expect(ctx.goal).toBe('critique:repo');
   });
 });

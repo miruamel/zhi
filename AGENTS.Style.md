@@ -11,15 +11,15 @@ Satu-satunya standar dokumentasi Zhi. Berlaku untuk komentar kode DAN docstring,
 
 ## Tag wajib
 
-| Tag | Arti | Wajib untuk |
-|---|---|---|
-| `@brief` | satu kalimat ringkas | semua simbol publik |
-| `@param {tipe} nama` | argumen + kontrak | fungsi >0 arg |
-| `@return {tipe}` | nilai kembali + kontrak | fungsi non-void |
-| `@throw {Error}` | kondisi lempar | bila ada |
-| `@example` | contoh pemanggilan | API publik penting |
-| `@see` | rujukan file/modul terkait | bila relevan |
-| `@since` | versi diperkenalkan | simbol stabil |
+| Tag                  | Arti                       | Wajib untuk         |
+| -------------------- | -------------------------- | ------------------- |
+| `@brief`             | satu kalimat ringkas       | semua simbol publik |
+| `@param {tipe} nama` | argumen + kontrak          | fungsi >0 arg       |
+| `@return {tipe}`     | nilai kembali + kontrak    | fungsi non-void     |
+| `@throw {Error}`     | kondisi lempar             | bila ada            |
+| `@example`           | contoh pemanggilan         | API publik penting  |
+| `@see`               | rujukan file/modul terkait | bila relevan        |
+| `@since`             | versi diperkenalkan        | simbol stabil       |
 
 ## Contoh per bahasa
 
@@ -35,7 +35,9 @@ Satu-satunya standar dokumentasi Zhi. Berlaku untuk komentar kode DAN docstring,
  * @see engine/build/context.ts
  * @since 0.1.0
  */
-export function compress(raw: string): string { /* ... */ }
+export function compress(raw: string): string {
+  /* ... */
+}
 ```
 
 ### JavaScript (glue / self-register)
@@ -47,7 +49,9 @@ export function compress(raw: string): string { /* ... */ }
  * @param {string} to - path target.
  * @see engine/tools/index.js
  */
-export function register(from, to) { /* ... */ }
+export function register(from, to) {
+  /* ... */
+}
 ```
 
 ### Zig
@@ -61,7 +65,7 @@ pub fn compress(raw: []const u8) ![]u8 { // ... }
 
 ## Aturan penulisan
 
-- `@brief` ≤1 kalimat. Jangan ulang nama fungsi; jelaskan *apa* + *why* singkat.
+- `@brief` ≤1 kalimat. Jangan ulang nama fungsi; jelaskan _apa_ + _why_ singkat.
 - `@param` sebutkan kontrak (null?, range?, efek samping?).
 - Jangan dokumentasikan hal sepele (`@brief getter` untuk `getX()` tidak wajib).
 - Docstring TIDAK boleh jadi tempat logika atau TODO. TODO → issue, bukan komentar.

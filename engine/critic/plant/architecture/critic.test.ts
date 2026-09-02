@@ -3,7 +3,8 @@ import { test, expect } from 'bun:test';
 import { architectureCritic, parseGuard } from './critic';
 
 test('parseGuard: clean stdout = 0 violations, no infra error', () => {
-  const stdout = 'ok: 0 circular dependency\nok: 0 deep relative import\nok: 0 illegal layer edge\n';
+  const stdout =
+    'ok: 0 circular dependency\nok: 0 deep relative import\nok: 0 illegal layer edge\n';
   const r = parseGuard(stdout, '');
   expect(r.circular).toBe(0);
   expect(r.deep).toBe(0);
@@ -44,13 +45,16 @@ test('architectureCritic: real clean repo scores 1', () => {
 
 test('architectureCritic: ignores files param (holistic check)', () => {
   // Path fakes an illegal layer edge, but the param is ignored — guard runs against real repo.
-  const c = architectureCritic([{ path: 'engine/foo/a.ts', content: "import { z } from '../../../src/bar';\n" }]);
+  const c = architectureCritic([
+    { path: 'engine/foo/a.ts', content: "import { z } from '../../../src/bar';\n" },
+  ]);
   expect(c.score).toBe(1);
   expect(c.findings).toHaveLength(0);
 });
 
 test('parseGuard: handles guard exit 0 (no violation blocks)', () => {
-  const stdout = 'ok: 0 circular dependency\nok: 0 deep relative import\nok: 0 illegal layer edge\n';
+  const stdout =
+    'ok: 0 circular dependency\nok: 0 deep relative import\nok: 0 illegal layer edge\n';
   const r = parseGuard(stdout, '');
   expect(r.circular + r.deep + r.illegal).toBe(0);
 });

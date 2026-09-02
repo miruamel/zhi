@@ -35,7 +35,10 @@ describe('verify', () => {
 
   it('flags deep relative import', () => {
     const r = verify([
-      { path: 'engine/x/a.ts', content: '/** @brief. @since 0.1.0 */\nimport { b } from "../../../b";\n' },
+      {
+        path: 'engine/x/a.ts',
+        content: '/** @brief. @since 0.1.0 */\nimport { b } from "../../../b";\n',
+      },
     ]);
     expect(r.ok).toBe(false);
     expect(r.violations.some((v) => v.includes('deep'))).toBe(true);

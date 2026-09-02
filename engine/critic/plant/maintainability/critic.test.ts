@@ -15,7 +15,9 @@ test('codeLines drops blank/comment/short/import', () => {
 });
 
 test('scores 1 with no duplicates', () => {
-  const c = maintainabilityCritic([{ path: 'a.ts', content: 'const alpha = 1;\nconst beta = 2;\n' }]);
+  const c = maintainabilityCritic([
+    { path: 'a.ts', content: 'const alpha = 1;\nconst beta = 2;\n' },
+  ]);
   expect(c.score).toBe(1);
   expect(c.findings).toHaveLength(0);
 });

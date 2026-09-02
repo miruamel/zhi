@@ -2,7 +2,7 @@
 
 ## Tujuan
 
-Verifikasi hasil lewat **toolchain nyata** (build, test, scan) — gate berbasis *kode*, bukan model judgment. Dijalankan di state `EVALUATE`, setelah `CRITIQUE`. Ini yang membedakan Zhi dari chat-wrapper: keputusan layak-commit didukung fakta tool, bukan vibes.
+Verifikasi hasil lewat **toolchain nyata** (build, test, scan) — gate berbasis _kode_, bukan model judgment. Dijalankan di state `EVALUATE`, setelah `CRITIQUE`. Ini yang membedakan Zhi dari chat-wrapper: keputusan layak-commit didukung fakta tool, bukan vibes.
 
 ## Komponen
 
@@ -20,7 +20,7 @@ Verifikasi hasil lewat **toolchain nyata** (build, test, scan) — gate berbasis
  * @return {EvalOutput} passed + reasons (blocker bila test gagal / secret bocor).
  * @throw {never} kegagalan dikembalikan sebagai status, bukan lempar.
  * @since 0.1.0 */
-export function evaluate(worktree: string): EvalOutput
+export function evaluate(worktree: string): EvalOutput;
 ```
 
 ## Alur

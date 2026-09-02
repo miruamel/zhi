@@ -4,13 +4,13 @@ Zhi mengeksekusi kode yang dihasilkan model dan memanggil API eksternal. Keamana
 
 ## Trust boundaries
 
-| Batas | Trust | Perlakuan |
-|---|---|---|
-| Goal dari CLI/user | trusted | sanitasi ringan (whitespace, length). Bukan untrusted web. |
-| Model output (tool call) | **untrusted** | validasi schema; path dibatasi ke repo; argumen divalidasi. |
-| Generated code | semi-trusted | jalan di worktree; `eval/security` scan sebelum commit. |
-| 9router / OMP API | trusted-but-limited | rate-limit via `orch/budget`; fallback via `resil/breaker`. |
-| `gh` (PR/CI) | trusted | token scoped; hanya operasi repo target. |
+| Batas                    | Trust               | Perlakuan                                                   |
+| ------------------------ | ------------------- | ----------------------------------------------------------- |
+| Goal dari CLI/user       | trusted             | sanitasi ringan (whitespace, length). Bukan untrusted web.  |
+| Model output (tool call) | **untrusted**       | validasi schema; path dibatasi ke repo; argumen divalidasi. |
+| Generated code           | semi-trusted        | jalan di worktree; `eval/security` scan sebelum commit.     |
+| 9router / OMP API        | trusted-but-limited | rate-limit via `orch/budget`; fallback via `resil/breaker`. |
+| `gh` (PR/CI)             | trusted             | token scoped; hanya operasi repo target.                    |
 
 ## Secret handling
 

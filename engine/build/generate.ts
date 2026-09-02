@@ -46,7 +46,10 @@ export async function generate(spec: GenSpec, invoker?: ModelInvoker): Promise<S
  * @param {GenSpec} spec - spesifikasi domain.
  * @param {ModelInvoker} [invoker] - bila ada & stream, alirkan token; else batch.
  * @return {AsyncGenerator<string>} token plan (atau satu chunk batch). @since 0.4.0 */
-export async function* generateStream(spec: GenSpec, invoker?: ModelInvoker): AsyncGenerator<string> {
+export async function* generateStream(
+  spec: GenSpec,
+  invoker?: ModelInvoker,
+): AsyncGenerator<string> {
   const d = spec.domain;
   const prompts = [
     ...LAYERS.map((l) => `Generate ${l} module for domain ${d} (AGENTS.md fractal).`),

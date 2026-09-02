@@ -16,7 +16,10 @@ export interface ResilCtx {
  * @param {ResilCtx} ctx - breaker + budget.
  * @return {Promise<T | DLQEntry>} hasil atau DLQ (tidak pernah throw).
  * @since 0.1.0 */
-export async function withResilience<T>(fn: () => Promise<T>, ctx: ResilCtx = {}): Promise<T | DLQEntry> {
+export async function withResilience<T>(
+  fn: () => Promise<T>,
+  ctx: ResilCtx = {},
+): Promise<T | DLQEntry> {
   const max = ctx.maxAttempts ?? 3;
   if (ctx.breaker?.isOpen()) {
     return { error: 'circuit-open', attempts: 0, at: Date.now() } as DLQEntry;

@@ -2,7 +2,8 @@
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-const EXPORT_RE = /^\s*export\s+(?:async\s+)?(?:function|const|class|interface|type|let|var|enum)\b/m;
+const EXPORT_RE =
+  /^\s*export\s+(?:async\s+)?(?:function|const|class|interface|type|let|var|enum)\b/m;
 const BRIEF_RE = /@brief\b/;
 const TEST_RE = /\.test\.(ts|js)$/;
 

@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'bun:test';
 import { generate, generateStream } from './generate';
-import { LocalStubInvoker, CloudModelInvoker, selectInvoker, type ModelInvoker } from '../model/invoker';
+import {
+  LocalStubInvoker,
+  CloudModelInvoker,
+  selectInvoker,
+  type ModelInvoker,
+} from '../model/invoker';
 /** @brief Build Response dengan body ReadableStream berisi chunk SSE. @return {Response} */
 function sseResponse(chunks: string[]): Response {
   const stream = new ReadableStream<Uint8Array>({
@@ -47,7 +52,9 @@ describe('build generate', () => {
         headers: { 'content-type': 'application/json' },
       })) as unknown as typeof fetch;
     try {
-      expect(await new CloudModelInvoker({ apiKey: 'k' }).invoke('prompt')).toBe('// generated code');
+      expect(await new CloudModelInvoker({ apiKey: 'k' }).invoke('prompt')).toBe(
+        '// generated code',
+      );
     } finally {
       globalThis.fetch = saved;
     }
@@ -99,8 +106,13 @@ describe('build generate', () => {
   it('generateStream yields one stream per prompt via invoker.stream', async () => {
     let calls = 0;
     const fake = {
-      async invoke() { return ''; },
-      async *stream() { calls++; yield `tok${calls}`; },
+      async invoke() {
+        return '';
+      },
+      async *stream() {
+        calls++;
+        yield `tok${calls}`;
+      },
     } as unknown as ModelInvoker;
     const toks: string[] = [];
     for await (const t of generateStream({ domain: 'auth' }, fake)) toks.push(t);

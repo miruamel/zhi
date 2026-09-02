@@ -30,43 +30,43 @@ Dep minimal: **hanya `ink`** untuk TUI. Model call = `fetch` ke 9router (tanpa S
  * @since 0.1.0 */
 export interface ZhiConfig {
   model: {
-    backends: Backend[];        // 9router/OMP/local
-    defaultTier: Tier;          // 'heavy'
-    fallbackTier: Tier;         // 'light' bila heavy down
+    backends: Backend[]; // 9router/OMP/local
+    defaultTier: Tier; // 'heavy'
+    fallbackTier: Tier; // 'light' bila heavy down
   };
   budget: {
-    defaultTokens: number;      // 200_000
-    perStepRatio: number;       // 0.2 (maks 20% budget per step)
+    defaultTokens: number; // 200_000
+    perStepRatio: number; // 0.2 (maks 20% budget per step)
   };
   critic: {
     weights: Partial<Record<CriticId, number>>; // override bobot
-    securityFloor: number;      // 0.5 -> auto-fail di bawah ini
-    passAvg: number;            // 0.7 -> threshold pass
+    securityFloor: number; // 0.5 -> auto-fail di bawah ini
+    passAvg: number; // 0.7 -> threshold pass
   };
   resil: {
-    maxRetry: number;           // 3
-    breakerWindow: number;      // 10
-    breakerErrorRate: number;   // 0.5
+    maxRetry: number; // 3
+    breakerWindow: number; // 10
+    breakerErrorRate: number; // 0.5
   };
   git: {
-    baseBranch: string;         // 'main'
-    prDraft: boolean;           // false
+    baseBranch: string; // 'main'
+    prDraft: boolean; // false
   };
   native: {
-    wasmDir: string;            // 'native/out'
+    wasmDir: string; // 'native/out'
   };
 }
 ```
 
 ## Environment variables
 
-| Var | Pakai di | Wajib | Keterangan |
-|---|---|---|---|
-| `NINAROUTER_KEY` | model/router | ya (bila pakai 9router) | API key 9router (cookie-auth di proxy, bukan Bearer). |
-| `OMP_*` | model/router | opsional | bila routing ke OMP. |
-| `GITHUB_TOKEN` | tools/git (gh) | ya (bila buka PR) | token gh dengan scope repo. |
-| `ZHI_CONFIG` | cli | opsional | path ke `zhi.config.ts` (default: cwd). |
-| `ZHI_LOG` | observability | opsional | `silent|info|debug` (default `info`). |
+| Var              | Pakai di       | Wajib                   | Keterangan                                            |
+| ---------------- | -------------- | ----------------------- | ----------------------------------------------------- |
+| `NINAROUTER_KEY` | model/router   | ya (bila pakai 9router) | API key 9router (cookie-auth di proxy, bukan Bearer). |
+| `OMP_*`          | model/router   | opsional                | bila routing ke OMP.                                  |
+| `GITHUB_TOKEN`   | tools/git (gh) | ya (bila buka PR)       | token gh dengan scope repo.                           |
+| `ZHI_CONFIG`     | cli            | opsional                | path ke `zhi.config.ts` (default: cwd).               |
+| `ZHI_LOG`        | observability  | opsional                | `silent                                               | info | debug`(default`info`). |
 
 **Jangan hardcode secret** di `zhi.config.ts` — ambil dari env. Lihat `security.md`.
 
@@ -81,15 +81,15 @@ zhi --version
 
 Flag `run`:
 
-| Flag | Default | Keterangan |
-|---|---|---|
-| `--repo <path>` | cwd | target repo. |
-| `--base <branch>` | config.git.baseBranch | base branch. |
-| `--budget <n>` | config.budget.defaultTokens | token budget. |
-| `--tier <heavy|light|micro>` | config.model.defaultTier | override routing. |
-| `--dry-run` | false | plan saja, tidak eksekusi/commit/PR. |
-| `--no-pr` | false | stop di COMMIT, jangan buka PR. |
-| `--config <path>` | `ZHI_CONFIG`/cwd | path config. |
+| Flag              | Default                     | Keterangan                           |
+| ----------------- | --------------------------- | ------------------------------------ |
+| `--repo <path>`   | cwd                         | target repo.                         |
+| `--base <branch>` | config.git.baseBranch       | base branch.                         |
+| `--budget <n>`    | config.budget.defaultTokens | token budget.                        |
+| `--tier <heavy    | light                       | micro>`                              | config.model.defaultTier | override routing. |
+| `--dry-run`       | false                       | plan saja, tidak eksekusi/commit/PR. |
+| `--no-pr`         | false                       | stop di COMMIT, jangan buka PR.      |
+| `--config <path>` | `ZHI_CONFIG`/cwd            | path config.                         |
 
 Contoh:
 

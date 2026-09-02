@@ -22,7 +22,9 @@ export function importsCritic(files: FileRecord[], maxUp = 3): Critique {
       if (!spec.startsWith('.')) continue;
       const ups = (spec.match(/\.\.\//g) ?? []).length;
       if (ups > maxUp) {
-        findings.push(f.path + ':' + (i + 1) + ' deep-relative ' + spec + ' (' + ups + '>' + maxUp + ')');
+        findings.push(
+          f.path + ':' + (i + 1) + ' deep-relative ' + spec + ' (' + ups + '>' + maxUp + ')',
+        );
         count++;
       }
     }

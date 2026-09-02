@@ -15,7 +15,8 @@ const MAX_RECOVER = 3;
 const GENERATE_RETRY = 3;
 
 /** @brief True bila hasil withResilience adalah DLQ (gagal definitif). @since 0.1.0 */
-const isDLQ = (r: string | DLQEntry): r is DLQEntry => typeof r === 'object' && r !== null && 'error' in r;
+const isDLQ = (r: string | DLQEntry): r is DLQEntry =>
+  typeof r === 'object' && r !== null && 'error' in r;
 
 /** @brief Dependensi injeksi untuk state LLM-dependent + ambang. @since 0.1.0 */
 export interface LoopDeps {
@@ -47,7 +48,11 @@ export interface LoopDeps {
  * @return {Partial<Record<LoopState, StateHandler>>} handler tiap state aktif.
  * @see docs/design/loop.md
  * @since 0.1.0 */
-export function buildHandlers(ctx: LoopContext, deps: LoopDeps, metrics?: LoopMetrics): Partial<Record<LoopState, StateHandler>> {
+export function buildHandlers(
+  ctx: LoopContext,
+  deps: LoopDeps,
+  metrics?: LoopMetrics,
+): Partial<Record<LoopState, StateHandler>> {
   const breaker = new CircuitBreaker({ windowSize: 5, openThreshold: 0.5 });
   const raw: Partial<Record<LoopState, StateHandler>> = {
     [LoopState.INTAKE]: () => {
@@ -66,7 +71,10 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps, metrics?: LoopMe
       return LoopEvent.ISOLATED;
     },
     [LoopState.EXECUTE]: async () => {
-      const res = await withResilience(() => deps.generate(ctx.plan ?? '', ctx.worktree), { breaker, maxAttempts: GENERATE_RETRY });
+      const res = await withResilience(() => deps.generate(ctx.plan ?? '', ctx.worktree), {
+        breaker,
+        maxAttempts: GENERATE_RETRY,
+      });
       if (isDLQ(res)) {
         ctx.error = `generate failed after ${GENERATE_RETRY} retry: ${res.error}`;
         return LoopEvent.BUDGET_OUT;
@@ -80,9 +88,10 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps, metrics?: LoopMe
       return LoopEvent.CRITIQUED;
     },
     [LoopState.EVALUATE]: () => {
-      ctx.eval = deps.eval && ctx.worktree
-        ? deps.eval(ctx.worktree)
-        : gate({ score: ctx.aggregate?.score ?? 0, criteria: [], blockers: [] });
+      ctx.eval =
+        deps.eval && ctx.worktree
+          ? deps.eval(ctx.worktree)
+          : gate({ score: ctx.aggregate?.score ?? 0, criteria: [], blockers: [] });
       const ok = gatePass(LoopState.EVALUATE, {
         paretoScore: ctx.aggregate?.score ?? 0,
         paretoThreshold: deps.paretoThreshold,
@@ -95,11 +104,15 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps, metrics?: LoopMe
       const signal = [
         ctx.eval ? ctx.eval.reasons.join(' ') : '',
         ctx.aggregate ? `pareto ${ctx.aggregate.score} < ${deps.paretoThreshold}` : '',
-      ].filter(Boolean).join(' | ');
+      ]
+        .filter(Boolean)
+        .join(' | ');
       const classified = classifyError(signal);
       const exhausted = ctx.attempts >= MAX_RECOVER;
       if (classified.fatal || exhausted) {
-        ctx.error = classified.fatal ? `fatal: ${signal}` : `recover exhausted after ${ctx.attempts} attempt(s)`;
+        ctx.error = classified.fatal
+          ? `fatal: ${signal}`
+          : `recover exhausted after ${ctx.attempts} attempt(s)`;
         return LoopEvent.BUDGET_OUT;
       }
       return LoopEvent.RECOVERED;
@@ -109,7 +122,8 @@ export function buildHandlers(ctx: LoopContext, deps: LoopDeps, metrics?: LoopMe
       return LoopEvent.COMMITTED;
     },
     [LoopState.PR_OPEN]: () => {
-      if (deps.prOpen && ctx.worktree) ctx.prUrl = deps.prOpen(ctx.worktree, ctx.goal ?? 'autoloop', ctx.plan ?? '');
+      if (deps.prOpen && ctx.worktree)
+        ctx.prUrl = deps.prOpen(ctx.worktree, ctx.goal ?? 'autoloop', ctx.plan ?? '');
       return LoopEvent.PR_OPENED;
     },
     [LoopState.CI_WATCH]: () => {

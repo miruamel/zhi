@@ -50,6 +50,8 @@ describe('LoopDriver', () => {
 
   it('run() throws on illegal transition from handler', async () => {
     const d = new LoopDriver();
-    await expect(d.run({ [LoopState.INTAKE]: () => LoopEvent.COMMITTED })).rejects.toThrow(/illegal/);
+    await expect(d.run({ [LoopState.INTAKE]: () => LoopEvent.COMMITTED })).rejects.toThrow(
+      /illegal/,
+    );
   });
 });

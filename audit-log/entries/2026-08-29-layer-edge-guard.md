@@ -23,6 +23,7 @@ Invarian sudah terpenuhi di tree saat ini; cek meng-encode untuk mencegah regres
 ## Change
 
 Extended `scripts/ci/architecture/check-circular.ts` (depth 5, 0-dep):
+
 - Tambah `layerOf(abs)` + tabel `ILLEGAL` (`engine:['src']`, `src:['native']`,
   `native:['engine','src']`).
 - Iterasi edge graph; flag edge `fl->tl` jika masuk `ILLEGAL[fl]`.

@@ -18,7 +18,12 @@ describe('knowledge store', () => {
     s.add({ key: 'a', value: '1', tags: ['x'] });
     s.add({ key: 'b', value: '2', tags: ['x', 'y'] });
     s.add({ key: 'c', value: '3', tags: ['z'] });
-    expect(s.byTag('x').map((f) => f.key).sort()).toEqual(['a', 'b']);
+    expect(
+      s
+        .byTag('x')
+        .map((f) => f.key)
+        .sort(),
+    ).toEqual(['a', 'b']);
   });
   it('returns undefined for missing key', () => {
     expect(new KnowledgeStore().get('nope')).toBeUndefined();

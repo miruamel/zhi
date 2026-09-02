@@ -27,7 +27,10 @@ test('test files excluded', () => {
 });
 
 test('score floors at 0', () => {
-  const files = Array.from({ length: 10 }, (_, i) => ({ path: `ui${i}.tsx`, content: `<img src="${i}" />\n` }));
+  const files = Array.from({ length: 10 }, (_, i) => ({
+    path: `ui${i}.tsx`,
+    content: `<img src="${i}" />\n`,
+  }));
   const r = accessibilityCritic(files);
   expect(r.score).toBe(0);
 });

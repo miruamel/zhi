@@ -32,7 +32,8 @@ export function verify(files: ScaffoldFile[]): VerifyResult {
     }
   }
   for (const [dir, n] of byDir) {
-    if (n > MAX_FILES_PER_DIR) violations.push(`dir exceeds ${MAX_FILES_PER_DIR} files: ${dir} (${n})`);
+    if (n > MAX_FILES_PER_DIR)
+      violations.push(`dir exceeds ${MAX_FILES_PER_DIR} files: ${dir} (${n})`);
   }
   return { ok: violations.length === 0, violations };
 }

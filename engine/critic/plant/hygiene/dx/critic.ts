@@ -10,7 +10,10 @@ import type { Critique } from '../../../aggregate';
 export function dxCritic(root: string): Critique {
   const findings: string[] = [];
   const readme = join(root, 'README.md');
-  if (!existsSync(readme) || !/quickstart|getting started|usage/i.test(readFileSync(readme, 'utf8'))) {
+  if (
+    !existsSync(readme) ||
+    !/quickstart|getting started|usage/i.test(readFileSync(readme, 'utf8'))
+  ) {
     findings.push(`${root} README missing quickstart/usage section`);
   }
   if (!existsSync(join(root, 'AGENTS.md'))) findings.push(`${root} missing AGENTS.md`);

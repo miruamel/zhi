@@ -6,11 +6,25 @@ import { aggregate } from '../aggregate';
 test('compose runs all eight critics', () => {
   const cr = composeCritiques([{ path: 'engine/foo/a.ts', content: 'export const x = 1;\n' }]);
   expect(cr).toHaveLength(11);
-  expect(cr.map((c) => c.name).sort()).toEqual(['accessibility', 'architecture', 'doc', 'imports', 'maintainability', 'perf', 'privacy', 'security', 'sloc', 'style', 'todo']);
+  expect(cr.map((c) => c.name).sort()).toEqual([
+    'accessibility',
+    'architecture',
+    'doc',
+    'imports',
+    'maintainability',
+    'perf',
+    'privacy',
+    'security',
+    'sloc',
+    'style',
+    'todo',
+  ]);
 });
 
 test('compose clean files aggregate to score 1 (gate pass)', () => {
-  const cr = composeCritiques([{ path: 'a.ts', content: '/** @brief X. */\nexport const x = 1;\n' }]);
+  const cr = composeCritiques([
+    { path: 'a.ts', content: '/** @brief X. */\nexport const x = 1;\n' },
+  ]);
   const r = aggregate(cr, 0.7);
   expect(r.score).toBe(1);
   expect(r.passed).toBe(true);
@@ -21,7 +35,10 @@ test('compose detects violations across critics', () => {
   const cr = composeCritiques([
     { path: 'big.ts', content: 'x\n'.repeat(210) },
     { path: 'todo.ts', content: '// TODO: x\n// FIXME: y\n// TODO: z\n// FIXME: w\n' },
-    { path: 'imp.ts', content: "import { x } from '../../../../d';\nimport { y } from '../../../../e';\n" },
+    {
+      path: 'imp.ts',
+      content: "import { x } from '../../../../d';\nimport { y } from '../../../../e';\n",
+    },
   ]);
   const r = aggregate(cr, 0.7);
   expect(r.score).toBeLessThan(1);
@@ -37,8 +54,16 @@ test('compose detects violations across critics', () => {
 test('compose severe violations fail even lenient gate', () => {
   const cr = composeCritiques([
     { path: 'god.ts', content: 'x\n'.repeat(400) },
-    { path: 'mess.ts', content: '// TODO\n// FIXME\n// XXX\n// TODO\n// FIXME\nconst cfg = { password: "supersecretvalue123" };\neval("bad");\nel.innerHTML = y;\n' },
-    { path: 'deep.ts', content: "import { a } from '../../../../../a';\nimport { b } from '../../../../../b';\nimport { c } from '../../../../../c';\n" },
+    {
+      path: 'mess.ts',
+      content:
+        '// TODO\n// FIXME\n// XXX\n// TODO\n// FIXME\nconst cfg = { password: "supersecretvalue123" };\neval("bad");\nel.innerHTML = y;\n',
+    },
+    {
+      path: 'deep.ts',
+      content:
+        "import { a } from '../../../../../a';\nimport { b } from '../../../../../b';\nimport { c } from '../../../../../c';\n",
+    },
   ]);
   const r = aggregate(cr, 0.7);
   expect(r.score).toBeLessThan(0.7);

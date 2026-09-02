@@ -2,8 +2,28 @@
 import type { Constraint, Intent } from './types';
 
 const STOPWORDS = new Set([
-  'a', 'an', 'the', 'to', 'for', 'of', 'on', 'in', 'with', 'using', 'make', 'build', 'create',
-  'and', 'then', 'lalu', 'kemudian', 'dan', 'untuk', 'dengan', 'pakai', 'buat',
+  'a',
+  'an',
+  'the',
+  'to',
+  'for',
+  'of',
+  'on',
+  'in',
+  'with',
+  'using',
+  'make',
+  'build',
+  'create',
+  'and',
+  'then',
+  'lalu',
+  'kemudian',
+  'dan',
+  'untuk',
+  'dengan',
+  'pakai',
+  'buat',
 ]);
 export { STOPWORDS };
 

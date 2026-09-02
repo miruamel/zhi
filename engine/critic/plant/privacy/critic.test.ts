@@ -10,7 +10,12 @@ test('clean files score 1', () => {
 });
 
 test('detects private key block', () => {
-  const c = privacyCritic([{ path: 'k.pem', content: '-----BEGIN RSA PRIVATE KEY-----\nMII...\n-----END PRIVATE KEY-----\n' }]);
+  const c = privacyCritic([
+    {
+      path: 'k.pem',
+      content: '-----BEGIN RSA PRIVATE KEY-----\nMII...\n-----END PRIVATE KEY-----\n',
+    },
+  ]);
   expect(c.findings.some((f) => f.includes('private-key-block'))).toBe(true);
   expect(c.score).toBeLessThan(1);
 });
@@ -26,7 +31,9 @@ test('detects jwt', () => {
 });
 
 test('detects db url with credentials', () => {
-  const c = privacyCritic([{ path: 'a.ts', content: 'const u = "postgres://user:pass@localhost:5432/db";\n' }]);
+  const c = privacyCritic([
+    { path: 'a.ts', content: 'const u = "postgres://user:pass@localhost:5432/db";\n' },
+  ]);
   expect(c.findings.some((f) => f.includes('db-url-with-credentials'))).toBe(true);
 });
 

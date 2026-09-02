@@ -20,7 +20,7 @@ Cegah loop **spin** tak terbatas. Beri recovery terbatas (bounded) lewat circuit
  * @return {T | DLQEntry} hasil atau masuk DLQ.
  * @throw {never} kegagalan final dikembalikan sebagai DLQEntry.
  * @since 0.1.0 */
-export async function withResilience<T>(fn: () => Promise<T>, ctx: ResilCtx): Promise<T | DLQEntry>
+export async function withResilience<T>(fn: () => Promise<T>, ctx: ResilCtx): Promise<T | DLQEntry>;
 ```
 
 ## Strategi recovery

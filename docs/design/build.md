@@ -19,19 +19,19 @@ Hasilkan/ubah kode **multi-file** yang konsisten antar-file, verifikasi syntax s
  * @return {FileChange[]} perubahan per file.
  * @see engine/knowledge/git.ts (dep map dari history)
  * @since 0.1.0 */
-export async function generate(req: GenReq): Promise<FileChange[]>
+export async function generate(req: GenReq): Promise<FileChange[]>;
 
 /** @brief Verifikasi syntax + format hasil generate.
  * @param {FileChange[]} changes
  * @return {VerifyResult} ok | errors.
  * @since 0.1.0 */
-export function verify(changes: FileChange[]): VerifyResult
+export function verify(changes: FileChange[]): VerifyResult;
 
 /** @brief Kompres konteks loop panjang agar muat context window.
  * @param {Context} ctx
  * @return {Context} ctx terkompresi.
  * @since 0.1.0 */
-export function compress(ctx: Context): Context
+export function compress(ctx: Context): Context;
 ```
 
 ## Alur

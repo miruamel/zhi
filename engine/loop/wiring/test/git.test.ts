@@ -26,7 +26,9 @@ describe('gitIsolate + gitCommit', () => {
   const repo = mkdtempSync(join(tmpdir(), 'zhi-git-'));
   beforeAll(() => {
     process.chdir(repo);
-    execSync('git init -q && git config user.email t@t.t && git config user.name t && git commit --allow-empty -q -m init');
+    execSync(
+      'git init -q && git config user.email t@t.t && git config user.name t && git commit --allow-empty -q -m init',
+    );
   });
   afterAll(() => {
     process.chdir(orig);

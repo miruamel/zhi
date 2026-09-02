@@ -14,8 +14,14 @@ const SECRET_RES: SecretPattern[] = [
   { re: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----/, label: 'private-key-block' },
   { re: /\bAKIA[0-9A-Z]{16}\b/, label: 'aws-access-key-id' },
   { re: /\beyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/, label: 'jwt-token' },
-  { re: /\b(?:postgres|postgresql|mysql|mongodb|redis|amqp):\/\/[^\s:'"]+:[^\s:'"]+@/, label: 'db-url-with-credentials' },
-  { re: /\b(?:password|passwd|secret|api[_-]?key|token|private[_-]?key|access[_-]?key)\s*[:=]\s*['"](?!\/)[A-Za-z0-9/+_@.-]{8,}['"]/, label: 'hardcoded-credential' },
+  {
+    re: /\b(?:postgres|postgresql|mysql|mongodb|redis|amqp):\/\/[^\s:'"]+:[^\s:'"]+@/,
+    label: 'db-url-with-credentials',
+  },
+  {
+    re: /\b(?:password|passwd|secret|api[_-]?key|token|private[_-]?key|access[_-]?key)\s*[:=]\s*['"](?!\/)[A-Za-z0-9/+_@.-]{8,}['"]/,
+    label: 'hardcoded-credential',
+  },
 ];
 
 /** @brief Privacy critic: setiap kecocokan secret kurangi skor 0.5 (floor 0), bobot 1.5.

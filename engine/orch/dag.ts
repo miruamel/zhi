@@ -3,7 +3,6 @@ import type { Dag, Edge, Intent, Step } from './types';
 import { CycleError } from './types';
 import { STOPWORDS } from './parse';
 
-
 /** @brief Urutkan node topologis; lempar CycleError bila ada siklus.
  * @param {Step[]} nodes - step DAG.
  * @param {Edge[]} edges - edge dependensi.
@@ -61,7 +60,10 @@ export function buildDag(intent: Intent): Dag {
     id: `s${i}`,
     label,
     deps: i > 0 ? [`s${i - 1}`] : [],
-    estimate: Math.max(1, label.split(/\s+/).filter((w) => w && !STOPWORDS.has(w.toLowerCase())).length),
+    estimate: Math.max(
+      1,
+      label.split(/\s+/).filter((w) => w && !STOPWORDS.has(w.toLowerCase())).length,
+    ),
     priority: 0.5 + (i === 0 ? 0.1 : 0) + (i === last ? 0.1 : 0),
   }));
   const edges: Edge[] = [];
