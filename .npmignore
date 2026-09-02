@@ -1,0 +1,50 @@
+# Source files (build to dist/ before publish)
+src/
+engine/
+test/
+tests/
+
+# Tests
+**/*.test.ts
+**/*.spec.ts
+
+# CI / scripts (not part of published artifact)
+scripts/
+.github/
+.husky/
+audit-log/
+
+# Docs internal (keep top-level AGENTS.md/CHANGES.md via package.json files[])
+docs/
+
+# Native source (WASM binary published if built to dist/, source stays in native/)
+native/stream/
+native/.zig-cache/
+native/stream/.zig-cache/
+native/out/
+
+# Config internal
+.eslintrc
+.prettierrc
+.eslintrc.json
+.prettierrc.json
+vitest.config.ts
+tsconfig*.json
+bun.lock
+package-lock.json
+.npmrc
+
+# IDE / OS / Secrets
+.vscode/
+.idea/
+.DS_Store
+.env
+.env.*
+*.local
+*.log
+*.tsbuildinfo
+coverage/
+
+# Editor snapshots / reports
+.claude/
+.cursorrules
