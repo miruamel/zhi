@@ -57,9 +57,19 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Extract notes dari CHANGES.md untuk tag ini (section [X.Y.Z])
+          # Validate tag format (vX.Y.Z only) to prevent awk-regex injection.
           TAG="${GITHUB_REF_NAME}"
-          NOTES=$(awk "/^## \\[${TAG#v}\\]/,/^## \\[/" CHANGES.md | sed '$d' | head -n -1)
+          if ! [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Invalid tag format '$TAG' (expected vX.Y.Z)"
+            exit 1
+          fi
+          VERSION="${TAG#v}"
+          # Extract notes dari CHANGES.md untuk version ini (section [X.Y.Z]).
+          NOTES=$(awk -v ver="$VERSION" '
+            $0 ~ "^## \\[" ver "\\]" {p=1; next}
+            p && /^## \[/ {exit}
+            p {print}
+          ' CHANGES.md)
           if [ -z "$NOTES" ]; then
             NOTES="Release $TAG. Lihat CHANGES.md untuk detail."
           fi
