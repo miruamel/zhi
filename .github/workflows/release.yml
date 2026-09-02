@@ -1,0 +1,71 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to release (e.g. v0.1.1). Leave blank to use latest tag."
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  id-token: write # Required for npm provenance (sigstore)
+
+jobs:
+  release:
+    name: Build + Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Gate (lint + format + typecheck + test)
+        run: bun run gate
+
+      - name: Build TypeScript to dist/
+        run: bun run build
+
+      - name: Build Zig WASM
+        run: bun run native:build
+        continue-on-error: true # WASM write barrier di runner mungkin beda; lanjut walau gagal
+
+      - name: Publish to npm (@miruamel/zhi)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "::error::NPM_TOKEN secret not configured"
+            exit 1
+          fi
+          npm publish --provenance --access public
+          echo "[release] published to npm registry"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Extract notes dari CHANGES.md untuk tag ini (section [X.Y.Z])
+          TAG="${GITHUB_REF_NAME}"
+          NOTES=$(awk "/^## \\[${TAG#v}\\]/,/^## \\[/" CHANGES.md | sed '$d' | head -n -1)
+          if [ -z "$NOTES" ]; then
+            NOTES="Release $TAG. Lihat CHANGES.md untuk detail."
+          fi
+          gh release create "$TAG" \
+            --title "$TAG" \
+            --notes "$NOTES" \
+            --target main \
+            --verify-tag
+          echo "[release] GitHub Release created for $TAG"

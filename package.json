@@ -1,10 +1,32 @@
 {
-  "name": "zhi",
+  "name": "@miruamel/zhi",
   "version": "0.1.1",
-  "private": true,
   "type": "module",
   "maturity": "experimental",
   "description": "Autonomous terminal coding agent with multi-critic loop engine (Bun-native TS).",
+  "bin": {
+    "zhi": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./engine/*": "./dist/engine/*.js",
+    "./src/*": "./dist/src/*.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGES.md",
+    "AGENTS.md",
+    "AGENTS.Style.md"
+  ],
   "scripts": {
     "test": "bun test",
     "test:ci": "bun test --coverage --reporter=junit --reporter-outfile=coverage/coverage.xml",
@@ -20,8 +42,36 @@
     "arch:check": "bun run scripts/ci/architecture/check-circular.ts",
     "arch:metrics": "bun run scripts/ci/architecture/metrics.ts",
     "native:build": "cd native/stream && bash build.sh",
-    "prepare": "",
+    "build": "bun run scripts/build.ts",
+    "prepare": "bun run build",
+    "prepublishOnly": "bun run gate && bun run native:build",
     "commit": "commitlint --edit"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miruamel/zhi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/miruamel/zhi/issues"
+  },
+  "homepage": "https://github.com/miruamel/zhi#readme",
+  "keywords": [
+    "autonomous-agent",
+    "coding-agent",
+    "bun",
+    "typescript",
+    "critic-loop",
+    "zig",
+    "wasm",
+    "sse"
+  ],
+  "engines": {
+    "bun": ">=1.4.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.0.0",
