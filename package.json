@@ -7,7 +7,45 @@
   "description": "Autonomous terminal coding agent with multi-critic loop engine (Bun-native TS).",
   "scripts": {
     "test": "bun test",
-    "arch:check": "bun run scripts/ci/architecture/check-circular.ts"
+    "test:ci": "bun test --coverage --reporter=junit --reporter-outfile=coverage/coverage.xml",
+    "gate": "bun run lint && bun run format:check && bun run typecheck && bun run test",
+    "test:watch": "bun test --watch",
+    "lint": "bun x eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "bun x eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "format": "bun x prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "format:check": "bun x prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "typecheck": "bun x tsc --noEmit -p tsconfig.json",
+    "typecheck:node": "bun x tsc --noEmit -p tsconfig.node.json",
+    "typecheck:lib": "bun x tsc --noEmit -p tsconfig.lib.json",
+    "arch:check": "bun run scripts/ci/architecture/check-circular.ts",
+    "arch:metrics": "bun run scripts/ci/architecture/metrics.ts",
+    "native:build": "cd native/stream && bash build.sh",
+    "prepare": "",
+    "commit": "commitlint --edit"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "bun-types": "^1.4.0",
+    "eslint": "9.39.5",
+    "eslint-plugin-jsdoc": "^50.0.0",
+    "eslint-visitor-keys": "^5.0.1",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^2.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "bun run lint:fix",
+      "bun run format"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "bun run format"
+    ]
   },
   "license": "MIT"
 }
