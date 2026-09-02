@@ -1,10 +1,17 @@
 # Build artifacts
 native/out/
 *.wasm
+*.wasm.o
+
+# Zig build cache
+native/stream/.zig-cache/
+native/stream/.zig-cache
+native/.zig-cache/
 
 # Dependencies
 node_modules/
 .bun/
+bun.lock
 
 # Env & secrets
 .env
@@ -15,9 +22,18 @@ node_modules/
 .DS_Store
 .idea/
 .vscode/
+*.tsbuildinfo
 
 # Logs
 *.log
+
+# Coverage
+coverage/
+
 # Local tooling / sync state (not project source)
 .ngodingpakeai/
 .claude/
+
+# Test / coverage
+.nyc_output/
+coverage/
