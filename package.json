@@ -73,6 +73,11 @@
   "engines": {
     "bun": ">=1.4.0"
   },
+  "dependencies": {
+    "ink": "^4",
+    "react": "^18",
+    "@types/react": "^18"
+  },
   "devDependencies": {
     "@commitlint/cli": "^19.0.0",
     "@commitlint/config-conventional": "^19.0.0",
