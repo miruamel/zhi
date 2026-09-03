@@ -1,0 +1,27 @@
+# CODEOWNERS
+# Default owner for everything.
+/                                          @miruamel
+
+# Engine critical (state machine + critic + eval + resil).
+/engine/loop/                              @miruamel
+/engine/critic/                            @miruamel
+/engine/eval/                              @miruamel
+/engine/resil/                             @miruamel
+
+# Security-sensitive.
+/native/                                   @miruamel
+/docs/security.md                          @miruamel
+/docs/runbooks/                            @miruamel
+/SECURITY.md                               @miruamel
+
+# Build / release.
+/.github/workflows/                        @miruamel
+/scripts/                                  @miruamel
+/package.json                              @miruamel
+/CHANGES.md                                @miruamel
+
+# Marketing / repo metadata.
+/BUSINESS.md                               @miruamel
+/docs/marketing/                           @miruamel
+/assets/                                   @miruamel
+/README.md                                 @miruamel

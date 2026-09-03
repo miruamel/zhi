@@ -1,27 +1,30 @@
 # design/model.md — Model (LLM)
 
-## Tujuan
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
 
-Abstraksi tunggal ke LLM: routing antar backend (9router/OMP/local), tier heavy/light/micro, dan streaming token via Zig WASM parse. Dipakai `build` (generate) dan `critic` (kritikus model-based).
+## Purpose
 
-## Komponen
+A single abstraction over the LLM: routing between backends (9router/OMP/local), tiers heavy/light/micro, and token streaming through the Zig WASM parser. Used by `build` (generate) and `critic` (model-based critics).
+
+## Components
 
 - `index.ts` (Orchestrator): `chat()` entry.
-- `router.ts` (Model Router): pilih backend + tier (heavy/light/micro) per task.
+- `router.ts` (Model Router): choose backend + tier (heavy/light/micro) per task.
 - `stream.ts` (Stream Zig WASM parse): SSE chunk → token + tool-call extract, via `native/stream/parse.wasm`.
-- `context.ts` — **tidak di sini**; context compression ada di `build/context.ts`.
+- `context.ts` — **not here**; context compression lives in `build/context.ts`.
 
 ## Interface
 
 ```ts
-/** @brief Chat streaming ke backend terpilih.
+/** @brief Stream chat to the selected backend.
  * @param {ChatReq} req - messages + tier + maxTokens.
- * @return {AsyncIterable<Token>} stream token.
+ * @return {AsyncIterable<Token>} token stream.
  * @see engine/native/stream/parse.wasm
  * @since 0.1.0 */
 export async function* chat(req: ChatReq): AsyncIterable<Token>
 
-/** @brief Pilih backend+tier untuk task.
+/** @brief Choose backend + tier for a task.
  * @param {TaskKind} kind
  * @return {Backend} endpoint + model.
  * @since 0.1.0 */
@@ -30,20 +33,20 @@ export function route(kind: TaskKind): Backend
 
 ## Routing (v1)
 
-- `heavy` (generate kompleks, critic agregat) → 9router GPT-4/Claude class.
-- `light` (verify, format) → model kecil/cepat.
-- `micro` (classify, tag) → Phi-3 class / lokal.
-- Fallback antar-backend via `resil/breaker`.
+- `heavy` (complex generation, critic aggregate) → 9router GPT-4 / Claude class.
+- `light` (verify, format) → small / fast model.
+- `micro` (classify, tag) → Phi-3 class / local.
+- Inter-backend fallback via `resil/breaker`.
 
 ## Edge cases
 
-- Backend down → `resil` fallback ke backend lain / tier bawah.
-- Stream terputus → `stream.ts` deteksi EOF tak-normal → `resil` retry.
-- Token habis → `orch/budget` potong step.
+- Backend down → `resil` falls back to another backend / lower tier.
+- Stream interrupted → `stream.ts` detects abnormal EOF → `resil` retry.
+- Tokens exhausted → `orch/budget` cuts the step.
 
 ## v1
 
-Konkret: `router` + `stream` (Zig WASM). Context compression di `build/context.ts` (bukan sini).
+Concrete: `router` + `stream` (Zig WASM). Context compression is in `build/context.ts` (not here).
 
 ## Cross-link
 

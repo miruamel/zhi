@@ -1,35 +1,38 @@
 # glossary.md — Terms
 
-Istilah Zhi. Pakai konsisten di seluruh docs & kode.
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
 
-| Istilah               | Makna                                                                                   |
-| --------------------- | --------------------------------------------------------------------------------------- |
-| **Zhi (志)**          | Nama project: terminal coding agent dengan autonomous-loop engine + multi-critic plant. |
-| **Conductor**         | `engine/loop/` — state machine yang menjahit semua modul menjadi satu siklus otonom.    |
-| **Loop**              | Satu eksekusi penuh `LoopDriver.run(goal)` dari `INTAKE` sampai `DONE`.                 |
-| **Goal**              | Input berbahasa alami dari user (`Goal` di `data-model.md`).                            |
-| **Intent**            | Hasil `parseGoal`: action + targets + constraints terstruktur.                          |
-| **DAG**               | Directed Acyclic Graph dari `Step`; direncanakan `orch`, dijalankan `loop`.             |
-| **Step**              | Satu unit kerja dalam DAG (`generate`/`verify`/`critique`/`eval`/`commit`/`pr`).        |
-| **Critic plant**      | `engine/critic/` — 12 kritikus + semantic cache + meta-aggregator Pareto.               |
-| **Critic**            | Satu penilai kode (Security/Perf/...). Mengembalikan `CriticScore`.                     |
-| **Pareto (weighted)** | Agregasi 12 skor berbobot → keputusan layak-commit (`aggregate`).                       |
-| **Floor**             | Skor minimal per kritikus; di bawah → auto-fail (Security floor 0.5).                   |
-| **Eval toolchain**    | `engine/eval/` — build/test/SAST/secret/perf/compliance/quality-gate.                   |
-| **Gate**              | Keputusan `gatePass`: critic Pareto ∧ eval quality-gate. Penjaga tiap transisi.         |
-| **Resilience**        | `engine/resil/` — circuit breaker + retry budget + DLQ + recovery.                      |
-| **Bounded retry**     | Maksimal 3 percobaan (`resil/retry.ts`); cegah spin.                                    |
-| **DLQ**               | Dead Letter Queue — entry kegagalan final, tercatat + dinotifikasi.                     |
-| **Worktree**          | `git worktree` terisolasi; eksekusi terjadi di sini, main repo aman.                    |
-| **Ledger**            | `KB/ledger/*.jsonl` append-only; audit trail tiap step.                                 |
-| **Semantic cache**    | `critic/cache.ts` — similarity embedding; hindari eksekusi kritikus berulang.           |
-| **Tier**              | `heavy                                                                                  | light  | micro`— kelas model; diroute`model/router`.          |
-| **Native / WASM**     | `native/*.zig` → `*.wasm` hot path (stream parse, diff, embed).                         |
-| **Budget**            | Token total (`Goal.budget`); dialokasikan per step (`orch/budget`).                     |
-| **Circuit breaker**   | Buka bila error rate > 50% dalam window; cegah panggilan gagal terus-menerus.           |
-| **Abstain**           | Kritikus stub belum diimplementasi; tidak memengaruhi agregasi.                         |
-| **DONE(partial)**     | Loop berhenti tanpa goal penuh (budget habis / gagal final) + laporan.                  |
-| **Maturity**          | `experimental                                                                           | stable | mature`di`package.json`(lihat`AGENTS.md` §Maturity). |
+Zhi terminology. Use consistently across docs and code.
+
+| Term                   | Meaning                                                                                |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| **Zhi (志)**           | Project name: terminal coding agent with autonomous-loop engine + multi-critic plant.  |
+| **Conductor**          | `engine/loop/` — the state machine that stitches all modules into one autonomous cycle. |
+| **Loop**               | One full `LoopDriver.run(goal)` execution from `INTAKE` to `DONE`.                     |
+| **Goal**               | Natural-language input from the user (`Goal` in `data-model.md`).                     |
+| **Intent**             | Output of `parseGoal`: structured action + targets + constraints.                      |
+| **DAG**                | Directed Acyclic Graph of `Step`; planned by `orch`, executed by `loop`.               |
+| **Step**               | One unit of work in the DAG (`generate`/`verify`/`critique`/`eval`/`commit`/`pr`).    |
+| **Critic plant**       | `engine/critic/` — 15 critics + semantic cache + meta-aggregator Pareto.              |
+| **Critic**             | One code reviewer (Security/Perf/...). Returns a `CriticScore`.                        |
+| **Pareto (weighted)**  | Aggregates 15 weighted scores → commit-readiness decision (`aggregate`).               |
+| **Floor**              | Minimum per-critic score; below → auto-fail (Security floor 0.5).                     |
+| **Eval toolchain**     | `engine/eval/` — build/test/SAST/secret/perf/compliance/quality-gate.                  |
+| **Gate**               | `gatePass` decision: critic Pareto ∧ eval quality-gate. Guards every transition.      |
+| **Resilience**         | `engine/resil/` — circuit breaker + retry budget + DLQ + recovery.                     |
+| **Bounded retry**      | Max 3 attempts (`resil/retry.ts`); prevents spin.                                      |
+| **DLQ**                | Dead Letter Queue — terminal failure entries, recorded + notified.                     |
+| **Worktree**           | Isolated `git worktree`; execution happens here, main repo stays safe.                 |
+| **Ledger**             | `KB/ledger/*.jsonl` append-only; audit trail per step.                                 |
+| **Semantic cache**     | `critic/cache.ts` — similarity embedding; avoid re-running critics.                    |
+| **Tier**               | `heavy | light | micro` — model class; routed by `model/router`.                       |
+| **Native / WASM**      | `native/*.zig` → `*.wasm` hot path (stream parse, diff, embed).                        |
+| **Budget**             | Total tokens (`Goal.budget`); allocated per step (`orch/budget`).                      |
+| **Circuit breaker**    | Opens when error rate > 50% within a window; prevents repeated failed calls.           |
+| **Abstain**            | Stub critic not yet implemented; does not influence aggregation.                       |
+| **DONE(partial)**      | Loop stops without full goal (budget exhausted / terminal fail) + report.              |
+| **Maturity**           | `experimental | stable | mature` in `package.json` (see `AGENTS.md` §Maturity).          |
 
 ## Cross-link
 

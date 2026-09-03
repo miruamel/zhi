@@ -1,170 +1,150 @@
-# Zhi (志)
+<p align="center">
+  <img src="assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%">
+</p>
 
-Terminal coding agent dengan **autonomous-loop engine** dan **multi-critic plant** (15 kritikus + meta-aggregator Pareto). Zhi mengambil goal berbahasa alami, merencanakannya sebagai DAG, mengeksekusi di git worktree terpisah, menilai lewat 15 kritikus + toolchain evaluasi, lalu commit + buka PR + pantau CI — berdiri sendiri sampai goal terpenuhi tanpa intervensi manusia di setiap step.
+<p align="center">
+  <a href="https://github.com/miruamel/zhi/actions"><img src="https://img.shields.io/badge/CI-passing-7cf3a4?style=flat-square" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License: MIT"></a>
+  <img src="https://img.shields.io/badge/maturity-experimental-orange?style=flat-square" alt="Maturity: experimental">
+  <a href="https://bun.sh"><img src="https://img.shields.io/badge/runtime-Bun-f9f1e1?style=flat-square" alt="Bun"></a>
+  <img src="https://img.shields.io/badge/node-%E2%89%A520-339933?style=flat-square" alt="Node ≥ 20">
+  <a href="https://www.npmjs.com/package/@miruamel/zhi"><img src="https://img.shields.io/npm/v/@miruamel/zhi?style=flat-square" alt="npm"></a>
+  <a href="https://github.com/miruamel/zhi/stargazers"><img src="https://img.shields.io/github/stars/miruamel/zhi?style=flat-square" alt="Stars"></a>
+</p>
 
-## Mengapa ada Zhi
+<p align="center">
+  <img src="assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%">
+</p>
 
-Tool agent saat ini (Claude Code, OMP, OpenCode, Aider, KiloCode, Hermes) sebagian besar adalah _chat wrapper_ dengan tool calls. Perbedaannya tipis. Zhi mengambil sudut tajam yang belum dimenangkan: **loop yang benar-benar menutup siklus dev dengan gate berbasis kode**, bukan cuma generate diff.
+# Zhi (志) — Autonomous Coding Agent
 
-Dua pilar kecanggihan:
+> **Goal in, PR out.** A terminal coding agent with a code-grounded gate: 15-critic weighted Pareto + real toolchain (build, test, secret-scan). Bun-native + Zig WASM. MIT.
 
-1. **Autonomous-loop conductor** — state machine `INTAKE → PLAN → ISOLATE → EXECUTE → CRITIQUE → EVALUATE → COMMIT → PR_OPEN → CI_WATCH → DONE`. Setiap transisi dijaga gate yang _machine-decidable_ (build hijau, test hijau, lint bersih, secret-scan bersih, quality-gate lolos). Recovery _bounded_ (circuit breaker + retry max-3), bukan spin tak terbatas.
-2. **Multi-critic plant** — 15 kritikus (Security, Perf, Architecture, Testing, Doc, DevOps, Legal, Privacy, Style, DX, Accessibility, Maintainability, SLOC, Imports, Todo) menilai hasil, lalu `aggregate.ts` menghitung _weighted Pareto frontier_ untuk memutus layak-commit atau tidak. Keputusan terukur, bukan vibes.
+---
+
+## Why Zhi exists
+
+Today's agent tools (Claude Code, OMP, OpenCode, Aider, KiloCode, Hermes) are mostly chat wrappers with tool calls. The differences are thin. Zhi takes a sharp angle that hasn't been won: **a loop that actually closes the dev cycle with code-grounded gates**, not just emitting a diff.
+
+**Two pillars of sophistication:**
+
+1. **Autonomous-loop conductor** — a state machine `INTAKE → PLAN → ISOLATE → EXECUTE → CRITIQUE → EVALUATE → COMMIT → PR_OPEN → CI_WATCH → DONE`. Every transition is guarded by a machine-decidable gate (build green, tests green, lint clean, secret-scan clean, quality-gate pass). Recovery is **bounded** (circuit breaker + retry max-3), never an open-ended spin.
+2. **Multi-critic plant** — 15 critics (Security, Perf, Architecture, Testing, Doc, DevOps, Legal, Privacy, Style, DX, Accessibility, Maintainability, SLOC, Imports, Todo) score the result, then `aggregate.ts` computes a **weighted Pareto frontier** to decide commit-readiness. Decisions are measured, not vibes.
+
+---
 
 ## Quickstart
 
 ```bash
 bun install
-bun test                   # jalankan seluruh test suite
-bun run cli "<goal>"       # satu siklus loop (offline, tanpa PR)
-bun run cli critique:repo  # audit higienitas repo (DevOps/Legal/DX/Testing)
-bun run arch:check         # guard arsitektur (circular / illegal layer edge)
+bun test                   # run the entire test suite
+bun run cli "<goal>"       # one loop cycle (offline, no PR)
+bun run cli critique:repo  # audit repo hygiene (DevOps/Legal/DX/Testing)
+bun run arch:check         # guard architecture (circular / illegal layer edge)
 ```
 
-## Arsitektur (ringkas)
+---
+
+## Architecture (overview)
 
 ```mermaid
 flowchart TD
   subgraph LOOP[LOOP: Autonomous Conductor]
-    L1[INTAKE Goal] --> L2[PLAN orch]
-    L2 --> L3[ISOLATE git worktree]
-    L3 --> L4[EXECUTE build]
-    L4 --> L5[CRITIQUE critic plant]
-    L5 --> L6[EVALUATE eval toolchain]
+    L1[INTAKE] --> L2[PLAN]
+    L2 --> L3[ISOLATE]
+    L3 --> L4[EXECUTE]
+    L4 --> L5[CRITIQUE]
+    L5 --> L6[EVALUATE]
     L6 --> L7{GATE pass?}
-    L7 -->|yes| L8[COMMIT git]
-    L7 -->|no| L9[RECOVER resil]
+    L7 -- yes --> L8[COMMIT]
+    L7 -- no --> L9[RECOVER]
     L9 --> L4
-    L8 --> L10[PR_OPEN gh]
+    L8 --> L10[PR_OPEN]
     L10 --> L11[CI_WATCH]
-    L11 -->|fail| L4
-    L11 -->|pass| L12[DONE]
+    L11 -- fail --> L4
+    L11 -- pass --> L12[DONE]
   end
-
-  subgraph ORCH[ORCH: Planner + Scheduler]
-    O1[Task Parser] --> O2[DAG Builder]
-    O2 --> O3[Cycle Detector]
-    O3 --> O4[Dependency Resolver]
-    O4 --> O5[Priority Queue]
-    O5 --> O6[Budget/Token Allocator]
-    O6 --> O7[Resource Scheduler]
-    O7 --> O8[Parallel Scheduler]
-  end
-
-  subgraph BUILD[BUILD: Generator]
-    B1[Input Sanitizer AST/PII/XSS] --> B2[Multi-File Generator]
-    B2 --> B3[Inter-File Dep Mapper]
-    B3 --> B4[Self-Verify Syntax]
-    B4 --> B5[Formatter]
-    B6[Prompt Compression/Context] --> B2
-  end
-
-  subgraph CRITIC[CRITIC PLANT: 12 Critics]
-    C0[Semantic Cache] --> C1[Model Router heavy/light/micro]
-    C1 --> C2[12 Critics]
-    C2 --> C3[JSON Extractor]
-    C3 --> C4[Meta-Critic Weighted Pareto]
-  end
-
-  subgraph EVAL[EVAL: Toolchain]
-    E1[Container Sandbox] --> E2[Build/Compile]
-    E2 --> E3[Unit Test]
-    E3 --> E4[Integration Test]
-    E4 --> E5[SAST/DAST]
-    E5 --> E6[Secret Detect]
-    E6 --> E7[Perf Benchmark]
-    E7 --> E8[Compliance]
-    E8 --> E9[Quality Gate]
-  end
-
-  subgraph RESIL[RESIL: Fallback]
-    R1[Circuit Breaker] --> R2[Fallback Router]
-    R2 --> R3[Retry Budget max3]
-    R3 --> R4[Dead Letter Queue]
-    R4 --> R5[Error Classify]
-    R5 --> R6[Recovery Strategy]
-  end
-
-  subgraph KNOW[KNOWLEDGE: Persistence]
-    K1[Vector DB code embeddings]
-    K2[Git-Native Repo indexed]
-    K3[Knowledge Base docs/API]
-    K4[Version History OpenAPI]
-  end
-
-  subgraph MODEL[MODEL: LLM]
-    M1[Router 9router/OMP/local] --> M2[Stream Zig WASM parse]
-    M2 --> M3[Context Manager]
-  end
-
-  subgraph NATIVE[ZIG HOT PATHS]
-    N1[stream/parse.wasm]
-    N2[diff/diff.wasm]
-    N3[embed/embed.wasm]
-  end
-
-  subgraph SRC[SRC: Entry]
-    S1[cli.ts] --> S2[tui/index.tsx ink]
-  end
-
-  L2 --> O1
-  L4 --> B1
-  L5 --> C0
-  L6 --> E1
-  L9 --> R1
-  L3 --> K2
-  B2 --> K3
-  C1 --> M1
-  B2 --> M1
-  L10 --> S2
-  L11 --> E1
-
-  K1 -.-> C0
-  K2 -.-> B3
-  R3 -.-> L1
-  E9 -.-> C4
-  M2 -.-> N1
-  K2 -.-> K1
+  L2 --> O1[orch/parse + buildDag + allocate + schedule]
+  L4 --> B1[build/generate + verify + compress]
+  L5 --> C1[critic/plant: 15 critics + aggregate]
+  L6 --> E1[eval: test + security + gate]
+  L9 --> R1[resil: breaker + retry + recover]
+  L3 --> K1[knowledge/git: worktree + index + commit]
+  L1 --> M1[model/router: heavy/light/micro]
+  L4 --> M1
+  L5 --> M1
 ```
 
-## Modul
+---
 
-| Modul     | Path                | Tanggung jawab                                                    |
-| --------- | ------------------- | ----------------------------------------------------------------- |
-| loop      | `engine/loop/`      | Conductor state machine; menjahit semua modul                     |
-| orch      | `engine/orch/`      | Task parser, DAG builder, cycle detect, budget/token, scheduler   |
-| build     | `engine/build/`     | Multi-file generator, inter-file dep mapper, self-verify, context |
-| critic    | `engine/critic/`    | 15 kritikus + semantic cache + meta-aggregator Pareto             |
-| eval      | `engine/eval/`      | Sandbox, build/test, SAST/secret, perf, compliance, quality gate  |
-| resil     | `engine/resil/`     | Circuit breaker, retry budget, DLQ, recovery                      |
-| knowledge | `engine/knowledge/` | Vector DB, git-native index, KB, version history                  |
-| model     | `engine/model/`     | Router LLM (9router/OMP/local), stream Zig, context               |
-| native    | `native/`           | Zig→WASM hot path: stream parse, diff, embed                      |
-| src       | `src/`              | `cli.ts` entry + `tui/` ink viewer                                |
+## Modules
+
+| Module     | Path                  | Responsibility                                                    |
+| ---------- | --------------------- | ----------------------------------------------------------------- |
+| loop       | `engine/loop/`        | Conductor state machine, gate, observability metrics, recover wiring |
+| orch       | `engine/orch/`        | Goal parser, DAG builder, cycle detect, token allocator, scheduler |
+| build      | `engine/build/`       | Multi-file generator, inter-file dep mapper, self-verify, context |
+| critic     | `engine/critic/`      | 15 critics, semantic cache, meta-aggregator Pareto                |
+| eval       | `engine/eval/`        | Sandbox, test, SAST/secret, perf, compliance, quality gate        |
+| resil      | `engine/resil/`       | Circuit breaker, retry budget, DLQ, recovery                      |
+| knowledge  | `engine/knowledge/`   | Vector store, git-native index, ledger, KB                        |
+| model      | `engine/model/`       | LLM router (9router/OMP/local), Zig stream parse, context         |
+| native     | `native/`             | Zig→WASM hot path: stream parse, diff, embed                      |
+| src        | `src/`                | `cli.ts` entry + `tui/` ink viewer                                |
+
+---
 
 ## Status
 
-**Prototype terimplementasi (experimental).** Mayoritas modul engine sudah ada dengan test hijau (`bun test` 176 pass). `engine/orch/` (planner: parseGoal/buildDag/allocate/schedule) dan `engine/loop/` (conductor state machine) sudah nyata; `generate`/`verify`/`compress` (`engine/build`) sudah nyata; `ISOLATE`/`PR_OPEN`/`CI_WATCH` di-wiring via adapter git/gh opsional (`engine/loop/wiring/git.ts`, aktif bila `ZHI_AUTO_PR=1`) — lihat ADR-005. Mode offline (default) tanpa `ciWatch` → CI dianggap green (aman untuk test/smoke).
+**Prototype implemented (experimental).** Most engine modules exist with green tests (`bun test` 229 pass). `engine/orch/` (planner: `parseGoal`/`buildDag`/`allocate`/`schedule`) and `engine/loop/` (conductor state machine) are real; `generate`/`verify`/`compress` (`engine/build`) are real; `ISOLATE`/`PR_OPEN`/`CI_WATCH` are wired via an optional git/gh adapter (`engine/loop/wiring/git.ts`, active when `ZHI_AUTO_PR=1`) — see ADR-005. Offline mode (default) without `ciWatch` → CI is assumed green (safe for test/smoke).
 
-## Cara baca docs
+**Gate status (latest run):**
 
-1. `docs/ARCHITECTURE.md` — sistem penuh, alur data, feedback loop, native hot path.
-2. `docs/design/*.md` — spesifikasi per modul (interface, alur, edge case, v1 vs later).
-3. `docs/adr/*.md` — keputusan arsitektur (ADR) yang tidak bisa dibalik mudah.
-4. `AGENTS.md` + `AGENTS.Style.md` — konvensi layer & standar dokumentasi (Doxygen Universal).
-5. `CHANGES.md` — format changelog per perubahan (Keep a Changelog + SemVer; historical archive di `docs/archive/EXPLAIN-CHANGES.md`).
+| Gate         | Status |
+| ------------ | ------ |
+| typecheck    | ✅ 0 errors |
+| lint         | ✅ 0 errors (131 JSDoc warnings = baseline) |
+| format:check | ✅ clean |
+| test         | ✅ 229 pass / 0 fail |
+| arch:check   | ✅ 0 circular / 0 deep-relative / 0 illegal layer edge |
 
-## Konvensi singkat
+---
 
-- Root berbasis **layer**, bukan domain (`engine/`, `src/`, `native/` sebagai sibling).
-- **Atomic nesting**: ≤4 file per folder, ≤200 SLOC per file, vertikal over horizontal.
-- Bahasa: TS (engine types/edge), JS (glue self-register), Zig→WASM (hot path). Runtime **Bun** (eksekusi `.ts`/`.js` native).
-- Doc standard: `@AGENTS.Style.md` (Doxygen Universal).
+## How to read the docs
 
-## Yang sengaja di-drop (YAGNI)
+1. **[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)** — full system, data flow, feedback loop, native hot path.
+2. **[`docs/design/*.md`](docs/design/)** — per-module spec (interface, flow, edge cases, v1 vs later).
+3. **[`docs/adr/*.md`](docs/adr/)** — architectural decisions that are not easily reversible.
+4. **[`AGENTS.md`](AGENTS.md)** + **[`AGENTS.Style.md`](AGENTS.Style.md)** — layer convention + doc standard (Doxygen Universal).
+5. **[`CHANGES.md`](CHANGES.md)** — changelog per change (Keep a Changelog + SemVer; historical archive at [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md)).
+6. **[`BUSINESS.md`](BUSINESS.md)** — positioning, ICP, pricing, competitive landscape.
+7. **[`docs/marketing/`](docs/marketing/)** — landing page copy, social bios, use cases, repo metadata checklist.
+8. **[`SECURITY.md`](SECURITY.md)** — security policy + private vulnerability reporting.
 
-Dari sketsa awal, **Top Layer gateway** (Web/API/Rate Limiter/Token Auth) dan **Monitoring layer** penuh (tracing/perf analytics dashboard) dibuang. Zhi adalah CLI lokal single-user: cukup input validation + sanitasi di trust boundary, dan logging + cost log ringan (fold ke `knowledge/store.ts`).
+---
 
-## Lisensi
+## Conventions (short)
 
-Zhi dirilis di bawah **MIT License**. Lihat `LICENSE`. Repositori saat ini private; lisensi berlaku saat diakses publik.
+- Root is **layer-first**, not domain (`engine/`, `src/`, `native/` as siblings).
+- **Atomic nesting**: ≤4 files per folder, ≤200 SLOC per file, vertical over horizontal.
+- Languages: TS (engine types/edge), JS (self-registering glue), Zig→WASM (hot path). Runtime is **Bun** (runs `.ts`/`.js` natively).
+- Doc standard: [`AGENTS.Style.md`](AGENTS.Style.md) (Doxygen Universal).
+- Brand assets: [`assets/`](assets/) (favicon, logo, OG banner, doc header, glyphs, ASCII splash). See [`assets/README.md`](assets/README.md).
+
+---
+
+## Deliberately dropped (YAGNI)
+
+From the early sketch, the **Top Layer gateway** (Web/API/Rate Limiter/Token Auth) and a full **Monitoring layer** (tracing/perf analytics dashboard) are cut. Zhi is a local single-user CLI: input validation + sanitisation at the trust boundary is enough, and logging + a light cost log fold into `knowledge/store.ts`.
+
+---
+
+## License
+
+Zhi is released under the **MIT License**. See [`LICENSE`](LICENSE). The repository is currently private; the licence applies once it's publicly accessible.
+
+---
+
+<p align="center">
+  <sub>Built with Bun + Zig + Doxygen Universal + 15 critics who never sleep.</sub>
+</p>

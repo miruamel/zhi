@@ -1,75 +1,78 @@
 # design/loop.md — Autonomous Conductor
 
-## Tujuan
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
 
-`engine/loop/` adalah **conductor**: state machine yang menjahit `orch → build → critic → eval → resil → knowledge → model` menjadi satu siklus otonom. Tidak mengambil keputusan domain; hanya mengatur transisi state dan memanggil modul lain lewat dependency injection.
+## Purpose
+
+`engine/loop/` is the **conductor**: a state machine that stitches `orch → build → critic → eval → resil → knowledge → model` into a single autonomous cycle. It does not make domain decisions; it only governs state transitions and calls other modules through dependency injection.
 
 ## State machine
 
 States: `INTAKE | PLAN | ISOLATE | EXECUTE | CRITIQUE | EVALUATE | RECOVER | COMMIT | PR_OPEN | CI_WATCH | DONE`.
 
-Transisi (lihat `ARCHITECTURE.md` §7):
+Transitions (see `ARCHITECTURE.md` §7):
 
 - `INTAKE → PLAN`
 - `PLAN → ISOLATE`
 - `ISOLATE → EXECUTE`
 - `EXECUTE → CRITIQUE`
 - `CRITIQUE → EVALUATE`
-- `EVALUATE → COMMIT` (bila `gatePass`) | `EVALUATE → RECOVER` (bila gagal)
+- `EVALUATE → COMMIT` (when `gatePass`) | `EVALUATE → RECOVER` (when fail)
 - `RECOVER → EXECUTE` (bounded retry)
 - `COMMIT → PR_OPEN`
 - `PR_OPEN → CI_WATCH`
-- `CI_WATCH → RECOVER` (CI merah, bounded) | `CI_WATCH → DONE` (CI hijau)
-- budget habis di mana pun → `RECOVER` → `DONE(PARTIAL)` + laporan
+- `CI_WATCH → RECOVER` (CI red, bounded) | `CI_WATCH → DONE` (CI green)
+- budget exhausted anywhere → `RECOVER` → `DONE(PARTIAL)` + report
 
 ## Interface
 
 ```ts
-/** @brief Bangun handler loop per state via dependency injection.
- * @param {LoopContext} ctx - konteks mutable loop (goal/plan/code/...).
- * @param {LoopDeps} deps - adapter: plan/generate/critique/compress wajib;
- *        isolate?/commit?/prOpen?/ciWatch? opsional (git/gh nyata bila ZHI_AUTO_PR=1).
- * @return {Record<LoopState, Handler>} map handler per state.
+/** @brief Build per-state loop handlers via dependency injection.
+ * @param {LoopContext} ctx - mutable loop context (goal/plan/code/...).
+ * @param {LoopDeps} deps - adapters: plan/generate/critique/compress required;
+ *        isolate?/commit?/prOpen?/ciWatch? optional (real git/gh when ZHI_AUTO_PR=1).
+ * @return {Record<LoopState, Handler>} handler map per state.
  * @see docs/design/orch.md docs/design/critic.md
  * @since 0.1.0 */
 export function buildHandlers(ctx: LoopContext, deps: LoopDeps): Record<LoopState, Handler>;
 
-/** @brief Runner state machine; jalankan sampai DONE atau budget habis.
- * @param {Record<LoopState, Handler>} handlers - hasil buildHandlers.
- * @param {number} [budget=100] - max transisi sebelum throw 'loop: budget exceeded'.
- * @return {Promise<void>} mutasi ctx ke status akhir.
+/** @brief Run the state machine until DONE or budget exhausted.
+ * @param {Record<LoopState, Handler>} handlers - result of buildHandlers.
+ * @param {number} [budget=100] - max transitions before throwing 'loop: budget exceeded'.
+ * @return {Promise<void>} mutates ctx to the final status.
  * @since 0.1.0 */
 export class LoopDriver {
   get current(): LoopState;
   async run(handlers: Record<LoopState, Handler>, budget?: number): Promise<void>;
 }
 
-/** @brief Gate sebelum COMMIT: critic Pareto >= threshold (eval quality-gate menyusul).
+/** @brief Gate before COMMIT: critic Pareto >= threshold (eval quality-gate follows).
  * @param {LoopState} state
- * @return {boolean} layak commit.
+ * @return {boolean} commit-ready.
  * @since 0.1.0 */
 export function gatePass(state: LoopState): boolean;
 ```
 
 ## Files
 
-- `driver.ts` — `LoopDriver` runner state machine (transisi + budget guard).
+- `driver.ts` — `LoopDriver` runner (state transitions + budget guard).
 - `states.ts` — `LoopState` enum + `transitions` map + `gatePass`.
-- `wiring/handlers.ts` — `buildHandlers(ctx, deps)` menjahit handler per state via `LoopDeps`.
+- `wiring/handlers.ts` — `buildHandlers(ctx, deps)` stitches per-state handlers via `LoopDeps`.
 - `wiring/context.ts` — `LoopContext` (goal/plan/code/critiques/aggregate/eval/branch/prUrl/error/budgetUsed).
-- `wiring/git.ts` — adapter deterministik `gitIsolate`/`ghPrOpen`/`ghCiWatch` (git/gh CLI).
+- `wiring/git.ts` — deterministic adapter `gitIsolate`/`ghPrOpen`/`ghCiWatch` (git/gh CLI).
 
 ## Edge cases
 
-- Goal ambigu → `PLAN` gagal → `RECOVER` → (bila tidak bisa) `DONE(PARTIAL)` + laporan.
-- Budget habis di `EXECUTE` → `RECOVER` → `DONE(PARTIAL)`.
-- `generate` gagal (throw) di `EXECUTE` → `withResilience` retry (max 3) + `CircuitBreaker` → DLQ → `BUDGET_OUT` → `RECOVER` (bounded, no infinite spin; selaras `resil/retry.ts` + `resil/breaker.ts`) (@zhi)
-- CI merah setelah PR → balik `EXECUTE` dengan error context (bounded retry via `resil/retry.ts`).
-- Branch conflict → ISOLATE ulang di branch baru (`wiring/git.ts`).
+- Ambiguous goal → `PLAN` fails → `RECOVER` → (if unresolvable) `DONE(PARTIAL)` + report.
+- Budget exhausted at `EXECUTE` → `RECOVER` → `DONE(PARTIAL)`.
+- `generate` throws at `EXECUTE` → `withResilience` retry (max 3) + `CircuitBreaker` → DLQ → `BUDGET_OUT` → `RECOVER` (bounded, no infinite spin; aligns with `resil/retry.ts` + `resil/breaker.ts`) (@zhi)
+- CI red after PR → back to `EXECUTE` with error context (bounded retry via `resil/retry.ts`).
+- Branch conflict → re-isolate on a new branch (`wiring/git.ts`).
 
 ## v1
 
-Konkret: state machine + `wiring/handlers.ts` + `gatePass` + recover wiring. Paralel antar-step belakangan (`orch/scheduler.ts` sudah siap, loop jalan **serial** dulu).
+Concrete: state machine + `wiring/handlers.ts` + `gatePass` + recover wiring. Inter-step parallelism is later (`orch/scheduler.ts` is ready, the loop runs **serial** first).
 
 ## Cross-link
 

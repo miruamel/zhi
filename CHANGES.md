@@ -26,6 +26,14 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - `.github/workflows/publish.yml` (sebelumnya `release.yml`) — tag `v*.*.*` push → gate + build + `npm publish --provenance` (OIDC Trusted Publisher, **no `secrets.NPM_TOKEN`**); GH release notes auto-extracted dari `CHANGES.md` per-version; tag format divalidasi regex + awk pattern via `-v` flag, **no interpolation**. Workflow filename rename supaya match npmjs.com Trusted Publisher entry.
 - `docs/runbooks/npm-trusted-publishing.md` — runbook migrasi npm auth dari long-lived `NPM_TOKEN` ke OIDC federation (Trusted Publishing). Target: hapus `secrets.NPM_TOKEN` dari GitHub repo. Status: target.
 - `.github/ISSUE_TEMPLATE/` — `security-incident.md` (private-rotation tracker, no paste-secret policy) + `tech-debt.md` (hygiene-gap tracker).
+- `bug_report.md`, `feature_request.md`, `question.md` — standard issue templates for non-security bugs, features, usage questions.
+- `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist (typecheck / lint / format / tests / coverage / CHANGES / arch-guard).
+- `.github/CODEOWNERS` — module ownership (`engine/loop`, `engine/critic`, `engine/eval`, `engine/resil`, `native/`, security-sensitive, release).
+- `.github/FUNDING.yml` — GitHub Sponsors button scaffold.
+- `SECURITY.md` — security policy: supported versions table, private reporting, scope, past advisories, best-practices for users.
+- `assets/` — `favicon.svg` (64×64), `logo.svg` (360×96), `og-banner.svg` (1200×630), `doc-header.svg` (1200×120), `glyphs.svg` (800×96), `banner.txt` (ASCII splash), `assets/README.md` (asset index + color palette).
+- `BUSINESS.md` — positioning, ICP, pricing (proposed), competitive landscape (vs Claude Code/OMP/Aider/KiloCode/Hermes), value prop canvas.
+- `docs/marketing/` — `landing-copy.md` (hero/problem/how-it-works/features/FAQ for zhi.dev), `social-bio.md` (GitHub/X/LinkedIn/npm bios), `use-cases.md` (8 concrete user stories), `repo-metadata.md` (checklist of forgotten small details), `README.md` (index).
 - `.prettierignore` — exclude `dist/`, `native/out/`, `.zig-cache/`, `.nyc_output/`, `coverage/`, `bun.lock` (generated / not source).
 - `.gitignore` — tambah `dist/` (TS emit, bukan source).
 - `package.json` — `format:check` pakai `--ignore-path .prettierignore`; `prepare` kosong (no post-install build); `bun-types` exact pin `1.4.0` (was `^1.4.0`).
@@ -37,6 +45,10 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - `engine/orch/orch.test.ts` (157 SLOC) dipecah → 5 atomic tests (`parse`, `build-dag`, `topo-sort`, `allocate`, `schedule`; max 35 SLOC per file).
 - `engine/resil/resil.test.ts` (172 SLOC) dipecah → 4 atomic tests (`breaker`, `retry`, `recover`, `with-resilience`; max 59 SLOC per file).
 - Arch metrics: max SLOC turun dari 164 → 118 (`engine/build/generate.test.ts`).
+- README translated to English, with badge grid (CI / License / Maturity / Bun / Node ≥ 20 / npm / Stars) and hero image (`assets/doc-header.svg`).
+- `docs/configuration.md`, `docs/security.md`, `docs/observability.md`, `docs/standards/commit.md`, `docs/runbooks/npm-trusted-publishing.md`, `docs/guides/{roadmap,testing,tui,glossary}.md`, `docs/design/{loop,orch,build,critic,eval,resil,knowledge,model,data-model,sequences}.md`, `docs/examples/trace-email-validation.md` — translated to English.
+- `docs/ARCHITECTURE.md` — translated to English + cleaned Mermaid diagram.
+- All 26 markdown docs now lead with the shared `assets/doc-header.svg` banner + `assets/glyphs.svg` glyph row for visual consistency.
 
 ### Fixed
 

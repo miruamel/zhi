@@ -1,53 +1,56 @@
 # standards/commit.md — Commit Rule
 
-Aturan commit Zhi. Diterapkan via pre-commit hook + CI gate.
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
+Zhi commit rules. Enforced via pre-commit hook + CI gate.
 
 ## 1. Conventional Commits
 
-Format: `<type>: <description>` (bahasa Indonesia untuk description bila menjelaskan, identifier verbatim).
+Format: `<type>: <description>` (English description, identifiers verbatim).
 
-Tipe: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
+Types: `feat` | `fix` | `refactor` | `docs` | `test` | `perf` | `ci` | `chore`.
 
 ```
-feat(loop): tambah state CI_WATCH + transisi fail
-fix(critic): koreksi bobot Security floor 0.5
+feat(loop): add CI_WATCH state + fail transition
+fix(critic): correct Security floor weight to 0.5
 docs(adr): ADR-002 critic Pareto
 ```
 
-## 2. CHANGES.md wajib
+## 2. CHANGES.md required
 
-Setiap PR yang mengubah **behavior / API / arsitektur** WAJIB update `CHANGES.md` (top-first, di bawah `## [Unreleased]`) sebelum merge. Format: Keep a Changelog (section Added/Changed/Fixed/Removed/Security). Docs-only PR dikecualikan. Versi di-bump per SemVer saat release (lihat §5).
+Every PR that changes **behavior / API / architecture** MUST update `CHANGES.md` (top-first, under `## [Unreleased]`) before merge. Format: Keep a Changelog (sections Added/Changed/Fixed/Removed/Security). Docs-only PRs are exempt. Versions are bumped per SemVer on release (see §5).
 
-Historical archive sebelum rename 2026-09-02: `docs/archive/EXPLAIN-CHANGES.md`.
+Historical archive before the 2026-09-02 rename: `docs/archive/EXPLAIN-CHANGES.md`.
 
 ## 3. Doc-style gate
 
-Setiap simbol publik (export) wajib `@brief` (Doxygen Universal, lihat `AGENTS.Style.md`). Pre-commit menolak yang kurang.
+Every public symbol (export) must carry `@brief` (Doxygen Universal, see `AGENTS.Style.md`). Pre-commit rejects missing ones.
 
 ## 4. Atomic commit
 
-Satu commit = satu perubahan kohesif. Jangan campur refactor + feat. File per commit tetap patuh `AGENTS.md` (≤4/file, ≤200 SLOC).
+One commit = one cohesive change. Don't mix refactor + feat. Files per commit still obey `AGENTS.md` (≤4/file, ≤200 SLOC).
 
 ## 5. Maturity & version
 
-Root `package.json` deklarasikan `"maturity"`. Zhi mulai `experimental` (`0.y.z`):
+Root `package.json` declares `"maturity"`. Zhi starts `experimental` (`0.y.z`):
 
-- breaking change = **minor** (bukan major).
-- minor = batch per milestone, bukan 1-fitur-1-minor.
+- breaking change = **minor** (not major).
+- minor = batch per milestone, not 1-feature-1-minor.
 - PATCH = zero behavior change.
-- major butuh RFC + migration guide (lihat `AGENTS.md` §Maturity).
+- major needs RFC + migration guide (see `AGENTS.md` §Maturity).
 
 ## 6. Co-Authored-By
 
-Default **tanpa** `Co-Authored-By` trailer (sesuai ECC `includeCoAuthoredBy: false`). Untuk atribusi Claude, set `includeCoAuthoredBy: true` di settings atau konfigurasi `attribution`.
+Default **without** the `Co-Authored-By` trailer (per ECC `includeCoAuthoredBy: false`). For Claude attribution, set `includeCoAuthoredBy: true` in settings or configure `attribution`.
 
 ## 7. Pre-commit checklist
 
-- [ ] `tsc --noEmit` / typecheck lolos
-- [ ] `gate.ts` (eval) hijau: build ∧ test ∧ lint ∧ secret ∧ quality-gate
-- [ ] `@brief` ada di simbol publik baru
-- [ ] `CHANGES.md` updated di `## [Unreleased]` (bila behavior berubah)
-- [ ] Cross-link docs relevan terupdate
+- [ ] `tsc --noEmit` / typecheck passes
+- [ ] `gate.ts` (eval) green: build ∧ test ∧ lint ∧ secret ∧ quality-gate
+- [ ] `@brief` present on new public symbols
+- [ ] `CHANGES.md` updated under `## [Unreleased]` (when behavior changes)
+- [ ] Relevant cross-link docs updated
 
 ## References
 
