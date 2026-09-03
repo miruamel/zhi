@@ -22,8 +22,18 @@ describe('toPatch', () => {
     ];
     const r = toPatch(ctx({ critiques }), new LoopMetrics(), LoopState.PLAN, false);
     expect(r.critics).toHaveLength(2);
-    expect(r.critics?.[0]).toMatchObject({ name: 'security', score: 0.9, abstain: false, reason: 'no leak' });
-    expect(r.critics?.[1]).toMatchObject({ name: 'style', score: 0.5, abstain: false, reason: undefined });
+    expect(r.critics?.[0]).toMatchObject({
+      name: 'security',
+      score: 0.9,
+      abstain: false,
+      reason: 'no leak',
+    });
+    expect(r.critics?.[1]).toMatchObject({
+      name: 'style',
+      score: 0.5,
+      abstain: false,
+      reason: undefined,
+    });
   });
 
   it('returns empty critics when ctx.critiques is undefined', () => {
@@ -72,9 +82,10 @@ describe('toPatch', () => {
     expect(
       toPatch(ctx({ prUrl: 'https://y' }), new LoopMetrics(), LoopState.DONE, false).prCi,
     ).toMatchObject({ prUrl: 'https://y', ciStatus: 'green' });
-    expect(
-      toPatch(ctx(), new LoopMetrics(), LoopState.PLAN, false).prCi,
-    ).toMatchObject({ prUrl: undefined, ciStatus: undefined });
+    expect(toPatch(ctx(), new LoopMetrics(), LoopState.PLAN, false).prCi).toMatchObject({
+      prUrl: undefined,
+      ciStatus: undefined,
+    });
   });
 
   it('passes recoverAttempts from metrics and aborted flag', () => {
