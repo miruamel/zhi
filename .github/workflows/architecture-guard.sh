@@ -8,17 +8,19 @@ set -euo pipefail
 
 ROOT="${1:-.}"
 
-echo "[guard] files-per-directory (<=5; root + docs/design + docs/adr + audit-log/entries exempt)"
+echo "[guard] files-per-directory (<=5; root + docs/design + docs/adr + audit-log/entries + test/ exempt)"
 
 violations=0
 while IFS= read -r d; do
-  # Skip exempt dirs (root, design, adr, audit-log entries, this script's folder, node_modules).
+  # Skip exempt dirs (root, design, adr, audit-log entries, this script's folder, node_modules,
+  #   native/out, .husky, assets, dist, and any test/ dir — test files are exempt from
+  #   files-per-dir source cap per mandate §6.2; they live under test/ by convention).
   # Match top dir OR any subpath under it ("./foo" or "./foo/bar/baz").
   case "$d" in
-    "$ROOT"|"./docs/design"|"./docs/design"/*|"./docs/adr"|"./docs/adr"/*|"./audit-log/entries"|"./audit-log/entries"/*|"./.git"|"./.git"/*|"./node_modules"|"./node_modules"/*|"./.github"|"./.github"/*|"./native/out"|"./native/out"/*|"./.husky"|"./.husky"/*|"./assets"|"./assets"/*|"./dist"|"./dist"/*)
+    "$ROOT"|*/test|*/test/*|"./docs/design"|"./docs/design"/*|"./docs/adr"|"./docs/adr"/*|"./audit-log/entries"|"./audit-log/entries"/*|"./.git"|"./.git"/*|"./node_modules"|"./node_modules"/*|"./.github"|"./.github"/*|"./native/out"|"./native/out"/*|"./.husky"|"./.husky"/*|"./assets"|"./assets"/*|"./dist"|"./dist"/*)
       continue
       ;;
-  esac
+    esac
   c=$(find "$d" -maxdepth 1 -type f 2>/dev/null | wc -l)
   if [ "$c" -gt 5 ]; then
     echo "[guard] VIOLATION files-per-dir: $d ($c files > 5)"
