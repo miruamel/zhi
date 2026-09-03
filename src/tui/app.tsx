@@ -36,7 +36,7 @@ import {
   Profile,
 } from './panes';
 import type { AppState } from './core/state';
-import type { PaneId } from './engine/focus';
+import type { PaneId } from './engine/focus/index.ts';
 
 export interface AppProps {
   initialState: AppState;

@@ -3,7 +3,7 @@
  *        evaluate → commit → pr_open → ci_watch → done.
  * @since 0.1.1
  */
-import { colors, type ColorToken } from '../core/style/colors.ts';
+import { colors, type ColorToken } from '../../core/style/colors.ts';
 
 /** @brief One stage of the orchestrator loop. */
 export type LoopState =

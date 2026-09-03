@@ -2,7 +2,7 @@
  * @brief Layout builder: maps pane identifiers to grid positions.
  * @since 0.1.1
  */
-import type { PaneId } from "./focus.ts";
+import type { PaneId } from "../focus/index.ts";
 
 /** @brief One pane's placement inside the grid. */
 export interface LayoutPane {
