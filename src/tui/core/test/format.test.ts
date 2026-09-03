@@ -2,7 +2,16 @@
  * @brief Unit: pure formatters (formatMs, formatScore, formatTokens, formatPct, bar, formatTime, truncate, pad). @since 0.1.0
  */
 import { describe, expect, it } from 'bun:test';
-import { bar, formatMs, formatPct, formatScore, formatTime, formatTokens, pad, truncate } from '../format';
+import {
+  bar,
+  formatMs,
+  formatPct,
+  formatScore,
+  formatTime,
+  formatTokens,
+  pad,
+  truncate,
+} from '../format';
 
 describe('formatMs', () => {
   it('returns 0ms for negative', () => {
