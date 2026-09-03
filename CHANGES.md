@@ -29,6 +29,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - `.prettierignore` — exclude `dist/`, `native/out/`, `.zig-cache/`, `.nyc_output/`, `coverage/`, `bun.lock` (generated / not source).
 - `.gitignore` — tambah `dist/` (TS emit, bukan source).
 - `package.json` — `format:check` pakai `--ignore-path .prettierignore`; `prepare` kosong (no post-install build); `bun-types` exact pin `1.4.0` (was `^1.4.0`).
+
 ### Changed
 
 - `bun.lock` tracked (was previously `.gitignore`d) — CI `bun install --frozen-lockfile` sekarang reproducible.
