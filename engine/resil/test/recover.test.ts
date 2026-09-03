@@ -1,35 +1,38 @@
 /**
- * @brief Unit: classifyError — error → recovery strategy. @since 0.1.0
+ * @brief Unit: classifyError() — recovery strategy classification. @since 0.1.0
  */
 import { describe, expect, it } from 'bun:test';
 import { classifyError } from '../recover';
 
 describe('classifyError', () => {
-  it('fatal for budget/timeout', () => {
-    expect(classifyError('budget exceeded').strategy).toBe('abort');
-    expect(classifyError('budget exceeded').fatal).toBe(true);
+  it('classifies budget/timeout/fatal/quota as abort+fatal', () => {
+    expect(classifyError('budget exceeded')).toEqual({ strategy: 'abort', fatal: true });
+    expect(classifyError('TIMEOUT after 30s')).toEqual({ strategy: 'abort', fatal: true });
+    expect(classifyError('FATAL: disk full')).toEqual({ strategy: 'abort', fatal: true });
+    expect(classifyError('quota exceeded for api')).toEqual({ strategy: 'abort', fatal: true });
   });
 
-  it('replan for cycle/parse', () => {
-    expect(classifyError('dag cycle detected').strategy).toBe('replan');
+  it('classifies cycle/ambig/parse as replan', () => {
+    expect(classifyError('cycle detected in dag')).toEqual({ strategy: 'replan', fatal: false });
+    expect(classifyError('ambiguous goal: build thing')).toEqual({ strategy: 'replan', fatal: false });
+    expect(classifyError('parse error in goal')).toEqual({ strategy: 'replan', fatal: false });
   });
 
-  it('patch default', () => {
-    expect(classifyError('syntax error').strategy).toBe('patch');
+  it('defaults to patch for unknown errors', () => {
+    expect(classifyError('some random failure')).toEqual({ strategy: 'patch', fatal: false });
   });
 
-  it('fatal for timeout/quota', () => {
-    expect(classifyError('timeout exceeded').fatal).toBe(true);
-    expect(classifyError('quota exceeded').strategy).toBe('abort');
+  it('handles null/undefined as patch', () => {
+    expect(classifyError(null)).toEqual({ strategy: 'patch', fatal: false });
+    expect(classifyError(undefined)).toEqual({ strategy: 'patch', fatal: false });
   });
 
-  it('replan for ambig/parse', () => {
-    expect(classifyError('ambig detected').strategy).toBe('replan');
-    expect(classifyError('parse detected').fatal).toBe(false);
+  it('handles empty string as patch', () => {
+    expect(classifyError('')).toEqual({ strategy: 'patch', fatal: false });
   });
 
-  it('handles null/undefined without crash', () => {
-    expect(classifyError(undefined).strategy).toBe('patch');
-    expect(classifyError(null).fatal).toBe(false);
+  it('is case-insensitive', () => {
+    expect(classifyError('Budget')).toEqual({ strategy: 'abort', fatal: true });
+    expect(classifyError('CYCLE')).toEqual({ strategy: 'replan', fatal: false });
   });
 });
