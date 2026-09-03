@@ -11,7 +11,7 @@
  */
 import React from 'react';
 import type { AppState } from '../../core/state';
-import type { PaneId } from '../../engine/focus/index';
+import type { PaneId } from '../../engine/focus';
 import {
   Header,
   Dag,
