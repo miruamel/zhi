@@ -33,6 +33,14 @@ describe('genCommand', () => {
     const text = out.join('');
     expect(text).toContain('// verify:');
   });
+
+  it('streams token output when --stream flag present', async () => {
+    const ctx = await genCommand(['auth', '--stream']);
+    expect(ctx.goal).toBe('auth');
+    const text = out.join('');
+    expect(text).toContain('engine/auth/handlers/index.ts');
+    expect(text).toContain('engine/auth/index.ts');
+  });
 });
 
 describe('loopCommand', () => {
