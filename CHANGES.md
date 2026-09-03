@@ -67,6 +67,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - **`engine/critic/plant/hygiene/testing` critic false-positive** — `dirHasTests` only checked the source's own directory and its `test/` subdir, missing the repo's consolidated sibling-`test/` convention. Three `src/cli/commands/*.ts` files were flagged as uncovered despite being exercised by `src/cli/test/commands.test.ts`. Extended to also accept `join(dirname(dir), 'test')`. Repo-wide critic now scores 1.0 with zero findings.
 - **`engine/critic/plant/security` eval-call false-positive** — regex `/\beval\s*\(/` matched `deps.eval(ctx.worktree)` in `builder.ts:71` because `\b` matches at the `.`→`e` boundary. That field is a typed DI dependency (`eval?: (worktree: string) => EvalOutput` in `LoopDeps`), not a code-execution sink. Changed to `/(?<!\.)\beval\s*\(/` — negative lookbehind excludes method-call syntax while still catching global `eval(`.
 - **3 pre-existing test failures** (`engine/critic/plant/compose.test.ts`, `engine/critic/plant/architecture/critic.test.ts`, `src/cli/test/index.test.ts`) — all traced to `as unknown as any` casts in `handlers.test.ts` that broke after `isDLQ`'s signature widened to `unknown`. Removed the casts; 254 → 255 pass, 0 fail.
+- **`parseSseWasm` fail-closed on WASM write-barrier breakage** — `load()` in `engine/stream/zigBridge.ts` could throw when the WASM write barrier is broken (proot env), propagating the exception into `parseStream` and crashing the pipeline. Added `if (!wasmAvailable) return []` guard before `load()` and a `try/catch` around `load()` returning `[]` on throw. `parseStream` already had the `result.length === 0 && chunk.length > 0` → `disableWasm()` + fallback-to-`parseSseTs` logic, so the fix makes the failure path deterministic across all environments. `Loaded` type exported per `ts-no-return-type` rule. Stream tests rewritten to be env-independent: `disableWasm()` called explicitly before `parseStream()` instead of relying on proot breakage. Unused `isWasmAvailable` import removed (TS6133). 355 tests pass, 0 fail; CI green.
 
 ### Changed
 
@@ -91,14 +92,13 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - Prettier trailing-newline normalization on `engine/critic/plant/security/{critic,critic.test.ts}` and 4 other test files.
 
 ### Changed
+- **`parseSseWasm` fail-closed + stream test determinism** — `load()` in `engine/stream/zigBridge.ts` could throw on WASM write-barrier breakage (proot), propagating into `parseStream` and crashing the whole pipeline. Added `if (!wasmAvailable) return []` guard + `try/catch` around `load()` returning `[]` on throw. `parseStream` already had the `result.length === 0 && chunk.length > 0` → `disableWasm()` + fallback-to-`parseSseTs` logic, so the fix makes the failure path deterministic. `Loaded` type exported per `ts-no-return-type` rule. Stream tests rewritten to be env-independent: `disableWasm()` called explicitly before `parseStream()` instead of relying on proot breakage. `isWasmAvailable` unused import removed (TS6133). 355 tests pass, 0 fail; CI green.
 
 - **CLI + TUI test restructure into per-unit subdirs** — flat `test/` directories violated the ≤5-files-per-directory architecture cap (`src/tui/panes/test` had 8, `src/cli/test` had 7). Restructured to per-unit co-location: each unit gets its own `<unit>/<unit>.ts` + `<unit>.test.ts` (2 files each). `src/tui/panes/{top/{header,dag,detail},middle/{critics,eval,pr},bottom/{log,help}}` and `src/cli/{autonomous-deps,offline-deps,parse-args,plan-symbol}` + `src/cli/commands/{gen,loop,critique-repo}`. Flat `test/` dirs deleted; `commands.test.ts` (101 SLOC, 3 describe blocks) split into 3 per-command test files.
 - **Path aliases adopted for deep-relative imports** — `@engine/*` / `@src/*` aliases (already declared in `tsconfig.json`) now used by all CLI modules that sit 3–4 levels below root. This eliminates the `../../../../engine/...` chain that the architecture guard flags as deep-relative-import violations (>3 `../`). Guard script already accepts bare `engine/`/`src/` specifiers; `@engine/*` resolves through `tsconfig` paths and is treated as external (no deep-relative count).
 - **Architecture guard `test/` exemption removed** — `.github/workflows/architecture-guard.sh` no longer exempts `*/test|*/test/*`. Flat `test/` directories are eliminated, so the exemption is dead code. Guard now enforces ≤5 files per directory uniformly.
 
 ### Test
-
-- **355 tests pass, 0 fail** (was 356 — `commands.test.ts` split into 3 per-command files; `critique-repo-traversal.test.ts` co-located beside its subject). Gate: typecheck clean, lint 0 errors, format clean, arch guard all checks passed.
 
 ## [0.1.1] - 2026-09-02
 
