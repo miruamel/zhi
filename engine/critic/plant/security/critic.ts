@@ -11,7 +11,7 @@ interface SinkPattern {
 // parameter) butuh analisis alur; di luar scope static single-file. Tambah di sini
 // bila ada bukti injeksi nyata di artefak generated.
 const SINK_RES: SinkPattern[] = [
-  { re: /\beval\s*\(/, label: 'eval-call' },
+  { re: /(?<!\.)\beval\s*\(/, label: 'eval-call' },
   { re: /\bnew\s+Function\s*\(/, label: 'new-function' },
   { re: /innerHTML\s*=/, label: 'innerHTML-assign' },
   { re: /dangerouslySetInnerHTML/, label: 'dangerously-set-inner-html' },

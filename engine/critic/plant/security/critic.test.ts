@@ -27,3 +27,9 @@ test('penalty 0.3 per finding, floor 0', () => {
   expect(c.findings).toHaveLength(2);
   expect(c.score).toBeCloseTo(0.4);
 });
+
+test('does not flag method-call eval (deps.eval)', () => {
+  const c = securityCritic([{ path: 'a.ts', content: 'deps.eval(ctx.worktree);\n' }]);
+  expect(c.findings.some((f) => f.includes('eval-call'))).toBe(false);
+  expect(c.score).toBe(1);
+});
