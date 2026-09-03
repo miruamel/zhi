@@ -28,6 +28,8 @@ export function toPatch(
   totalMs = 0,
   errors = 0,
   timeline: TimelineEntry[] = [],
+  stageRecords: { stage: string; ms: number; ok: boolean; error?: string }[] = [],
+  facts: { key: string; value: string; tags: string[] }[] = [],
 ): Partial<AppState> {
   return {
     loop,
@@ -63,6 +65,8 @@ export function toPatch(
     },
     log: logEntries,
     timeline,
+    stageRecords,
+    facts,
     finished: loop === LoopState.DONE,
     aborted,
   };
@@ -115,7 +119,18 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
         msg: `${String(_from)} --${String(_ev)}--> ${String(to)}`,
       });
       holder.push?.(
-        toPatch(ctx, metrics, to, !!ctx.error, logEntries, s.totalMs, s.errors, timeline),
+        toPatch(
+          ctx,
+          metrics,
+          to,
+          !!ctx.error,
+          logEntries,
+          s.totalMs,
+          s.errors,
+          timeline,
+          metrics.stages.map((r) => ({ stage: r.stage, ms: r.ms, ok: r.ok, error: r.error })),
+          [],
+        ),
       );
     },
   });

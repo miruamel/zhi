@@ -17,7 +17,7 @@ export const glyphs = {
   done2: 'DONE',
   warn: '⚠',
   info: 'ℹ',
-  fire: '✦',
+  bulb: '💡',
 } as const;
 
 export type GlyphKey = keyof typeof glyphs;

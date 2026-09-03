@@ -3,7 +3,19 @@ import { Box, Text, useApp, useInput } from 'ink';
 import { useState, useEffect } from 'react';
 import { colors } from './core/style/colors';
 import { resolveKey } from './core/keymap';
-import { Header, Dag, Detail, Critics, Timeline, Eval, Pr as PrPane, Log, Help } from './panes';
+import {
+  Header,
+  Dag,
+  Detail,
+  Critics,
+  Timeline,
+  Stages,
+  Eval,
+  Knowledge,
+  Pr as PrPane,
+  Log,
+  Help,
+} from './panes';
 import type { AppState } from './core/state';
 
 export interface AppProps {
@@ -96,6 +108,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         />
       </Box>
       <Box marginTop={1} gap={1}>
+        <Stages state={state} />
         <Timeline entries={state.timeline} />
       </Box>
       <Box marginTop={1} gap={1}>
@@ -106,6 +119,9 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
           expanded={expandedCritics}
         />
         <PrPane prCi={state.prCi} expanded={expandedPr} />
+      </Box>
+      <Box marginTop={1} gap={1}>
+        <Knowledge state={state} />
       </Box>
       <Box marginTop={1} gap={1}>
         <Eval evalReport={state.eval} />
