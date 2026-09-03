@@ -1,118 +1,150 @@
-# ARCHITECTURE — Zhi (志)
+# ARCHITECTURE.md
 
-Spesifikasi arsitektur sistem penuh. Melengkapi `README.md` (ringkas) dan `docs/design/*.md` (per-modul). Diagram mermaid sama dengan `README.md`; di sini diuraikan alur, kontrak antar-modul, feedback loop, dan native hot path.
+System overview of Zhi: data flow, feedback loop, native hot path, and module boundaries.
 
-## 1. Tujuan & posisi
+## 1. Why
 
-Zhi adalah **terminal coding agent** yang menjalankan siklus dev secara otonom: dari goal berbahasa alami sampai PR merge, dengan gate berbasis kode di tiap transisi. Berbeda dari chat-wrapper (Claude Code/OMP/OpenCode/Aider/KiloCode/Hermes) karena dua pilar:
+Zhi is a terminal coding agent with an autonomous loop. Existing agent tools (Claude Code, OMP, OpenCode, Aider, KiloCode, Hermes) are mostly chat wrappers with tool calls. The interesting move is to **close the dev cycle with code-grounded gates**, not just emit a diff.
 
-- **Conductor loop** yang menutup siklus (`COMMIT` + `PR_OPEN` + `CI_WATCH`), bukan berhenti di diff.
-- **Multi-critic plant** yang memutus layak-commit lewat 12 kritikus + _weighted Pareto_, bukan satu model call.
+Two pillars:
 
-## 2. Komponen utama
+1. **Autonomous-loop conductor** — state machine `INTAKE → PLAN → ISOLATE → EXECUTE → CRITIQUE → EVALUATE → COMMIT → PR_OPEN → CI_WATCH → DONE`. Every transition is guarded by a machine-decidable gate (build green, test green, lint clean, secret-scan clean, quality-gate pass). Recovery is bounded (circuit breaker + retry max-3), never an open-ended spin.
+2. **Multi-critic plant** — 15 critics (Security, Perf, Architecture, Testing, Doc, DevOps, Legal, Privacy, Style, DX, Accessibility, Maintainability, SLOC, Imports, Todo) score the result, then `aggregate.ts` computes a weighted Pareto frontier to decide commit-readiness. Decisions are measured, not vibes.
 
-| Subgraph  | Modul               | Peran                                                                                          |
-| --------- | ------------------- | ---------------------------------------------------------------------------------------------- |
-| LOOP      | `engine/loop/`      | Conductor state machine; menjahit semua modul lewat `wiring/handlers.ts` (LoopDeps DI).        |
-| ORCH      | `engine/orch/`      | Ubah goal → DAG step; alokasi budget/token; jadwalkan (serial dulu, paralel belakangan).       |
-| BUILD     | `engine/build/`     | Generate multi-file; petakan inter-file dep; self-verify; kelola konteks (prompt compression). |
-| CRITIC    | `engine/critic/`    | 12 kritikus + semantic cache + meta-aggregator Pareto.                                         |
-| EVAL      | `engine/eval/`      | Toolchain: sandbox, build/test, SAST/secret, perf, compliance, quality gate.                   |
-| RESIL     | `engine/resil/`     | Circuit breaker, retry budget (max-3), DLQ, recovery.                                          |
-| KNOWLEDGE | `engine/knowledge/` | Vector DB, git-native index, KB docs/API, version history.                                     |
-| MODEL     | `engine/model/`     | Router LLM (9router/OMP/local, tier heavy/light/micro), stream Zig, context.                   |
-| NATIVE    | `native/`           | Zig→WASM: stream parse, diff, embed.                                                           |
-| SRC       | `src/`              | `cli.ts` entry + `tui/` ink viewer.                                                            |
+## 2. High-level diagram
 
-## 3. Alur eksekusi utama (happy path)
+```mermaid
+flowchart LR
+  subgraph LOOP[LOOP: Autonomous Conductor]
+    L1[INTAKE] --> L2[PLAN]
+    L2 --> L3[ISOLATE]
+    L3 --> L4[EXECUTE]
+    L4 --> L5[CRITIQUE]
+    L5 --> L6[EVALUATE]
+    L6 --> L7{GATE pass?}
+    L7 -- yes --> L8[COMMIT]
+    L7 -- no --> L9[RECOVER]
+    L9 --> L4
+    L8 --> L10[PR_OPEN]
+    L10 --> L11[CI_WATCH]
+    L11 -- fail --> L4
+    L11 -- pass --> L12[DONE]
+  end
+  L2 --> O1[orch/parse + buildDag + allocate + schedule]
+  L4 --> B1[build/generate + verify + compress]
+  L5 --> C1[critic/plant: 15 critics + aggregate]
+  L6 --> E1[eval: test + security + gate]
+  L9 --> R1[resil: breaker + retry + recover]
+  L3 --> K1[knowledge/git: worktree + index + commit]
+  L1 --> M1[model/router: heavy/light/micro]
+  L4 --> M1
+  L5 --> M1
+```
 
-1. **INTAKE** — `cli.ts` terima goal (teks) + flag (repo, base branch, budget). Masuk `engine/loop/driver.ts`.
-2. **PLAN** — `orch/parse.ts` tokenisasi goal → `orch/dag.ts` bangun DAG step + `cycle detect` + `dependency resolver`. `orch/budget.ts` alokasi token per step. `orch/scheduler.ts` urutkan (priority queue).
-3. **ISOLATE** — `wiring/git.ts` (`gitIsolate`) buat **git worktree** terisolasi dari main. Semua eksekusi terjadi di worktree, main repo aman.
-4. **EXECUTE** — `build/generate.ts` panggil `model/router.ts` (stream via `model/stream.ts` Zig) untuk tulis/edit file. `build/verify.ts` self-verify syntax. `build/context.ts` jaga konteks muat (prompt compression bila loop panjang).
-5. **CRITIQUE** — `critic/cache.ts` cek semantic cache (embedding similarity dari `knowledge/vectors.ts`). `critic/critics.ts` jalan 12 kritikus. `critic/aggregate.ts` hitung weighted Pareto → skor layak-commit.
-6. **EVALUATE** — `eval/index.ts` picu `eval/sandbox.ts` (worktree lokal dulu; container belakangan) → `eval/test.ts` (build + unit + integration) → `eval/security.ts` (SAST/DAST + secret) → `eval/gate.ts` (perf bench + compliance + quality gate).
-7. **GATE** — `loop/states.ts` cek: critic Pareto ≥ threshold **DAN** eval quality-gate hijau.
-   - **yes** → `COMMIT` (`wiring/git.ts` commit di worktree).
-   - **no** → `RECOVER` (`resil/`).
-8. **PR_OPEN** — `wiring/git.ts` (`ghPrOpen`) buka PR dari branch. Status ke `tui/`.
-9. **CI_WATCH** — `wiring/git.ts` (`ghCiWatch`) pantau CI. Fail → balik ke `EXECUTE` dengan error sebagai konteks (bounded). Pass → `DONE`.
+## 3. Data flow (one step)
 
-## 4. Feedback loops (dashed)
+```
+Goal (text)
+  -> parseGoal()         -> Intent
+  -> buildDag()          -> Dag (nodes, edges, topo)
+  -> allocate(budget)    -> Map<stepId, tokens>
+  -> schedule()          -> Step[] in execution order
+  -> per step:
+       build/generate(spec, invoker?)         -> FileChange[]
+       build/verify(changes)                  -> VerifyResult
+       critic/plant/composeCritiques(changes)  -> Critique[]
+       critic/aggregate(critiques, threshold)  -> Aggregate (pass?, weightedAvg)
+       eval/evaluate(worktree)                -> EvalReport (gatePass?)
+       gatePass(state) -> COMMIT | RECOVER
+  -> commit(worktree)    -> branch
+  -> prOpen(branch)      -> PR url
+  -> ciWatch(runId)      -> 'pass' | 'fail'
+  -> DONE | DONE(partial) + report
+```
 
-- **`K1 -.-> C0`** — Vector DB (`knowledge/vectors.ts`) feed semantic cache (`critic/cache.ts`): prompt mirip tidak perlu di-kritik ulang penuh.
-- **`K2 -.-> B3`** — Git-native history (`wiring/git.ts`) feed inter-file dep mapper (`build/generate.ts`): pahami struktur repo sebelum generate.
-- **`R3 -.-> L1`** — Retry budget habis (`resil/retry.ts`) → replan (`orch/`) dari awal dengan konteks kegagalan.
-- **`E9 -.-> C4`** — Eval quality-gate (`eval/gate.ts`) feed meta-critic (`critic/aggregate.ts`): bobot kritikus bisa disesuaikan dari hasil eval.
-- **`M2 -.-> N1`** — Model stream (`model/stream.ts`) pakai Zig WASM parse (`native/stream/parse.wasm`).
-- **`K2 -.-> K1`** — Git-native index di-embed ke Vector DB (`native/embed/embed.wasm`).
+## 4. Feedback loop
 
-## 5. Native hot paths (Zig → WASM)
+```mermaid
+flowchart LR
+  E[EVALUATE] -->|gatePass=false| REC[RECOVER]
+  REC -->|classifyError| STR{strategy}
+  STR -- replan --> PL[PLAN]
+  STR -- patch --> EX[EXECUTE]
+  STR -- abort --> DN[DONE partial]
+  CI[CI_WATCH] -->|fail| EX
+  EX -->|bounded retry x3| DLQ[DLQ]
+  DLQ --> DN
+```
 
-| Modul        | File                      | Why Zig                                                                        |
-| ------------ | ------------------------- | ------------------------------------------------------------------------------ |
-| Stream parse | `native/stream/parse.zig` | SSE chunk → token + tool-call extract; CPU-bound, harus deterministik & cepat. |
-| Diff         | `native/diff/diff.zig`    | Unified diff compute antar revision; hot saat eval bandingkan before/after.    |
-| Embed        | `native/embed/embed.zig`  | Code embedding untuk Vector DB; matriks berat, WASM isolasi aman.              |
+Critic and eval outcomes are both part of the gate. `gatePass` = `critic.aggregate.pass ∧ eval.evaluate.gatePass`.
 
-Setiap `native/<area>/build.zig` emit `native/out/<name>.wasm` (gitignored). TS wrapper `engine/<area>/zigBridge.ts` panggil `WebAssembly.instantiate`. Konsumer import wrapper, bukan `.wasm`.
+## 5. Native hot path (Zig → WASM)
 
-## 6. TUI (ink)
+Three CPU-bound lanes are implemented as Zig modules compiled to WASM and called from TS via thin `engine/<area>/zigBridge.ts`:
 
-`src/tui/index.tsx` adalah viewer **tipis** di atas loop. Menampilkan:
+- `native/stream/parse.zig` — SSE chunk → `Token[]` + tool-call extract. `engine/stream/zigBridge.ts` exposes `parseStream`.
+- `native/diff/diff.zig` — unified diff compute (deferred; future critic lane).
+- `native/embed/embed.zig` — code embedding for Vector DB (deferred; needs embedding model).
 
-- DAG step (status: pending/running/done/failed).
-- Transisi state machine saat terjadi.
-- Skor 12 kritikus + Pareto aggregate per step.
-- Hasil eval (build/test/SAST/secret/gate).
-- Status PR + CI (dari `gh run_watch`).
-- Log token/budget (dari `knowledge/store.ts`).
+Decision: **WASM first, N-API only if FFI overhead proves meaningful** (see `docs/adr/ADR-004-native-boundary.md`).
 
-TUI tidak mengambil keputusan — hanya visualisasi. Keputusan di `loop/` + `critic/aggregate.ts`.
+A TS-only fallback parser lives in `engine/stream/parseSseTs.ts` and is auto-selected when the Zig WASM write barrier trips (e.g. proot env).
 
-## 7. State machine loop (detail)
+## 6. Module responsibilities
 
-`engine/loop/states.ts` mendefinisikan `LoopState`:
-`INTAKE | PLAN | ISOLATE | EXECUTE | CRITIQUE | EVALUATE | RECOVER | COMMIT | PR_OPEN | CI_WATCH | DONE`.
+| Module     | Path                  | Owns                                                                 |
+| ---------- | --------------------- | -------------------------------------------------------------------- |
+| loop       | `engine/loop/`        | Conductor state machine, gate, observability metrics, recover wiring |
+| orch       | `engine/orch/`        | Goal parser, DAG builder, cycle detect, token allocator, scheduler   |
+| build      | `engine/build/`       | Multi-file generator, inter-file dep mapper, self-verify, context    |
+| critic     | `engine/critic/`      | 15 critics, semantic cache, meta-aggregator Pareto                   |
+| eval       | `engine/eval/`        | Sandbox, test, SAST/secret, perf, compliance, quality gate           |
+| resil      | `engine/resil/`       | Circuit breaker, retry budget, DLQ, recovery                         |
+| knowledge  | `engine/knowledge/`   | Vector store, git-native index, ledger, KB                          |
+| model      | `engine/model/`       | LLM router (9router/OMP/local), Zig stream parse, context            |
+| native     | `native/`             | Zig→WASM hot path: stream parse, diff, embed                         |
+| src        | `src/`                | `cli.ts` entry + `tui/` ink viewer                                   |
 
-Transisi dikendalikan `engine/loop/driver.ts` (`LoopDriver`) + `engine/loop/wiring/handlers.ts` (`buildHandlers`):
+## 7. State machine
 
-- `EVALUATE → COMMIT` hanya bila `gatePass(state) === true`.
-- `EVALUATE → RECOVER` bila gagal; `RECOVER → EXECUTE` setelah strategi recovery dipilih (bounded).
-- `CI_WATCH → RECOVER` bila CI merah (bounded); `CI_WATCH → DONE` bila hijau.
-- Budget habis di mana pun → `RECOVER` lalu (bila tidak bisa) `DONE` dengan status `PARTIAL` + laporan.
+States: `INTAKE | PLAN | ISOLATE | EXECUTE | CRITIQUE | EVALUATE | RECOVER | COMMIT | PR_OPEN | CI_WATCH | DONE`.
 
-## 8. v1 scope (konkret vs stub)
+Transitions:
 
-**Konkret di v1:**
+- `INTAKE → PLAN`
+- `PLAN → ISOLATE`
+- `ISOLATE → EXECUTE`
+- `EXECUTE → CRITIQUE`
+- `CRITIQUE → EVALUATE`
+- `EVALUATE → COMMIT` (when `gatePass`) | `EVALUATE → RECOVER` (when fail)
+- `RECOVER → EXECUTE` (bounded retry)
+- `COMMIT → PR_OPEN`
+- `PR_OPEN → CI_WATCH`
+- `CI_WATCH → RECOVER` (CI red, bounded) | `CI_WATCH → DONE` (CI green)
+- budget exhausted anywhere → `RECOVER` → `DONE(PARTIAL)` + report
 
-- `loop/*` (state machine + `wiring/handlers.ts` + gate + recover wiring).
-- `orch/dag.ts` (parser + DAG + cycle + dep + priority + budget).
-- `build/generate.ts` + `build/verify.ts` + `build/context.ts`.
-- `critic/cache.ts` + `critic/critics.ts` (Security/Perf/Testing/Style konkret) + `critic/aggregate.ts`.
-- `eval/test.ts` + `eval/security.ts` + `eval/gate.ts`.
-- `resil/*` (breaker + retry + recover).
-- `wiring/git.ts` + `knowledge/store.ts`.
-- `model/router.ts` + `model/stream.ts`.
-- `src/cli.ts` + `src/tui/index.tsx`.
+## 8. v1 scope
 
-**Stub (interface siap, impl belakangan) — ponytail:**
+End-to-end single-step happy path + bounded recovery:
 
-- `build/sanitize.ts` (AST/PII/XSS) — belakangan; input dari user trust boundary, bukan untrusted web.
-- 8 kritikus sisa (Architecture/Doc/DevOps/Legal/Privacy/DX/Accessibility/Maintainability) — daftar di `critic/critics.ts` sebagai registry dengan impl `not-implemented` + upgrade path.
-- `eval/sandbox.ts` container — v1 pakai worktree lokal; container bila jalan kode tak-terpercaya.
-- `knowledge/vectors.ts` + `knowledge/docs.ts` + `knowledge/versions.ts` — Vector DB butuh `native/embed` + infrastruktur; v1 pakai git-native + flat KB.
-- `native/embed/embed.zig` — menunggu Vector DB.
+- `loop` (state machine + pipeline + `gatePass` + recover wiring).
+- `orch` (parse, dag, cycle, budget, serial scheduler).
+- `build` (generate + verify + context; sanitise is a stub).
+- `critic` (cache + Security/Perf/Testing/Style + 11 more concrete + aggregate).
+- `eval` (test + security + gate; sandbox = worktree).
+- `resil` (breaker + retry max-3 + DLQ + recover).
+- `knowledge` (git worktree + index + commit + ledger; vectors graduated, docs/versions stubs).
+- `model` (router 9router/OMP/local + stream Zig WASM).
+- `native/stream/parse.wasm` (Zig).
+- `src/cli/` + `src/tui/` (ink, thin viewer).
+- Testing: unit + integration loop + e2e dummy repo.
 
-## 9. Cross-reference
+**Out of scope for v1** (deliberate YAGNI): top-layer gateway (Web/API/rate limit/token auth), full monitoring layer (tracing/perf dashboard). Zhi is a local single-user CLI: trust-boundary input validation + sanitisation is enough, and logging + light cost log fold into `knowledge/store.ts`.
 
-- Loop: `docs/design/loop.md`
-- Orchestrator: `docs/design/orch.md`
-- Builder: `docs/design/build.md`
-- Critic plant: `docs/design/critic.md`
-- Eval toolchain: `docs/design/eval.md`
-- Resilience: `docs/design/resil.md`
-- Knowledge: `docs/design/knowledge.md`
-- Model: `docs/design/model.md`
-- Keputusan: `docs/adr/ADR-001..004`
-- Commit rule: `docs/standards/commit.md`
+## 9. How to read the docs
+
+1. `docs/ARCHITECTURE.md` (this file) — full system, data flow, feedback loop, native hot path.
+2. `docs/design/*.md` — per-module spec (interface, flow, edge cases, v1 vs later).
+3. `docs/adr/*.md` — architectural decisions that are not easily reversible.
+4. `AGENTS.md` + `AGENTS.Style.md` — layer convention + doc standard (Doxygen Universal).
+5. `CHANGES.md` — changelog per change (Keep a Changelog + SemVer; historical archive at `docs/archive/EXPLAIN-CHANGES.md`).

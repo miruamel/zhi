@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Zhi (志)">
+  <title>Zhi (志)</title>
+  <rect width="64" height="64" rx="12" fill="#0b0d12"/>
+  <g fill="none" stroke="#7cf3a4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 18 L40 46"/>
+    <path d="M40 18 L14 46"/>
+  </g>
+  <circle cx="50" cy="14" r="3" fill="#7cf3a4"/>
+</svg>

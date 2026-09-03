@@ -1,27 +1,27 @@
 # design/data-model.md — Shared Contracts
 
-Tipe bersama yang dipakai lintas modul. Semua modul berkomunikasi lewat kontrak ini (dependency injection di `loop/wiring/handlers.ts`). Field wajib diberi `@brief`.
+Shared types used across modules. Every module communicates through these contracts (dependency injection in `loop/wiring/handlers.ts`). Required fields carry `@brief`.
 
 ## Goal & Intent
 
 ```ts
-/** @brief Input mentah dari user (CLI/API).
+/** @brief Raw input from the user (CLI / API).
  * @since 0.1.0 */
 export interface Goal {
-  text: string; // "tambah validasi email di auth.ts, test hijau, buka PR"
-  repo: string; // path atau owner/repo
+  text: string; // "add email validation in auth.ts, tests green, open PR"
+  repo: string; // path or owner/repo
   base: string; // base branch (default: main/master)
   budget: number; // total token budget
-  tierPref?: Tier; // override routing default
-  dryRun?: boolean; // plan saja, tidak eksekusi
+  tierPref?: Tier; // override default routing
+  dryRun?: boolean; // plan only, no execution
 }
 
-/** @brief Hasil parseGoal: intent terstruktur + constraints.
+/** @brief Output of parseGoal: structured intent + constraints.
  * @since 0.1.0 */
 export interface Intent {
   action: 'add' | 'fix' | 'refactor' | 'test' | 'docs' | 'chore';
-  targets: string[]; // file/simbol target ("auth.ts", "validateEmail")
-  constraints: string[]; // "test hijau", "buka PR", "tanpa breaking"
+  targets: string[]; // target file/symbol ("auth.ts", "validateEmail")
+  constraints: string[]; // "tests green", "open PR", "no breaking"
   scope: 'file' | 'module' | 'repo';
 }
 ```
@@ -29,22 +29,22 @@ export interface Intent {
 ## DAG & Step
 
 ```ts
-/** @brief Directed Acyclic Graph dari step eksekusi.
+/** @brief Directed Acyclic Graph of execution steps.
  * @since 0.1.0 */
 export interface Dag {
   nodes: Step[];
   edges: Edge[]; // {from: stepId, to: stepId}
-  topo: string[]; // node id terurut topologis
+  topo: string[]; // topologically ordered node ids
 }
 
-/** @brief Satu unit kerja dalam loop.
+/** @brief One unit of work in the loop.
  * @since 0.1.0 */
 export interface Step {
   id: string;
   kind: TaskKind; // 'generate' | 'verify' | 'critique' | 'eval' | 'commit' | 'pr'
   intent: Intent;
-  deps: string[]; // step id pra-syarat
-  tokenBudget: number; // alokasi dari orch/allocate
+  deps: string[]; // prerequisite step ids
+  tokenBudget: number; // allocation from orch/allocate
   status: 'pending' | 'running' | 'done' | 'failed' | 'skipped';
 }
 
@@ -55,35 +55,35 @@ export type TaskKind = 'generate' | 'verify' | 'critique' | 'eval' | 'commit' | 
 ## FileChange & GenReq
 
 ```ts
-/** @brief Perubahan pada satu file hasil generate.
+/** @brief One file change produced by generate.
  * @since 0.1.0 */
 export interface FileChange {
   path: string;
-  before: string; // isi sebelum (untuk diff)
-  after: string; // isi sesudah
+  before: string; // content before (for diff)
+  after: string; // content after
   op: 'create' | 'edit' | 'delete';
 }
 
-/** @brief Request ke build/generate.
+/** @brief Request to build/generate.
  * @since 0.1.0 */
 export interface GenReq {
   instruction: string;
   targets: string[];
-  depMap: RepoIndex; // dari knowledge/git
-  ctx: Context; // dari build/context
+  depMap: RepoIndex; // from knowledge/git
+  ctx: Context; // from build/context
 }
 ```
 
 ## Critic & Aggregate
 
 ```ts
-/** @brief Skor satu kritikus.
+/** @brief Score from a single critic.
  * @since 0.1.0 */
 export interface CriticScore {
-  critic: CriticId; // 'security' | 'perf' | ... (12 id)
+  critic: CriticId; // 'security' | 'perf' | ... (12 ids)
   value: number; // 0..1
-  abstain?: boolean; // stub belum diimplementasi
-  reason: string; // mengapa skor ini
+  abstain?: boolean; // stub, not implemented yet
+  reason: string; // why this score
 }
 
 export type CriticId =
@@ -100,20 +100,20 @@ export type CriticId =
   | 'accessibility'
   | 'maintainability';
 
-/** @brief Hasil agregasi Pareto.
+/** @brief Weighted Pareto aggregation result.
  * @since 0.1.0 */
 export interface Aggregate {
   pass: boolean;
   weightedAvg: number; // 0..1
-  reasons: string[]; // per kritikus
-  fallback?: boolean; // true bila semua abstain -> pakai eval gate
+  reasons: string[]; // per critic
+  fallback?: boolean; // true when all abstain -> use eval gate
 }
 ```
 
 ## Eval
 
 ```ts
-/** @brief Laporan toolchain evaluasi.
+/** @brief Report from the evaluation toolchain.
  * @since 0.1.0 */
 export interface EvalReport {
   build: StageStatus;
@@ -125,7 +125,7 @@ export interface EvalReport {
 
 export interface StageStatus {
   ok: boolean;
-  detail: string; // error / metrik
+  detail: string; // error / metric
   durationMs: number;
 }
 ```
@@ -133,7 +133,7 @@ export interface StageStatus {
 ## Loop report & context
 
 ```ts
-/** @brief Laporan akhir loop.
+/** @brief Final loop report.
  * @since 0.1.0 */
 export interface LoopReport {
   status: 'done' | 'partial';
@@ -143,10 +143,10 @@ export interface LoopReport {
   prUrl?: string;
   ciStatus?: 'pass' | 'fail' | 'unknown';
   tokensUsed: number;
-  ledgerRef: string; // path ke KB/ledger
+  ledgerRef: string; // path to KB/ledger
 }
 
-/** @brief Konteks loop yang dikompres oleh build/context.
+/** @brief Loop context, compressed by build/context.
  * @since 0.1.0 */
 export interface Context {
   goal: Goal;
@@ -159,7 +159,7 @@ export interface Context {
 ## Knowledge & resilience
 
 ```ts
-/** @brief Index repo dari knowledge/git.
+/** @brief Repo index from knowledge/git.
  * @since 0.1.0 */
 export interface RepoIndex {
   files: string[];
@@ -173,7 +173,7 @@ export interface CommitMeta {
   files: string[];
 }
 
-/** @brief Entry ledger append-only (KB/ledger).
+/** @brief Append-only ledger entry (KB/ledger).
  * @since 0.1.0 */
 export interface LedgerEntry {
   ts: string; // ISO
@@ -183,15 +183,15 @@ export interface LedgerEntry {
   tokens: number;
 }
 
-/** @brief Context resilience.
+/** @brief Resilience context.
  * @since 0.1.0 */
 export interface ResilCtx {
   maxRetry: number; // default 3
-  breakerWindow: number; // jumlah panggilan
+  breakerWindow: number; // number of calls
   strategy: 'replan' | 'patch' | 'abort';
 }
 
-/** @brief Entry Dead Letter Queue.
+/** @brief Dead Letter Queue entry.
  * @since 0.1.0 */
 export interface DLQEntry {
   ts: string;
@@ -204,21 +204,21 @@ export interface DLQEntry {
 ## Model
 
 ```ts
-/** @brief Satu token dari stream model.
+/** @brief One token from the model stream.
  * @since 0.1.0 */
 export interface Token {
   text: string;
   tool?: ToolCall;
 }
 
-/** @brief Panggilan tool terstruktur dari model.
+/** @brief Structured tool call from the model.
  * @since 0.1.0 */
 export interface ToolCall {
   name: string;
   args: Record<string, unknown>;
 }
 
-/** @brief Backend terpilih oleh model/router.
+/** @brief Backend selected by model/router.
  * @since 0.1.0 */
 export interface Backend {
   url: string;

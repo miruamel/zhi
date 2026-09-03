@@ -1,6 +1,6 @@
 # configuration.md — Config, Env, CLI
 
-Cara menjalankan dan mengonfigurasi Zhi. Semua config via `zhi.config.ts` + env var; CLI flag override per-invocation.
+How to run and configure Zhi. All config lives in `zhi.config.ts` plus env vars; CLI flags override per-invocation.
 
 ## package.json (minimal)
 
@@ -21,27 +21,27 @@ Cara menjalankan dan mengonfigurasi Zhi. Semua config via `zhi.config.ts` + env 
 }
 ```
 
-Dep minimal: **hanya `ink`** untuk TUI. Model call = `fetch` ke 9router (tanpa SDK). Zig WASM di-load via `WebAssembly.instantiate` (tidak butuh dep).
+Minimal dependency: **only `ink`** for the TUI. Model calls go through `fetch` to 9router (no SDK). Zig WASM is loaded via `WebAssembly.instantiate` (no dep needed).
 
 ## zhi.config.ts
 
 ```ts
-/** @brief Konfigurasi Zhi (zhi.config.ts).
+/** @brief Zhi configuration (zhi.config.ts).
  * @since 0.1.0 */
 export interface ZhiConfig {
   model: {
     backends: Backend[]; // 9router/OMP/local
     defaultTier: Tier; // 'heavy'
-    fallbackTier: Tier; // 'light' bila heavy down
+    fallbackTier: Tier; // 'light' when heavy is down
   };
   budget: {
     defaultTokens: number; // 200_000
-    perStepRatio: number; // 0.2 (maks 20% budget per step)
+    perStepRatio: number; // 0.2 (max 20% of budget per step)
   };
   critic: {
-    weights: Partial<Record<CriticId, number>>; // override bobot
-    securityFloor: number; // 0.5 -> auto-fail di bawah ini
-    passAvg: number; // 0.7 -> threshold pass
+    weights: Partial<Record<CriticId, number>>; // override weights
+    securityFloor: number; // 0.5 -> auto-fail below this
+    passAvg: number; // 0.7 -> pass threshold
   };
   resil: {
     maxRetry: number; // 3
@@ -60,41 +60,41 @@ export interface ZhiConfig {
 
 ## Environment variables
 
-| Var              | Pakai di       | Wajib                   | Keterangan                                            |
-| ---------------- | -------------- | ----------------------- | ----------------------------------------------------- |
-| `NINAROUTER_KEY` | model/router   | ya (bila pakai 9router) | API key 9router (cookie-auth di proxy, bukan Bearer). |
-| `OMP_*`          | model/router   | opsional                | bila routing ke OMP.                                  |
-| `GITHUB_TOKEN`   | tools/git (gh) | ya (bila buka PR)       | token gh dengan scope repo.                           |
-| `ZHI_CONFIG`     | cli            | opsional                | path ke `zhi.config.ts` (default: cwd).               |
-| `ZHI_LOG`        | observability  | opsional                | `silent                                               | info | debug`(default`info`). |
+| Var              | Used by         | Required                  | Notes                                                |
+| ---------------- | --------------- | ------------------------- | ---------------------------------------------------- |
+| `NINAROUTER_KEY` | model/router    | yes (when using 9router)  | 9router API key (cookie-auth at the proxy, not Bearer). |
+| `OMP_*`          | model/router    | optional                  | when routing to OMP.                                 |
+| `GITHUB_TOKEN`   | tools/git (gh)  | yes (when opening PRs)    | gh token with repo scope.                            |
+| `ZHI_CONFIG`     | cli             | optional                  | path to `zhi.config.ts` (default: cwd).              |
+| `ZHI_LOG`        | observability   | optional                  | `silent | info | debug` (default `info`).            |
 
-**Jangan hardcode secret** di `zhi.config.ts` — ambil dari env. Lihat `security.md`.
+**Never hardcode secrets** in `zhi.config.ts` — read them from env. See `security.md`.
 
 ## CLI
 
 ```
 zhi run "<goal>" [flags]
-zhi plan "<goal>"        # dry-run: hanya PLAN, tampilkan DAG
-zhi resume <ledgerRef>   # lanjut dari DONE(partial)
+zhi plan "<goal>"        # dry-run: PLAN only, show the DAG
+zhi resume <ledgerRef>   # resume from DONE(partial)
 zhi --version
 ```
 
-Flag `run`:
+`run` flags:
 
-| Flag              | Default                     | Keterangan                           |
-| ----------------- | --------------------------- | ------------------------------------ |
-| `--repo <path>`   | cwd                         | target repo.                         |
-| `--base <branch>` | config.git.baseBranch       | base branch.                         |
-| `--budget <n>`    | config.budget.defaultTokens | token budget.                        |
-| `--tier <heavy    | light                       | micro>`                              | config.model.defaultTier | override routing. |
-| `--dry-run`       | false                       | plan saja, tidak eksekusi/commit/PR. |
-| `--no-pr`         | false                       | stop di COMMIT, jangan buka PR.      |
-| `--config <path>` | `ZHI_CONFIG`/cwd            | path config.                         |
+| Flag              | Default                     | Notes                                  |
+| ----------------- | --------------------------- | -------------------------------------- |
+| `--repo <path>`   | cwd                         | target repo.                           |
+| `--base <branch>` | config.git.baseBranch       | base branch.                           |
+| `--budget <n>`    | config.budget.defaultTokens | token budget.                          |
+| `--tier <heavy|light|micro>` | config.model.defaultTier | override routing.             |
+| `--dry-run`       | false                       | plan only, no execute/commit/PR.       |
+| `--no-pr`         | false                       | stop at COMMIT, don't open a PR.       |
+| `--config <path>` | `ZHI_CONFIG`/cwd            | config path.                           |
 
-Contoh:
+Example:
 
 ```
-zhi run "tambah validasi email di auth.ts, test hijau, buka PR" \
+zhi run "add email validation in auth.ts, tests green, open PR" \
   --repo ./myapp --base main --budget 150000
 ```
 

@@ -1,12 +1,12 @@
 # design/build.md — Generator
 
-## Tujuan
+## Purpose
 
-Hasilkan/ubah kode **multi-file** yang konsisten antar-file, verifikasi syntax sendiri, dan jaga konteks muat saat loop panjang. Dijalankan di state `EXECUTE`.
+Generate / modify **multi-file** code that is consistent across files, self-verifies syntax, and keeps context within budget over a long loop. Runs in the `EXECUTE` state.
 
-## Komponen
+## Components
 
-- `sanitize.ts` (Input Sanitizer: AST / PII / XSS) — **stub v1**.
+- `sanitize.ts` (Input Sanitiser: AST / PII / XSS) — **stub in v1**.
 - `generate.ts` (Multi-File Generator + Inter-File Dependency Mapper).
 - `verify.ts` (Self-Verify Syntax Checker + Formatter).
 - `context.ts` (Prompt Compression / Context Manager).
@@ -14,42 +14,42 @@ Hasilkan/ubah kode **multi-file** yang konsisten antar-file, verifikasi syntax s
 ## Interface
 
 ```ts
-/** @brief Generate/edit multi-file dari instruksi + konteks repo.
- * @param {GenReq} req - instruksi + file target + dep map.
- * @return {FileChange[]} perubahan per file.
- * @see engine/knowledge/git.ts (dep map dari history)
+/** @brief Generate / edit multi-file from instructions + repo context.
+ * @param {GenReq} req - instructions + target files + dep map.
+ * @return {FileChange[]} per-file changes.
+ * @see engine/knowledge/git.ts (dep map from history)
  * @since 0.1.0 */
 export async function generate(req: GenReq): Promise<FileChange[]>;
 
-/** @brief Verifikasi syntax + format hasil generate.
+/** @brief Verify syntax + format the generated output.
  * @param {FileChange[]} changes
  * @return {VerifyResult} ok | errors.
  * @since 0.1.0 */
 export function verify(changes: FileChange[]): VerifyResult;
 
-/** @brief Kompres konteks loop panjang agar muat context window.
+/** @brief Compress long-loop context to fit the context window.
  * @param {Context} ctx
- * @return {Context} ctx terkompresi.
+ * @return {Context} compressed ctx.
  * @since 0.1.0 */
 export function compress(ctx: Context): Context;
 ```
 
-## Alur
+## Flow
 
-1. `generate` panggil `model/router.ts` (stream via `model/stream.ts`).
-2. Inter-file dep mapper baca `knowledge/git.ts` (history) sebelum generate → konsistensi import/export antar-file.
-3. `verify` cek syntax (`tsc --noEmit` / parser) + format (prettier/dprint).
-4. `context.compress` jaga konteks bila step ke-N (mencegah overflow).
+1. `generate` calls `model/router.ts` (stream via `model/stream.ts`).
+2. Inter-file dep mapper reads `knowledge/git.ts` (history) before generate → import/export consistency across files.
+3. `verify` checks syntax (`tsc --noEmit` / parser) + format (prettier/dprint).
+4. `context.compress` keeps context in budget for step N (prevents overflow).
 
 ## Edge cases
 
-- Generate gagal syntax → `verify` error → loop `RECOVER`.
-- Dep map tidak lengkap → generate heuristik + `verify` ketat.
-- Context overflow → `compress` sebelum step berikutnya.
+- Generate produces invalid syntax → `verify` error → loop `RECOVER`.
+- Incomplete dep map → generate heuristics + `verify` strict.
+- Context overflow → `compress` before next step.
 
 ## v1
 
-Konkret: `generate` + `verify` + `context`. `sanitize` **stub** — input berasal dari user (trust boundary), bukan untrusted web, sehingga prioritas rendah. Bila kelak Zhi menerima input web, `sanitize` naik ke konkret (AST strip + PII redact + XSS escape).
+Concrete: `generate` + `verify` + `context`. `sanitize` is a **stub** — input is from the user (trust boundary), not untrusted web, so it is low priority. When Zhi eventually takes web input, `sanitize` becomes concrete (AST strip + PII redact + XSS escape).
 
 ## Cross-link
 

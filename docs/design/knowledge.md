@@ -1,54 +1,54 @@
 # design/knowledge.md — Knowledge & Persistence
 
-## Tujuan
+## Purpose
 
-Simpan state lintas-step dan lintas-sesi: index git-native, ledger task, KB docs/API, version history, dan (belakangan) Vector DB untuk semantic cache critic.
+Persist state across steps and across sessions: git-native index, task ledger, KB docs/API, version history, and (later) a Vector DB for critic semantic cache.
 
-## Komponen
+## Components
 
-- `index.ts` (Store + Ledger): append-only task ledger (`KB/ledger/*.jsonl` + `KB/index.json`), mirip pola yuxi.
-- `git.ts` (Git-Native Repo indexed): worktree creation, diff, commit, history index untuk dep mapper `build`.
-- `vectors.ts` (VectorStore in-memory + cosine search) — **graduated v0.3.0** (embeddings via `native/embed` menyusul).
-- `docs.ts` (Knowledge Base docs/API) — **stub v1**.
-- `versions.ts` (Version History OpenAPI) — **stub v1**.
+- `index.ts` (Store + Ledger): append-only task ledger (`KB/ledger/*.jsonl` + `KB/index.json`), same pattern as yuxi.
+- `git.ts` (Git-Native Repo indexed): worktree creation, diff, commit, history index for the build dep mapper.
+- `vectors.ts` (VectorStore in-memory + cosine search) — **graduated v0.3.0** (embeddings via `native/embed` follow).
+- `docs.ts` (Knowledge Base docs/API) — **stub in v1**.
+- `versions.ts` (Version History OpenAPI) — **stub in v1**.
 
 ## Interface
 
 ```ts
-/** @brief Index repo (history + struktur) untuk dipakai build/eval.
+/** @brief Index repo (history + structure) for build/eval consumption.
  * @param {string} repoPath
- * @return {RepoIndex} struktur + history ter-index.
+ * @return {RepoIndex} indexed structure + history.
  * @since 0.1.0 */
 export function indexRepo(repoPath: string): RepoIndex;
 
-/** @brief Buat worktree terisolasi dari base branch.
+/** @brief Create an isolated worktree from the base branch.
  * @param {string} base
- * @return {string} path worktree.
+ * @return {string} worktree path.
  * @since 0.1.0 */
 export function makeWorktree(base: string): string;
 
-/** @brief Append entry ledger (append-only).
+/** @brief Append a ledger entry (append-only).
  * @param {LedgerEntry} entry
  * @since 0.1.0 */
 export function appendLedger(entry: LedgerEntry): void;
 ```
 
-## Alur
+## Flow
 
-- `loop` panggil `makeWorktree` di `ISOLATE`.
-- `build` baca `indexRepo` untuk dep map.
-- `loop` `appendLedger` tiap step (audit trail).
-- `critic/cache` baca `vectors` (menyusul setelah `native/embed` tersedia).
+- `loop` calls `makeWorktree` in `ISOLATE`.
+- `build` reads `indexRepo` for the dep map.
+- `loop` `appendLedger` per step (audit trail).
+- `critic/cache` reads `vectors` (follows once `native/embed` is available).
 
 ## Edge cases
 
-- Worktree gagal dibuat → `RECOVER` (branch baru).
-- Ledger corrupt → rebuild dari git history.
-- Vectors belum ada → critic jalan tanpa cache.
+- Worktree creation fails → `RECOVER` (new branch).
+- Ledger corrupt → rebuild from git history.
+- Vectors not yet present → critics run without cache.
 
 ## v1
 
-- Konkret: `git` (worktree + index + commit) + `store/ledger` + `vectors` (store in-memory). `docs`/`versions` **stub** (menunggu sumber OpenAPI/docs).
+- Concrete: `git` (worktree + index + commit) + `store/ledger` + `vectors` (in-memory store). `docs`/`versions` are **stubs** (waiting for OpenAPI/docs sources).
 
 ## Cross-link
 

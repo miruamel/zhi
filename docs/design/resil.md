@@ -1,43 +1,43 @@
 # design/resil.md — Resilience & Fallback
 
-## Tujuan
+## Purpose
 
-Cegah loop **spin** tak terbatas. Beri recovery terbatas (bounded) lewat circuit breaker, retry budget, DLQ, dan strategi recovery. Dihubungi dari `loop` state `RECOVER` dan dari tiap modul yang bisa gagal (model call, eval).
+Stop the loop from **spinning** forever. Provide bounded recovery through circuit breaker, retry budget, DLQ, and recovery strategies. Called from the `RECOVER` state and from any module that can fail (model call, eval).
 
-## Komponen
+## Components
 
 - `index.ts` (Orchestrator): `withResilience(fn)` wrapper.
-- `breaker.ts` (Circuit Breaker): buka bila error rate tinggi.
-- `retry.ts` (Retry Budget Limiter max-3 + Dead Letter Queue): coba ulang maksimal 3x, lalu masuk DLQ.
-- `recover.ts` (Error Classification + Recovery Strategies): klasifikasi error → strategi (replan / patch / abort).
+- `breaker.ts` (Circuit Breaker): opens when error rate is high.
+- `retry.ts` (Retry Budget Limiter max-3 + Dead Letter Queue): retry up to 3 times, then send to DLQ.
+- `recover.ts` (Error Classification + Recovery Strategies): classify error → strategy (replan / patch / abort).
 
 ## Interface
 
 ```ts
-/** @brief Jalankan fn dengan circuit breaker + retry budget + recovery.
+/** @brief Run fn with circuit breaker + retry budget + recovery.
  * @param {() => Promise<T>} fn
- * @param {ResilCtx} ctx - budget, strategi.
- * @return {T | DLQEntry} hasil atau masuk DLQ.
- * @throw {never} kegagalan final dikembalikan sebagai DLQEntry.
+ * @param {ResilCtx} ctx - budget, strategy.
+ * @return {T | DLQEntry} result or DLQ entry.
+ * @throw {never} terminal failures are returned as a DLQEntry.
  * @since 0.1.0 */
 export async function withResilience<T>(fn: () => Promise<T>, ctx: ResilCtx): Promise<T | DLQEntry>;
 ```
 
-## Strategi recovery
+## Recovery strategies
 
-- `replan` — goal ambigu / siklus DAG → `orch` dari awal.
-- `patch` — test/syntax gagal → `build` ulang dengan error context.
-- `abort` — budget habis / error fatal → `DONE(PARTIAL)` + laporan.
+- `replan` — ambiguous goal / DAG cycle → `orch` from scratch.
+- `patch` — test/syntax failed → `build` again with error context.
+- `abort` — budget exhausted / fatal error → `DONE(PARTIAL)` + report.
 
 ## Edge cases
 
-- Error rate > 50% dalam window → breaker buka → `abort`.
-- Retry ke-3 gagal → DLQ → `abort` (tidak spin).
-- DLQ entry → log + notifikasi (ke `tui`), tidak diam-diam dibuang.
+- Error rate > 50% within the window → breaker opens → `abort`.
+- Retry #3 fails → DLQ → `abort` (no spin).
+- DLQ entry → log + notify (to `tui`), never silently dropped.
 
 ## v1
 
-Konkret semua: `breaker` + `retry` (max-3) + `recover` + DLQ. Ini inti "anti-spin" yang membedakan Zhi dari chat-wrapper.
+All concrete: `breaker` + `retry` (max-3) + `recover` + DLQ. This is the "anti-spin" core that separates Zhi from a chat wrapper.
 
 ## Cross-link
 
