@@ -5,48 +5,53 @@ import { describe, expect, it } from 'bun:test';
 import { retryWithBudget } from '../retry';
 
 describe('retryWithBudget', () => {
-  it('returns value on first success', async () => {
-    const r = await retryWithBudget(async () => 42, 3);
+  it('succeeds on first attempt', async () => {
+    const r = await retryWithBudget(async () => 'ok');
     expect(r.ok).toBe(true);
-    expect(r.value).toBe(42);
+    expect(r.value).toBe('ok');
     expect(r.attempts).toBe(1);
+    expect(r.dlq).toBeUndefined();
   });
 
   it('retries then succeeds', async () => {
-    let n = 0;
+    let calls = 0;
     const r = await retryWithBudget(async () => {
-      if (++n < 3) throw new Error('x');
-      return n;
-    }, 3);
+      calls++;
+      if (calls < 3) throw new Error('boom');
+      return 'recovered';
+    });
     expect(r.ok).toBe(true);
-    expect(r.value).toBe(3);
+    expect(r.value).toBe('recovered');
     expect(r.attempts).toBe(3);
   });
 
-  it('DLQ after max attempts', async () => {
+  it('exhausts budget and returns DLQ', async () => {
     const r = await retryWithBudget(async () => {
-      throw new Error('boom');
+      throw new Error('always fails');
     }, 3);
     expect(r.ok).toBe(false);
-    expect(r.dlq?.attempts).toBe(3);
-    expect(r.dlq?.error).toContain('boom');
+    expect(r.attempts).toBe(3);
+    expect(r.dlq).toBeDefined();
+    expect(r.dlq!.error).toContain('always fails');
+    expect(r.dlq!.attempts).toBe(3);
+    expect(r.dlq!.at).toBeGreaterThan(0);
   });
 
-  it('respects custom maxAttempts', async () => {
-    let n = 0;
+  it('uses default maxAttempts=3', async () => {
+    let calls = 0;
     const r = await retryWithBudget(async () => {
-      n++;
-      throw new Error('x');
-    }, 1);
-    expect(r.attempts).toBe(1);
-    expect(n).toBe(1);
+      calls++;
+      throw new Error('nope');
+    });
+    expect(r.ok).toBe(false);
+    expect(r.attempts).toBe(3);
+    expect(calls).toBe(3);
   });
 
-  it('DLQ carries attempts + timestamp', async () => {
+  it('DLQ error is stringified', async () => {
     const r = await retryWithBudget(async () => {
-      throw new Error('always');
-    }, 3);
-    expect(r.dlq?.attempts).toBe(3);
-    expect(typeof r.dlq?.at).toBe('number');
+      throw new Error('object error');
+    }, 2);
+    expect(r.dlq!.error).toContain('object error');
   });
 });
