@@ -34,10 +34,11 @@ function ciLabel(status: PrCiState['ciStatus']): string {
 
 export interface PrProps {
   prCi: PrCiState;
+  expanded?: boolean;
 }
 
 /** @brief Render the PR/CI pane. @since 0.1.0 */
-export function Pr({ prCi }: PrProps) {
+export function Pr({ prCi, expanded = false }: PrProps) {
   return (
     <Box
       flexDirection="column"
@@ -64,6 +65,23 @@ export function Pr({ prCi }: PrProps) {
           <Text color={colors.fgDim}> {formatMs(prCi.ciDurationMs)}</Text>
         )}
       </Box>
+      {expanded && (
+        <Box flexDirection="column" marginTop={1}>
+          <Text color={colors.fgDim}>ci status</Text>
+          <Text color={ciColor(prCi.ciStatus)}>
+            {prCi.ciStatus === 'green'
+              ? '✓ all checks passed'
+              : prCi.ciStatus === 'red'
+                ? '✗ checks failing'
+                : prCi.ciStatus === 'pending'
+                  ? '◌ checks running…'
+                  : '○ no CI data'}
+          </Text>
+          {prCi.ciDurationMs !== undefined && (
+            <Text color={colors.fgDim}>elapsed {formatMs(prCi.ciDurationMs)}</Text>
+          )}
+        </Box>
+      )}
     </Box>
   );
 }

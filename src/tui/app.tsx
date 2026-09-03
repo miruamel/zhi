@@ -21,6 +21,9 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   const [state, setState] = useState<AppState>(initialState);
   const [paused, setPaused] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [expandedLog, setExpandedLog] = useState(false);
+  const [expandedCritics, setExpandedCritics] = useState(false);
+  const [expandedPr, setExpandedPr] = useState(false);
 
   useEffect(() => {
     onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
@@ -40,6 +43,15 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         break;
       case 'pauseResume':
         setPaused((p: boolean) => !p);
+        break;
+      case 'toggleLog':
+        setExpandedLog((e: boolean) => !e);
+        break;
+      case 'toggleCritics':
+        setExpandedCritics((e: boolean) => !e);
+        break;
+      case 'togglePr':
+        setExpandedPr((e: boolean) => !e);
         break;
       case 'toggleHelp':
         setShowHelp((h: boolean) => !h);
@@ -74,20 +86,31 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
           critics={state.critics}
           weightedAvg={state.eval.weightedAvg}
           threshold={threshold}
+          expanded={expandedCritics}
         />
+        <PrPane prCi={state.prCi} />
       </Box>
       <Box marginTop={1} gap={1}>
         <Eval evalReport={state.eval} />
-        <PrPane prCi={state.prCi} />
+        <PrPane prCi={state.prCi} expanded={expandedPr} />
       </Box>
       <Box marginTop={1}>
-        <Log log={state.log} expanded={false} maxLines={40} />
+        <Log log={state.log} expanded={expandedLog} maxLines={40} />
       </Box>
       <Box marginTop={1}>
         <Help paused={paused} showHelp={showHelp} />
       </Box>
       <Box marginTop={1}>
         <Text color={colors.fgDim}>Zhi (志) v0.1.1 · MIT · {paused ? 'PAUSED' : 'RUNNING'}</Text>
+        {state.finished && (
+          <Text color={state.aborted ? colors.warn : colors.done} bold>
+            {' '}
+            {state.aborted ? '⚠ DONE (partial)' : '✓ DONE'}
+            {' — '}
+            {state.tokensUsed} tokens used
+            {state.prCi.prUrl ? ` · ${state.prCi.prUrl}` : ''}
+          </Text>
+        )}
       </Box>
     </Box>
   );
