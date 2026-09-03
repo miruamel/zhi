@@ -14,7 +14,7 @@ const WASM_PATH = join(import.meta.dir, '..', '..', 'native', 'out', 'stream.was
 const PAGE = 65536;
 const MEMORY_BASE = 1024;
 
-type Loaded = {
+export type Loaded = {
   instance: WebAssembly.Instance;
   memory: WebAssembly.Memory;
   stack: WebAssembly.Global;
@@ -66,11 +66,23 @@ function calcOffsets(inputLen: number): { inOff: number; outOff: number; outCap:
 }
 
 /** @brief Parse chunk SSE via Zig wasm32 → array payload `data:`.
+ * Fails closed: returns empty array if WASM is disabled, unavailable, or
+ * instantiation throws (proot write-barrier breakage). Callers must treat
+ * empty array as "no events parsed" — never as "zero data events".
  * @param {string} chunk - chunk SSE (UTF-8).
  * @return {Promise<string[]>} payload data per event.
  * @since 0.1.1 */
 export async function parseSseWasm(chunk: string): Promise<string[]> {
-  const { instance, memory, stack } = await load();
+  if (!wasmAvailable) {
+    return [];
+  }
+  let inst: Loaded;
+  try {
+    inst = await load();
+  } catch {
+    return [];
+  }
+  const { instance, memory, stack } = inst;
   const parse = (instance.exports as Record<string, unknown>).parse_sse as (
     i: number,
     il: number,
