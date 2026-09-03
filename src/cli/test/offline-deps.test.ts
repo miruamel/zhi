@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach, afterEach } from 'bun:test';
-import { mkdtempSync, rmSync, existsSync, readdirSync } from 'node:fs';
+import { mkdtempSync, rmSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { offlineDeps } from '../offline-deps';
@@ -42,11 +42,10 @@ describe('offlineDeps generate', () => {
 
   it('compress() truncates text to budget', async () => {
     const deps = offlineDeps(0.7);
-    const out = await deps.compress('x'.repeat(5000));
+    const out = await deps.compress!('x'.repeat(5000));
     expect(typeof out).toBe('string');
     expect(out.length).toBeLessThanOrEqual(20000);
   });
-
 
   it('compress() returns empty string when budget is zero (fallback path)', () => {
     // budget is hardcoded to 20000 in the closure; to hit the ?? '' fallback
