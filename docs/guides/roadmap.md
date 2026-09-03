@@ -11,7 +11,7 @@ Zhi ships in phases. Every release raises maturity per `AGENTS.md` §Maturity. E
 
 - `loop/*` (state machine + pipeline + `gatePass` + recover wiring).
 - `orch/*` (parse, dag, cycle, budget, serial scheduler).
-- `critic/*` — 13 concrete critics (accessibility, architecture, compose, doc, hygiene, imports, maintainability, perf, privacy, security, sloc, style, todo) + aggregate. All promoted from stub → concrete (PR #23–#28, #31). Repo-wide critic score 1.0, 0 findings on `main`.
+- `critic/*` — 15 concrete critics (accessibility, architecture, doc, hygiene/devops, hygiene/dx, hygiene/legal, hygiene/testing, imports, maintainability, perf, privacy, security, sloc, style, todo) + aggregate. All promoted from stub → concrete (PR #23–#28, #31). Repo-wide critic score 1.0, 0 findings on `main`.
 - `model/*` (router 9router/OMP/local + stream Zig WASM).
 - `native/stream/parse.wasm` (Zig).
 - `src/cli.ts` + `src/tui/` (ink, thin viewer).
@@ -22,7 +22,7 @@ Zhi ships in phases. Every release raises maturity per `AGENTS.md` §Maturity. E
 ## v0.2.0 — Experimental (depth)
 
 - `orch/scheduler.ts` parallel across steps — **DEFERRED** (see v0.2.0 notes): `buildDag` only produces linear chains, so there are no parallel steps; no conflict resolver exists yet (the roadmap incorrectly said "already there").
-- ~~The remaining 8 critics promoted from stub → concrete, in stages (Architecture, Doc, DevOps, Privacy, DX, Accessibility, Maintainability, Legal).~~ **DONE** — all 13 critics are concrete as of v0.1.2 (see v0.1.0 scope above).
+- ~~The remaining 8 critics promoted from stub → concrete, in stages (Architecture, Doc, DevOps, Privacy, DX, Accessibility, Maintainability, Legal).~~ **DONE** — all 15 critics are concrete as of v0.1.2 (see v0.1.0 scope above).
 - `eval/sandbox.ts` container (for untrusted code).
 - `build/sanitize.ts` (AST/PII/XSS) — when Zhi takes web input.
 
@@ -31,7 +31,7 @@ Zhi ships in phases. Every release raises maturity per `AGENTS.md` §Maturity. E
 - **Parallel scheduler deferred.** `buildDag` (`dag.ts`) only produces linear chains (`s{i}` depends on `s{i-1}`), so there are no independent steps to run in parallel. The roadmap stated "conflict resolver already exists" — **inaccurate**: no conflict resolver exists in `types.ts`/`dag.ts`/`schedule.ts`. Adding a resolver now = dead code (no branch to resolve). Deferred to v1.0.0 (Multi-PR orchestration), where parallel waves become meaningful.
 - **Sandbox container** (`eval/sandbox.ts`) needs a container runtime; not prioritised in this env.
 - **Sanitise** (`build/sanitize.ts`) is conditional: only when Zhi takes web input (AST/PII/XSS). Not yet active.
-- All 11 single-file critics + 4 repo-wide hygiene (devops/legal/dx/testing) pass; testing gap closed (PR #23–#28). The `testing` critic now = 0 findings on `main`.
+- All 11 single-file critics + 4 repo-wide hygiene (devops/dx/legal/testing) pass; testing gap closed (PR #23–#28). The `testing` critic now = 0 findings on `main`.
 
 ## v0.3.0 — Experimental → Stable candidate
 
