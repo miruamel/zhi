@@ -26,8 +26,8 @@ export fn parse_sse(
             input_ptr[i + 4] == ':')
         {
             var start: usize = i + 5;
-            // Strip satu leading space (opsional).
-            if (start < j and input_ptr[start] == ' ') {
+            // Strip semua leading space (SSE spec, samakan dengan TS fallback).
+            while (start < j and input_ptr[start] == ' ') {
                 start += 1;
             }
             // Copy payload.
