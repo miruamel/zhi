@@ -1,13 +1,13 @@
 /** @brief Log pane: append-only log stream with filters. @since 0.1.0 */
 import { Box, Text } from 'ink';
-import { colors } from '../../core/colors';
-import { formatTime, truncate } from '../../core/format';
+import { colors } from '../../core/style/colors';
+import { formatTime, truncate } from '../../core/style/format';
 import type { LogEntry } from '../../core/state';
 
 export interface LogProps {
   log: LogEntry[];
-  expanded: boolean;
   maxLines: number;
+  scroll?: number;
 }
 
 function kindColor(k: LogEntry['kind']): string {
@@ -26,9 +26,10 @@ function kindColor(k: LogEntry['kind']): string {
   }
 }
 
-/** @brief Render the log pane (latest N entries, color-coded). @since 0.1.0 */
-export function Log({ log, expanded, maxLines }: LogProps) {
-  const visible = expanded ? log.slice(-maxLines) : log.slice(-Math.min(8, maxLines));
+export function Log({ log, maxLines, scroll = 0 }: LogProps) {
+  const end = Math.max(0, log.length - scroll);
+  const start = Math.max(0, end - maxLines);
+  const visible = log.slice(start, end);
   const hiddenCount = log.length - visible.length;
   return (
     <Box

@@ -1,7 +1,7 @@
 /** @brief PR / CI pane: PR link + CI status with elapsed. @since 0.1.0 */
 import { Box, Text } from 'ink';
-import { colors } from '../../core/colors';
-import { formatMs } from '../../core/format';
+import { colors } from '../../core/style/colors';
+import { formatMs } from '../../core/style/format';
 import type { PrCiState } from '../../core/state';
 
 function ciColor(status: PrCiState['ciStatus']): string {

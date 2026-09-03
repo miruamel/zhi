@@ -1,7 +1,7 @@
 /** @brief App root — the main ink <App> for Zhi TUI. @since 0.1.0 */
 import { Box, Text, useApp, useInput } from 'ink';
 import { useState, useEffect } from 'react';
-import { colors } from './core/colors';
+import { colors } from './core/style/colors';
 import { resolveKey } from './core/keymap';
 import { Header, Dag, Detail, Critics, Eval, Pr as PrPane, Log, Help } from './panes';
 import type { AppState } from './core/state';
@@ -21,9 +21,9 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   const [state, setState] = useState<AppState>(initialState);
   const [paused, setPaused] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
-  const [expandedLog, setExpandedLog] = useState(false);
   const [expandedCritics, setExpandedCritics] = useState(false);
   const [expandedPr, setExpandedPr] = useState(false);
+  const [logScroll, setLogScroll] = useState(0);
 
   useEffect(() => {
     onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
@@ -44,9 +44,6 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
       case 'pauseResume':
         setPaused((p: boolean) => !p);
         break;
-      case 'toggleLog':
-        setExpandedLog((e: boolean) => !e);
-        break;
       case 'toggleCritics':
         setExpandedCritics((e: boolean) => !e);
         break;
@@ -55,6 +52,23 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         break;
       case 'toggleHelp':
         setShowHelp((h: boolean) => !h);
+        break;
+      case 'cycle':
+        setExpandedCritics(false);
+        setExpandedPr(false);
+        setLogScroll(0);
+        break;
+      case 'nextLog':
+        setLogScroll((s: number) => s + 1);
+        break;
+      case 'prevLog':
+        setLogScroll((s: number) => Math.max(0, s - 1));
+        break;
+      case 'logTop':
+        setLogScroll(0);
+        break;
+      case 'logBottom':
+        setLogScroll(9999);
         break;
       default:
         break;
@@ -88,14 +102,13 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
           threshold={threshold}
           expanded={expandedCritics}
         />
-        <PrPane prCi={state.prCi} />
+        <PrPane prCi={state.prCi} expanded={expandedPr} />
       </Box>
       <Box marginTop={1} gap={1}>
         <Eval evalReport={state.eval} />
-        <PrPane prCi={state.prCi} expanded={expandedPr} />
       </Box>
       <Box marginTop={1}>
-        <Log log={state.log} expanded={expandedLog} maxLines={40} />
+        <Log log={state.log} maxLines={40} scroll={logScroll} />
       </Box>
       <Box marginTop={1}>
         <Help paused={paused} showHelp={showHelp} />

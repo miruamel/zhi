@@ -1,7 +1,7 @@
 /** @brief Header pane: ASCII banner + loop state badge + version. @since 0.1.0 */
 import { Box, Text } from 'ink';
-import { colors } from '../../core/colors';
-import { formatMs } from '../../core/format';
+import { colors } from '../../core/style/colors';
+import { formatMs } from '../../core/style/format';
 
 const BANNER = [
   '  ______   _    _   _    ___              ',

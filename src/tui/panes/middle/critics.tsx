@@ -1,7 +1,7 @@
 /** @brief Critics pane: 15-critic weighted Pareto display. @since 0.1.0 */
 import { Box, Text } from 'ink';
-import { colors } from '../../core/colors';
-import { bar, formatScore } from '../../core/format';
+import { colors } from '../../core/style/colors';
+import { bar, formatScore } from '../../core/style/format';
 import type { CriticLine } from '../../core/state';
 
 const WEIGHTS: Record<string, number> = {
