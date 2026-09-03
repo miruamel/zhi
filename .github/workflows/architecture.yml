@@ -43,10 +43,6 @@ jobs:
           echo "/opt/zig-x86_64-linux-${ZIG_VER}" >> "$GITHUB_PATH"
       - name: Build native wasm (stream)
         run: cd native/stream && bash build.sh
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
       - name: Circular + deep-relative import check (§6.10, §6.11)
         run: bun scripts/ci/architecture/check-circular.ts
       - name: bun test
