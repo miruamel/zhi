@@ -3,6 +3,8 @@ import { LoopDriver } from '../../../driver';
 import { buildHandlers, type LoopDeps } from '../index';
 import type { LoopContext } from '../../context';
 import { LoopState } from '../../../states';
+import { isDLQ } from '../is-dlq';
+import type { DLQEntry } from '../../../../resil';
 
 function stubDeps(over: Partial<LoopDeps> = {}): LoopDeps {
   return {
@@ -108,5 +110,23 @@ describe('loop wiring', () => {
     await d2.run(buildHandlers(red, stubDeps({ ciWatch: () => 'red' })));
     expect(d2.finished).toBe(true);
     expect(red.attempts).toBe(3);
+  });
+});
+
+describe('isDLQ', () => {
+  it('returns true for DLQEntry', () => {
+    expect(isDLQ({ error: 'boom', attempts: 3, at: 1 })).toBe(true);
+  });
+
+  it('returns false for string result', () => {
+    expect(isDLQ('done')).toBe(false);
+  });
+
+  it('returns false for null (runtime guard)', () => {
+    expect(isDLQ(null as unknown as string | DLQEntry)).toBe(false);
+  });
+
+  it('returns false for object without error field', () => {
+    expect(isDLQ({ value: 42 } as unknown as string | DLQEntry)).toBe(false);
   });
 });

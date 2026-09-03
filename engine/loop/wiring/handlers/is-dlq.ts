@@ -1,6 +1,6 @@
 /**
- * @brief True bila hasil withResilience adalah DLQ (gagal definitif).
- * @param {unknown} r - hasil withResilience (string | DLQEntry).
+ * @brief Type guard: true bila hasil withResilience adalah DLQ (gagal definitif).
+ * @param {string | DLQEntry} r - hasil withResilience.
  * @return {boolean} true bila DLQ.
  * @since 0.1.1
  */
