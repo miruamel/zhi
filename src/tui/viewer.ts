@@ -32,4 +32,3 @@ export function render(s: ViewerState): string {
   lines.push(`knowledge: ${s.knowledgeCount} facts`);
   return lines.join('\n');
 }
-

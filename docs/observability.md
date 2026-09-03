@@ -20,14 +20,14 @@ Zhi runs autonomously; without observability, failures stay invisible. All signa
 
 ## Metrics (in-process)
 
-| Metric                | Source            | Purpose                                          |
-| --------------------- | ----------------- | ------------------------------------------------ |
-| `tokens_used`         | model/stream      | budget tracking (`orch/budget`).                 |
-| `step_duration`       | every module      | slow-step detection.                             |
-| `critic_scores`       | critic/aggregate  | quality trend across runs.                       |
-| `eval_stage_duration` | eval/*            | toolchain regressions.                           |
-| `retry_count`         | resil/retry       | spin detection (alert when approaching max-3).   |
-| `dlq_size`            | resil/recover     | terminal failures.                               |
+| Metric                | Source           | Purpose                                        |
+| --------------------- | ---------------- | ---------------------------------------------- |
+| `tokens_used`         | model/stream     | budget tracking (`orch/budget`).               |
+| `step_duration`       | every module     | slow-step detection.                           |
+| `critic_scores`       | critic/aggregate | quality trend across runs.                     |
+| `eval_stage_duration` | eval/*           | toolchain regressions.                         |
+| `retry_count`         | resil/retry      | spin detection (alert when approaching max-3). |
+| `dlq_size`            | resil/recover    | terminal failures.                             |
 
 ## Cost tracking
 

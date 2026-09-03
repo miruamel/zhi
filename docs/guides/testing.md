@@ -14,18 +14,18 @@ Zhi itself must be tested before it can run a trustworthy loop. Strategy: unit (
 
 ## Unit (per module)
 
-| Module                 | What's tested                                                                 |
-| ---------------------- | ------------------------------------------------------------------------------ |
-| `loop/states.ts`       | `gatePass` correctly rejects when critic/eval fail; accepts when they pass.    |
-| `orch/dag.ts`          | cycle detection on cyclic DAG; correct topo sort.                              |
-| `orch/budget.ts`       | proportional allocation; trim when budget < minimum.                          |
-| `critic/aggregate.ts`  | Security floor auto-fail; abstain fallback; avg ≥ 0.7 pass.                    |
-| `critic/critics.ts`    | stubs return `abstain`; concrete (Security/Perf/Testing/Style) score plausibly. |
-| `eval/gate.ts`         | `gatePass = build∧test∧secret∧lint∧coverage≥0.8`.                              |
-| `resil/retry.ts`       | retry max-3 then DLQ; breaker opens when error rate > 0.5.                     |
-| `resil/recover.ts`     | error classification → right strategy (replan/patch/abort).                   |
-| `knowledge/git.ts`     | isolated worktree; commit inside the worktree, not on main.                    |
-| `model/router.ts`      | correct tier routing; fallback to a lower tier when backend is down.           |
+| Module                | What's tested                                                                   |
+| --------------------- | ------------------------------------------------------------------------------- |
+| `loop/states.ts`      | `gatePass` correctly rejects when critic/eval fail; accepts when they pass.     |
+| `orch/dag.ts`         | cycle detection on cyclic DAG; correct topo sort.                               |
+| `orch/budget.ts`      | proportional allocation; trim when budget < minimum.                            |
+| `critic/aggregate.ts` | Security floor auto-fail; abstain fallback; avg ≥ 0.7 pass.                     |
+| `critic/critics.ts`   | stubs return `abstain`; concrete (Security/Perf/Testing/Style) score plausibly. |
+| `eval/gate.ts`        | `gatePass = build∧test∧secret∧lint∧coverage≥0.8`.                               |
+| `resil/retry.ts`      | retry max-3 then DLQ; breaker opens when error rate > 0.5.                      |
+| `resil/recover.ts`    | error classification → right strategy (replan/patch/abort).                     |
+| `knowledge/git.ts`    | isolated worktree; commit inside the worktree, not on main.                     |
+| `model/router.ts`     | correct tier routing; fallback to a lower tier when backend is down.            |
 
 ## Integration (loop)
 

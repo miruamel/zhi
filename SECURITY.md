@@ -8,13 +8,12 @@
   <img src="assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%">
 </p>
 
-
 ## Supported Versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.1.x   | ✅ active          |
-| < 0.1   | ❌ end-of-life      |
+| Version | Supported      |
+| ------- | -------------- |
+| 0.1.x   | ✅ active      |
+| < 0.1   | ❌ end-of-life |
 
 ## Reporting a Vulnerability
 
@@ -51,10 +50,10 @@ Out of scope:
 
 ## Past advisories
 
-| Date       | CVE / GHSA          | Severity | Description                                                                 | Fixed in |
-| ---------- | ------------------- | -------- | --------------------------------------------------------------------------- | -------- |
-| 2026-09-02 | CVE-2026-47429      | 9.8 crit | vitest UI server arbitrary file read + write + execute via path traversal  | v0.1.1   |
-| 2026-09-02 | (internal)          | high     | npm `NPM_TOKEN` long-lived secret in GitHub repo (compromised in session)   | v0.1.1   |
+| Date       | CVE / GHSA     | Severity | Description                                                               | Fixed in |
+| ---------- | -------------- | -------- | ------------------------------------------------------------------------- | -------- |
+| 2026-09-02 | CVE-2026-47429 | 9.8 crit | vitest UI server arbitrary file read + write + execute via path traversal | v0.1.1   |
+| 2026-09-02 | (internal)     | high     | npm `NPM_TOKEN` long-lived secret in GitHub repo (compromised in session) | v0.1.1   |
 
 ## Best practices for users
 

@@ -7,13 +7,13 @@ Zhi executes model-generated code and calls external APIs. Security is not an ad
 
 ## Trust boundaries
 
-| Boundary                  | Trust             | Treatment                                                    |
-| ------------------------- | ----------------- | ------------------------------------------------------------ |
-| Goal from CLI / user      | trusted           | light sanitisation (whitespace, length). Not untrusted web. |
-| Model output (tool call)  | **untrusted**     | schema validation; paths constrained to repo; args validated. |
-| Generated code            | semi-trusted      | runs in a worktree; `eval/security` scan before commit.      |
-| 9router / OMP API         | trusted-but-limited | rate limit via `orch/budget`; fallback via `resil/breaker`. |
-| `gh` (PR / CI)            | trusted           | scoped token; only operates on target repo.                  |
+| Boundary                 | Trust               | Treatment                                                     |
+| ------------------------ | ------------------- | ------------------------------------------------------------- |
+| Goal from CLI / user     | trusted             | light sanitisation (whitespace, length). Not untrusted web.   |
+| Model output (tool call) | **untrusted**       | schema validation; paths constrained to repo; args validated. |
+| Generated code           | semi-trusted        | runs in a worktree; `eval/security` scan before commit.       |
+| 9router / OMP API        | trusted-but-limited | rate limit via `orch/budget`; fallback via `resil/breaker`.   |
+| `gh` (PR / CI)           | trusted             | scoped token; only operates on target repo.                   |
 
 ## Secret handling
 

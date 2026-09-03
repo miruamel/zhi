@@ -79,18 +79,18 @@ flowchart TD
 
 ## Modules
 
-| Module     | Path                  | Responsibility                                                    |
-| ---------- | --------------------- | ----------------------------------------------------------------- |
-| loop       | `engine/loop/`        | Conductor state machine, gate, observability metrics, recover wiring |
-| orch       | `engine/orch/`        | Goal parser, DAG builder, cycle detect, token allocator, scheduler |
-| build      | `engine/build/`       | Multi-file generator, inter-file dep mapper, self-verify, context |
-| critic     | `engine/critic/`      | 15 critics, semantic cache, meta-aggregator Pareto                |
-| eval       | `engine/eval/`        | Sandbox, test, SAST/secret, perf, compliance, quality gate        |
-| resil      | `engine/resil/`       | Circuit breaker, retry budget, DLQ, recovery                      |
-| knowledge  | `engine/knowledge/`   | Vector store, git-native index, ledger, KB                        |
-| model      | `engine/model/`       | LLM router (9router/OMP/local), Zig stream parse, context         |
-| native     | `native/`             | Zig→WASM hot path: stream parse, diff, embed                      |
-| src        | `src/`                | `cli.ts` entry + `tui/` ink viewer                                |
+| Module    | Path                | Responsibility                                                       |
+| --------- | ------------------- | -------------------------------------------------------------------- |
+| loop      | `engine/loop/`      | Conductor state machine, gate, observability metrics, recover wiring |
+| orch      | `engine/orch/`      | Goal parser, DAG builder, cycle detect, token allocator, scheduler   |
+| build     | `engine/build/`     | Multi-file generator, inter-file dep mapper, self-verify, context    |
+| critic    | `engine/critic/`    | 15 critics, semantic cache, meta-aggregator Pareto                   |
+| eval      | `engine/eval/`      | Sandbox, test, SAST/secret, perf, compliance, quality gate           |
+| resil     | `engine/resil/`     | Circuit breaker, retry budget, DLQ, recovery                         |
+| knowledge | `engine/knowledge/` | Vector store, git-native index, ledger, KB                           |
+| model     | `engine/model/`     | LLM router (9router/OMP/local), Zig stream parse, context            |
+| native    | `native/`           | Zig→WASM hot path: stream parse, diff, embed                         |
+| src       | `src/`              | `cli.ts` entry + `tui/` ink viewer                                   |
 
 ---
 
@@ -100,12 +100,12 @@ flowchart TD
 
 **Gate status (latest run):**
 
-| Gate         | Status |
-| ------------ | ------ |
-| typecheck    | ✅ 0 errors |
-| lint         | ✅ 0 errors (131 JSDoc warnings = baseline) |
-| format:check | ✅ clean |
-| test         | ✅ 229 pass / 0 fail |
+| Gate         | Status                                                 |
+| ------------ | ------------------------------------------------------ |
+| typecheck    | ✅ 0 errors                                            |
+| lint         | ✅ 0 errors (131 JSDoc warnings = baseline)            |
+| format:check | ✅ clean                                               |
+| test         | ✅ 229 pass / 0 fail                                   |
 | arch:check   | ✅ 0 circular / 0 deep-relative / 0 illegal layer edge |
 
 ---

@@ -1,7 +1,7 @@
 ---
 name: Question
 about: Usage question (consider GitHub Discussions for community Q&A)
-title: "[question] "
+title: '[question] '
 labels: question
 assignees: ''
 ---

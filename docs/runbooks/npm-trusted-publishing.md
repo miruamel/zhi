@@ -21,12 +21,12 @@
 
 At https://www.npmjs.com/package/@miruamel/zhi/access → "Publishing access" → "Add a Trusted Publisher":
 
-| Field             | Value                 |
-| ----------------- | --------------------- |
-| Provider          | GitHub Actions        |
-| Repository owner  | `miruamel`            |
-| Repository name   | `zhi`                 |
-| Workflow filename | `publish.yml`         |
+| Field             | Value                   |
+| ----------------- | ----------------------- |
+| Provider          | GitHub Actions          |
+| Repository owner  | `miruamel`              |
+| Repository name   | `zhi`                   |
+| Workflow filename | `publish.yml`           |
 | Environment name  | _leave blank_ (default) |
 
 npm will generate a unique `id-token` subject identifier, e.g.
