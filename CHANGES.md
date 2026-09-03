@@ -78,10 +78,14 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 - **Removed dead `vitest` dependency, config, and setup** — `vitest.config.ts`, `tests/setup.ts`, and the `vitest` devDependency are orphaned from the pre-rename era (ADR-012). All tests use `bun:test`; no script, CI workflow, or source file references vitest. Removed. `tests/` directory is now empty and deleted.
 - **Roadmap critic status correction** — `docs/guides/roadmap.md` claimed `critic/*` had "8 stubs"; all 13 critics are concrete implementations (accessibility, architecture, compose, doc, hygiene, imports, maintainability, perf, privacy, security, sloc, style, todo). Updated v0.1.0 scope and struck through the v0.2.0 "remaining 8 critics" bullet with a DONE marker.
+- **CLI + TUI test restructure into per-unit subdirs** — flat `test/` directories violated the ≤5-files-per-directory architecture cap (`src/tui/panes/test` had 8, `src/cli/test` had 7). Restructured to per-unit co-location: each unit gets its own `<unit>/<unit>.ts` + `<unit>.test.ts` (2 files each). `src/tui/panes/{top/{header,dag,detail},middle/{critics,eval,pr},bottom/{log,help}}` and `src/cli/{autonomous-deps,offline-deps,parse-args,plan-symbol}` + `src/cli/commands/{gen,loop,critique-repo}`. Flat `test/` dirs deleted; `commands.test.ts` (101 SLOC, 3 describe blocks) split into 3 per-command test files.
+- **Path aliases adopted for deep-relative imports** — `@engine/*` / `@src/*` aliases (already declared in `tsconfig.json`) now used by all CLI modules that sit 3–4 levels below root. This eliminates the `../../../../engine/...` chain that the architecture guard flags as deep-relative-import violations (>3 `../`). Guard script already accepts bare `engine/`/`src/` specifiers; `@engine/*` resolves through `tsconfig` paths and is treated as external (no deep-relative count).
+- **Architecture guard `test/` exemption removed** — `.github/workflows/architecture-guard.sh` no longer exempts `*/test|*/test/*`. Flat `test/` directories are eliminated, so the exemption is dead code. Guard now enforces ≤5 files per directory uniformly.
 
 ### Test
 
 - **TUI test coverage for 13 files from PR #45** — 14 test files (105 tests, 210 expect calls) covering `src/tui/core/{colors,format,icons,keymap,state}.ts` and `src/tui/panes/{bottom/{help,log},middle/{critics,eval,pr},top/{dag,detail,header}}.tsx`. Test convention follows repo pattern: `bun:test`, co-located `test/` directory at parent level (`src/tui/test/`, `src/tui/panes/test/`). The `dirHasTests` critic check picks these up for sibling coverage. Repo-wide critic score restored to 1.0 with 0 findings (was ~0.74 from 13 uncovered TUI files). Test count: 255 → 356. Initially written as a single 401-SLOC monolith (`panes.test.ts`); split into 8 atomic files (one per pane, max 47 SLOC) to satisfy the architecture guard SLOC cap (≤150).
+- **355 tests pass, 0 fail** (was 356 — `commands.test.ts` split into 3 per-command files; `critique-repo-traversal.test.ts` co-located beside its subject). Gate: typecheck clean, lint 0 errors, format clean, arch guard all checks passed.
 
 ### Security
 
@@ -90,16 +94,6 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 ### Style
 
 - Prettier trailing-newline normalization on `engine/critic/plant/security/{critic,critic.test.ts}` and 4 other test files.
-
-### Changed
-
-- **`parseSseWasm` fail-closed + stream test determinism** — `load()` in `engine/stream/zigBridge.ts` could throw on WASM write-barrier breakage (proot), propagating into `parseStream` and crashing the whole pipeline. Added `if (!wasmAvailable) return []` guard + `try/catch` around `load()` returning `[]` on throw. `parseStream` already had the `result.length === 0 && chunk.length > 0` → `disableWasm()` + fallback-to-`parseSseTs` logic, so the fix makes the failure path deterministic. `Loaded` type exported per `ts-no-return-type` rule. Stream tests rewritten to be env-independent: `disableWasm()` called explicitly before `parseStream()` instead of relying on proot breakage. `isWasmAvailable` unused import removed (TS6133). 355 tests pass, 0 fail; CI green.
-
-- **CLI + TUI test restructure into per-unit subdirs** — flat `test/` directories violated the ≤5-files-per-directory architecture cap (`src/tui/panes/test` had 8, `src/cli/test` had 7). Restructured to per-unit co-location: each unit gets its own `<unit>/<unit>.ts` + `<unit>.test.ts` (2 files each). `src/tui/panes/{top/{header,dag,detail},middle/{critics,eval,pr},bottom/{log,help}}` and `src/cli/{autonomous-deps,offline-deps,parse-args,plan-symbol}` + `src/cli/commands/{gen,loop,critique-repo}`. Flat `test/` dirs deleted; `commands.test.ts` (101 SLOC, 3 describe blocks) split into 3 per-command test files.
-- **Path aliases adopted for deep-relative imports** — `@engine/*` / `@src/*` aliases (already declared in `tsconfig.json`) now used by all CLI modules that sit 3–4 levels below root. This eliminates the `../../../../engine/...` chain that the architecture guard flags as deep-relative-import violations (>3 `../`). Guard script already accepts bare `engine/`/`src/` specifiers; `@engine/*` resolves through `tsconfig` paths and is treated as external (no deep-relative count).
-- **Architecture guard `test/` exemption removed** — `.github/workflows/architecture-guard.sh` no longer exempts `*/test|*/test/*`. Flat `test/` directories are eliminated, so the exemption is dead code. Guard now enforces ≤5 files per directory uniformly.
-
-### Test
 
 ## [0.1.1] - 2026-09-02
 
