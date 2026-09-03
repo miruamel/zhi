@@ -4,7 +4,7 @@
  */
 import { useEffect, useRef } from "react";
 import { useInput } from "ink";
-import { ShortcutRegistry, matchShortcut, parseShortcut, type KeyCombo } from '../../core/shortcuts.ts';
+import { ShortcutRegistry, matchShortcut, parseShortcut, type KeyCombo } from "../../core/shortcuts";
 
 /** @brief ink's key event shape (the fields we actually consume). */
 type InputKey = {

@@ -2,8 +2,8 @@
  * @brief Bridges imperative loop updates into React state with metrics + perf marks.
  * @since 0.1.2
  */
-import type { AppState } from "../../core/state";
-import type { PerfTracker } from "../../engine/perf";
+import type { AppState } from "../../core/state.ts";
+import type { PerfTracker } from "../../engine/perf/index.ts";
 
 /** @brief Aggregate counters for state pushes. */
 export interface BridgeMetrics {
