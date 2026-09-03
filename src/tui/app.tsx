@@ -3,7 +3,8 @@ import { Box, Text, useApp, useInput } from 'ink';
 import { useState, useEffect, useRef } from 'react';
 import { colors } from './core/style/colors';
 import { resolveKey } from './core/keymap';
-import { createFocusManager } from './engine';
+import { createFocusManager, createPerfTracker } from './engine';
+import { createBridge } from './integration/state-bridge';
 import {
   Header,
   Dag,
@@ -55,11 +56,12 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   const [focusedPane, setFocusedPane] = useState('dag');
   const fmRef = useRef(createFocusManager('dag'));
   const fm = fmRef.current;
+  const perfRef = useRef(createPerfTracker());
+  const bridgeRef = useRef(createBridge(setState, perfRef.current));
 
   useEffect(() => {
-    onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
+    onRegister?.(bridgeRef.current.push.bind(bridgeRef.current));
   }, [onRegister]);
-
   useInput((input: string, key: { [k: string]: boolean }) => {
     const action = resolveKey(input, key);
     switch (action) {
