@@ -32,4 +32,8 @@ export class KnowledgeStore {
     }
     return out;
   }
+  /** @brief Ambil semua fakta (urutan insertion). @return {Fact[]} */
+  all(): Fact[] {
+    return Array.from(this.map.values());
+  }
 }
