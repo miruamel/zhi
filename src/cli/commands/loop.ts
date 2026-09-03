@@ -50,7 +50,8 @@ export function toPatch(
     },
     prCi: {
       prUrl: ctx.prUrl,
-      ciStatus: loop === LoopState.CI_WATCH ? 'pending' : loop === LoopState.DONE ? 'green' : undefined,
+      ciStatus:
+        loop === LoopState.CI_WATCH ? 'pending' : loop === LoopState.DONE ? 'green' : undefined,
     },
     log: [],
     finished: loop === LoopState.DONE,
@@ -65,7 +66,9 @@ export async function loopCommand(argv: string[]): Promise<LoopContext> {
   const ctx: LoopContext = { goal };
   const metrics = new LoopMetrics();
   const logger = new LoopLogger();
-  const driver = new LoopDriver({ onTransition: (from, ev, to) => logger.transition(from, ev, to) });
+  const driver = new LoopDriver({
+    onTransition: (from, ev, to) => logger.transition(from, ev, to),
+  });
   await driver.run(buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics));
   const s = metrics.summary();
   console.log(`[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}`);
@@ -92,8 +95,13 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
     threshold,
     tokensBudget: 100_000,
     onAbort: () => driver.abort(),
-    onQuit: () => { unmount(); process.exit(0); },
-    onRegister: (p) => { holder.push = p; },
+    onQuit: () => {
+      unmount();
+      process.exit(0);
+    },
+    onRegister: (p) => {
+      holder.push = p;
+    },
   });
   await driver.run(handlers);
   unmount();

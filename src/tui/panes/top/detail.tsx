@@ -16,8 +16,16 @@ export interface DetailProps {
 export function Detail({ step, loop, tokensUsed, tokensBudget, recoverAttempts }: DetailProps) {
   const pct = tokensBudget > 0 ? tokensUsed / tokensBudget : 0;
   return (
-    <Box flexDirection="column" borderStyle="round" borderColor={colors.warn} paddingX={1} flexGrow={1}>
-      <Text color={colors.warn} bold>⏵  STEP DETAIL</Text>
+    <Box
+      flexDirection="column"
+      borderStyle="round"
+      borderColor={colors.warn}
+      paddingX={1}
+      flexGrow={1}
+    >
+      <Text color={colors.warn} bold>
+        ⏵ STEP DETAIL
+      </Text>
       <Box gap={1}>
         <Text color={colors.fgDim}>state:</Text>
         <Text color={colors.fg}>{loop}</Text>
@@ -34,21 +42,23 @@ export function Detail({ step, loop, tokensUsed, tokensBudget, recoverAttempts }
             <Text color={colors.fgDim}>status:</Text>
             <Text color={colors.fg}>{step.status}</Text>
             {step.tokenBudget !== undefined && (
-              <Text color={colors.fgDim}>  budget {formatTokens(step.tokenBudget)}</Text>
+              <Text color={colors.fgDim}> budget {formatTokens(step.tokenBudget)}</Text>
             )}
             {step.tokensUsed !== undefined && (
-              <Text color={colors.fgDim}>  used {formatTokens(step.tokensUsed)}</Text>
+              <Text color={colors.fgDim}> used {formatTokens(step.tokensUsed)}</Text>
             )}
           </Box>
-          {step.detail && <Text color={colors.fgDim}>  {step.detail}</Text>}
+          {step.detail && <Text color={colors.fgDim}> {step.detail}</Text>}
         </>
       ) : (
-        <Text color={colors.fgDim}>  (idle — waiting for {loop})</Text>
+        <Text color={colors.fgDim}> (idle — waiting for {loop})</Text>
       )}
       <Box marginTop={1} gap={1}>
         <Text color={colors.fgDim}>tokens:</Text>
         <Text color={colors.fg}>{formatTokens(tokensUsed)}</Text>
-        <Text color={colors.fgDim}>/ {formatTokens(tokensBudget)} ({formatPct(pct)})</Text>
+        <Text color={colors.fgDim}>
+          / {formatTokens(tokensBudget)} ({formatPct(pct)})
+        </Text>
       </Box>
       <Box gap={1}>
         <Text color={colors.fgDim}>recover attempts:</Text>

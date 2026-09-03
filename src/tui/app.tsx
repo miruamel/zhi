@@ -3,9 +3,7 @@ import { Box, Text, useApp, useInput } from 'ink';
 import { useState, useEffect } from 'react';
 import { colors } from './colors';
 import { resolveKey } from './keymap';
-import {
-  Header, Dag, Detail, Critics, Eval, Pr as PrPane, Log, Help,
-} from './panes';
+import { Header, Dag, Detail, Critics, Eval, Pr as PrPane, Log, Help } from './panes';
 import type { AppState } from './state';
 
 export interface AppProps {
@@ -72,7 +70,11 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         />
       </Box>
       <Box marginTop={1} gap={1}>
-        <Critics critics={state.critics} weightedAvg={state.eval.weightedAvg} threshold={threshold} />
+        <Critics
+          critics={state.critics}
+          weightedAvg={state.eval.weightedAvg}
+          threshold={threshold}
+        />
       </Box>
       <Box marginTop={1} gap={1}>
         <Eval evalReport={state.eval} />

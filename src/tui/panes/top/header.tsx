@@ -23,20 +23,24 @@ export interface HeaderProps {
 /** @brief Render the header pane (banner + status bar). @since 0.1.0 */
 export function Header({ loop, goal, startedAt, finished, aborted }: HeaderProps) {
   const elapsed = Date.now() - startedAt;
-  const stateColor = aborted ? colors.error
-    : finished ? colors.complete
-    : colors.running;
+  const stateColor = aborted ? colors.error : finished ? colors.complete : colors.running;
   const stateLabel = aborted ? 'ABORTED' : finished ? 'DONE' : 'RUNNING';
   return (
     <Box flexDirection="column" borderStyle="round" borderColor={colors.accent} paddingX={1}>
       {BANNER.map((line, i) => (
-        <Text key={i} color={i === BANNER.length - 1 ? colors.accent : colors.fgDim}>{line}</Text>
+        <Text key={i} color={i === BANNER.length - 1 ? colors.accent : colors.fgDim}>
+          {line}
+        </Text>
       ))}
       <Box marginTop={1} gap={2}>
         <Text color={colors.fgDim}>state:</Text>
-        <Text color={stateColor} bold>{loop}</Text>
+        <Text color={stateColor} bold>
+          {loop}
+        </Text>
         <Text color={colors.fgDim}>·</Text>
-        <Text color={stateColor} bold>{stateLabel}</Text>
+        <Text color={stateColor} bold>
+          {stateLabel}
+        </Text>
         <Text color={colors.fgDim}>·</Text>
         <Text color={colors.fgDim}>elapsed {formatMs(elapsed)}</Text>
       </Box>

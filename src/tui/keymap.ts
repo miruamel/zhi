@@ -1,8 +1,19 @@
 /** @brief Keymap: maps key press to action. @since 0.1.0 */
 export type KeyAction =
-  | 'quit' | 'toggleLog' | 'toggleCritics' | 'togglePr'
-  | 'toggleHelp' | 'pauseResume' | 'abort' | 'redraw' | 'nextLog'
-  | 'prevLog' | 'logTop' | 'logBottom' | 'cycle' | 'unknown';
+  | 'quit'
+  | 'toggleLog'
+  | 'toggleCritics'
+  | 'togglePr'
+  | 'toggleHelp'
+  | 'pauseResume'
+  | 'abort'
+  | 'redraw'
+  | 'nextLog'
+  | 'prevLog'
+  | 'logTop'
+  | 'logBottom'
+  | 'cycle'
+  | 'unknown';
 
 const map: Record<string, KeyAction> = {
   q: 'quit',
