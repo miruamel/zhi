@@ -16,23 +16,23 @@ Score `generate` output through concrete critics, then `aggregate` computes a we
 
 ## Concrete critics (implemented)
 
-| Critic          | Check                                                                                                          | Weight | Source                              |
-| --------------- | -------------------------------------------------------------------------------------------------------------- | ------ | ----------------------------------- |
-| architecture    | circular dep, deep-relative, illegal layer edge (mirrors CI guard `scripts/ci/architecture/check-circular.ts`) | 1.5    | `plant/architecture/critic.ts`      |
-| sloc            | SLOC per file ≤ 200 (mandate §6.3)                                                                             | 1      | `plant/sloc/critic.ts`              |
-| imports         | deep-relative import > 3 levels (mandate §6.7, §6.11)                                                          | 1.5    | `plant/imports/critic.ts`           |
-| maintainability | duplicate code lines (mandate §6, DRY)                                                                         | 1      | `plant/maintainability/critic.ts`   |
-| todo            | TODO / FIXME / XXX markers (mandate §6 cleanliness)                                                            | 1      | `plant/todo/critic.ts`              |
-| privacy         | high-confidence secret leak (private key, AKIA, JWT, DB URL, hardcoded creds)                                  | 1.5    | `plant/privacy/critic.ts`           |
-| doc             | public export without `@brief` (AGENTS.Style.md)                                                               | 1      | `plant/doc/critic.ts`               |
-| accessibility   | `<img>` without `alt`, `onClick` without keyboard handler (WCAG 2.1 AA)                                        | 1      | `plant/accessibility/critic.ts`     |
-| devops          | CI config (`.github/workflows` or `scripts/ci`) + `.gitignore` present                                          | 1      | `plant/hygiene/devops/critic.ts`    |
-| legal           | LICENSE + README.md present                                                                                    | 1      | `plant/hygiene/legal/critic.ts`     |
-| dx              | README quickstart/usage + AGENTS.md + package.json test script                                                 | 0.8    | `plant/hygiene/dx/critic.ts`        |
-| security        | injection sinks (eval, new Function, innerHTML=, dangerouslySetInnerHTML, child_process.exec/execSync)         | 1.5    | `plant/security/critic.ts`          |
-| perf            | debugger / console.* in generated code                                                                         | 1      | `plant/perf/critic.ts`              |
-| style           | `: any` / `as any` / `@ts-ignore` / `@ts-nocheck`                                                              | 1      | `plant/style/critic.ts`             |
-| testing         | every source in `src/` + `engine/` without a test sibling                                                       | 1      | `plant/hygiene/testing/critic.ts`   |
+| Critic          | Check                                                                                                          | Weight | Source                            |
+| --------------- | -------------------------------------------------------------------------------------------------------------- | ------ | --------------------------------- |
+| architecture    | circular dep, deep-relative, illegal layer edge (mirrors CI guard `scripts/ci/architecture/check-circular.ts`) | 1.5    | `plant/architecture/critic.ts`    |
+| sloc            | SLOC per file ≤ 200 (mandate §6.3)                                                                             | 1      | `plant/sloc/critic.ts`            |
+| imports         | deep-relative import > 3 levels (mandate §6.7, §6.11)                                                          | 1.5    | `plant/imports/critic.ts`         |
+| maintainability | duplicate code lines (mandate §6, DRY)                                                                         | 1      | `plant/maintainability/critic.ts` |
+| todo            | TODO / FIXME / XXX markers (mandate §6 cleanliness)                                                            | 1      | `plant/todo/critic.ts`            |
+| privacy         | high-confidence secret leak (private key, AKIA, JWT, DB URL, hardcoded creds)                                  | 1.5    | `plant/privacy/critic.ts`         |
+| doc             | public export without `@brief` (AGENTS.Style.md)                                                               | 1      | `plant/doc/critic.ts`             |
+| accessibility   | `<img>` without `alt`, `onClick` without keyboard handler (WCAG 2.1 AA)                                        | 1      | `plant/accessibility/critic.ts`   |
+| devops          | CI config (`.github/workflows` or `scripts/ci`) + `.gitignore` present                                         | 1      | `plant/hygiene/devops/critic.ts`  |
+| legal           | LICENSE + README.md present                                                                                    | 1      | `plant/hygiene/legal/critic.ts`   |
+| dx              | README quickstart/usage + AGENTS.md + package.json test script                                                 | 0.8    | `plant/hygiene/dx/critic.ts`      |
+| security        | injection sinks (eval, new Function, innerHTML=, dangerouslySetInnerHTML, child_process.exec/execSync)         | 1.5    | `plant/security/critic.ts`        |
+| perf            | debugger / console.* in generated code                                                                         | 1      | `plant/perf/critic.ts`            |
+| style           | `: any` / `as any` / `@ts-ignore` / `@ts-nocheck`                                                              | 1      | `plant/style/critic.ts`           |
+| testing         | every source in `src/` + `engine/` without a test sibling                                                      | 1      | `plant/hygiene/testing/critic.ts` |
 
 ## Interface
 

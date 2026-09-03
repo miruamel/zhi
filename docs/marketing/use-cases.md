@@ -14,6 +14,7 @@
 **Before Zhi:** She opens VS Code, writes the regex, writes 2 tests, runs them, makes a commit, opens a PR, waits for CI, reviews the diff, merges. 30 minutes of context switches.
 
 **With Zhi:**
+
 ```
 $ zhi run "add email validation in auth.ts, tests green, open PR"
 [INTAKE] goal: add email validation in auth.ts, tests green, open PR
@@ -39,11 +40,13 @@ Sarah is back from coffee. The PR is in her inbox.
 **Before Zhi:** He bumps them one at a time, runs tests, fixes the type errors, repeats. 2 hours, lots of context switches, ends up reverting 3.
 
 **With Zhi:**
+
 ```
 $ zhi run "bump all dev deps to latest, fix type errors, tests green, single PR"
 ```
 
 Zhi's loop:
+
 - Bumps each dep in turn
 - Runs `bun test` after each bump
 - If a type error appears, generates a patch (bounded retry max 3)
@@ -60,6 +63,7 @@ If something genuinely can't be fixed in 3 attempts → DLQ entry → Alex gets 
 **Before Zhi:** Rename the folder, fix 47 imports, miss 3, ship a broken build at 6pm Friday, roll back.
 
 **With Zhi:**
+
 ```
 $ zhi run "rename engine/foo to engine/bar, update all imports, tests green, no circular dep"
 ```
@@ -75,6 +79,7 @@ Zhi's **architecture critic** (weight 1.5) blocks the PR if any illegal layer ed
 **Before Zhi:** Scrolls through `git log`, writes 4 bullets, forgets a breaking change, gets an issue filed.
 
 **With Zhi:**
+
 ```
 $ zhi run "summarize the last 10 commits into CHANGES.md [Unreleased] section, Keep a Changelog format"
 ```
@@ -90,6 +95,7 @@ Zhi reads the ledger, finds the breaking changes, drafts the entry, opens a PR. 
 **Before Zhi:** 30 minutes of `ls` + `cat` + `grep` + mental checklist.
 
 **With Zhi:**
+
 ```
 $ bun run cli critique:repo
 [devops] 1.0 — CI config + .gitignore present
@@ -110,6 +116,7 @@ She fixes the 3 missing tests, then tags v1.0.0 with confidence.
 **Before Zhi:** He does them over 3 weekends, gets bored, ships 4.
 
 **With Zhi:**
+
 ```
 $ for task in "fix images without alt" "remove console.log from src/" "add tests for engine/foo" ...; do
     zhi run "$task" --base main
@@ -127,6 +134,7 @@ He wakes up to 12 PRs. Some passed the gate, some are in DLQ. He reviews the DLQ
 **Before Zhi:** Pair for 2 days, then hand them a backlog of "easy" tickets. Tickets aren't actually easy.
 
 **With Zhi:**
+
 - Day 1: New hire runs `zhi run "add a hello-world CLI subcommand"`. Sees the full loop. Reads the critic output. Asks "why did security score 0.92 here?"
 - Day 2: New hire runs `zhi run critique:repo`. Sees the gaps. Asks "why is testing at 0.6?"
 - Day 3: New hire is patching real code, with Zhi as a safety net.
@@ -142,6 +150,7 @@ The loop is the documentation.
 **Before Zhi:** Trust + pray. Hope nobody runs Claude Code on a 500k-token task.
 
 **With Zhi:**
+
 ```bash
 # Per-invocation cap
 zhi run "fix the lint errors" --budget 50000 --tier light

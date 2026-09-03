@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Suggest a new critic, module, or behavior
-title: "[feat] "
+title: '[feat] '
 labels: enhancement
 assignees: ''
 ---

@@ -40,14 +40,14 @@ State is passed from `loop` via the `onState(state: LoopState, payload)` callbac
 
 ## Keybindings
 
-| Key      | Action                                                                |
-| -------- | --------------------------------------------------------------------- |
-| `q`      | quit (loop keeps running in the background; confirm if not DONE).    |
-| `space`  | pause / resume render (not pause loop).                               |
-| `l`      | toggle full Log view.                                                 |
-| `c`      | toggle Critics detail.                                                |
-| `p`      | toggle PR / CI detail.                                                |
-| `ctrl+c` | abort loop (trigger `resil` abort → DONE partial + report).           |
+| Key      | Action                                                            |
+| -------- | ----------------------------------------------------------------- |
+| `q`      | quit (loop keeps running in the background; confirm if not DONE). |
+| `space`  | pause / resume render (not pause loop).                           |
+| `l`      | toggle full Log view.                                             |
+| `c`      | toggle Critics detail.                                            |
+| `p`      | toggle PR / CI detail.                                            |
+| `ctrl+c` | abort loop (trigger `resil` abort → DONE partial + report).       |
 
 ## Behavior
 

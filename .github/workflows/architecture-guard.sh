@@ -15,7 +15,7 @@ while IFS= read -r d; do
   # Skip exempt dirs (root, design, adr, audit-log entries, this script's folder, node_modules).
   # Match top dir OR any subpath under it ("./foo" or "./foo/bar/baz").
   case "$d" in
-    "$ROOT"|"./docs/design"|"./docs/design"/*|"./docs/adr"|"./docs/adr"/*|"./audit-log/entries"|"./audit-log/entries"/*|"./.git"|"./.git"/*|"./node_modules"|"./node_modules"/*|"./.github"|"./.github"/*|"./native/out"|"./native/out"/*|"./.husky"|"./.husky"/*|"./dist"|"./dist"/*)
+    "$ROOT"|"./docs/design"|"./docs/design"/*|"./docs/adr"|"./docs/adr"/*|"./audit-log/entries"|"./audit-log/entries"/*|"./.git"|"./.git"/*|"./node_modules"|"./node_modules"/*|"./.github"|"./.github"/*|"./native/out"|"./native/out"/*|"./.husky"|"./.husky"/*|"./assets"|"./assets"/*|"./dist"|"./dist"/*)
       continue
       ;;
   esac

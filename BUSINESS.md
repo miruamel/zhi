@@ -8,7 +8,6 @@
   <img src="assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%">
 </p>
 
-
 > Marketing, positioning, and product strategy for Zhi. Source-of-truth for one-liners, value prop, and go-to-market. Bilingual: English primary, Indonesian secondary.
 
 ---
@@ -16,15 +15,19 @@
 ## TL;DR (one-liners)
 
 **EN — pitch (Twitter / GitHub social preview):**
+
 > Zhi is the autonomous terminal coding agent that actually closes the dev loop. 15-critic plant, weighted Pareto gate, bounded retry, real PRs — without you babysitting every step.
 
 **EN — long (README hero):**
+
 > Zhi takes a goal in plain English, plans it as a DAG, executes in an isolated git worktree, scores the result through 15 critics + a real toolchain (build, test, secret-scan), then commits, opens a PR, and watches CI — standing on its own until the goal is met.
 
 **ID — ringkas (untuk komunitas ID):**
+
 > Zhi: agent coding terminal otonom. Goal bahasa alami → plan → eksekusi di worktree → 15 kritikus + toolchain nyata → commit → PR → CI hijau. Tanpa intervensi tiap langkah.
 
 **EN — 12-word elevator:**
+
 > Autonomous terminal coding agent. Goal in, PR out. Gate-based, not vibe-based.
 
 ---
@@ -33,15 +36,15 @@
 
 Zhi sits in the **terminal coding agent** category alongside Claude Code, OMP, OpenCode, Aider, KiloCode, and Hermes — but it picks a different sharp angle.
 
-| Competitor     | Default model              | Loop style                  | PR/CI integration     | Differentiator                          |
-| -------------- | -------------------------- | --------------------------- | --------------------- | --------------------------------------- |
-| **Claude Code** | Anthropic                  | Interactive + agentic       | Optional              | Anthropic quality, chat-first           |
-| **OMP**        | OpenAI / Anthropic         | Interactive + agentic       | Optional              | Multi-model, cost-aware                 |
-| **OpenCode**   | Open source models         | Interactive                 | Optional              | OSS, BYO model                          |
-| **Aider**      | OpenAI / Anthropic         | Pair-programming            | Optional              | Repo map, git-native                    |
-| **KiloCode**   | Any                        | Interactive                 | Optional              | VS Code integration                     |
-| **Hermes**     | Any                        | Open agent                  | Optional              | Configurable agents                     |
-| **Zhi**        | 9router / OMP / local      | **Autonomous loop + gate**  | **Built-in, trunk-based** | **Code-grounded gate, 15 critics, bounded retry** |
+| Competitor      | Default model         | Loop style                 | PR/CI integration         | Differentiator                                    |
+| --------------- | --------------------- | -------------------------- | ------------------------- | ------------------------------------------------- |
+| **Claude Code** | Anthropic             | Interactive + agentic      | Optional                  | Anthropic quality, chat-first                     |
+| **OMP**         | OpenAI / Anthropic    | Interactive + agentic      | Optional                  | Multi-model, cost-aware                           |
+| **OpenCode**    | Open source models    | Interactive                | Optional                  | OSS, BYO model                                    |
+| **Aider**       | OpenAI / Anthropic    | Pair-programming           | Optional                  | Repo map, git-native                              |
+| **KiloCode**    | Any                   | Interactive                | Optional                  | VS Code integration                               |
+| **Hermes**      | Any                   | Open agent                 | Optional                  | Configurable agents                               |
+| **Zhi**         | 9router / OMP / local | **Autonomous loop + gate** | **Built-in, trunk-based** | **Code-grounded gate, 15 critics, bounded retry** |
 
 **Positioning statement:**
 
@@ -82,6 +85,7 @@ These are stories you'd tell a friend, not an engineer.
 You say: `zhi run "add email validation in auth.ts, tests green, open PR"`.
 
 Zhi does:
+
 1. Parses the goal, plans a 3-step DAG (generate → test → PR).
 2. Makes a git worktree at `.zhi/wt-abc123/`.
 3. Generates `auth.ts` + `auth.test.ts`, runs `bun test`, scans for secrets.
@@ -121,11 +125,11 @@ Zhi: reads the ledger, drafts the entry, opens a PR with the changelog-only chan
 
 Zhi is currently **MIT-licensed, free, single-binary**. There is no pricing yet.
 
-| Tier    | What you get                                    | Who it's for             | Cost    |
-| ------- | ----------------------------------------------- | ------------------------ | ------- |
-| Local   | Full source, all features, run on your machine  | Solo / hobbyist          | Free    |
-| Team    | (planned) shared ledger, worktree pool, queue   | Small teams (5–20)       | TBD     |
-| Hosted  | (planned) zero-setup SaaS, per-token billing    | Anyone who doesn't want to set up Bun + Zig | TBD     |
+| Tier   | What you get                                   | Who it's for                                | Cost |
+| ------ | ---------------------------------------------- | ------------------------------------------- | ---- |
+| Local  | Full source, all features, run on your machine | Solo / hobbyist                             | Free |
+| Team   | (planned) shared ledger, worktree pool, queue  | Small teams (5–20)                          | TBD  |
+| Hosted | (planned) zero-setup SaaS, per-token billing   | Anyone who doesn't want to set up Bun + Zig | TBD  |
 
 **Why free for now:** the loop, the gate, and the critic plant are the differentiator. Distribution > monetization until v1.0.0 stable.
 
@@ -133,13 +137,13 @@ Zhi is currently **MIT-licensed, free, single-binary**. There is no pricing yet.
 
 ## Value Proposition Canvas
 
-| Pains (today)                                                | Gains (with Zhi)                                                       |
-| ------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| "I started an agentic loop 20 min ago, it went sideways, I lost $4 of tokens." | Bounded retry (max 3) + circuit breaker. You can't bleed.            |
-| "The agent made a change but I'm not sure it's safe to merge." | 15-critic weighted Pareto + real toolchain (test, secret-scan).       |
-| "I want the agent to do boring PRs while I sleep."           | Trunk-based: worktree → PR → CI watch → done. Truly hands-off.          |
-| "I can't audit what the agent did."                           | Append-only ledger (`KB/ledger/*.jsonl`) per step.                    |
-| "Every agent wants a different model and I want to A/B."      | `model/router` with 9router / OMP / local + tier heavy/light/micro.   |
+| Pains (today)                                                                  | Gains (with Zhi)                                                    |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| "I started an agentic loop 20 min ago, it went sideways, I lost $4 of tokens." | Bounded retry (max 3) + circuit breaker. You can't bleed.           |
+| "The agent made a change but I'm not sure it's safe to merge."                 | 15-critic weighted Pareto + real toolchain (test, secret-scan).     |
+| "I want the agent to do boring PRs while I sleep."                             | Trunk-based: worktree → PR → CI watch → done. Truly hands-off.      |
+| "I can't audit what the agent did."                                            | Append-only ledger (`KB/ledger/*.jsonl`) per step.                  |
+| "Every agent wants a different model and I want to A/B."                       | `model/router` with 9router / OMP / local + tier heavy/light/micro. |
 
 ---
 
@@ -156,7 +160,7 @@ Zhi is currently **MIT-licensed, free, single-binary**. There is no pricing yet.
 ## Competitive moat (what's hard to copy)
 
 1. **The 15-critic plant as one cohesive unit** — most agents have 1-2 critics (security, perf). Zhi bundles 15 + a weighted Pareto aggregator with floors + abstain semantics.
-2. **The autonomous loop with bounded retry** — easy to build a chat loop, hard to build one that *stops* correctly. Zhi's `resil/` is the most-tested module.
+2. **The autonomous loop with bounded retry** — easy to build a chat loop, hard to build one that _stops_ correctly. Zhi's `resil/` is the most-tested module.
 3. **Bun-native + Zig WASM** — the SSE parser is in Zig, called via a thin TS bridge. Cheaper + more deterministic than pure-TS competitors.
 4. **Atomic refactor discipline** — ≤4 files/folder, ≤200 SLOC/file, vertical nesting. The codebase stays readable as it grows. Competitors that don't enforce this end up with god files.
 
@@ -164,11 +168,11 @@ Zhi is currently **MIT-licensed, free, single-binary**. There is no pricing yet.
 
 ## Roadmap to v1.0.0 (stable) — business lens
 
-| Milestone | What unlocks                                       | User-visible delta                          |
-| --------- | -------------------------------------------------- | ------------------------------------------- |
-| v0.2.0    | All 15 critics concrete (currently 15/15 done)     | Honest PRs, no `// FIXME: critic stub`      |
-| v0.3.0    | Knowledge: VectorStore (graduated), semantic cache | Critic "learns" from prior runs             |
-| v1.0.0    | Multi-PR orchestration                             | Queue N goals, parallel TUI pane            |
+| Milestone | What unlocks                                       | User-visible delta                     |
+| --------- | -------------------------------------------------- | -------------------------------------- |
+| v0.2.0    | All 15 critics concrete (currently 15/15 done)     | Honest PRs, no `// FIXME: critic stub` |
+| v0.3.0    | Knowledge: VectorStore (graduated), semantic cache | Critic "learns" from prior runs        |
+| v1.0.0    | Multi-PR orchestration                             | Queue N goals, parallel TUI pane       |
 
 The honest pitch: **v0.1.x is for people who like to live on the edge of the agent space.** v1.0.0 is for teams who want a stable tool to delegate to.
 

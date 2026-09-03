@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Something Zhi did is wrong, broken, or unexpected
-title: "[bug] "
+title: '[bug] '
 labels: bug
 assignees: ''
 ---

@@ -12,9 +12,11 @@
 ### EN
 
 **Headline**
+
 > Autonomous coding agent. Goal in, PR out.
 
 **Subhead**
+
 > Zhi takes a plain-English goal, plans it as a DAG, executes in an isolated git worktree, scores the result through 15 critics and a real toolchain (build, test, secret-scan), then commits, opens a PR, and watches CI. Standalone. No babysitting.
 
 **Primary CTA**: `bun add -g @miruamel/zhi` then `zhi run "your goal"`.
@@ -23,9 +25,11 @@
 ### ID
 
 **Headline**
+
 > Agent coding otonom. Goal masuk, PR keluar.
 
 **Subhead**
+
 > Zhi ambil goal bahasa alami, rencana sebagai DAG, eksekusi di git worktree terisolasi, nilai lewat 15 kritikus + toolchain nyata (build, test, secret-scan), commit, buka PR, pantau CI. Mandiri. Tanpa dijagain tiap langkah.
 
 **CTA utama**: `bun add -g @miruamel/zhi` lalu `zhi run "goal lo"`.
@@ -67,14 +71,14 @@ Tiap transisi dijaga **gate yang machine-decidable** (15 kritikus + toolchain ny
 
 ## Features (6-bullet grid)
 
-| Feature                          | What it does                                                | Why you care                              |
-| -------------------------------- | ----------------------------------------------------------- | ----------------------------------------- |
-| 15-critic plant                  | Security, perf, architecture, testing, doc, devops, …       | Honest PRs, no vibes-based merge          |
-| Weighted Pareto gate             | Aggregates critics, respects floors, abstains when unsure  | Trade-offs without false-negatives        |
-| Bounded retry                    | Max 3 attempts, then DLQ                                    | Can't burn $20 in a loop                  |
-| Git worktree isolation           | Main repo untouched until gate passes                      | Safe to run on prod code                  |
-| Trunk-based PR + CI watch        | `gh pr create` + `gh run watch`                            | Same workflow as a human PR               |
-| Bun-native + Zig WASM            | TypeScript end-to-end, Zig for SSE parse                   | Fast + deterministic                      |
+| Feature                   | What it does                                              | Why you care                       |
+| ------------------------- | --------------------------------------------------------- | ---------------------------------- |
+| 15-critic plant           | Security, perf, architecture, testing, doc, devops, …     | Honest PRs, no vibes-based merge   |
+| Weighted Pareto gate      | Aggregates critics, respects floors, abstains when unsure | Trade-offs without false-negatives |
+| Bounded retry             | Max 3 attempts, then DLQ                                  | Can't burn $20 in a loop           |
+| Git worktree isolation    | Main repo untouched until gate passes                     | Safe to run on prod code           |
+| Trunk-based PR + CI watch | `gh pr create` + `gh run watch`                           | Same workflow as a human PR        |
+| Bun-native + Zig WASM     | TypeScript end-to-end, Zig for SSE parse                  | Fast + deterministic               |
 
 ---
 
@@ -113,6 +117,7 @@ Currently **TypeScript / JavaScript** (Bun-native). Other languages are not on t
 ### How do I know it's safe to merge a Zhi PR?
 
 Each PR carries:
+
 - The critic Pareto score (`weightedAvg`, per-critic breakdown)
 - The eval report (build, test, security, gate)
 - The full ledger (`KB/ledger/<runId>.jsonl`)
@@ -131,11 +136,11 @@ It's **experimental** (`maturity: experimental` in `package.json`). Expect rough
 
 ## Pricing (planned)
 
-| Tier    | What you get                                     | Cost    |
-| ------- | ------------------------------------------------ | ------- |
-| Local   | Full source, all features, MIT                   | Free    |
-| Team    | (planned) shared ledger, worktree pool, queue    | TBD     |
-| Hosted  | (planned) zero-setup SaaS, per-token billing     | TBD     |
+| Tier   | What you get                                  | Cost |
+| ------ | --------------------------------------------- | ---- |
+| Local  | Full source, all features, MIT                | Free |
+| Team   | (planned) shared ledger, worktree pool, queue | TBD  |
+| Hosted | (planned) zero-setup SaaS, per-token billing  | TBD  |
 
 ---
 

@@ -8,23 +8,22 @@
   <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%">
 </p>
 
-
 Business-facing content for Zhi. Source-of-truth for landing-page copy, social bios, use cases, and the repo metadata checklist.
 
-| File                | Purpose                                                                | Audience                     |
-| ------------------- | ---------------------------------------------------------------------- | ---------------------------- |
-| `landing-copy.md`   | Hero, problem, how-it-works, features, FAQ, footer                      | Marketing site (zhi.dev)    |
-| `social-bio.md`     | One-liners for GitHub / X / LinkedIn / npm / dev.to                    | Social media                 |
-| `use-cases.md`      | 8 concrete user stories (Sarah, Alex, Mei, Jordan, …)                   | Sales, blog posts, README    |
-| `repo-metadata.md`  | Checklist of "small forgotten details": description, topics, releases  | Maintainer / release manager |
-| `../BUSINESS.md`    | Positioning, ICP, pricing, competitive landscape, value prop canvas   | Strategy / GTM               |
+| File               | Purpose                                                               | Audience                     |
+| ------------------ | --------------------------------------------------------------------- | ---------------------------- |
+| `landing-copy.md`  | Hero, problem, how-it-works, features, FAQ, footer                    | Marketing site (zhi.dev)     |
+| `social-bio.md`    | One-liners for GitHub / X / LinkedIn / npm / dev.to                   | Social media                 |
+| `use-cases.md`     | 8 concrete user stories (Sarah, Alex, Mei, Jordan, …)                 | Sales, blog posts, README    |
+| `repo-metadata.md` | Checklist of "small forgotten details": description, topics, releases | Maintainer / release manager |
+| `../BUSINESS.md`   | Positioning, ICP, pricing, competitive landscape, value prop canvas   | Strategy / GTM               |
 
 ## Style
 
 - **Bilingual**: English primary, Indonesian secondary.
 - **Tone**: technical-but-human, no marketing fluff.
 - **Numbers**: always concrete (`15 critics`, `max 3 retries`, `Bun ≥ 1.4.0`).
-- **No fake case studies**: every use case is a *pattern*, not a fake testimonial.
+- **No fake case studies**: every use case is a _pattern_, not a fake testimonial.
 - **YAGNI**: don't write a "Team" pricing tier if it doesn't exist yet. Mark it `(planned)`.
 
 ## When to update

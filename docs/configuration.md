@@ -63,13 +63,13 @@ export interface ZhiConfig {
 
 ## Environment variables
 
-| Var              | Used by         | Required                  | Notes                                                |
-| ---------------- | --------------- | ------------------------- | ---------------------------------------------------- |
-| `NINAROUTER_KEY` | model/router    | yes (when using 9router)  | 9router API key (cookie-auth at the proxy, not Bearer). |
-| `OMP_*`          | model/router    | optional                  | when routing to OMP.                                 |
-| `GITHUB_TOKEN`   | tools/git (gh)  | yes (when opening PRs)    | gh token with repo scope.                            |
-| `ZHI_CONFIG`     | cli             | optional                  | path to `zhi.config.ts` (default: cwd).              |
-| `ZHI_LOG`        | observability   | optional                  | `silent | info | debug` (default `info`).            |
+| Var              | Used by        | Required                 | Notes                                                   |
+| ---------------- | -------------- | ------------------------ | ------------------------------------------------------- |
+| `NINAROUTER_KEY` | model/router   | yes (when using 9router) | 9router API key (cookie-auth at the proxy, not Bearer). |
+| `OMP_*`          | model/router   | optional                 | when routing to OMP.                                    |
+| `GITHUB_TOKEN`   | tools/git (gh) | yes (when opening PRs)   | gh token with repo scope.                               |
+| `ZHI_CONFIG`     | cli            | optional                 | path to `zhi.config.ts` (default: cwd).                 |
+| `ZHI_LOG`        | observability  | optional                 | `silent                                                 | info | debug`(default`info`). |
 
 **Never hardcode secrets** in `zhi.config.ts` — read them from env. See `security.md`.
 
@@ -84,15 +84,15 @@ zhi --version
 
 `run` flags:
 
-| Flag              | Default                     | Notes                                  |
-| ----------------- | --------------------------- | -------------------------------------- |
-| `--repo <path>`   | cwd                         | target repo.                           |
-| `--base <branch>` | config.git.baseBranch       | base branch.                           |
-| `--budget <n>`    | config.budget.defaultTokens | token budget.                          |
-| `--tier <heavy|light|micro>` | config.model.defaultTier | override routing.             |
-| `--dry-run`       | false                       | plan only, no execute/commit/PR.       |
-| `--no-pr`         | false                       | stop at COMMIT, don't open a PR.       |
-| `--config <path>` | `ZHI_CONFIG`/cwd            | config path.                           |
+| Flag              | Default                     | Notes                            |
+| ----------------- | --------------------------- | -------------------------------- |
+| `--repo <path>`   | cwd                         | target repo.                     |
+| `--base <branch>` | config.git.baseBranch       | base branch.                     |
+| `--budget <n>`    | config.budget.defaultTokens | token budget.                    |
+| `--tier <heavy    | light                       | micro>`                          | config.model.defaultTier | override routing. |
+| `--dry-run`       | false                       | plan only, no execute/commit/PR. |
+| `--no-pr`         | false                       | stop at COMMIT, don't open a PR. |
+| `--config <path>` | `ZHI_CONFIG`/cwd            | config path.                     |
 
 Example:
 

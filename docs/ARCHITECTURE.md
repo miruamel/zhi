@@ -95,18 +95,18 @@ A TS-only fallback parser lives in `engine/stream/parseSseTs.ts` and is auto-sel
 
 ## 6. Module responsibilities
 
-| Module     | Path                  | Owns                                                                 |
-| ---------- | --------------------- | -------------------------------------------------------------------- |
-| loop       | `engine/loop/`        | Conductor state machine, gate, observability metrics, recover wiring |
-| orch       | `engine/orch/`        | Goal parser, DAG builder, cycle detect, token allocator, scheduler   |
-| build      | `engine/build/`       | Multi-file generator, inter-file dep mapper, self-verify, context    |
-| critic     | `engine/critic/`      | 15 critics, semantic cache, meta-aggregator Pareto                   |
-| eval       | `engine/eval/`        | Sandbox, test, SAST/secret, perf, compliance, quality gate           |
-| resil      | `engine/resil/`       | Circuit breaker, retry budget, DLQ, recovery                         |
-| knowledge  | `engine/knowledge/`   | Vector store, git-native index, ledger, KB                          |
-| model      | `engine/model/`       | LLM router (9router/OMP/local), Zig stream parse, context            |
-| native     | `native/`             | Zig→WASM hot path: stream parse, diff, embed                         |
-| src        | `src/`                | `cli.ts` entry + `tui/` ink viewer                                   |
+| Module    | Path                | Owns                                                                 |
+| --------- | ------------------- | -------------------------------------------------------------------- |
+| loop      | `engine/loop/`      | Conductor state machine, gate, observability metrics, recover wiring |
+| orch      | `engine/orch/`      | Goal parser, DAG builder, cycle detect, token allocator, scheduler   |
+| build     | `engine/build/`     | Multi-file generator, inter-file dep mapper, self-verify, context    |
+| critic    | `engine/critic/`    | 15 critics, semantic cache, meta-aggregator Pareto                   |
+| eval      | `engine/eval/`      | Sandbox, test, SAST/secret, perf, compliance, quality gate           |
+| resil     | `engine/resil/`     | Circuit breaker, retry budget, DLQ, recovery                         |
+| knowledge | `engine/knowledge/` | Vector store, git-native index, ledger, KB                           |
+| model     | `engine/model/`     | LLM router (9router/OMP/local), Zig stream parse, context            |
+| native    | `native/`           | Zig→WASM hot path: stream parse, diff, embed                         |
+| src       | `src/`              | `cli.ts` entry + `tui/` ink viewer                                   |
 
 ## 7. State machine
 
