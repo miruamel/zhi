@@ -22,10 +22,9 @@ Zhi ships in phases. Every release raises maturity per `AGENTS.md` §Maturity. E
 ## v0.2.0 — Experimental (depth)
 
 - `orch/scheduler.ts` parallel across steps — **DEFERRED** (see v0.2.0 notes): `buildDag` only produces linear chains, so there are no parallel steps; no conflict resolver exists yet (the roadmap incorrectly said "already there").
-- The remaining 8 critics promoted from stub → concrete, in stages (Architecture, Doc, DevOps, Privacy, DX, Accessibility, Maintainability, Legal).
+- ~~The remaining 8 critics promoted from stub → concrete, in stages (Architecture, Doc, DevOps, Privacy, DX, Accessibility, Maintainability, Legal).~~ **DONE** — all 13 critics are concrete as of v0.1.2 (see v0.1.0 scope above).
 - `eval/sandbox.ts` container (for untrusted code).
 - `build/sanitize.ts` (AST/PII/XSS) — when Zhi takes web input.
-- ~~The remaining 8 critics promoted from stub → concrete, in stages (Architecture, Doc, DevOps, Privacy, DX, Accessibility, Maintainability, Legal).~~ **DONE** — all 13 critics are concrete as of v0.1.2 (see v0.1.0 scope above).
 
 ### v0.2.0 notes
 

@@ -96,7 +96,7 @@ flowchart TD
 
 ## Status
 
-**Prototype implemented (experimental).** Most engine modules exist with green tests (`bun test` 255 pass). `engine/orch/` (planner: `parseGoal`/`buildDag`/`allocate`/`schedule`) and `engine/loop/` (conductor state machine) are real; `generate`/`verify`/`compress` (`engine/build`) are real; `ISOLATE`/`PR_OPEN`/`CI_WATCH` are wired via an optional git/gh adapter (`engine/loop/wiring/git.ts`, active when `ZHI_AUTO_PR=1`) — see ADR-005. Offline mode (default) without `ciWatch` → CI is assumed green (safe for test/smoke).
+**Prototype implemented (experimental).** Most engine modules exist with green tests (`bun test` 393 pass). `engine/orch/` (planner: `parseGoal`/`buildDag`/`allocate`/`schedule`) and `engine/loop/` (conductor state machine) are real; `generate`/`verify`/`compress` (`engine/build`) are real; `ISOLATE`/`PR_OPEN`/`CI_WATCH` are wired via an optional git/gh adapter (`engine/loop/wiring/git.ts`, active when `ZHI_AUTO_PR=1`) — see ADR-005. Offline mode (default) without `ciWatch` → CI is assumed green (safe for test/smoke).
 
 **Gate status (latest run):**
 
@@ -105,7 +105,7 @@ flowchart TD
 | typecheck    | ✅ 0 errors                                            |
 | lint         | ✅ 0 errors (131 JSDoc warnings = baseline)            |
 | format:check | ✅ clean                                               |
-| test         | ✅ 255 pass / 0 fail                                   |
+| test         | ✅ 393 pass / 0 fail                                   |
 | arch:check   | ✅ 0 circular / 0 deep-relative / 0 illegal layer edge |
 
 ---
