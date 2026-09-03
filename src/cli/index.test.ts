@@ -2,7 +2,7 @@
  * @brief Integration: cli boot main() — full loop run dari argv. @since 0.1.0
  */
 import { describe, expect, it } from 'bun:test';
-import type { Critique } from '../../../engine/critic/aggregate';
+import type { Critique } from '../../engine/critic/aggregate';
 import { main } from './index';
 
 describe('cli boot', () => {
