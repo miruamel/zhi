@@ -1,89 +1,22 @@
 /**
- * @brief Lightweight syntax tokenizer + ANSI highlighter for code panes.
+ * @brief Language-aware tokenizers: JS/TS, JSON, SQL, Bash, Markdown, generic.
  *
- * Supports ts, tsx, js, jsx, json, md, bash, sql. Token types are coarse
- * (keyword / string / number / comment / operator / punctuation /
- * identifier / whitespace / other) which is enough to colorize a TUI pane
- * without pulling in a full parser.
- *
+ * Split from syntax.ts (590 SLOC) so each file stays under the 200 SLOC ceiling.
  * @since 0.2.0
  */
+import {
+  PUNCT_CHARS,
+  OPERATOR_CHARS,
+  TS_KEYWORDS,
+  SQL_KEYWORDS,
+  BASH_KEYWORDS,
+  type SyntaxLang,
+  type Token,
+  type TokenType,
+} from './tokens.ts';
 
-const ANSI_RESET = '\x1b[0m';
-
-/** @brief Color palette mapped to token types (ink color names). */
-const TOKEN_COLOR: Record<TokenType, string> = {
-  keyword: 'magenta',
-  string: 'green',
-  number: 'yellow',
-  comment: 'gray',
-  operator: 'cyan',
-  punctuation: 'white',
-  identifier: 'white',
-  whitespace: '',
-  other: 'white',
-};
-
-export type TokenType =
-  | 'keyword'
-  | 'string'
-  | 'number'
-  | 'comment'
-  | 'operator'
-  | 'punctuation'
-  | 'identifier'
-  | 'whitespace'
-  | 'other';
-
-/** @brief A single lexical token produced by `tokenize`. */
-export interface Token {
-  type: TokenType;
-  value: string;
-}
-
-const TS_KEYWORDS = new Set([
-  'abstract', 'as', 'async', 'await', 'break', 'case', 'catch', 'class',
-  'const', 'continue', 'debugger', 'default', 'delete', 'do', 'else',
-  'enum', 'export', 'extends', 'false', 'finally', 'for', 'from',
-  'function', 'get', 'if', 'implements', 'import', 'in', 'instanceof',
-  'interface', 'let', 'new', 'null', 'of', 'private', 'protected',
-  'public', 'readonly', 'return', 'set', 'static', 'super', 'switch',
-  'this', 'throw', 'true', 'try', 'type', 'typeof', 'undefined', 'var',
-  'void', 'while', 'with', 'yield', 'satisfies', 'keyof', 'never',
-  'unknown', 'any',
-]);
-
-const SQL_KEYWORDS = new Set([
-  'SELECT', 'FROM', 'WHERE', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'SET',
-  'DELETE', 'CREATE', 'TABLE', 'DROP', 'ALTER', 'ADD', 'COLUMN', 'INDEX',
-  'JOIN', 'INNER', 'LEFT', 'RIGHT', 'FULL', 'OUTER', 'ON', 'AS', 'AND',
-  'OR', 'NOT', 'NULL', 'IS', 'IN', 'BETWEEN', 'LIKE', 'GROUP', 'BY',
-  'ORDER', 'HAVING', 'LIMIT', 'OFFSET', 'UNION', 'ALL', 'DISTINCT',
-  'PRIMARY', 'KEY', 'FOREIGN', 'REFERENCES', 'DEFAULT', 'CHECK',
-  'BEGIN', 'COMMIT', 'ROLLBACK', 'TRANSACTION', 'VIEW', 'CASE', 'WHEN',
-  'THEN', 'ELSE', 'END',
-]);
-
-const BASH_KEYWORDS = new Set([
-  'if', 'then', 'else', 'elif', 'fi', 'for', 'while', 'do', 'done',
-  'case', 'esac', 'in', 'function', 'return', 'export', 'local',
-  'readonly', 'declare', 'unset', 'source', 'true', 'false',
-]);
-
-const OPERATOR_CHARS = new Set([
-  '+', '-', '*', '/', '%', '=', '!', '<', '>', '&', '|', '^', '~',
-  '?', ':',
-]);
-
-const PUNCT_CHARS = new Set([
-  '{', '}', '(', ')', '[', ']', ',', ';', '.',
-]);
-
-/** @brief Languages understood by `tokenize` / `highlight`. */
-export type SyntaxLang =
-  | 'ts' | 'tsx' | 'js' | 'jsx' | 'json' | 'md' | 'bash' | 'sql';
-
-function normalizeLang(lang?: string): SyntaxLang | null {
+/** @brief Map a free-form language hint to a known SyntaxLang. */
+export function normalizeLang(lang?: string): SyntaxLang | null {
   if (!lang) return null;
   const lower = lang.toLowerCase();
   if (lower === 'ts' || lower === 'typescript') return 'ts';
@@ -115,17 +48,16 @@ export function tokenize(code: string, lang?: string): Token[] {
   return tokenizeGeneric(code);
 }
 
-
 function pushWs(tokens: Token[], text: string): void {
   if (text.length === 0) return;
   tokens.push({ type: 'whitespace', value: text });
 }
 
- function readWhile(code: string, i: number, pred: (ch: string) => boolean): { text: string; next: number } {
-   let j = i;
-   while (j < code.length && pred(code[j]!)) j++;
-   return { text: code.slice(i, j), next: j };
- }
+function readWhile(code: string, i: number, pred: (ch: string) => boolean): { text: string; next: number } {
+  let j = i;
+  while (j < code.length && pred(code[j]!)) j++;
+  return { text: code.slice(i, j), next: j };
+}
 
 function isIdentStart(ch: string): boolean {
   return /[A-Za-z_$]/.test(ch);
@@ -528,64 +460,4 @@ function tokenizeGeneric(code: string): Token[] {
     i++;
   }
   return tokens;
-}
-
-function ansiOpen(color: string): string {
-  if (!color) return '';
-  const map: Record<string, number> = {
-    black: 30, red: 31, green: 32, yellow: 33,
-    blue: 34, magenta: 35, cyan: 36, white: 37, gray: 90,
-  };
-  const code = map[color] ?? 37;
-  return `\x1b[${code}m`;
-}
-
-/**
- * @brief Highlight source code into a string with ANSI color escapes.
- * @param code Raw source.
- * @param lang Optional language hint.
- * @return Colored string (with embedded reset codes). Pass-through
- *         safe to feed into Ink/terminal renderers.
- */
-export function highlight(code: string, lang?: string): string {
-  const tokens = tokenize(code, lang);
-  let out = '';
-  for (const tok of tokens) {
-    const color = TOKEN_COLOR[tok.type];
-    if (!color) {
-      out += tok.value;
-      continue;
-    }
-    out += ansiOpen(color) + tok.value + ANSI_RESET;
-  }
-  return out;
-}
-
-/**
- * @brief Count the visible (cell) width of a string, stripping ANSI escapes.
- *
- * Counts UTF-16 code units minus ANSI CSI sequences, treating most
- * characters as one cell. Good enough for terminal pane alignment.
- *
- * @param s String possibly containing ANSI escapes.
- * @return Approximate visible width.
- */
-export function visibleLength(s: string): number {
-  let n = 0;
-  let i = 0;
-  while (i < s.length) {
-    if (s.charCodeAt(i) === 27 && s[i + 1] === '[') {
-      // Skip CSI sequence: bytes in 0x30..0x3F, then a final byte in 0x40..0x7E.
-      let j = i + 2;
-      while (j < s.length && s.charCodeAt(j) <= 0x3f) j++;
-      if (j < s.length && s.charCodeAt(j) >= 0x40 && s.charCodeAt(j) <= 0x7e) {
-        i = j + 1;
-        continue;
-      }
-      break;
-    }
-    n++;
-    i++;
-  }
-  return n;
 }

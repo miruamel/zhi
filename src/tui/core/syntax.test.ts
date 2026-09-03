@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, test } from 'bun:test';
-import { tokenize, highlight, visibleLength } from './syntax.ts';
+import { tokenize, highlight, visibleLength } from './syntax/index.ts';
 
 describe('tokenize (ts/js)', () => {
   test('classifies TS keywords', () => {
