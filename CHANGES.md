@@ -75,6 +75,9 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - **Merged `test/gen-stream-coverage`** — 1 unique commit: 8-line test addition for `--stream` CLI branch fallback via `generateStream`. Branch deleted after merge (local + remote).
 - **Deleted stale `feat/tui-ink` branch** — divergent pre-merge TUI work (816 insertions / 3633 deletions vs main). Canonical TUI already in `origin/main`; this branch was superseded. Deleted local + remote.
 
+- **Removed dead `vitest` dependency, config, and setup** — `vitest.config.ts`, `tests/setup.ts`, and the `vitest` devDependency are orphaned from the pre-rename era (ADR-012). All tests use `bun:test`; no script, CI workflow, or source file references vitest. Removed. `tests/` directory is now empty and deleted.
+- **Roadmap critic status correction** — `docs/guides/roadmap.md` claimed `critic/*` had "8 stubs"; all 13 critics are concrete implementations (accessibility, architecture, compose, doc, hygiene, imports, maintainability, perf, privacy, security, sloc, style, todo). Updated v0.1.0 scope and struck through the v0.2.0 "remaining 8 critics" bullet with a DONE marker.
+
 ### Test
 
 - **TUI test coverage for 13 files from PR #45** — 14 test files (105 tests, 210 expect calls) covering `src/tui/core/{colors,format,icons,keymap,state}.ts` and `src/tui/panes/{bottom/{help,log},middle/{critics,eval,pr},top/{dag,detail,header}}.tsx`. Test convention follows repo pattern: `bun:test`, co-located `test/` directory at parent level (`src/tui/test/`, `src/tui/panes/test/`). The `dirHasTests` critic check picks these up for sibling coverage. Repo-wide critic score restored to 1.0 with 0 findings (was ~0.74 from 13 uncovered TUI files). Test count: 255 → 356. Initially written as a single 401-SLOC monolith (`panes.test.ts`); split into 8 atomic files (one per pane, max 47 SLOC) to satisfy the architecture guard SLOC cap (≤150).
