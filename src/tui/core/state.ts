@@ -38,7 +38,14 @@ export interface DagStep {
   tokensUsed?: number;
   detail?: string;
 }
-
+/** @brief One timeline event (stage start/finish/error). @since 0.1.1 */
+export interface TimelineEntry {
+  ts: number;
+  stage: string;
+  event: string;
+  ms?: number;
+  msg?: string;
+}
 /** @brief Log entry from LoopLogger. @since 0.1.0 */
 export interface LogEntry {
   ts: number;
@@ -50,7 +57,7 @@ export interface LogEntry {
   msg: string;
 }
 
-/** @brief Active PR / CI state. @since 0.1.0 */
+/** @brief Pull request and CI status for the TUI. @since 0.1.0 */
 export interface PrCiState {
   prUrl?: string;
   prNumber?: number;
@@ -62,6 +69,7 @@ export interface PrCiState {
 export interface AppState {
   loop: string;
   goal: string;
+  timeline: TimelineEntry[];
   steps: DagStep[];
   currentStepId?: string;
   critics: CriticLine[];
@@ -98,6 +106,7 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     },
     prCi: { ciStatus: 'unknown' },
     log: [],
+    timeline: [],
     metrics: { stages: 0, errors: 0, totalMs: 0, recoverAttempts: 0 },
     tokensUsed: 0,
     tokensBudget,

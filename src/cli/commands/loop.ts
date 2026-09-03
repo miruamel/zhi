@@ -17,8 +17,7 @@ import { autonomousDeps } from '../autonomous-deps';
 import { offlineDeps } from '../offline-deps';
 import { parseArgs } from '../parse-args';
 import { mountTui } from '../../tui/render';
-import type { AppState, LogEntry } from '../../tui/core/state';
-
+import type { AppState, LogEntry, TimelineEntry } from '../../tui/core/state';
 /** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.1 */
 export function toPatch(
   ctx: LoopContext,
@@ -28,6 +27,7 @@ export function toPatch(
   logEntries: LogEntry[] = [],
   totalMs = 0,
   errors = 0,
+  timeline: TimelineEntry[] = [],
 ): Partial<AppState> {
   return {
     loop,
@@ -62,6 +62,7 @@ export function toPatch(
         loop === LoopState.CI_WATCH ? 'pending' : loop === LoopState.DONE ? 'green' : undefined,
     },
     log: logEntries,
+    timeline,
     finished: loop === LoopState.DONE,
     aborted,
   };
@@ -91,6 +92,7 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
   const metrics = new LoopMetrics();
   const logger = new LoopLogger();
   const logEntries: LogEntry[] = [];
+  const timeline: TimelineEntry[] = [];
   const holder = { push: null as ((p: Partial<AppState>) => void) | null };
   const driver = new LoopDriver({
     onTransition: (_from, _ev, to) => {
@@ -105,7 +107,16 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
         msg: `${String(_from)} --${String(_ev)}--> ${String(to)}`,
       });
       const s = metrics.summary();
-      holder.push?.(toPatch(ctx, metrics, to, !!ctx.error, logEntries, s.totalMs, s.errors));
+      timeline.push({
+        ts: Date.now(),
+        stage: String(to),
+        event: String(_ev),
+        ms: s.totalMs,
+        msg: `${String(_from)} --${String(_ev)}--> ${String(to)}`,
+      });
+      holder.push?.(
+        toPatch(ctx, metrics, to, !!ctx.error, logEntries, s.totalMs, s.errors, timeline),
+      );
     },
   });
   const handlers = buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics);

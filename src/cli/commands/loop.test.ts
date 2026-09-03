@@ -5,7 +5,7 @@ import { LoopState } from '../../../engine/loop/states';
 import { LoopMetrics } from '../../../engine/loop/observability/metrics';
 import type { LoopContext } from '../../../engine/loop/wiring/context';
 import { toPatch } from './loop';
-import type { AppState, LogEntry } from '../../tui/core/state';
+import type { AppState, LogEntry, TimelineEntry } from '../../tui/core/state';
 /** @brief Cast Partial<AppState> to full for assertions — toPatch returns partial patches. */
 const full = (p: Partial<AppState>): AppState => p as AppState;
 const ctx = (over: Partial<LoopContext> = {}): LoopContext => ({
@@ -71,5 +71,29 @@ describe('toPatch', () => {
     expect(p.aborted).toBe(true);
     expect(p.metrics.errors).toBe(1);
     expect(p.log).toHaveLength(2);
+  });
+});
+
+const timeline: TimelineEntry[] = [
+  { ts: 100, stage: 'PLAN', event: 'start' },
+  { ts: 200, stage: 'PLAN', event: 'finish', ms: 100 },
+  { ts: 300, stage: 'EXECUTE', event: 'error', msg: 'boom' },
+];
+
+describe('toPatch timeline', () => {
+  it('passes through timeline entries', () => {
+    const m = new LoopMetrics();
+    const p = full(toPatch(ctx(), m, LoopState.PLAN, false, entries, 0, 0, timeline));
+    expect(p.timeline).toHaveLength(3);
+    expect(p.timeline[0].stage).toBe('PLAN');
+    expect(p.timeline[0].event).toBe('start');
+    expect(p.timeline[2].event).toBe('error');
+    expect(p.timeline[2].msg).toBe('boom');
+  });
+
+  it('defaults to empty timeline', () => {
+    const m = new LoopMetrics();
+    const p = full(toPatch(ctx(), m, LoopState.PLAN, false));
+    expect(p.timeline).toHaveLength(0);
   });
 });
