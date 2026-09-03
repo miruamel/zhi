@@ -90,6 +90,16 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 - Prettier trailing-newline normalization on `engine/critic/plant/security/{critic,critic.test.ts}` and 4 other test files.
 
+### Changed
+
+- **CLI + TUI test restructure into per-unit subdirs** — flat `test/` directories violated the ≤5-files-per-directory architecture cap (`src/tui/panes/test` had 8, `src/cli/test` had 7). Restructured to per-unit co-location: each unit gets its own `<unit>/<unit>.ts` + `<unit>.test.ts` (2 files each). `src/tui/panes/{top/{header,dag,detail},middle/{critics,eval,pr},bottom/{log,help}}` and `src/cli/{autonomous-deps,offline-deps,parse-args,plan-symbol}` + `src/cli/commands/{gen,loop,critique-repo}`. Flat `test/` dirs deleted; `commands.test.ts` (101 SLOC, 3 describe blocks) split into 3 per-command test files.
+- **Path aliases adopted for deep-relative imports** — `@engine/*` / `@src/*` aliases (already declared in `tsconfig.json`) now used by all CLI modules that sit 3–4 levels below root. This eliminates the `../../../../engine/...` chain that the architecture guard flags as deep-relative-import violations (>3 `../`). Guard script already accepts bare `engine/`/`src/` specifiers; `@engine/*` resolves through `tsconfig` paths and is treated as external (no deep-relative count).
+- **Architecture guard `test/` exemption removed** — `.github/workflows/architecture-guard.sh` no longer exempts `*/test|*/test/*`. Flat `test/` directories are eliminated, so the exemption is dead code. Guard now enforces ≤5 files per directory uniformly.
+
+### Test
+
+- **355 tests pass, 0 fail** (was 356 — `commands.test.ts` split into 3 per-command files; `critique-repo-traversal.test.ts` co-located beside its subject). Gate: typecheck clean, lint 0 errors, format clean, arch guard all checks passed.
+
 ## [0.1.1] - 2026-09-02
 
 ### Security

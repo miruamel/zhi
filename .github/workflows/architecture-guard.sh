@@ -8,7 +8,7 @@ set -euo pipefail
 
 ROOT="${1:-.}"
 
-echo "[guard] files-per-directory (<=5; root + docs/design + docs/adr + audit-log/entries + test/ exempt)"
+echo "[guard] files-per-directory (<=5; root + docs/design + docs/adr + audit-log/entries exempt)"
 
 violations=0
 while IFS= read -r d; do
@@ -17,7 +17,7 @@ while IFS= read -r d; do
   #   files-per-dir source cap per mandate §6.2; they live under test/ by convention).
   # Match top dir OR any subpath under it ("./foo" or "./foo/bar/baz").
   case "$d" in
-    "$ROOT"|*/test|*/test/*|"./docs/design"|"./docs/design"/*|"./docs/adr"|"./docs/adr"/*|"./audit-log/entries"|"./audit-log/entries"/*|"./.git"|"./.git"/*|"./node_modules"|"./node_modules"/*|"./.github"|"./.github"/*|"./native/out"|"./native/out"/*|"./.husky"|"./.husky"/*|"./assets"|"./assets"/*|"./dist"|"./dist"/*)
+    "$ROOT"|"./docs/design"|"./docs/design"/*|"./docs/adr"|"./docs/adr"/*|"./audit-log/entries"|"./audit-log/entries"/*|"./.git"|"./.git"/*|"./node_modules"|"./node_modules"/*|"./.github"|"./.github"/*|"./native/out"|"./native/out"/*|"./.husky"|"./.husky"/*|"./assets"|"./assets"/*|"./dist"|"./dist"/*)
       continue
       ;;
     esac

@@ -7,9 +7,9 @@
  * @since 0.1.0
  */
 import type { LoopContext } from '../../engine/loop/wiring/context';
-import { genCommand } from './commands/gen';
-import { critiqueRepoCommand } from './commands/critique-repo';
-import { loopCommand, loopCommandTui } from './commands/loop';
+import { genCommand } from './commands/gen/gen';
+import { critiqueRepoCommand } from './commands/critique-repo/critique-repo';
+import { loopCommand, loopCommandTui } from './commands/loop/loop';
 
 /** @brief Jalankan CLI argv: TTY default → TUI, non-TTY → stdout. @param {string[]} argv @return {Promise<LoopContext>} */
 export async function main(argv: string[]): Promise<LoopContext> {
