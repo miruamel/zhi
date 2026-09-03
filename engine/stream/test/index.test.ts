@@ -25,5 +25,4 @@ describe('parseStream write-barrier detection', () => {
     expect(result.length).toBeGreaterThan(0);
     resetWasm();
   });
-
 });
