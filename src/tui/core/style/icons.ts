@@ -18,6 +18,8 @@ export const glyphs = {
   warn: '⚠',
   info: 'ℹ',
   bulb: '💡',
+  code: '</>',
+  gear: '⚙',
 } as const;
 
 export type GlyphKey = keyof typeof glyphs;

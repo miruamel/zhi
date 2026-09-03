@@ -10,4 +10,6 @@ export { Eval } from './middle/eval';
 export { Pr } from './middle/pr';
 export { Knowledge } from './bottom/knowledge';
 export { Log } from './bottom/log';
+export { CodeViewer } from './bottom/code';
 export { Help } from './bottom/help';
+export { Config } from './bottom/config';

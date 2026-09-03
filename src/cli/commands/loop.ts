@@ -18,7 +18,9 @@ import { offlineDeps } from '../offline-deps';
 import { parseArgs } from '../parse-args';
 import { mountTui } from '../../tui/render';
 import type { AppState, LogEntry, TimelineEntry } from '../../tui/core/state';
-/** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.1 */
+/** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.1
+ * @param {number} [errors=0] - hitung error terakumulasi.
+ */
 export function toPatch(
   ctx: LoopContext,
   metrics: LoopMetrics,
@@ -30,6 +32,8 @@ export function toPatch(
   timeline: TimelineEntry[] = [],
   stageRecords: { stage: string; ms: number; ok: boolean; error?: string }[] = [],
   facts: { key: string; value: string; tags: string[] }[] = [],
+  code?: string,
+  config?: { threshold: number; tokensBudget: number; offline: boolean },
 ): Partial<AppState> {
   return {
     loop,
@@ -64,6 +68,8 @@ export function toPatch(
         loop === LoopState.CI_WATCH ? 'pending' : loop === LoopState.DONE ? 'green' : undefined,
     },
     log: logEntries,
+    code,
+    config,
     timeline,
     stageRecords,
     facts,
@@ -130,6 +136,8 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
           timeline,
           metrics.stages.map((r) => ({ stage: r.stage, ms: r.ms, ok: r.ok, error: r.error })),
           [],
+          ctx.code,
+          { threshold, tokensBudget: 100_000, offline: false },
         ),
       );
     },

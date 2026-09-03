@@ -88,6 +88,8 @@ export interface AppState {
     totalMs: number;
     recoverAttempts: number;
   };
+  code?: string;
+  config?: { threshold: number; tokensBudget: number; offline: boolean };
   stageRecords: { stage: string; ms: number; ok: boolean; error?: string }[];
   facts: { key: string; value: string; tags: string[] }[];
   tokensUsed: number;
@@ -113,11 +115,13 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
       weightedAvg: 0,
     },
     prCi: { ciStatus: 'unknown' },
+    metrics: { stages: 0, errors: 0, totalMs: 0, recoverAttempts: 0 },
     stageRecords: [],
     facts: [],
     log: [],
     timeline: [],
-    metrics: { stages: 0, errors: 0, totalMs: 0, recoverAttempts: 0 },
+    code: undefined,
+    config: undefined,
     tokensUsed: 0,
     tokensBudget,
     startedAt: Date.now(),

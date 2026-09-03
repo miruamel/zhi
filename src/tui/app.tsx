@@ -15,6 +15,8 @@ import {
   Knowledge,
   Pr as PrPane,
   Log,
+  CodeViewer,
+  Config,
   Help,
 } from './panes';
 import type { AppState } from './core/state';
@@ -126,6 +128,8 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
       </Box>
       <Box marginTop={1} gap={1}>
         <Knowledge state={state} />
+        <CodeViewer state={state} />
+        <Config state={state} />
       </Box>
       <Box marginTop={1} gap={1}>
         <Eval evalReport={state.eval} />
