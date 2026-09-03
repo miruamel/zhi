@@ -59,6 +59,27 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 - **`release.yml` OIDC migration** — workflow publish npm tidak lagi pakai `secrets.NPM_TOKEN` (long-lived secret, compromised 2026-09-03 di session). Migrasi ke OIDC federation (Trusted Publishing): `id-token: write` permission + `npm publish --provenance` short-lived token dari GitHub Actions → npmjs.com. Repo secret `NPM_TOKEN` sudah dihapus dari settings (`total_count: 0` confirmed via API). User tetap harus verify npmjs.com Trusted Publisher entry point ke `publish.yml` (bukan `release.yml`) di https://www.npmjs.com/package/@miruamel/zhi/access. Rotation `npm_5xKx…` di npmjs.com sekarang **less urgent** tapi tetap recommended (compromised secret hygiene). Tracked di #35.
 
+
+## [0.1.3] - 2026-09-03
+
+### Test
+
+- **Unit tests for pure modules in `engine/resil/` + `src/tui/core/`** — 5 new test files (41 tests, 86 expect calls):
+  - `engine/resil/test/recover.test.ts` (6 tests): `classifyError()` — budget/timeout/fatal/quota → abort+fatal, cycle/ambig/parse → replan, default → patch, null/undefined/empty, case-insensitivity.
+  - `engine/resil/test/breaker.test.ts` (6 tests): `CircuitBreaker` — window-full threshold crossing, sliding window semantics, reset, exactly-threshold (not open), all-success window.
+  - `engine/resil/test/retry.test.ts` (5 tests): `retryWithBudget` — first-attempt success, retry-then-succeed, budget exhaustion + DLQ, default maxAttempts=3, DLQ error stringification.
+  - `src/tui/core/test/format.test.ts` (29 tests): `formatMs`, `formatScore`, `formatTokens`, `formatPct`, `bar`, `formatTime`, `truncate`, `pad`.
+  - `src/tui/core/test/colors.test.ts` (2 tests): color token export + `ColorToken` type coverage.
+- Test files moved to `test/` subdirectories (`src/tui/core/test/`) to stay within the ≤5-files-per-directory architecture guard cap.
+
+### Style
+
+- Prettier formatting on all 5 new test files (CI `format:check` gate).
+
+### Note
+
+- Version bump 0.1.2 → 0.1.3 is **forced**, not semantic: npm refuses to publish over an already-published version. The 0.1.2 tag was force-pushed to `04449d1` but `npm publish` returned `E403 You cannot publish over the previously published versions: 0.1.2`. No behavior change vs 0.1.2.
+
 ## [Unreleased]
 
 ### Fixed
@@ -145,7 +166,8 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 First tagged baseline. See [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md) for the full 2026-08-29 → 2026-08-30 development log (15 entries; note: that history uses inconsistent version headers `[0.1.0]` duplicated and a non-monotonic `0.1.0..0.6.0` block — preserved as-is for authorial record).
 
-[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/miruamel/zhi/releases/tag/v0.1.3
 [0.1.2]: https://github.com/miruamel/zhi/releases/tag/v0.1.2
 [0.1.1]: https://github.com/miruamel/zhi/releases/tag/v0.1.1
 [0.1.0]: https://github.com/miruamel/zhi/releases/tag/v0.1.0
