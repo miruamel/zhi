@@ -77,7 +77,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 ### Test
 
-- **TUI test coverage for 13 files from PR #45** — 6 new test files (101 tests) covering `src/tui/core/{colors,format,icons,keymap,state}.ts` and `src/tui/panes/{bottom/{help,log},middle/{critics,eval,pr},top/{dag,detail,header}}.tsx`. Test convention follows repo pattern: `bun:test`, co-located `test/` directory at parent level (`src/tui/test/`, `src/tui/panes/test/`). The `dirHasTests` critic check picks these up for sibling coverage. Repo-wide critic score restored to 1.0 with 0 findings (was ~0.74 from 13 uncovered TUI files). Test count: 255 → 356.
+- **TUI test coverage for 13 files from PR #45** — 14 test files (105 tests, 210 expect calls) covering `src/tui/core/{colors,format,icons,keymap,state}.ts` and `src/tui/panes/{bottom/{help,log},middle/{critics,eval,pr},top/{dag,detail,header}}.tsx`. Test convention follows repo pattern: `bun:test`, co-located `test/` directory at parent level (`src/tui/test/`, `src/tui/panes/test/`). The `dirHasTests` critic check picks these up for sibling coverage. Repo-wide critic score restored to 1.0 with 0 findings (was ~0.74 from 13 uncovered TUI files). Test count: 255 → 356. Initially written as a single 401-SLOC monolith (`panes.test.ts`); split into 8 atomic files (one per pane, max 47 SLOC) to satisfy the architecture guard SLOC cap (≤150).
 
 ### Security
 
