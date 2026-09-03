@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96" role="img" aria-label="Zhi autonomous coding agent">
+  <title>Zhi — Autonomous Coding Agent</title>
+  <rect width="360" height="96" rx="14" fill="#0b0d12"/>
+  <g transform="translate(20,18)">
+    <g fill="none" stroke="#7cf3a4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 8 L34 56"/>
+      <path d="M34 8 L6 56"/>
+    </g>
+    <circle cx="44" cy="6" r="3" fill="#7cf3a4"/>
+  </g>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#e6edf3">
+    <text x="84" y="44" font-size="28" font-weight="700">Zhi</text>
+    <text x="84" y="68" font-size="13" fill="#9aa6b2">志 · autonomous coding agent</text>
+  </g>
+  <g transform="translate(284,30)" font-family="ui-monospace, monospace" font-size="10" fill="#7cf3a4">
+    <rect x="0" y="0" width="56" height="20" rx="4" fill="none" stroke="#7cf3a4"/>
+    <text x="6" y="14">v0.1.1</text>
+  </g>
+</svg>

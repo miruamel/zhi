@@ -1,8 +1,11 @@
 # tui.md — Terminal UI Specification
 
-`src/tui/index.tsx` adalah viewer **tipis** di atas `loop`. Tidak mengambil keputusan — hanya visualisasi state machine + hasil tiap modul. Dibangun dengan `ink` (React-for-terminal).
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
 
-## Layout (pane)
+`src/tui/index.tsx` is a **thin** viewer on top of `loop`. It does not make decisions — only visualises the state machine + the result of each module. Built with `ink` (React-for-terminal).
+
+## Layout (panes)
 
 ```
 ┌─ DAG ───────────────┬─ Step Detail ────────────┐
@@ -23,38 +26,39 @@
 └───────────────────────────────────────────────┘
 ```
 
-## Komponen ink
+## ink components
 
-- `<DagView steps={steps} />` — daftar step + status ikon (● running, ✓ done, ○ pending, ✗ failed).
-- `<StepDetail step={current} />` — detail step aktif + pemakaian token.
-- `<CriticPanel scores={scores} aggregate={agg} />` — 12 bar + avg + PASS/FAIL.
-- `<EvalPanel report={evalReport} />` — per-tahap eval.
-- `<PrCiBar pr={prUrl} ci={ciStatus} />` — status PR + CI.
-- `<LogView entries={ledger} />` — stream ledger (append-only).
+- `<DagView steps={steps} />` — list of steps + status icons (● running, ✓ done, ○ pending, ✗ failed).
+- `<StepDetail step={current} />` — active step detail + token usage.
+- `<CriticPanel scores={scores} aggregate={agg} />` — 15 bars + avg + PASS/FAIL.
+- `<EvalPanel report={evalReport} />` — per-stage eval.
+- `<PrCiBar pr={prUrl} ci={ciStatus} />` — PR + CI status.
+- `<LogView entries={ledger} />` — ledger stream (append-only).
+- `<SplashBanner text={banner} />` — boot banner (`assets/banner.txt`).
 
-State di-pass dari `loop` via callback `onState(state: LoopState, payload)`. TUI tidak mutate state loop.
+State is passed from `loop` via the `onState(state: LoopState, payload)` callback. The TUI does not mutate loop state.
 
 ## Keybindings
 
-| Key      | Aksi                                                               |
-| -------- | ------------------------------------------------------------------ |
-| `q`      | quit (loop tetap jalan di background; konfirmasi bila belum DONE). |
-| `space`  | pause/resume render (bukan pause loop).                            |
-| `l`      | toggle full Log view.                                              |
-| `c`      | toggle Critics detail.                                             |
-| `p`      | toggle PR/CI detail.                                               |
-| `ctrl+c` | abort loop (trigger `resil` abort → DONE partial + laporan).       |
+| Key      | Action                                                                |
+| -------- | --------------------------------------------------------------------- |
+| `q`      | quit (loop keeps running in the background; confirm if not DONE).    |
+| `space`  | pause / resume render (not pause loop).                               |
+| `l`      | toggle full Log view.                                                 |
+| `c`      | toggle Critics detail.                                                |
+| `p`      | toggle PR / CI detail.                                                |
+| `ctrl+c` | abort loop (trigger `resil` abort → DONE partial + report).           |
 
 ## Behavior
 
-- TUI render deklaratif; setiap transisi state → re-render pane terkait.
-- Bila `DONE(partial)`, TUI tampilkan banner kuning + `ledgerRef` untuk `zhi resume`.
-- Bila `DONE`, TUI tampilkan `prUrl` + ringkasan token.
-- Log di-feed dari `knowledge/store.ts` (ledger) — TUI hanya subscribe.
+- TUI renders declaratively; every state transition → re-render the affected pane.
+- On `DONE(partial)`, the TUI shows a yellow banner + `ledgerRef` for `zhi resume`.
+- On `DONE`, the TUI shows `prUrl` + token summary.
+- The Log is fed from `knowledge/store.ts` (ledger) — the TUI only subscribes.
 
 ## v1
 
-Konkret: DAG + Step + Critics + Eval + PR/CI + Log, keybindings di atas. Tidak ada input field interaktif (goal diberikan via CLI, bukan di TUI). Interaktif (edit goal mid-loop) belakangan.
+Concrete: DAG + Step + Critics + Eval + PR/CI + Log + Splash, keybindings above. No interactive input field (goal is given via CLI, not in the TUI). Interactive input (edit goal mid-loop) is later.
 
 ## Cross-link
 

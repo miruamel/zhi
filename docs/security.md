@@ -1,44 +1,47 @@
 # security.md — Trust Boundaries & Hardening
 
-Zhi mengeksekusi kode yang dihasilkan model dan memanggil API eksternal. Keamanan bukan fitur tambahan — bagian dari gate.
+<p align="center">  <img src="../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
+Zhi executes model-generated code and calls external APIs. Security is not an add-on — it is part of the gate.
 
 ## Trust boundaries
 
-| Batas                    | Trust               | Perlakuan                                                   |
-| ------------------------ | ------------------- | ----------------------------------------------------------- |
-| Goal dari CLI/user       | trusted             | sanitasi ringan (whitespace, length). Bukan untrusted web.  |
-| Model output (tool call) | **untrusted**       | validasi schema; path dibatasi ke repo; argumen divalidasi. |
-| Generated code           | semi-trusted        | jalan di worktree; `eval/security` scan sebelum commit.     |
-| 9router / OMP API        | trusted-but-limited | rate-limit via `orch/budget`; fallback via `resil/breaker`. |
-| `gh` (PR/CI)             | trusted             | token scoped; hanya operasi repo target.                    |
+| Boundary                  | Trust             | Treatment                                                    |
+| ------------------------- | ----------------- | ------------------------------------------------------------ |
+| Goal from CLI / user      | trusted           | light sanitisation (whitespace, length). Not untrusted web. |
+| Model output (tool call)  | **untrusted**     | schema validation; paths constrained to repo; args validated. |
+| Generated code            | semi-trusted      | runs in a worktree; `eval/security` scan before commit.      |
+| 9router / OMP API         | trusted-but-limited | rate limit via `orch/budget`; fallback via `resil/breaker`. |
+| `gh` (PR / CI)            | trusted           | scoped token; only operates on target repo.                  |
 
 ## Secret handling
 
-- `NINAROUTER_KEY`, `GITHUB_TOKEN` **hanya** dari env. Tidak pernah di-hardcode atau ditulis ke `zhi.config.ts` / repo.
-- `eval/security.ts` jalankan **secret detection** (regex + detector) pada `FileChange.after`. Bila terdeteksi → `gatePass=false` + auto-fail keras (seperti Security critic floor).
-- Ledger (`knowledge/store.ts`) **tidak** mencatat secret; `detail` di-redact.
-- `.env` di-`.gitignore`; `zhi.config.ts` tidak boleh berisi nilai secret.
+- `NINAROUTER_KEY`, `GITHUB_TOKEN` come **only** from env. Never hardcode or write them into `zhi.config.ts` / repo.
+- `eval/security.ts` runs **secret detection** (regex + detector) on `FileChange.after`. When a hit is found → `gatePass=false` + hard auto-fail (mirrors the Security critic floor).
+- The ledger (`knowledge/store.ts`) **never** records secrets; `detail` is redacted.
+- `.env` is in `.gitignore`; `zhi.config.ts` must not contain secret values.
 
 ## Prompt injection
 
-- Tool call dari model divalidasi terhadap schema tertutup (`ToolCall.name` harus ada di allowlist, `args` sesuai tipe).
-- Path file dibatasi ke dalam repo target (tidak boleh `../`, `/etc`, `~`). `build/generate` tolak path di luar worktree.
-- Tidak ada exec bebas; perintah shell (bila diperlukan) dari allowlist sempit (`build`, `test`, `lint`). Bukan `rm -rf`, bukan network egress tak-terkontrol.
+- Tool calls from the model are validated against a closed schema (`ToolCall.name` must be in an allowlist, `args` typed).
+- File paths are constrained to inside the target repo (no `../`, `/etc`, `~`). `build/generate` rejects paths outside the worktree.
+- No unrestricted exec; shell commands (when required) come from a narrow allowlist (`build`, `test`, `lint`). Not `rm -rf`, not uncontrolled network egress.
 
 ## Sandbox
 
-- **v1**: eksekusi di **git worktree lokal** terisolasi. Main repo aman (worktree terpisah).
-- **Later**: `eval/sandbox.ts` container (read-only FS + seccomp + network egress deny) untuk jalan kode tak-terpercaya (bila Zhi kelak terima input web/untrusted).
+- **v1**: execution happens in an isolated **local git worktree**. The main repo stays safe (separate worktree).
+- **Later**: `eval/sandbox.ts` container (read-only FS + seccomp + network egress deny) to run untrusted code (when Zhi eventually takes web / untrusted input).
 
 ## Supply chain
 
-- Dep minimal: **hanya `ink`**. Tidak ada SDK model (pakai `fetch`). Zig WASM di-build lokal (`native/build.zig`), bukan di-unduh.
-- `bun audit` + `npm audit` di CI gate.
+- Minimal deps: **only `ink`**. No model SDK (`fetch` is used). Zig WASM is built locally (`native/build.zig`), not downloaded.
+- `bun audit` + `npm audit` in the CI gate.
 
 ## Failure mode
 
-- Secret terdeteksi → loop `RECOVER` (patch) atau `abort` bila persisten; tidak pernah commit ber-secret.
-- Model coba path di luar repo → `build` tolak + log ke DLQ (kategoriself: injection attempt).
+- Secret detected → loop goes to `RECOVER` (patch) or `abort` if persistent; never commits with secrets.
+- Model tries a path outside the repo → `build` rejects + logs to DLQ (category: injection attempt).
 
 ## Cross-link
 

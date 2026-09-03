@@ -1,6 +1,9 @@
 # design/sequences.md — Sequence Diagrams
 
-Visualisasi alur temporal lintas modul. Melengkapi state machine di `loop.md` dan alur di `ARCHITECTURE.md` §3.
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
+Visualisations of cross-module temporal flow. Complements the state machine in `loop.md` and the data flow in `ARCHITECTURE.md` §3.
 
 ## 1. Happy path (goal → PR)
 
@@ -36,10 +39,10 @@ sequenceDiagram
   L->>G: CI_WATCH (run_watch)
   G-->>L: pass
   L-->>CLI: LoopReport(done, prUrl)
-  CLI-->>U: tampilkan hasil
+  CLI-->>U: show result
 ```
 
-## 2. Recovery pada test gagal
+## 2. Recovery on test failure
 
 ```mermaid
 sequenceDiagram
@@ -54,14 +57,14 @@ sequenceDiagram
   L->>R: withResilience(replan/patch)
   R->>R: classify(error) -> patch
   R->>B: generate(req + errorContext)
-  B-->>L: FileChange[] (revisi)
-  L->>E: runEval(revisi)
+  B-->>L: FileChange[] (revision)
+  L->>E: runEval(revision)
   alt pass
     E-->>L: gatePass=true
     L->>L: COMMIT
-  else masih gagal (retry ke-3)
+  else still failing (retry #3)
     R->>R: DLQ entry
-    L->>L: DONE(partial) + laporan
+    L->>L: DONE(partial) + report
   end
 ```
 
@@ -74,12 +77,12 @@ sequenceDiagram
   participant B as build
 
   L->>G: PR_OPEN + CI_WATCH
-  G-->>L: CI fail (job X merah)
+  G-->>L: CI fail (job X red)
   L->>L: CI_WATCH -> EXECUTE (error context)
   L->>B: generate(req + CI error)
   B-->>L: FileChange[]
-  L->>G: push fix ke PR branch
-  L->>G: CI_WATCH lagi
+  L->>G: push fix to PR branch
+  L->>G: CI_WATCH again
   G-->>L: pass
   L->>L: DONE
 ```
@@ -98,17 +101,17 @@ sequenceDiagram
   C->>Cache: lookup(embedding(changes))
   Cache->>V: similarity query
   alt cache hit
-    V-->>Cache: skor lama
-    Cache-->>C: pakai cache (skip eksekusi)
+    V-->>Cache: old score
+    Cache-->>C: use cache (skip execution)
   else miss
-    C->>C: jalan 12 kritikus (konkret via tool, stub abstain)
+    C->>C: run 12 critics (concrete via tool, stubs abstain)
   end
   C->>Agg: aggregate(scores)
   Agg-->>L: Aggregate(pass?, weightedAvg, reasons)
 ```
 
-## Catatan
+## Notes
 
-- Semua diagram asumsikan `loop` sebagai conductor; modul lain stateless terhadap loop (dipanggil, mengembalikan nilai).
-- Retry/DLQ diabstraksi ke `resil` — lihat `design/resil.md`.
-- Sequence #2 dan #3 adalah satu-satunya jalur yang memicu `RECOVER`/`EXECUTE` ulang; keduanya **bounded** (max-3 via `resil/retry.ts`).
+- All diagrams assume `loop` is the conductor; other modules are stateless with respect to the loop (called, return values).
+- Retry / DLQ are abstracted into `resil` — see `design/resil.md`.
+- Sequence #2 and #3 are the only paths that trigger `RECOVER`/`EXECUTE` again; both are **bounded** (max-3 via `resil/retry.ts`).
