@@ -2,6 +2,7 @@
 export { Header } from './top/header';
 export { Dag } from './top/dag';
 export { Detail } from './top/detail';
+export { Metrics } from './top/metrics';
 export { Critics } from './middle/critics';
 export { Timeline } from './middle/timeline';
 export { Stages } from './middle/stages';

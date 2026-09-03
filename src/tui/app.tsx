@@ -7,6 +7,7 @@ import {
   Header,
   Dag,
   Detail,
+  Metrics,
   Critics,
   Timeline,
   Stages,
@@ -101,11 +102,14 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         <Dag steps={state.steps} currentStepId={state.currentStepId} currentLoop={state.loop} />
         <Detail
           step={currentStep}
-          loop={state.loop}
           tokensUsed={state.tokensUsed}
+          loop={state.loop}
           tokensBudget={state.tokensBudget}
           recoverAttempts={state.metrics.recoverAttempts}
         />
+      </Box>
+      <Box marginTop={1} gap={1}>
+        <Metrics state={state} />
       </Box>
       <Box marginTop={1} gap={1}>
         <Stages state={state} />

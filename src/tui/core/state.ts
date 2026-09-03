@@ -38,7 +38,13 @@ export interface DagStep {
   tokensUsed?: number;
   detail?: string;
 }
-/** @brief One timeline event (stage start/finish/error). @since 0.1.1 */
+/** @brief One stage record (from LoopMetrics). @since 0.1.1 */
+export interface StageRecord {
+  stage: string;
+  ms: number;
+  ok: boolean;
+  error?: string;
+}
 export interface TimelineEntry {
   ts: number;
   stage: string;
