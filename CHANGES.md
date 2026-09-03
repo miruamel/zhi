@@ -23,7 +23,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - `.npmrc` (provenance + registry) + `.npmignore` (exclude src/engine/test/docs/native, publish dist only).
 - **GitHub Actions workflows**:
   - `.github/workflows/ci.yml` — gate (arch + lint + format + typecheck + test) + build (TS + Zig WASM via direct download) pada push/PR main.
-  - `.github/workflows/release.yml` — tag `v*.*.*` push → gate + build + `npm publish --provenance` + GH release (notes auto-extracted dari `CHANGES.md` per-version; tag format divalidasi regex + awk pattern via `-v` flag, **no interpolation**).
+- `.github/workflows/publish.yml` (sebelumnya `release.yml`) — tag `v*.*.*` push → gate + build + `npm publish --provenance` (OIDC Trusted Publisher, **no `secrets.NPM_TOKEN`**); GH release notes auto-extracted dari `CHANGES.md` per-version; tag format divalidasi regex + awk pattern via `-v` flag, **no interpolation**. Workflow filename rename supaya match npmjs.com Trusted Publisher entry.
 - `docs/runbooks/npm-trusted-publishing.md` — runbook migrasi npm auth dari long-lived `NPM_TOKEN` ke OIDC federation (Trusted Publishing). Target: hapus `secrets.NPM_TOKEN` dari GitHub repo. Status: target.
 - `.github/ISSUE_TEMPLATE/` — `security-incident.md` (private-rotation tracker, no paste-secret policy) + `tech-debt.md` (hygiene-gap tracker).
 - `.prettierignore` — exclude `dist/`, `native/out/`, `.zig-cache/`, `.nyc_output/`, `coverage/`, `bun.lock` (generated / not source).
@@ -42,6 +42,10 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 - CI workflow hardening: `release.yml` awk-regex injection (interpolasi `${TAG#v}` unsafely) → tag format validation `^v[0-9]+\.[0-9]+\.[0-9]+$` + awk pattern via `-v` flag.
 - Dual lockfile race condition: workflow `Install dependencies` step sekarang pass (Bun-only lockfile contract).
+
+### Security
+
+- **`release.yml` OIDC migration** — workflow publish npm tidak lagi pakai `secrets.NPM_TOKEN` (long-lived secret, compromised 2026-09-03 di session). Migrasi ke OIDC federation (Trusted Publishing): `id-token: write` permission + `npm publish --provenance` short-lived token dari GitHub Actions → npmjs.com. Repo secret `NPM_TOKEN` sudah dihapus dari settings (`total_count: 0` confirmed via API). User tetap harus verify npmjs.com Trusted Publisher entry point ke `publish.yml` (bukan `release.yml`) di https://www.npmjs.com/package/@miruamel/zhi/access. Rotation `npm_5xKx…` di npmjs.com sekarang **less urgent** tapi tetap recommended (compromised secret hygiene). Tracked di #35.
 
 ## [0.1.1] - 2026-09-02
 
