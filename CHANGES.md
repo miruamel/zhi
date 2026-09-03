@@ -14,7 +14,7 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
-## [Unreleased]
+## [0.1.2] - 2026-09-03
 
 ### Added
 
@@ -46,6 +46,8 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 ### Security
 
 - **`release.yml` OIDC migration** — workflow publish npm tidak lagi pakai `secrets.NPM_TOKEN` (long-lived secret, compromised 2026-09-03 di session). Migrasi ke OIDC federation (Trusted Publishing): `id-token: write` permission + `npm publish --provenance` short-lived token dari GitHub Actions → npmjs.com. Repo secret `NPM_TOKEN` sudah dihapus dari settings (`total_count: 0` confirmed via API). User tetap harus verify npmjs.com Trusted Publisher entry point ke `publish.yml` (bukan `release.yml`) di https://www.npmjs.com/package/@miruamel/zhi/access. Rotation `npm_5xKx…` di npmjs.com sekarang **less urgent** tapi tetap recommended (compromised secret hygiene). Tracked di #35.
+
+## [Unreleased]
 
 ## [0.1.1] - 2026-09-02
 
@@ -95,6 +97,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 First tagged baseline. See [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md) for the full 2026-08-29 → 2026-08-30 development log (15 entries; note: that history uses inconsistent version headers `[0.1.0]` duplicated and a non-monotonic `0.1.0..0.6.0` block — preserved as-is for authorial record).
 
-[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/miruamel/zhi/releases/tag/v0.1.2
 [0.1.1]: https://github.com/miruamel/zhi/releases/tag/v0.1.1
 [0.1.0]: https://github.com/miruamel/zhi/releases/tag/v0.1.0
