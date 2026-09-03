@@ -22,17 +22,19 @@ export interface AuditProps {
   maxLines?: number;
   filter?: string;
   onFilter?: (filter: string) => void;
+  focused?: boolean;
 }
 
 const FILTER_CYCLE = ['', 'allow', 'deny', 'error'] as const;
 
 
 /** @brief Render the audit pane with filter input and entry rows. @since 0.1.1 */
-export function Audit({ entries, maxLines = 50, filter = '', onFilter }: AuditProps) {
+export function Audit({ entries, maxLines = 50, filter = '', onFilter , focused = true }: AuditProps) {
   const [filtering, setFiltering] = useState(false);
   const [draft, setDraft] = useState(filter);
 
   useInput((input, key) => {
+    if (!focused) return;
     if (filtering) {
       if (key.return) {
         setFiltering(false);

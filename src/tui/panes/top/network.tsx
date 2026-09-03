@@ -18,6 +18,7 @@ export interface NetworkProps {
   connections: NetworkConnection[];
   onDisconnect?: (id: string) => void;
   maxLines?: number;
+  focused?: boolean;
 }
 
 const STATUS_DOT: Record<NetworkConnection['status'], string> = {
@@ -41,11 +42,12 @@ function formatBytes(n: number): string {
 }
 
 /** @brief Render the network connections pane. @since 0.1.1 */
-export function Network({ connections, onDisconnect, maxLines }: NetworkProps) {
+export function Network({ connections, onDisconnect, maxLines , focused = true }: NetworkProps) {
   const limit = maxLines ?? connections.length;
   const visible = connections.slice(0, limit);
 
   useInput((input) => {
+    if (!focused) return;
     if (input === 'd' && onDisconnect && visible[0]) {
       onDisconnect(visible[0].id);
     }

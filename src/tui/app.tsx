@@ -3,6 +3,7 @@ import { Box, Text, useApp, useInput } from 'ink';
 import { useState, useEffect } from 'react';
 import { colors } from './core/style/colors';
 import { resolveKey } from './core/keymap';
+import { createFocusManager } from './engine';
 import {
   Header,
   Dag,
@@ -51,6 +52,9 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   const [expandedCritics, setExpandedCritics] = useState(false);
   const [expandedPr, setExpandedPr] = useState(false);
   const [logScroll, setLogScroll] = useState(0);
+  const [focusedPane, setFocusedPane] = useState('dag');
+
+  const fm = createFocusManager(focusedPane as any);
 
   useEffect(() => {
     onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
@@ -84,6 +88,8 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         setExpandedCritics(false);
         setExpandedPr(false);
         setLogScroll(0);
+        fm.focusNext();
+        setFocusedPane(fm.focused);
         break;
       case 'nextLog':
         setLogScroll((s: number) => s + 1);
@@ -103,6 +109,8 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   });
 
   const currentStep = state.steps.find((s) => s.id === state.currentStepId);
+  const isFocused = (id: string) => focusedPane === id;
+
   return (
     <Box flexDirection="column" paddingX={1}>
       <Header
@@ -123,9 +131,23 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         />
       </Box>
       <Box marginTop={1} gap={1}>
-        <Terminal lines={[]} />
-        <Resources resources={{ cpu: 0, memory: { used: 0, total: 0 }, disk: { used: 0, total: 0 }, network: { bytesIn: 0, bytesOut: 0 } }} />
-        <Diff diff={[]} />
+        <Metrics state={state} />
+        <Agents agents={[]} focused={isFocused('agents')} />
+        <Network connections={[]} focused={isFocused('network')} />
+        <Resources
+          resources={{ cpu: 0, memory: { used: 0, total: 0 }, disk: { used: 0, total: 0 }, network: { bytesIn: 0, bytesOut: 0 } }}
+          focused={isFocused('resources')}
+        />
+      </Box>
+      <Box marginTop={1} gap={1}>
+        <Files files={[]} focused={isFocused('files')} />
+        <Diff diff={[]} focused={isFocused('diff')} />
+        <Secrets secrets={[]} focused={isFocused('secrets')} />
+      </Box>
+      <Box marginTop={1} gap={1}>
+        <Gate gates={[]} focused={isFocused('gate')} />
+        <Audit entries={[]} focused={isFocused('audit')} />
+        <Queue tasks={[]} focused={isFocused('queue')} />
       </Box>
       <Box marginTop={1} gap={1}>
         <Stages state={state} />
@@ -151,11 +173,27 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
       <Box marginTop={1}>
         <Log log={state.log} maxLines={40} scroll={logScroll} />
       </Box>
+      <Box marginTop={1} gap={1}>
+        <Notifications notifications={[]} focused={isFocused('notifications')} />
+        <Profile
+          profile={{
+            name: 'zhi',
+            model: 'unknown',
+            version: '0.1.1',
+            uptime: 0,
+            tokensUsed: state.tokensUsed,
+            tokensBudget: state.tokensBudget,
+            features: [],
+            endpoints: { api: '', ws: '' },
+          }}
+          focused={isFocused('profile')}
+        />
+      </Box>
       <Box marginTop={1}>
         <Help paused={paused} showHelp={showHelp} />
       </Box>
       <Box marginTop={1}>
-        <Text color={colors.fgDim}>Zhi (志) v0.1.1 · MIT · {paused ? 'PAUSED' : 'RUNNING'}</Text>
+        <Text color={colors.fgDim}>Zhi (志) v0.1.1 · MIT · {paused ? 'PAUSED' : 'RUNNING'} · Tab: focus</Text>
         {state.finished && (
           <Text color={state.aborted ? colors.warn : colors.done} bold>
             {' '}

@@ -19,6 +19,7 @@ export interface ProfileProps {
   profile: AgentProfile;
   onEdit?: (field: string, value: string) => void;
   onExport?: () => void;
+  focused?: boolean;
 }
 
 const UPTIME_MS_PER_MIN = 60_000;
@@ -40,12 +41,13 @@ function formatUptime(ms: number): string {
 }
 
 /** @brief Render the agent profile/settings pane. @since 0.1.1 */
-export function Profile({ profile, onEdit, onExport }: ProfileProps) {
+export function Profile({ profile, onEdit, onExport , focused = true }: ProfileProps) {
   const usage = profile.tokensBudget > 0
     ? profile.tokensUsed / profile.tokensBudget
     : 0;
 
   useInput((input) => {
+    if (!focused) return;
     if (input === 'e' && onEdit) {
       onEdit('name', profile.name);
     }

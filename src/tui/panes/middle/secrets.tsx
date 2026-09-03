@@ -42,6 +42,7 @@ export interface SecretsProps {
   onRotate?: (id: string) => void;
   /** @brief Cap rendered rows. @default 16 */
   maxLines?: number;
+  focused?: boolean;
 }
 
 /** @brief Days until expiry; negative when expired; '—' if unknown. Exported for tests. @since 0.1.1 */
@@ -64,11 +65,12 @@ export function isExpiringSoon(expires: number, now: number = Date.now(), thresh
 }
 
 /** @brief Secrets manager pane (rows + rotate hotkey). @since 0.1.1 */
-export function Secrets({ secrets, onRotate, maxLines = 16 }: SecretsProps): React.ReactElement {
+export function Secrets({ secrets, onRotate, maxLines = 16 , focused = true }: SecretsProps): React.ReactElement {
   const [focus, setFocus] = useState(0);
   const visible = secrets.slice(0, maxLines);
 
   useInput((input) => {
+    if (!focused) return;
     if (input === 'r' && onRotate && visible[focus]) {
       onRotate(visible[focus].id);
     }

@@ -33,14 +33,16 @@ export interface AgentsProps {
   agents: AgentCard[];
   onAgentClick?: (id: string) => void;
   maxLines?: number;
+  focused?: boolean;
 }
 
 /** @brief Render the agent roster pane. @since 0.1.1 */
-export function Agents({ agents, onAgentClick, maxLines }: AgentsProps) {
+export function Agents({ agents, onAgentClick, maxLines , focused = true }: AgentsProps) {
   const limit = maxLines ?? agents.length;
   const visible = agents.slice(0, limit);
 
   useInput((input, key) => {
+    if (!focused) return;
     if (key.return && onAgentClick && visible[0]) {
       onAgentClick(visible[0].id);
     }

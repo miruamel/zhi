@@ -19,6 +19,7 @@ export interface FilesProps {
   onFileClick?: (path: string) => void;
   maxLines?: number;
   title?: string;
+  focused?: boolean;
 }
 
 const LANG_COLOR: Record<string, string> = {
@@ -46,10 +47,11 @@ export function formatSize(bytes: number): string {
 }
 
 /** @brief Render the files pane. @since 0.1.1 */
-export function Files({ files, onFileClick, maxLines, title }: FilesProps) {
+export function Files({ files, onFileClick, maxLines, title , focused = true }: FilesProps) {
   const visible = maxLines !== undefined ? files.slice(0, maxLines) : files;
 
   useInput((_input, key) => {
+    if (!focused) return;
     if (key.return && onFileClick && visible[0]) onFileClick(visible[0].path);
   });
 

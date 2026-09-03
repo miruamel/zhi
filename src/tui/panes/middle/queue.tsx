@@ -22,6 +22,7 @@ export interface QueueProps {
   onRetry?: (id: string) => void;
   onCancel?: (id: string) => void;
   maxLines?: number;
+  focused?: boolean;
 }
 
 const PRIORITY_COLOR: Record<QueuePriority, string> = {
@@ -64,10 +65,11 @@ export function handleQueueKey(
 }
 
 /** @brief Render the task queue pane with priority colors, progress, and key bindings. @since 0.1.1 */
-export function Queue({ tasks, onRetry, onCancel, maxLines = DEFAULT_MAX }: QueueProps) {
+export function Queue({ tasks, onRetry, onCancel, maxLines = DEFAULT_MAX , focused = true }: QueueProps) {
   const visible = tasks.slice(0, maxLines);
 
   useInput((input) => {
+    if (!focused) return;
     const { retry, cancel } = handleQueueKey(input, tasks, onRetry, onCancel);
     if (retry && onRetry) onRetry(retry);
     if (cancel && onCancel) onCancel(cancel);

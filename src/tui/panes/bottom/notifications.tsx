@@ -20,6 +20,7 @@ export interface NotificationsProps {
   onMarkRead?: (id: string) => void;
   onClear?: () => void;
   maxLines?: number;
+  focused?: boolean;
 }
 
 /** @brief Per-type icon + color mapping. @since 0.1.1 */
@@ -31,10 +32,11 @@ const TYPE_META: Record<Notification['type'], { icon: string; color: string }> =
 };
 
 /** @brief Notifications pane: scrollable inbox with keyboard controls. @since 0.1.1 */
-export function Notifications({ notifications, onMarkRead, onClear, maxLines = 8 }: NotificationsProps) {
+export function Notifications({ notifications, onMarkRead, onClear, maxLines = 8 , focused = true }: NotificationsProps) {
   const [selected, setSelected] = useState(0);
 
   useInput((input, key) => {
+    if (!focused) return;
     if (notifications.length === 0) return;
     if (key.return && onMarkRead) {
       onMarkRead(notifications[selected]!.id);

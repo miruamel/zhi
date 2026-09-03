@@ -17,6 +17,7 @@ export interface GateProps {
   gates: GateResult[];
   onReplay?: (id: string) => void;
   maxLines?: number;
+  focused?: boolean;
 }
 
 const STATUS_ICON: Record<GateResult['status'], { glyph: string; color: string }> = {
@@ -54,11 +55,12 @@ export function handleGateKey(
 }
 
 /** @brief Render the gate evaluation pane. @since 0.1.1 */
-export function Gate({ gates, onReplay, maxLines = 20 }: GateProps) {
+export function Gate({ gates, onReplay, maxLines = 20 , focused = true }: GateProps) {
   const [focus, setFocus] = useState(0);
   const visible = gates.slice(0, maxLines);
 
   useInput((input, key) => {
+    if (!focused) return;
     const { nextFocus, replayed } = handleGateKey(input, key, gates, focus, onReplay);
     setFocus(nextFocus);
     if (replayed && onReplay) onReplay(replayed);
