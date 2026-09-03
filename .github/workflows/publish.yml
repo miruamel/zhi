@@ -42,16 +42,14 @@ jobs:
         run: bun run native:build
         continue-on-error: true # WASM write barrier di runner mungkin beda; lanjut walau gagal
 
-      - name: Publish to npm (@miruamel/zhi)
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to npm (@miruamel/zhi) via OIDC Trusted Publisher
+        # Trusted Publisher sudah terdaftar di npmjs.com (miruamel/zhi → publish.yml,
+        # scopes: npm publish + npm stage publish). Pakai OIDC; tidak butuh NPM_TOKEN.
         run: |
-          if [ -z "$NODE_AUTH_TOKEN" ]; then
-            echo "::error::NPM_TOKEN secret not configured"
-            exit 1
-          fi
+          # `id-token: write` (line 16) + `--provenance` (sigstore) memberi npmjs.com
+          # signed OIDC token dari GitHub Actions → npm verify trust → publish.
           npm publish --provenance --access public
-          echo "[release] published to npm registry"
+          echo "[release] published to npm registry via OIDC"
 
       - name: Create GitHub Release
         env:
