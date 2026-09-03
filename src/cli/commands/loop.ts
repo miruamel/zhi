@@ -17,7 +17,7 @@ import { autonomousDeps } from '../autonomous-deps';
 import { offlineDeps } from '../offline-deps';
 import { parseArgs } from '../parse-args';
 import { mountTui } from '../../tui/render';
-import type { AppState } from '../../tui/core/state';
+import type { AppState, LogEntry } from '../../tui/core/state';
 
 /** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.1 */
 export function toPatch(
@@ -25,10 +25,18 @@ export function toPatch(
   metrics: LoopMetrics,
   loop: LoopState,
   aborted: boolean,
+  logEntries: LogEntry[] = [],
+  totalMs = 0,
+  errors = 0,
 ): Partial<AppState> {
   return {
     loop,
-    metrics: { stages: 0, errors: 0, totalMs: 0, recoverAttempts: metrics.recoverAttempts },
+    metrics: {
+      stages: metrics.stages.length,
+      errors,
+      totalMs,
+      recoverAttempts: metrics.recoverAttempts,
+    },
     critics: (ctx.critiques ?? []).map((c: Critique) => ({
       name: c.name,
       score: c.score,
@@ -53,13 +61,13 @@ export function toPatch(
       ciStatus:
         loop === LoopState.CI_WATCH ? 'pending' : loop === LoopState.DONE ? 'green' : undefined,
     },
-    log: [],
+    log: logEntries,
     finished: loop === LoopState.DONE,
     aborted,
   };
 }
 
-/** @brief Jalankan satu siklus loop otonom (stdout-only, tanpa TUI). @param {string[]} argv @return {Promise<LoopContext>} */
+/** @brief Jalarkan satu siklus loop otonom (stdout-only, tanpa TUI). @param {string[]} argv @return {Promise<LoopContext>} */
 export async function loopCommand(argv: string[]): Promise<LoopContext> {
   const { goal, threshold } = parseArgs(argv);
   if (!goal) throw new Error('cli: goal kosong');
@@ -82,11 +90,22 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
   const ctx: LoopContext = { goal };
   const metrics = new LoopMetrics();
   const logger = new LoopLogger();
+  const logEntries: LogEntry[] = [];
   const holder = { push: null as ((p: Partial<AppState>) => void) | null };
   const driver = new LoopDriver({
     onTransition: (_from, _ev, to) => {
       logger.transition(_from, _ev, to);
-      holder.push?.(toPatch(ctx, metrics, to, !!ctx.error));
+      logEntries.push({
+        ts: Date.now(),
+        runId: logger.runId,
+        from: String(_from),
+        to: String(to),
+        event: String(_ev),
+        kind: 'transition',
+        msg: `${String(_from)} --${String(_ev)}--> ${String(to)}`,
+      });
+      const s = metrics.summary();
+      holder.push?.(toPatch(ctx, metrics, to, !!ctx.error, logEntries, s.totalMs, s.errors));
     },
   });
   const handlers = buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics);
