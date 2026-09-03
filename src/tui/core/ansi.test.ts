@@ -6,7 +6,7 @@ import {
   measureWidth,
   padVisible,
   truncateVisible,
-} from './ansi';
+} from './ansi/index.ts';
 
 describe('ANSI_PATTERN', () => {
   test('matches CSI SGR sequences', () => {
