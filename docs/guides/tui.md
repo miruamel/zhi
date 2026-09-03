@@ -22,7 +22,7 @@
 ├─ PR / CI ───────────┴─ Log ───────────────────┤
 │ PR #42 opened · CI running…                   │
 │ [12:01] EXECUTE generate → 3 files            │
-│ [12:01] CRITIQUE 12 critics → avg 0.84        │
+│ [12:01] CRITIQUE 15 critics → avg 0.84
 └───────────────────────────────────────────────┘
 ```
 

@@ -104,7 +104,7 @@ sequenceDiagram
     V-->>Cache: old score
     Cache-->>C: use cache (skip execution)
   else miss
-    C->>C: run 12 critics (concrete via tool, stubs abstain)
+    C->>C: run 15 critics (concrete via tool, stubs abstain)
   end
   C->>Agg: aggregate(scores)
   Agg-->>L: Aggregate(pass?, weightedAvg, reasons)
