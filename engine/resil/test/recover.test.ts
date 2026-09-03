@@ -14,7 +14,10 @@ describe('classifyError', () => {
 
   it('classifies cycle/ambig/parse as replan', () => {
     expect(classifyError('cycle detected in dag')).toEqual({ strategy: 'replan', fatal: false });
-    expect(classifyError('ambiguous goal: build thing')).toEqual({ strategy: 'replan', fatal: false });
+    expect(classifyError('ambiguous goal: build thing')).toEqual({
+      strategy: 'replan',
+      fatal: false,
+    });
     expect(classifyError('parse error in goal')).toEqual({ strategy: 'replan', fatal: false });
   });
 

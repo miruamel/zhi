@@ -15,8 +15,21 @@ describe('colors', () => {
 
   it('ColorToken type covers all keys', () => {
     const keys: ColorToken[] = [
-      'bg', 'fg', 'fgDim', 'accent', 'accentBlue', 'warn', 'error',
-      'running', 'done', 'pending', 'failed', 'scoring', 'forward', 'commit', 'complete',
+      'bg',
+      'fg',
+      'fgDim',
+      'accent',
+      'accentBlue',
+      'warn',
+      'error',
+      'running',
+      'done',
+      'pending',
+      'failed',
+      'scoring',
+      'forward',
+      'commit',
+      'complete',
     ];
     expect(keys).toHaveLength(Object.keys(colors).length);
   });
