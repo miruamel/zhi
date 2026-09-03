@@ -1,5 +1,8 @@
 # standards/commit.md — Commit Rule
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 Zhi commit rules. Enforced via pre-commit hook + CI gate.
 
 ## 1. Conventional Commits

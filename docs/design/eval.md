@@ -1,5 +1,8 @@
 # design/eval.md — Evaluator Toolchain
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 ## Purpose
 
 Verify results through a **real toolchain** (build, test, scan) — a code-grounded gate, not model judgment. Runs in the `EVALUATE` state, after `CRITIQUE`. This is what separates Zhi from a chat wrapper: the commit-readiness decision is backed by tool facts, not vibes.

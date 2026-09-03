@@ -1,5 +1,8 @@
 # design/orch.md — Planner + Scheduler
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 ## Purpose
 
 Turn a natural-language goal into a **cycle-free, ordered, budgeted step DAG**. The planning heart of Zhi. Computed once in the `PLAN` state, then consumed by `loop/wiring/handlers.ts`.

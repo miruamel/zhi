@@ -1,5 +1,8 @@
 # examples/trace-email-validation.md — End-to-End Trace
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 A concrete trace of the goal `"add email validation in auth.ts, tests green, open PR"` through the entire system. Makes the abstractions in `ARCHITECTURE.md` / `design/*` real.
 
 ## 0. Invocation

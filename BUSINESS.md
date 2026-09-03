@@ -1,5 +1,14 @@
 # BUSINESS.md — Zhi (志)
 
+<p align="center">
+  <img src="assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%">
+</p>
+
+<p align="center">
+  <img src="assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%">
+</p>
+
+
 > Marketing, positioning, and product strategy for Zhi. Source-of-truth for one-liners, value prop, and go-to-market. Bilingual: English primary, Indonesian secondary.
 
 ---

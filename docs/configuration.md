@@ -1,5 +1,8 @@
 # configuration.md — Config, Env, CLI
 
+<p align="center">  <img src="../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 How to run and configure Zhi. All config lives in `zhi.config.ts` plus env vars; CLI flags override per-invocation.
 
 ## package.json (minimal)

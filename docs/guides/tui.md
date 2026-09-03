@@ -1,5 +1,8 @@
 # tui.md — Terminal UI Specification
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 `src/tui/index.tsx` is a **thin** viewer on top of `loop`. It does not make decisions — only visualises the state machine + the result of each module. Built with `ink` (React-for-terminal).
 
 ## Layout (panes)

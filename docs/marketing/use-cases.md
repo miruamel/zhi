@@ -1,5 +1,8 @@
 # Use Cases — Zhi (non-technical)
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 > Concrete, story-shaped use cases. For blog posts, README examples, sales conversations, and onboarding.
 
 ---

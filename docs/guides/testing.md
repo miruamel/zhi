@@ -1,5 +1,8 @@
 # testing.md — Testing Strategy
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 Zhi itself must be tested before it can run a trustworthy loop. Strategy: unit (pure functions) + integration (loop with fake modules) + e2e (dummy repo).
 
 ## Principles

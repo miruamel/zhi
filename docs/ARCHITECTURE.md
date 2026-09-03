@@ -1,5 +1,8 @@
 # ARCHITECTURE.md
 
+<p align="center">  <img src="../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 System overview of Zhi: data flow, feedback loop, native hot path, and module boundaries.
 
 ## 1. Why

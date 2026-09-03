@@ -1,5 +1,8 @@
 # design/model.md — Model (LLM)
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 ## Purpose
 
 A single abstraction over the LLM: routing between backends (9router/OMP/local), tiers heavy/light/micro, and token streaming through the Zig WASM parser. Used by `build` (generate) and `critic` (model-based critics).

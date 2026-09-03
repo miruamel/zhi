@@ -1,5 +1,8 @@
 # design/loop.md — Autonomous Conductor
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 ## Purpose
 
 `engine/loop/` is the **conductor**: a state machine that stitches `orch → build → critic → eval → resil → knowledge → model` into a single autonomous cycle. It does not make domain decisions; it only governs state transitions and calls other modules through dependency injection.

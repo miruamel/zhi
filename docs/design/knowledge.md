@@ -1,5 +1,8 @@
 # design/knowledge.md — Knowledge & Persistence
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 ## Purpose
 
 Persist state across steps and across sessions: git-native index, task ledger, KB docs/API, version history, and (later) a Vector DB for critic semantic cache.

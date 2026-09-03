@@ -1,5 +1,8 @@
 # design/build.md — Generator
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 ## Purpose
 
 Generate / modify **multi-file** code that is consistent across files, self-verifies syntax, and keeps context within budget over a long loop. Runs in the `EXECUTE` state.

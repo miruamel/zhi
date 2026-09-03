@@ -1,5 +1,8 @@
 # Runbook — npm Trusted Publishing (OIDC)
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 **Goal**: publish `@miruamel/zhi` to the npm registry without long-lived secrets. The npm token is NEVER stored in GitHub Secrets, .env, or any repo.
 
 **Why**: long-lived automation tokens = wide blast radius when leaked (1 compromised token = publish/delete to any package on the account). Trusted Publishing (OIDC federation) replaces them with short-lived tokens issued by GitHub Actions per run, scoped to a specific workflow.

@@ -1,5 +1,8 @@
 # observability.md — Logging, Metrics, Cost
 
+<p align="center">  <img src="../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 Zhi runs autonomously; without observability, failures stay invisible. All signals are emitted through `knowledge/store.ts` (ledger) + structured logs.
 
 ## Logging

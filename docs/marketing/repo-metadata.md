@@ -1,5 +1,8 @@
 # Repo Metadata — Zhi (small forgotten details)
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 > GitHub repo settings, npm package metadata, social previews, and release-note polish. The "detail kecil yg terlupakan" the user asked for.
 
 ---

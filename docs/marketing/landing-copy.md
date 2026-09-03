@@ -1,5 +1,8 @@
 # Landing Page Copy — zhi.dev (planned)
 
+<p align="center">  <img src="../../assets/doc-header.svg" alt="Zhi (志) — autonomous coding agent" width="100%"></p>
+<p align="center">  <img src="../../assets/glyphs.svg" alt="PLAN · BUILD · CRITIQUE · EVAL · COMMIT · DONE" width="80%"></p>
+
 > Bilingual copy for a future marketing site. EN primary, ID secondary. Tone: technical-but-human, no marketing fluff.
 
 ---
