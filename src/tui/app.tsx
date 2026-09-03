@@ -5,6 +5,8 @@ import { colors } from './core/style/colors';
 import { resolveKey } from './core/keymap';
 import { createFocusManager, createPerfTracker } from './engine';
 import { createBridge } from './integration/state-bridge';
+import { renderPane } from './integration/pane-renderer';
+import { PaneErrorBoundary } from './integration/error-boundary';
 import {
   Header,
   Dag,
@@ -34,6 +36,7 @@ import {
   Profile,
 } from './panes';
 import type { AppState } from './core/state';
+import type { PaneId } from './engine/focus';
 
 export interface AppProps {
   initialState: AppState;
@@ -53,7 +56,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   const [expandedCritics, setExpandedCritics] = useState(false);
   const [expandedPr, setExpandedPr] = useState(false);
   const [logScroll, setLogScroll] = useState(0);
-  const [focusedPane, setFocusedPane] = useState('dag');
+  const [focusedPane, setFocusedPane] = useState<PaneId>('dag');
   const fmRef = useRef(createFocusManager('dag'));
   const fm = fmRef.current;
   const perfRef = useRef(createPerfTracker());
@@ -108,88 +111,74 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   });
 
   const currentStep = state.steps.find((s) => s.id === state.currentStepId);
-  const isFocused = (id: string) => focusedPane === id;
+  const isFocused = (id: PaneId) => focusedPane === id;
+  const ui = { paused, showHelp, expandedCritics, expandedPr, logScroll };
+
+  /** @brief Wrap a pane in PaneErrorBoundary + focus border, render via shared renderPane. */
+  const frame = (id: PaneId) => {
+    const element = renderPane(id, state, threshold, currentStep, {
+      ...ui,
+      focused: isFocused(id),
+    });
+    if (!element) return null;
+    const borderColor = isFocused(id) ? colors.accent : colors.fgDim;
+    return (
+      <PaneErrorBoundary key={id} paneName={id}>
+        <Box borderStyle="single" borderColor={borderColor} flexDirection="column">
+          {element}
+        </Box>
+      </PaneErrorBoundary>
+    );
+  };
 
   return (
     <Box flexDirection="column" paddingX={1}>
-      <Header
-        loop={state.loop}
-        goal={state.goal}
-        startedAt={state.startedAt}
-        finished={state.finished}
-        aborted={state.aborted}
-      />
+      {frame('header')}
       <Box marginTop={1} gap={1}>
-        <Dag steps={state.steps} currentStepId={state.currentStepId} currentLoop={state.loop} />
-        <Detail
-          step={currentStep}
-          tokensUsed={state.tokensUsed}
-          loop={state.loop}
-          tokensBudget={state.tokensBudget}
-          recoverAttempts={state.metrics.recoverAttempts}
-        />
+        {frame('dag')}
+        {frame('detail')}
       </Box>
       <Box marginTop={1} gap={1}>
-        <Metrics state={state} />
-        <Agents agents={[]} focused={isFocused('agents')} />
-        <Network connections={[]} focused={isFocused('network')} />
-        <Resources
-          resources={{ cpu: 0, memory: { used: 0, total: 0 }, disk: { used: 0, total: 0 }, network: { bytesIn: 0, bytesOut: 0 } }}
-          focused={isFocused('resources')}
-        />
+        {frame('metrics')}
+        {frame('agents')}
+        {frame('network')}
+        {frame('resources')}
       </Box>
       <Box marginTop={1} gap={1}>
-        <Files files={[]} focused={isFocused('files')} />
-        <Diff diff={[]} focused={isFocused('diff')} />
-        <Secrets secrets={[]} focused={isFocused('secrets')} />
+        {frame('files')}
+        {frame('diff')}
+        {frame('secrets')}
       </Box>
       <Box marginTop={1} gap={1}>
-        <Gate gates={[]} focused={isFocused('gate')} />
-        <Audit entries={[]} focused={isFocused('audit')} />
-        <Queue tasks={[]} focused={isFocused('queue')} />
+        {frame('gate')}
+        {frame('audit')}
+        {frame('queue')}
       </Box>
       <Box marginTop={1} gap={1}>
-        <Stages state={state} />
-        <Timeline entries={state.timeline} />
+        {frame('stages')}
+        {frame('timeline')}
       </Box>
       <Box marginTop={1} gap={1}>
-        <Critics
-          critics={state.critics}
-          weightedAvg={state.eval.weightedAvg}
-          threshold={threshold}
-          expanded={expandedCritics}
-        />
-        <PrPane prCi={state.prCi} expanded={expandedPr} />
+        {frame('critics')}
+        {frame('pr')}
       </Box>
       <Box marginTop={1} gap={1}>
-        <Knowledge state={state} />
-        <CodeViewer state={state} />
-        <Config state={state} />
+        {frame('knowledge')}
+        {frame('code')}
+        {frame('config')}
       </Box>
       <Box marginTop={1} gap={1}>
-        <Eval evalReport={state.eval} />
+        {frame('eval')}
       </Box>
       <Box marginTop={1}>
-        <Log log={state.log} maxLines={40} scroll={logScroll} />
+        {frame('log')}
       </Box>
       <Box marginTop={1} gap={1}>
-        <Notifications notifications={[]} focused={isFocused('notifications')} />
-        <Profile
-          profile={{
-            name: 'zhi',
-            model: 'unknown',
-            version: '0.1.1',
-            uptime: 0,
-            tokensUsed: state.tokensUsed,
-            tokensBudget: state.tokensBudget,
-            features: [],
-            endpoints: { api: '', ws: '' },
-          }}
-          focused={isFocused('profile')}
-        />
+        {frame('notifications')}
+        {frame('profile')}
       </Box>
       <Box marginTop={1}>
-        <Help paused={paused} showHelp={showHelp} />
+        {frame('help')}
       </Box>
       <Box marginTop={1}>
         <Text color={colors.fgDim}>Zhi (志) v0.1.1 · MIT · {paused ? 'PAUSED' : 'RUNNING'} · Tab: focus</Text>
