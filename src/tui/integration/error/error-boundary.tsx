@@ -1,7 +1,7 @@
 /** @brief React error boundary for panes — catches render-time crashes and shows a fallback. @since 0.1.2 */
 import React from 'react';
 import { Box, Text } from 'ink';
-import { colors } from '../core/style/colors';
+import { colors } from '../../core/style/colors';
 
 /** @brief Props for the fallback UI element. @since 0.1.2 */
 export interface PaneErrorFallbackProps {

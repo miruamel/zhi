@@ -4,8 +4,8 @@ import { render } from 'ink';
 import React from 'react';
 import type { WriteStream } from 'node:fs';
 import { LayoutRenderer } from './layout-render';
-import { emptyState } from '../core/state';
-import { buildDefaultLayout, togglePane } from '../engine/builder';
+import { emptyState } from '../../core/state';
+import { buildDefaultLayout, togglePane } from '../../engine/layout';
 
 
 interface CaptureStdout {

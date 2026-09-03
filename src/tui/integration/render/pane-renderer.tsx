@@ -10,8 +10,8 @@
  * @since 0.2.0
  */
 import React from 'react';
-import type { AppState } from '../core/state.ts';
-import type { PaneId } from '../engine/focus.ts';
+import type { AppState } from '../../core/state';
+import type { PaneId } from '../../engine/focus';
 import {
   Header,
   Dag,
@@ -39,7 +39,7 @@ import {
   Audit,
   Queue,
   Profile,
-} from '../panes/index.ts';
+} from '../../panes/index.ts';
 
 /** @brief App-level UI state threaded into panes that consume it. */
 export interface PaneRenderState {

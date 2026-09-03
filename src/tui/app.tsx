@@ -4,9 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import { colors } from './core/style/colors';
 import { resolveKey } from './core/keymap';
 import { createFocusManager, createPerfTracker } from './engine';
-import { createBridge } from './integration/state-bridge';
-import { renderPane } from './integration/pane-renderer';
-import { PaneErrorBoundary } from './integration/error-boundary';
+import { createBridge } from './integration/state';
+import { renderPane } from './integration/render';
+import { PaneErrorBoundary } from './integration/error';
 import {
   Header,
   Dag,

@@ -1,12 +1,12 @@
 /** @brief Layout-aware renderer: filters visible panes via resolveLayout, focuses the active pane. @since 0.1.2 */
 import React from 'react';
 import { Box } from 'ink';
-import { colors } from '../core/style/colors';
-import { resolveLayout, type LayoutConfig } from '../engine/builder.ts';
-import type { PaneId } from '../engine/focus.ts';
-import type { AppState } from '../core/state.ts';
+import { colors } from '../../core/style/colors';
+import { resolveLayout, type LayoutConfig } from '../../engine/layout';
+import type { PaneId } from '../../engine/focus';
+import type { AppState } from '../../core/state';
 import { PaneErrorBoundary } from '../error';
-import { renderPane } from './pane-renderer.tsx';
+import { renderPane } from './pane-renderer';
 /** @brief Props for the integration-layer renderer. @since 0.1.2 */
 export interface LayoutRendererProps {
   config: LayoutConfig;

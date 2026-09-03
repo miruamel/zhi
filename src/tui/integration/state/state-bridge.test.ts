@@ -3,8 +3,8 @@
  */
 import { describe, expect, test } from "bun:test";
 import { createBridge, StateBridge } from "./state-bridge.ts";
-import type { AppState } from "../core/state.ts";
-import { PerfTracker } from "../engine/perf.ts";
+import type { AppState } from "../../core/state";
+import { PerfTracker } from "../../engine/perf";
 
 describe("StateBridge", () => {
   test("push updates metrics and forwards to setState", () => {
