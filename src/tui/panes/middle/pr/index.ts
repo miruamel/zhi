@@ -1,0 +1,1 @@
+export { Pr, type PrProps } from './pr';

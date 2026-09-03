@@ -1,0 +1,1 @@
+export { Profile, type AgentProfile, type ProfileProps } from './profile';

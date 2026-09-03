@@ -1,0 +1,1 @@
+export { Knowledge, type KnowledgeProps } from './knowledge';

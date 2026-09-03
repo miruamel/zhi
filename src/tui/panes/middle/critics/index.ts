@@ -1,0 +1,1 @@
+export { Critics, type CriticsProps } from './critics';
