@@ -74,9 +74,10 @@
     "bun": ">=1.4.0"
   },
   "dependencies": {
+    "@types/react": "^18",
+    "ansi-styles": "^7.0.0",
     "ink": "^4",
-    "react": "^18",
-    "@types/react": "^18"
+    "react": "^18"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.0.0",
@@ -88,6 +89,7 @@
     "eslint-plugin-jsdoc": "^50.0.0",
     "eslint-visitor-keys": "^5.0.1",
     "husky": "^9.0.0",
+    "ink-testing-library": "^4.0.0",
     "lint-staged": "^15.0.0",
     "prettier": "^3.0.0",
     "typescript": "^5.4.0",

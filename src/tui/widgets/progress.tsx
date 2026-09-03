@@ -18,8 +18,9 @@ export function ProgressBar({
   width = 20,
   color = colors.accent,
 }: ProgressBarProps) {
-  const pct = max > 0 ? Math.min(1, value / max) : 0;
-  const filled = Math.round(pct * width);
+  const safeValue = Math.max(0, value);
+  const pct = max > 0 ? Math.min(1, safeValue / max) : 0;
+  const filled = Math.max(0, Math.min(width, Math.round(pct * width)));
   const bar = '█'.repeat(filled) + '░'.repeat(width - filled);
   const pctText = (pct * 100).toFixed(0).padStart(3);
   return (

@@ -18,6 +18,7 @@ import { offlineDeps } from '../offline-deps';
 import { parseArgs } from '../parse-args';
 import { mountTui } from '../../tui/render';
 import type { AppState, LogEntry, TimelineEntry } from '../../tui/core/state';
+import { KnowledgeStore } from '../../../engine/knowledge/store';
 /** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.1
  * @param {number} [errors=0] - hitung error terakumulasi.
  */
@@ -101,6 +102,7 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
   const ctx: LoopContext = { goal };
   const metrics = new LoopMetrics();
   const logger = new LoopLogger();
+  const store = new KnowledgeStore();
   const logEntries: LogEntry[] = [];
   const timeline: TimelineEntry[] = [];
   const holder = { push: null as ((p: Partial<AppState>) => void) | null };
@@ -116,6 +118,11 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
         kind: 'transition',
         msg: `${String(_from)} --${String(_ev)}--> ${String(to)}`,
       });
+      if (to === LoopState.CRITIQUE) {
+        for (const c of ctx.critiques ?? []) {
+          store.add({ key: `critic:${c.name}`, value: `score=${c.score} findings=${c.findings.length}`, tags: ['critic', c.name] });
+        }
+      }
       const s = metrics.summary();
       timeline.push({
         ts: Date.now(),
@@ -135,9 +142,9 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
           s.errors,
           timeline,
           metrics.stages.map((r) => ({ stage: r.stage, ms: r.ms, ok: r.ok, error: r.error })),
-          [],
+          store.all(),
           ctx.code,
-          { threshold, tokensBudget: 100_000, offline: false },
+          { threshold, tokensBudget: 100_000, offline: process.env['ZHI_AUTO_PR'] !== '1' },
         ),
       );
     },

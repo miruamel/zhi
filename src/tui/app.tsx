@@ -8,16 +8,28 @@ import {
   Dag,
   Detail,
   Metrics,
+  Terminal,
+  Agents,
+  Network,
+  Resources,
   Critics,
   Timeline,
   Stages,
   Eval,
+  Files,
+  Diff,
+  Secrets,
+  Gate,
+  Audit,
+  Queue,
   Knowledge,
   Pr as PrPane,
   Log,
   CodeViewer,
   Config,
   Help,
+  Notifications,
+  Profile,
 } from './panes';
 import type { AppState } from './core/state';
 
@@ -111,7 +123,9 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         />
       </Box>
       <Box marginTop={1} gap={1}>
-        <Metrics state={state} />
+        <Terminal lines={[]} />
+        <Resources resources={{ cpu: 0, memory: { used: 0, total: 0 }, disk: { used: 0, total: 0 }, network: { bytesIn: 0, bytesOut: 0 } }} />
+        <Diff diff={[]} />
       </Box>
       <Box marginTop={1} gap={1}>
         <Stages state={state} />

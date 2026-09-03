@@ -1,3 +1,27 @@
 /** @brief Widgets barrel — re-exports reusable ink widgets. @since 0.1.1 */
 export { ProgressBar } from './progress';
 export { StatCard } from './stat';
+export { Badge, BADGE_COLORS } from './badge';
+export type { BadgeProps, BadgeColor, BadgeVariant, BadgeSize } from './badge';
+export { ProgressRing } from './progress-ring';
+export type { ProgressRingProps } from './progress-ring';
+export { Spinner, SPINNER_PRESETS } from './spinner';
+export type { SpinnerType, SpinnerProps } from './spinner';
+export { Tabs } from './tabs';
+export type { TabDef, TabsProps } from './tabs';
+export { Table } from './table';
+export type { ColumnDef, TableProps } from './table';
+export { Tree } from './tree';
+export type { TreeNode, TreeProps } from './tree';
+export { JsonView } from './json-view';
+export type { JsonPath, JsonViewProps } from './json-view';
+export { Tooltip } from './tooltip';
+export type { TooltipProps } from './tooltip';
+export { Breadcrumb } from './breadcrumb';
+export type { BreadcrumbItem, BreadcrumbProps } from './breadcrumb';
+export { SegmentedControl } from './segmented-control';
+export type { SegmentOption, SegmentedControlProps } from './segmented-control';
+export { EmptyState } from './empty-state';
+export type { EmptyStateProps, EmptyStateAction } from './empty-state';
+export { Callout, CALLOUT_VARIANTS } from './callout';
+export type { CalloutVariant, CalloutProps } from './callout';
