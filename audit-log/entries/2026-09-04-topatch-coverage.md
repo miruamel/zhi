@@ -10,15 +10,15 @@ Coverage survey menunjukkan `src/cli/commands/loop/loop.ts` pada 60% lines (23-5
 
 `src/cli/commands/loop/loop-topatch.test.ts` — 7 tests, 20 expect() calls:
 
-| # | Case | Cek |
-|---|------|-----|
-| 1 | critics mapping | name/score/abstain=false/reason=first finding |
-| 2 | empty critics (undefined) | `[]` |
-| 3 | loop state + finished flag | DONE→finished=true, PLAN→false |
-| 4 | eval gate from ctx.eval.passed | truthy→ok=true, falsy→ok=false |
-| 5 | weightedAggregate from ctx.aggregate.score | 0.75 / fallback 0 |
-| 6 | prCi.ciStatus per loop state | CI_WATCH→pending, DONE→green, PLAN→undefined |
-| 7 | recoverAttempts + aborted | metrics.recoverAttempts=3, aborted=true |
+| #   | Case                                       | Cek                                           |
+| --- | ------------------------------------------ | --------------------------------------------- |
+| 1   | critics mapping                            | name/score/abstain=false/reason=first finding |
+| 2   | empty critics (undefined)                  | `[]`                                          |
+| 3   | loop state + finished flag                 | DONE→finished=true, PLAN→false                |
+| 4   | eval gate from ctx.eval.passed             | truthy→ok=true, falsy→ok=false                |
+| 5   | weightedAggregate from ctx.aggregate.score | 0.75 / fallback 0                             |
+| 6   | prCi.ciStatus per loop state               | CI_WATCH→pending, DONE→green, PLAN→undefined  |
+| 7   | recoverAttempts + aborted                  | metrics.recoverAttempts=3, aborted=true       |
 
 ### Hasil
 
@@ -35,12 +35,12 @@ Coverage survey menunjukkan `src/cli/commands/loop/loop.ts` pada 60% lines (23-5
 
 ## Status Akhir
 
-| Gate | Status |
-|------|--------|
-| ci (0b97d3a) | in_progress |
-| architecture-guard (0b97d3a) | in_progress |
-| Working tree | clean |
-| npm @miruamel/zhi | 0.1.3 published (run 33813429714) |
+| Gate                         | Status                            |
+| ---------------------------- | --------------------------------- |
+| ci (0b97d3a)                 | in_progress                       |
+| architecture-guard (0b97d3a) | in_progress                       |
+| Working tree                 | clean                             |
+| npm @miruamel/zhi            | 0.1.3 published (run 33813429714) |
 
 ## Refleksi
 
