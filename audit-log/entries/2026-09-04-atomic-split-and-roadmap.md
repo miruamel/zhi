@@ -23,30 +23,30 @@ Advisory mengusulkan region-based grouping (`bottom/`/`middle/`/`top/`) dengan c
 
 Solusi: per-unit subdirs, source + test co-located, 2 file each:
 
-| Unit | Source | Test |
-|------|--------|------|
-| `src/tui/panes/top/header/` | `header.tsx` | `header.test.ts` |
-| `src/tui/panes/top/dag/` | `dag.tsx` | `dag.test.ts` |
-| `src/tui/panes/top/detail/` | `detail.tsx` | `detail.test.ts` |
+| Unit                            | Source        | Test              |
+| ------------------------------- | ------------- | ----------------- |
+| `src/tui/panes/top/header/`     | `header.tsx`  | `header.test.ts`  |
+| `src/tui/panes/top/dag/`        | `dag.tsx`     | `dag.test.ts`     |
+| `src/tui/panes/top/detail/`     | `detail.tsx`  | `detail.test.ts`  |
 | `src/tui/panes/middle/critics/` | `critics.tsx` | `critics.test.ts` |
-| `src/tui/panes/middle/eval/` | `eval.tsx` | `eval.test.ts` |
-| `src/tui/panes/middle/pr/` | `pr.tsx` | `pr.test.ts` |
-| `src/tui/panes/bottom/log/` | `log.tsx` | `log.test.ts` |
-| `src/tui/panes/bottom/help/` | `help.tsx` | `help.test.ts` |
+| `src/tui/panes/middle/eval/`    | `eval.tsx`    | `eval.test.ts`    |
+| `src/tui/panes/middle/pr/`      | `pr.tsx`      | `pr.test.ts`      |
+| `src/tui/panes/bottom/log/`     | `log.tsx`     | `log.test.ts`     |
+| `src/tui/panes/bottom/help/`    | `help.tsx`    | `help.test.ts`    |
 
 `src/tui/panes/test/` dihapus. `src/tui/panes/index.ts` barrel diperbarui.
 
 ### 3. CLI Restructure — 7 Per-Unit Subdirs
 
-| Unit | Source | Test |
-|------|--------|------|
-| `src/cli/autonomous-deps/` | `autonomous-deps.ts` | `autonomous-deps.test.ts` |
-| `src/cli/offline-deps/` | `offline-deps.ts` | `offline-deps.test.ts` |
-| `src/cli/parse-args/` | `parse-args.ts` | `parse-args.test.ts` |
-| `src/cli/plan-symbol/` | `plan-symbol.ts` | `plan-symbol.test.ts` |
-| `src/cli/commands/gen/` | `gen.ts` | `gen.test.ts` |
-| `src/cli/commands/loop/` | `loop.ts` | `loop.test.ts` |
-| `src/cli/commands/critique-repo/` | `critique-repo.ts` | `critique-repo.test.ts` + `critique-repo-traversal.test.ts` |
+| Unit                              | Source               | Test                                                        |
+| --------------------------------- | -------------------- | ----------------------------------------------------------- |
+| `src/cli/autonomous-deps/`        | `autonomous-deps.ts` | `autonomous-deps.test.ts`                                   |
+| `src/cli/offline-deps/`           | `offline-deps.ts`    | `offline-deps.test.ts`                                      |
+| `src/cli/parse-args/`             | `parse-args.ts`      | `parse-args.test.ts`                                        |
+| `src/cli/plan-symbol/`            | `plan-symbol.ts`     | `plan-symbol.test.ts`                                       |
+| `src/cli/commands/gen/`           | `gen.ts`             | `gen.test.ts`                                               |
+| `src/cli/commands/loop/`          | `loop.ts`            | `loop.test.ts`                                              |
+| `src/cli/commands/critique-repo/` | `critique-repo.ts`   | `critique-repo.test.ts` + `critique-repo-traversal.test.ts` |
 
 `src/cli/test/` dihapus. `commands.test.ts` (101 SLOC, 3 describe blocks: gen/loop/critique-repo) di-split menjadi 3 per-command test files, masing-masing dengan header + import sendiri. `index.test.ts` tetap flat di samping `index.ts` (2 files, under limit) — ini barrel-style entry, bukan unit.
 
@@ -65,13 +65,13 @@ Solusi: **adopt path aliases** `@engine/*` / `@src/*` yang sudah ada di `tsconfi
 
 ### 6. Gate Re-Verified
 
-| Gate | Status |
-|------|--------|
-| typecheck | 0 errors |
-| test | 355 pass / 0 fail, 725 expect() calls |
-| lint | 0 errors |
-| format | clean |
-| arch guard | all checks passed |
+| Gate       | Status                                |
+| ---------- | ------------------------------------- |
+| typecheck  | 0 errors                              |
+| test       | 355 pass / 0 fail, 725 expect() calls |
+| lint       | 0 errors                              |
+| format     | clean                                 |
+| arch guard | all checks passed                     |
 
 ### 7. Push & CI
 
@@ -87,13 +87,13 @@ Commit `12c5ad7` pushed ke `origin/main`. CI (`ci` + `architecture-guard`) sedan
 
 ## Status Akhir
 
-| Gate | Status |
-|------|--------|
-| typecheck | 0 errors |
-| test | 355 pass / 0 fail |
-| lint | 0 errors |
-| format | clean |
-| arch guard | all checks passed |
+| Gate        | Status             |
+| ----------- | ------------------ |
+| typecheck   | 0 errors           |
+| test        | 355 pass / 0 fail  |
+| lint        | 0 errors           |
+| format      | clean              |
+| arch guard  | all checks passed  |
 | critic gate | 1.0, zero findings |
 
 Working tree clean setelah commit. Tidak ada issue/PR terbuka.
