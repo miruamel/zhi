@@ -1,4 +1,6 @@
 # Build artifacts
+dist/
+
 native/out/
 *.wasm
 *.wasm.o

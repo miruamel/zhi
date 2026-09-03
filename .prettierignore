@@ -1,0 +1,14 @@
+# Generated build output (TS emit, not source)
+dist/
+native/out/
+
+# Zig build cache
+native/stream/.zig-cache/
+native/.zig-cache/
+
+# Coverage
+.nyc_output/
+coverage/
+
+# Lockfiles (generated, not formatted)
+bun.lock
