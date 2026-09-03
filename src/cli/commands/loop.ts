@@ -17,7 +17,7 @@ import { autonomousDeps } from '../autonomous-deps';
 import { offlineDeps } from '../offline-deps';
 import { parseArgs } from '../parse-args';
 import { mountTui } from '../../tui/render';
-import type { AppState } from '../../tui/state';
+import type { AppState } from '../../tui/core/state';
 
 /** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.1 */
 export function toPatch(

@@ -1,8 +1,8 @@
 /** @brief TUI render entry: bootstrap ink <ZhiApp> with state. @since 0.1.0 */
 import { render as inkRender } from 'ink';
 import { ZhiApp } from './app';
-import { emptyState } from './state';
-import type { AppState } from './state';
+import { emptyState } from './core/state';
+import type { AppState } from './core/state';
 
 export interface RenderOptions {
   goal: string;

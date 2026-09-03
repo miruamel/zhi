@@ -1,8 +1,8 @@
 /** @brief DAG pane: step list with status icons. @since 0.1.0 */
 import { Box, Text } from 'ink';
-import { colors } from '../../colors';
-import { glyphs } from '../../icons';
-import type { DagStep } from '../../state';
+import { colors } from '../../core/colors';
+import { glyphs } from '../../core/icons';
+import type { DagStep } from '../../core/state';
 
 function statusIcon(s: DagStep['status']): { g: string; c: string } {
   switch (s) {

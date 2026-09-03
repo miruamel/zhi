@@ -1,8 +1,8 @@
 /** @brief Log pane: append-only log stream with filters. @since 0.1.0 */
 import { Box, Text } from 'ink';
-import { colors } from '../../colors';
-import { formatTime, truncate } from '../../format';
-import type { LogEntry } from '../../state';
+import { colors } from '../../core/colors';
+import { formatTime, truncate } from '../../core/format';
+import type { LogEntry } from '../../core/state';
 
 export interface LogProps {
   log: LogEntry[];

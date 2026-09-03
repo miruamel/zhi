@@ -1,8 +1,8 @@
 /** @brief Step detail pane: current step info, tokens, elapsed, detail string. @since 0.1.0 */
 import { Box, Text } from 'ink';
-import { colors } from '../../colors';
-import { formatTokens, formatPct } from '../../format';
-import type { DagStep } from '../../state';
+import { colors } from '../../core/colors';
+import { formatTokens, formatPct } from '../../core/format';
+import type { DagStep } from '../../core/state';
 
 export interface DetailProps {
   step?: DagStep;

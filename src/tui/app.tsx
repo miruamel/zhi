@@ -1,10 +1,10 @@
 /** @brief App root — the main ink <App> for Zhi TUI. @since 0.1.0 */
 import { Box, Text, useApp, useInput } from 'ink';
 import { useState, useEffect } from 'react';
-import { colors } from './colors';
-import { resolveKey } from './keymap';
+import { colors } from './core/colors';
+import { resolveKey } from './core/keymap';
 import { Header, Dag, Detail, Critics, Eval, Pr as PrPane, Log, Help } from './panes';
-import type { AppState } from './state';
+import type { AppState } from './core/state';
 
 export interface AppProps {
   initialState: AppState;

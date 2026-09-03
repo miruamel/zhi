@@ -1,6 +1,6 @@
 /** @brief Help / keybindings footer pane. @since 0.1.0 */
 import { Box, Text } from 'ink';
-import { colors } from '../../colors';
+import { colors } from '../../core/colors';
 
 const BINDINGS: Array<[string, string]> = [
   ['q / esc', 'quit (abort loop if running)'],

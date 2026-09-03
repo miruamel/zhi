@@ -1,9 +1,9 @@
 /** @brief Eval pane: build/test/security/gate stages. @since 0.1.0 */
 import { Box, Text } from 'ink';
-import { colors } from '../../colors';
-import { formatMs, formatPct } from '../../format';
-import { glyphs } from '../../icons';
-import type { EvalReport } from '../../state';
+import { colors } from '../../core/colors';
+import { formatMs, formatPct } from '../../core/format';
+import { glyphs } from '../../core/icons';
+import type { EvalReport } from '../../core/state';
 
 export interface EvalProps {
   evalReport: EvalReport;
