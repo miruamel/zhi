@@ -1,6 +1,6 @@
 # audit-log
 
-Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` private). Dipelihara per mandat v6.0 §13.
+Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
 ## Entri
 
@@ -12,6 +12,7 @@ Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/
 - `2026-08-29-license-mit.md` — LICENSE MIT + ADR-006 exception untuk `audit-log/entries/`.
 - `2026-08-29-ci-fix-sloc-total.md` — CI SLOC guard false-positive pada baris `total` wc; filter `$2 != "total"`.
 - `2026-08-29-native-stream-wasm.md` — native/stream Zig→WASM: parse.zig, build.sh, stream.ts wrapper, test; deviasi build.zig (zig build hang).
+- `2026-09-04-convergence-and-changelog.md` — CHANGES.md `[Unreleased]` diisi (13 commit sejak v0.1.2), README koreksi fakta usang (test count 229→255, visibility private→public), survey repo miruamel/ (hanya zhi in-scope; profile README diabaikan per charter).
 
 ## Invarian yang dilacak
 
