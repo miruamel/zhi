@@ -97,14 +97,23 @@ export async function parseSseWasm(chunk: string): Promise<string[]> {
 }
 
 /**
- * @brief Mark WASM unavailable (called when write barrier detected broken).
- * @since 0.1.1
+ * @brief Apakah WASM tersedia (belum di-disable). @return {boolean} @since 0.1.1
+ */
+export function isWasmAvailable(): boolean {
+  return wasmAvailable;
+}
+/**
+ * @brief Non-aktifkan WASM (fallback ke TS parser).
+ * @since 0.6.0
  */
 export function disableWasm(): void {
   wasmAvailable = false;
 }
 
-/** @brief Apakah WASM tersedia (belum di-disable). @return {boolean} @since 0.1.1 */
-export function isWasmAvailable(): boolean {
-  return wasmAvailable;
+/**
+ * @brief Reset WASM availability to true (test helper).
+ * @since 0.6.0
+ */
+export function resetWasm(): void {
+  wasmAvailable = true;
 }
