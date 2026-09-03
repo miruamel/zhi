@@ -15,6 +15,7 @@ Setelah refactor per-unit test co-location (`12c5ad7`), CI `architecture-guard` 
 - `Loaded` type di-export (`export type Loaded`) agar konsumen bisa gunakan tanpa `Awaited<ReturnType<typeof load>>`.
 
 Hasil: `parseSseWasm` punya 3 failure path yang sama-sama mengembalikan `[]`:
+
 1. `!wasmAvailable` → `[]`
 2. `load()` throws → `[]`
 3. Normal parse → `string[]`
@@ -32,11 +33,11 @@ Test di `engine/stream/test/index.test.ts` dan `engine/stream/test/parse.test.ts
 
 ### 3. CI fix iterations
 
-| Commit | Masalah | Solusi |
-|--------|---------|--------|
-| `fca6718` | arch-guard pass, ci format:check fail | Prettier `--write` |
-| `df9b1d4` | ci typecheck fail: `isWasmAvailable` unused | Hapus import |
-| `6330d69` | ci success + arch-guard success | Selesai |
+| Commit    | Masalah                                     | Solusi             |
+| --------- | ------------------------------------------- | ------------------ |
+| `fca6718` | arch-guard pass, ci format:check fail       | Prettier `--write` |
+| `df9b1d4` | ci typecheck fail: `isWasmAvailable` unused | Hapus import       |
+| `6330d69` | ci success + arch-guard success             | Selesai            |
 
 ## Keputusan
 
@@ -46,12 +47,12 @@ Test di `engine/stream/test/index.test.ts` dan `engine/stream/test/parse.test.ts
 
 ## Status Akhir
 
-| Gate                  | Status                                              |
-| --------------------- | --------------------------------------------------- |
-| ci (33807981185)      | success                                             |
-| architecture-guard    | success (33807981022)                               |
-| Working tree          | clean                                               |
-| npm @miruamel/zhi     | 0.1.2 published, no bump needed                     |
+| Gate               | Status                          |
+| ------------------ | ------------------------------- |
+| ci (33807981185)   | success                         |
+| architecture-guard | success (33807981022)           |
+| Working tree       | clean                           |
+| npm @miruamel/zhi  | 0.1.2 published, no bump needed |
 
 ## Refleksi
 
