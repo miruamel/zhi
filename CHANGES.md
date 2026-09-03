@@ -24,8 +24,11 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - **GitHub Actions workflows**:
   - `.github/workflows/ci.yml` — gate (arch + lint + format + typecheck + test) + build (TS + Zig WASM via direct download) pada push/PR main.
   - `.github/workflows/release.yml` — tag `v*.*.*` push → gate + build + `npm publish --provenance` + GH release (notes auto-extracted dari `CHANGES.md` per-version; tag format divalidasi regex + awk pattern via `-v` flag, **no interpolation**).
-  - `.github/workflows/architecture-guard.sh` — bash checks (files-per-dir ≤5; SLOC ≤150 hard cap per §6.2); exempt `.husky`, `.dist`, `.native/out`, `.github`.
-
+- `docs/runbooks/npm-trusted-publishing.md` — runbook migrasi npm auth dari long-lived `NPM_TOKEN` ke OIDC federation (Trusted Publishing). Target: hapus `secrets.NPM_TOKEN` dari GitHub repo. Status: target.
+- `.github/ISSUE_TEMPLATE/` — `security-incident.md` (private-rotation tracker, no paste-secret policy) + `tech-debt.md` (hygiene-gap tracker).
+- `.prettierignore` — exclude `dist/`, `native/out/`, `.zig-cache/`, `.nyc_output/`, `coverage/`, `bun.lock` (generated / not source).
+- `.gitignore` — tambah `dist/` (TS emit, bukan source).
+- `package.json` — `format:check` pakai `--ignore-path .prettierignore`; `prepare` kosong (no post-install build); `bun-types` exact pin `1.4.0` (was `^1.4.0`).
 ### Changed
 
 - `bun.lock` tracked (was previously `.gitignore`d) — CI `bun install --frozen-lockfile` sekarang reproducible.
