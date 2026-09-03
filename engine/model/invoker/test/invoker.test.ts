@@ -1,6 +1,7 @@
-/** @brief Test LocalStubInvoker + selectInvoker. @since 0.2.0 */
+/** @brief Test LocalStubInvoker + selectInvoker + extractTokens. @since 0.2.0 */
 import { test, expect } from 'bun:test';
 import { LocalStubInvoker, selectInvoker } from '../index';
+import { extractTokens } from '../cloud';
 
 test('LocalStubInvoker.invoke returns deterministic stub with prompt', async () => {
   const out = await new LocalStubInvoker().invoke('make a thing');
@@ -19,4 +20,22 @@ test('selectInvoker without API key falls back to stub', async () => {
   delete process.env.MODEL_API_KEY;
   const inv = selectInvoker('generate');
   expect(inv).toBeInstanceOf(LocalStubInvoker);
+});
+
+test('extractTokens parses SSE delta content', () => {
+  const payload = JSON.stringify({ choices: [{ delta: { content: 'hello' } }] });
+  expect(extractTokens(payload)).toEqual(['hello']);
+});
+
+test('extractTokens returns empty for non-delta payload', () => {
+  const payload = JSON.stringify({ choices: [{ delta: {} }] });
+  expect(extractTokens(payload)).toEqual([]);
+});
+
+test('extractTokens returns empty for malformed JSON', () => {
+  expect(extractTokens('not json')).toEqual([]);
+});
+
+test('extractTokens returns empty for missing choices', () => {
+  expect(extractTokens('{}')).toEqual([]);
 });

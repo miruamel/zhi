@@ -22,7 +22,7 @@ export interface CloudInvokerOpts {
  * @return {string[]} token content (kosong bila bukan JSON/delta).
  * @since 0.1.0
  */
-function extractTokens(payload: string): string[] {
+export function extractTokens(payload: string): string[] {
   try {
     const json = JSON.parse(payload) as {
       choices?: Array<{ delta?: { content?: string } }>;
