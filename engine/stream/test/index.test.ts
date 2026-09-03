@@ -5,7 +5,7 @@
  * than relying on env-specific breakage. @since 0.6.0
  */
 import { describe, expect, it, beforeEach } from 'bun:test';
-import { parseStream, isWasmAvailable } from '../index';
+import { parseStream } from '../index';
 import { disableWasm, resetWasm } from '../zigBridge';
 
 describe('parseStream write-barrier detection', () => {
