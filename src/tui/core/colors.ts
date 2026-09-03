@@ -1,5 +1,4 @@
 /** @brief TUI color tokens (match assets/doc-header.svg palette). @since 0.1.0 */
-import type { ForegroundColorName } from 'chalk';
 
 export const colors = {
   bg: 'black' as const,
@@ -17,6 +16,6 @@ export const colors = {
   forward: 'cyan' as const,
   commit: 'cyan' as const,
   complete: 'greenBright' as const,
-} as const satisfies Record<string, ForegroundColorName>;
+} as const;
 
 export type ColorToken = keyof typeof colors;

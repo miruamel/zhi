@@ -23,10 +23,10 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
-    onRegister?.((p) => setState((s) => ({ ...s, ...p })));
+    onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
   }, [onRegister]);
 
-  useInput((input, key) => {
+  useInput((input: string, key: { [k: string]: boolean }) => {
     const action = resolveKey(input, key);
     switch (action) {
       case 'quit':
@@ -34,15 +34,15 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         exit();
         break;
       case 'abort':
-        setState((s) => ({ ...s, aborted: true, finished: true }));
+        setState((s: AppState) => ({ ...s, aborted: true, finished: true }));
         onAbort?.();
         exit();
         break;
       case 'pauseResume':
-        setPaused((p) => !p);
+        setPaused((p: boolean) => !p);
         break;
       case 'toggleHelp':
-        setShowHelp((h) => !h);
+        setShowHelp((h: boolean) => !h);
         break;
       default:
         break;
