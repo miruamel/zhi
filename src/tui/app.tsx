@@ -1,6 +1,6 @@
 /** @brief App root — the main ink <App> for Zhi TUI. @since 0.1.0 */
 import { Box, Text, useApp, useInput } from 'ink';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { colors } from './core/style/colors';
 import { resolveKey } from './core/keymap';
 import { createFocusManager } from './engine';
@@ -53,8 +53,8 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   const [expandedPr, setExpandedPr] = useState(false);
   const [logScroll, setLogScroll] = useState(0);
   const [focusedPane, setFocusedPane] = useState('dag');
-
-  const fm = createFocusManager(focusedPane as any);
+  const fmRef = useRef(createFocusManager('dag'));
+  const fm = fmRef.current;
 
   useEffect(() => {
     onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
@@ -85,9 +85,6 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         setShowHelp((h: boolean) => !h);
         break;
       case 'cycle':
-        setExpandedCritics(false);
-        setExpandedPr(false);
-        setLogScroll(0);
         fm.focusNext();
         setFocusedPane(fm.focused);
         break;
