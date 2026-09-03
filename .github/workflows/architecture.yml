@@ -26,6 +26,14 @@ jobs:
             -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 \
             | xargs -0 wc -l 2>/dev/null | awk '$2 != "total" && $1>200{print "VIOLATION SLOC:", $2; exit 1}'
           echo "ok: no code file exceeds 200 lines"
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
       - name: Setup Zig 0.16.0 (direct download; setup-zig mirror lacks 0.16.0)
         run: |
           ZIG_VER=0.16.0
