@@ -25,10 +25,17 @@ describe('parseSseTs (TS fallback)', () => {
 });
 
 describe('parseStream dispatcher', () => {
-  it('falls back to TS when WASM write barrier fails', async () => {
-    // Dispatcher auto-detects zero-byte WASM output and disables WASM.
+  it('falls back to TS when WASM is disabled', async () => {
+    // Write-barrier detection (lines 22-27) only fires when WASM
+    // genuinely breaks — untestable deterministically in a native
+    // CI env where WASM works. This test covers the same fallback
+    // path deterministically: WASM disabled → dispatcher routes
+    // straight to parseSseTs.
+    const { disableWasm, resetWasm } = await import('../zigBridge');
+    disableWasm();
     const out = await parseStream('data: hello\n\n');
     expect(out).toEqual(['hello']);
+    resetWasm();
   });
 
   it('exposes isWasmAvailable', () => {
