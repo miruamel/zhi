@@ -18,13 +18,13 @@
 
 Di https://www.npmjs.com/package/@miruamel/zhi/access → "Publishing access" → "Add a Trusted Publisher":
 
-| Field | Value |
-|---|---|
-| Provider | GitHub Actions |
-| Repository owner | `miruamel` |
-| Repository name | `zhi` |
-| Workflow filename | `release.yml` |
-| Environment name | _kosongkan_ (default) |
+| Field             | Value                 |
+| ----------------- | --------------------- |
+| Provider          | GitHub Actions        |
+| Repository owner  | `miruamel`            |
+| Repository name   | `zhi`                 |
+| Workflow filename | `release.yml`         |
+| Environment name  | _kosongkan_ (default) |
 
 npm akan generate unique `id-token` subject identifier, contoh:
 `repo:miruamel/zhi:ref:refs/tags/v*:environment:`
@@ -57,6 +57,7 @@ Ganti jadi:
 ```
 
 **Penting**:
+
 - `id-token: write` permission SUDAH ada di line 16 → tidak perlu tambah.
 - `NODE_AUTH_TOKEN` env **dihapus total** — npm CLI otomatis pakai OIDC token via `actions/github-token`.
 - `secrets.NPM_TOKEN` di GitHub repo **dihapus** setelah migrasi verified (jaga hygiene).

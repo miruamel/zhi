@@ -1,8 +1,8 @@
 ---
 name: Tech debt / hygiene gap
 about: Lacak hygiene gap atau debt teknis yang butuh fixing.
-title: "[debt] <deskripsi singkat>"
-labels: ["debt", "ops"]
+title: '[debt] <deskripsi singkat>'
+labels: ['debt', 'ops']
 assignees: []
 ---
 

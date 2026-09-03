@@ -1,8 +1,8 @@
 ---
 name: Security incident (rotasi credential)
 about: Lapor credential bocor atau kerentanan. Private — JANGAN post detail exploit.
-title: "[SECURITY] rotasi <credential-type>"
-labels: ["P0", "security"]
+title: '[SECURITY] rotasi <credential-type>'
+labels: ['P0', 'security']
 assignees: []
 ---
 
