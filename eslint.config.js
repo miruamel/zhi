@@ -19,13 +19,13 @@ export default [
     ],
   },
   {
-    files: ['src/**/*.ts', 'engine/**/*.ts', 'tests/**/*.ts', 'scripts/**/*.ts'],
+    files: ['src/**/*.ts', 'src/**/*.tsx', 'engine/**/*.ts', 'tests/**/*.ts', 'scripts/**/*.ts'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
         ecmaVersion: 2024,
         sourceType: 'module',
-        ecmaFeatures: { jsx: false },
+        ecmaFeatures: { jsx: true },
       },
       globals: {
         console: 'readonly',
