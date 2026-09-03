@@ -44,7 +44,10 @@ export class LoopDriver {
     this.onTransition?.(from, ev, next);
     return true;
   }
-
+  /** @brief Force-stop: set state DONE tanpa transisi. @since 0.1.1 */
+  abort(): void {
+    this.state = LoopState.DONE;
+  }
   /** @brief Jalankan siklus hingga DONE.
    * @param {Partial<Record<LoopState, StateHandler>>} handlers - handler per state aktif.
    * @param {number} maxSteps - batas iterasi (cegah loop tak berhingga). Default 64.
