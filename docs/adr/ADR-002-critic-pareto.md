@@ -6,7 +6,7 @@ Accepted — 2026-08-29
 
 ## Context
 
-Zhi menilai hasil generate lewat 12 kritikus. Keputusan layak-commit tidak boleh bergantung pada satu model call (vibes). Perlu agregasi terukur yang: (a) menolak keras kerentanan, (b) menghargai trade-off antar-dimensi (Pareto), (c) toleran terhadap kritikus yang belum diimplementasi (stub → abstain).
+- Zhi menilai hasil generate lewat 15 kritikus. Keputusan layak-commit tidak boleh bergantung pada satu model call (vibes). Perlu agregasi terukur yang: (a) menolak keras kerentanan, (b) menghargai trade-off antar-dimensi (Pareto), (c) toleran terhadap kritikus yang belum diimplementasi (stub → abstain).
 
 ## Decision
 
@@ -23,7 +23,7 @@ Zhi menilai hasil generate lewat 12 kritikus. Keputusan layak-commit tidak boleh
 - **+** Trade-off diterima: mis. perf turun sedikit tapi security naik tetap bisa `pass`.
 - **+** Stub aman: tidak memblokir v1, naik bertahap.
 - **-** Threshold (0.4/0.7) perlu kalibrasi empiris saat v1 jalan; rawan false-negative di awal.
-- **-** Pareto mahal bila semua 12 konkret (belakangan) — butuh caching (`critic/cache.ts`).
+- **-** Pareto mahal bila semua 15 konkret (belakangan) — butuh caching (`critic/cache.ts`).
 
 ## References
 
