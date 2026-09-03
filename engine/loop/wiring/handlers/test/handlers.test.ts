@@ -4,7 +4,6 @@ import { buildHandlers, type LoopDeps } from '../index';
 import type { LoopContext } from '../../context';
 import { LoopState } from '../../../states';
 import { isDLQ } from '../is-dlq';
-import type { DLQEntry } from '../../../../resil';
 
 function stubDeps(over: Partial<LoopDeps> = {}): LoopDeps {
   return {
@@ -123,10 +122,10 @@ describe('isDLQ', () => {
   });
 
   it('returns false for null (runtime guard)', () => {
-    expect(isDLQ(null as unknown as string | DLQEntry)).toBe(false);
+    expect(isDLQ(null)).toBe(false);
   });
 
   it('returns false for object without error field', () => {
-    expect(isDLQ({ value: 42 } as unknown as string | DLQEntry)).toBe(false);
+    expect(isDLQ({ value: 42 })).toBe(false);
   });
 });
