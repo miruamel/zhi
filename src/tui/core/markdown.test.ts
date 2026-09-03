@@ -5,7 +5,7 @@
 import { describe, expect, test } from "bun:test";
 import React from "react";
 import { colors } from "./style/colors.ts";
-import { mdToInk, mdToText, parseInline, parseMd } from "./markdown.ts";
+import { mdToInk, mdToText, parseInline, parseMd } from "./markdown/index.ts";
 
 describe("parseMd blocks", () => {
   test("returns empty array for blank input", () => {

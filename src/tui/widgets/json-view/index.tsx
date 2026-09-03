@@ -1,51 +1,14 @@
-/** @brief JsonView widget: collapsible tree viewer for JSON values. @since 0.1.1 */
+/**
+ * @brief JsonView widget: collapsible tree viewer for JSON values.
+ *
+ * Split from json-view.tsx (311 SLOC) so each file stays under the 250 SLOC ceiling.
+ * @since 0.1.1
+ */
 import { Text, Box, useInput } from 'ink';
 import { useState } from 'react';
-import { colors } from '../core/style/colors';
-
-/** @brief A single node reference passed to onPathClick. @since 0.1.1 */
-export interface JsonPath {
-  path: string;
-  value: unknown;
-  type: string;
-}
-
-const INDENT = '  ';
-
-/** @brief Classify a value's JSON type. @since 0.1.1 */
-function typeOf(v: unknown): string {
-  if (v === null) return 'null';
-  if (Array.isArray(v)) return 'array';
-  if (typeof v === 'object') return 'object';
-  return typeof v;
-}
-
-const TYPE_COLOR: Record<string, string> = {
-  string: colors.accent,
-  number: colors.warn,
-  boolean: colors.done,
-  null: colors.fgDim,
-};
-
-/** @brief Color for a primitive value. @since 0.1.1 */
-function primitiveColor(v: unknown): string {
-  return TYPE_COLOR[typeOf(v)] ?? colors.fg;
-}
-
-/** @brief Render a primitive value as a string literal. @since 0.1.1 */
-function primitiveLabel(v: unknown): string {
-  if (v === null) return 'null';
-  if (typeof v === 'string') return `"${v}"`;
-  return String(v);
-}
-
-/** @brief Props for JsonView. @since 0.1.1 */
-export interface JsonViewProps {
-  data: unknown;
-  collapsed?: boolean;
-  maxDepth?: number;
-  onPathClick?: (node: JsonPath) => void;
-}
+import { colors } from '../../core/style/colors';
+import type { JsonPath, JsonViewProps } from './types.ts';
+import { INDENT, typeOf, primitiveColor, primitiveLabel } from './types.ts';
 
 type IsOpenFn = (key: string) => boolean;
 type SetFocused = (k: string) => void;
@@ -54,49 +17,6 @@ interface RenderedLine {
   indent: string;
   head: React.ReactNode;
   body: React.ReactNode;
-}
-
-/** @brief Build the flat list of rendered lines for a JSON value. @since 0.1.1 */
-function buildLines(
-  value: unknown,
-  path: string,
-  depth: number,
-  collapsedDefault: boolean,
-  maxDepth: number,
-  onPathClick: ((node: JsonPath) => void) | undefined,
-  isOpen: IsOpenFn,
-  focused: string,
-  setFocused: SetFocused,
-): RenderedLine[] {
-  const indent = INDENT.repeat(depth);
-  const isContainer = value !== null && typeof value === 'object';
-
-  if (!isContainer) {
-    return [
-      {
-        indent,
-        head: null,
-        body: <Text color={primitiveColor(value)}>{primitiveLabel(value)}</Text>,
-      },
-    ];
-  }
-
-  if (Array.isArray(value)) {
-    return renderArray(value, path, depth, indent, collapsedDefault, maxDepth, onPathClick, isOpen, focused, setFocused);
-  }
-
-  return renderObject(
-    value as Record<string, unknown>,
-    path,
-    depth,
-    indent,
-    collapsedDefault,
-    maxDepth,
-    onPathClick,
-    isOpen,
-    focused,
-    setFocused,
-  );
 }
 
 /** @brief Toggle marker (+/-) for collapsible containers. @since 0.1.1 */
@@ -262,10 +182,50 @@ function renderArray(
   return out;
 }
 
-/**
- * @brief Render a collapsible JSON viewer.
- * @since 0.1.1
- */
+/** @brief Build the flat list of rendered lines for a JSON value. @since 0.1.1 */
+function buildLines(
+  value: unknown,
+  path: string,
+  depth: number,
+  collapsedDefault: boolean,
+  maxDepth: number,
+  onPathClick: ((node: JsonPath) => void) | undefined,
+  isOpen: IsOpenFn,
+  focused: string,
+  setFocused: SetFocused,
+): RenderedLine[] {
+  const indent = INDENT.repeat(depth);
+  const isContainer = value !== null && typeof value === 'object';
+
+  if (!isContainer) {
+    return [
+      {
+        indent,
+        head: null,
+        body: <Text color={primitiveColor(value)}>{primitiveLabel(value)}</Text>,
+      },
+    ];
+  }
+
+  if (Array.isArray(value)) {
+    return renderArray(value, path, depth, indent, collapsedDefault, maxDepth, onPathClick, isOpen, focused, setFocused);
+  }
+
+  return renderObject(
+    value as Record<string, unknown>,
+    path,
+    depth,
+    indent,
+    collapsedDefault,
+    maxDepth,
+    onPathClick,
+    isOpen,
+    focused,
+    setFocused,
+  );
+}
+
+/** @brief Render a collapsible JSON viewer. @since 0.1.1 */
 export function JsonView({
   data,
   collapsed = false,
