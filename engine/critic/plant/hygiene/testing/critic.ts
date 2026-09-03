@@ -49,6 +49,13 @@ function dirHasTests(src: string): boolean {
   const testDir = join(dir, 'test');
   if (existsSync(testDir) && readdirSync(testDir).some((f) => /\.test\.(ts|tsx|js|jsx)$/.test(f)))
     return true;
+  // Consolidated sibling test/ dir (e.g. src/cli/commands/*.ts covered by src/cli/test/*.test.ts)
+  const siblingTestDir = join(dirname(dir), 'test');
+  if (
+    existsSync(siblingTestDir) &&
+    readdirSync(siblingTestDir).some((f) => /\.test\.(ts|tsx|js|jsx)$/.test(f))
+  )
+    return true;
   return false;
 }
 

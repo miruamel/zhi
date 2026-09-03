@@ -89,3 +89,12 @@ test('source covered by consolidated co-located test not flagged', () => {
   const c = testingCritic(r);
   expect(c.findings.some((f) => f.includes('breaker.ts'))).toBe(false);
 });
+test('source covered by consolidated sibling test/ dir not flagged', () => {
+  const r = tmp();
+  mkdirSync(join(r, 'src', 'commands'), { recursive: true });
+  mkdirSync(join(r, 'src', 'test'), { recursive: true });
+  writeFileSync(join(r, 'src', 'commands', 'svc.ts'), 'export function doThing() { return 1; }\n');
+  writeFileSync(join(r, 'src', 'test', 'svc.test.ts'), 'import { test } from "bun:test";\n');
+  const c = testingCritic(r);
+  expect(c.findings.some((f) => f.includes('svc.ts'))).toBe(false);
+});
