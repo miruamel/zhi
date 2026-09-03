@@ -11,11 +11,7 @@ Zhi ships in phases. Every release raises maturity per `AGENTS.md` §Maturity. E
 
 - `loop/*` (state machine + pipeline + `gatePass` + recover wiring).
 - `orch/*` (parse, dag, cycle, budget, serial scheduler).
-- `build/*` (generate + verify + context; sanitise stub).
-- `critic/*` (cache + **Security/Perf/Testing/Style** concrete + aggregate; 8 stubs).
-- `eval/*` (test + security + gate; sandbox stub/worktree).
-- `resil/*` (breaker + retry max-3 + DLQ + recover).
-- `knowledge/*` (git worktree + index + commit + ledger; vectors/docs/versions stub).
+- `critic/*` — 13 concrete critics (accessibility, architecture, compose, doc, hygiene, imports, maintainability, perf, privacy, security, sloc, style, todo) + aggregate. All promoted from stub → concrete (PR #23–#28, #31). Repo-wide critic score 1.0, 0 findings on `main`.
 - `model/*` (router 9router/OMP/local + stream Zig WASM).
 - `native/stream/parse.wasm` (Zig).
 - `src/cli.ts` + `src/tui/` (ink, thin viewer).
@@ -29,6 +25,7 @@ Zhi ships in phases. Every release raises maturity per `AGENTS.md` §Maturity. E
 - The remaining 8 critics promoted from stub → concrete, in stages (Architecture, Doc, DevOps, Privacy, DX, Accessibility, Maintainability, Legal).
 - `eval/sandbox.ts` container (for untrusted code).
 - `build/sanitize.ts` (AST/PII/XSS) — when Zhi takes web input.
+- ~~The remaining 8 critics promoted from stub → concrete, in stages (Architecture, Doc, DevOps, Privacy, DX, Accessibility, Maintainability, Legal).~~ **DONE** — all 13 critics are concrete as of v0.1.2 (see v0.1.0 scope above).
 
 ### v0.2.0 notes
 
