@@ -13,6 +13,7 @@ Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/
 - `2026-08-29-ci-fix-sloc-total.md` — CI SLOC guard false-positive pada baris `total` wc; filter `$2 != "total"`.
 - `2026-08-29-native-stream-wasm.md` — native/stream Zig→WASM: parse.zig, build.sh, stream.ts wrapper, test; deviasi build.zig (zig build hang).
 - `2026-09-04-convergence-and-changelog.md` — CHANGES.md `[Unreleased]` diisi (13 commit sejak v0.1.2), README koreksi fakta usang (test count 229→255, visibility private→public), survey repo miruamel/ (hanya zhi in-scope; profile README diabaikan per charter).
+- `2026-09-04-pipeline-verification.md` — Verifikasi end-to-end SSE pipeline: `zigBridge.ts` (119 SLOC) terimplementasi penuh (WASM instantiate + memory management + ABI call), `parseStream` dispatcher punya fallback logic, `cloud.ts` konsumen terhubung. Smoke test 5 assertions (parseStream, empty, noise filter, multi-line, disableWasm→TS fallback) semuanya pass. Tidak ada scaffold debt.
 
 ## Invarian yang dilacak
 
