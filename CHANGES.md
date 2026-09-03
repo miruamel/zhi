@@ -71,6 +71,13 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 ### Changed
 
 - **Architecture guard `test/` directory exemption** — `.github/workflows/architecture-guard.sh` now exempts `test/` dirs from the ≤5-files-per-directory cap. Only `src/cli/test` (7 files) exceeded the cap; all other test dirs are under it.
+- **Merged `origin/main` (PR #45: ink TUI)** — clean merge, no conflicts. 25 files / +1211 / -50. TUI feature adds 14 files under `src/tui/` (6 panes: DAG, Detail, Critics, Eval, PR/CI, Log + Help overlay) plus `onRegister` prop wiring through `engine/loop/driver.ts`, `src/cli/index.ts`, `src/cli/commands/loop.ts`. `package.json` deps `ink@4.4.1` + `react@18.3.1`.
+- **Merged `test/gen-stream-coverage`** — 1 unique commit: 8-line test addition for `--stream` CLI branch fallback via `generateStream`. Branch deleted after merge (local + remote).
+- **Deleted stale `feat/tui-ink` branch** — divergent pre-merge TUI work (816 insertions / 3633 deletions vs main). Canonical TUI already in `origin/main`; this branch was superseded. Deleted local + remote.
+
+### Test
+
+- **TUI test coverage for 13 files from PR #45** — 6 new test files (101 tests) covering `src/tui/core/{colors,format,icons,keymap,state}.ts` and `src/tui/panes/{bottom/{help,log},middle/{critics,eval,pr},top/{dag,detail,header}}.tsx`. Test convention follows repo pattern: `bun:test`, co-located `test/` directory at parent level (`src/tui/test/`, `src/tui/panes/test/`). The `dirHasTests` critic check picks these up for sibling coverage. Repo-wide critic score restored to 1.0 with 0 findings (was ~0.74 from 13 uncovered TUI files). Test count: 255 → 356.
 
 ### Security
 
