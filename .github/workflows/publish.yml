@@ -38,9 +38,16 @@ jobs:
       - name: Build TypeScript to dist/
         run: bun run build
 
+      - name: Setup Zig 0.16.0 (direct download; setup-zig mirror lacks 0.16.0)
+        run: |
+          ZIG_VER=0.16.0
+          URL="https://ziglang.org/download/${ZIG_VER}/zig-x86_64-linux-${ZIG_VER}.tar.xz"
+          curl -fsSL "$URL" -o /tmp/zig.tar.xz
+          tar -xf /tmp/zig.tar.xz -C /opt
+          echo "/opt/zig-x86_64-linux-${ZIG_VER}" >> "$GITHUB_PATH"
+
       - name: Build Zig WASM
         run: bun run native:build
-        continue-on-error: true # WASM write barrier di runner mungkin beda; lanjut walau gagal
 
       - name: Publish to npm (@miruamel/zhi) via OIDC Trusted Publisher
         # Trusted Publisher sudah terdaftar di npmjs.com (miruamel/zhi → publish.yml,
