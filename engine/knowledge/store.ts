@@ -1,6 +1,6 @@
-/** @brief Store knowledge in-memory (atomic). @since 0.1.0 */
+/** @brief Store knowledge in-memory (atomic). @since 0.1.1 */
 
-/** @brief Entri knowledge. @since 0.1.0 */
+/** @brief Entri knowledge. @since 0.1.1 */
 export interface Fact {
   /** @brief Kunci unik. */
   key: string;
@@ -10,7 +10,7 @@ export interface Fact {
   tags: string[];
 }
 
-/** @brief Penyimpanan fakta sederhana (Map-backed). @since 0.1.0 */
+/** @brief Penyimpanan fakta sederhana (Map-backed). @since 0.1.1 */
 export class KnowledgeStore {
   private map = new Map<string, Fact>();
 

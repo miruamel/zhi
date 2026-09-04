@@ -3,7 +3,7 @@ import { test, expect } from 'bun:test';
 import { composeCritiques, composeHygiene } from './compose';
 import { aggregate } from '../aggregate';
 
-test('compose runs all eight critics', () => {
+test('compose runs all eleven critics', () => {
   const cr = composeCritiques([{ path: 'engine/foo/a.ts', content: 'export const x = 1;\n' }]);
   expect(cr).toHaveLength(11);
   expect(cr.map((c) => c.name).sort()).toEqual([

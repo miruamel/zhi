@@ -1,10 +1,10 @@
-/** @brief Driver state-machine loop Zhi. Murni, 0 dependensi eksternal. @since 0.1.0 */
+/** @brief Driver state-machine loop Zhi. Murni, 0 dependensi eksternal. @since 0.1.1 */
 import { LoopState, LoopEvent, transition } from './states';
 
-/** @brief Handler tiap state: kerjakan state, kembalikan event pemicu. @since 0.1.0 */
+/** @brief Handler tiap state: kerjakan state, kembalikan event pemicu. @since 0.1.1 */
 export type StateHandler = (state: LoopState) => LoopEvent | Promise<LoopEvent>;
 
-/** @brief Opsi driver. @since 0.1.0 */
+/** @brief Opsi driver. @since 0.1.1 */
 export interface LoopDriverOptions {
   /** @brief State awal. Default INTAKE. */
   start?: LoopState;
@@ -12,7 +12,7 @@ export interface LoopDriverOptions {
   onTransition?: (from: LoopState, ev: LoopEvent, to: LoopState) => void;
 }
 
-/** @brief Driver loop otonom: pegang state, validasi transisi, jalankan siklus. @since 0.1.0 */
+/** @brief Driver loop otonom: pegang state, validasi transisi, jalankan siklus. @since 0.1.1 */
 export class LoopDriver {
   private state: LoopState;
   private readonly onTransition?: LoopDriverOptions['onTransition'];
@@ -44,7 +44,7 @@ export class LoopDriver {
     this.onTransition?.(from, ev, next);
     return true;
   }
-  /** @brief Force-stop: set state DONE tanpa transisi. @since 0.1.1 */
+  /** @brief Force-stop: set state DONE tanpa transisi. @since 0.1.2 */
   abort(): void {
     this.state = LoopState.DONE;
   }
@@ -52,7 +52,7 @@ export class LoopDriver {
    * @param {Partial<Record<LoopState, StateHandler>>} handlers - handler per state aktif.
    * @param {number} maxSteps - batas iterasi (cegah loop tak berhingga). Default 64.
    * @throws {Error} bila state tak punya handler, transisi ilegal, atau budget habis.
-   * @since 0.1.0 */
+   * @since 0.1.1 */
   async run(handlers: Partial<Record<LoopState, StateHandler>>, maxSteps = 64): Promise<void> {
     let steps = 0;
     while (!this.finished) {

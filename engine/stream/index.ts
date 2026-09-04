@@ -1,7 +1,7 @@
 /**
  * @brief Dispatcher parser SSE: coba WASM (zigBridge), fallback ke TS bila write barrier gagal.
  * Konsumer (`engine/model/stream`) import `parseStream` dari sini.
- * @since 0.1.1
+ * @since 0.1.2
  */
 import { parseSseTs } from './parseSseTs';
 import { disableWasm, isWasmAvailable, parseSseWasm } from './zigBridge';
@@ -13,7 +13,7 @@ import { disableWasm, isWasmAvailable, parseSseWasm } from './zigBridge';
  * fallback ke parser TS untuk request ini dan selanjutnya.
  * @param {string} chunk - chunk SSE (UTF-8).
  * @return {Promise<string[]>} payload data per event.
- * @since 0.1.1
+ * @since 0.1.2
  */
 export async function parseStream(chunk: string): Promise<string[]> {
   if (!isWasmAvailable()) return parseSseTs(chunk);
@@ -22,7 +22,9 @@ export async function parseStream(chunk: string): Promise<string[]> {
     // Deteksi write barrier: input mengandung data: event tapi output kosong.
     // Chunk tanpa data: event (hanya event:/comment:/id:) akan return [] secara
     // sah dari parser yang berfungsi — jangan disable WASM untuk itu.
-    const hasDataEvent = chunk.includes('data:');
+    // Gunakan regex ^data: (multiline) agar tidak false-positive pada
+    // substring 'data:' di tengah baris (mis. field: data:foo).
+    const hasDataEvent = /^data:/m.test(chunk);
     if (result.length === 0 && chunk.length > 0 && hasDataEvent) {
       disableWasm();
       return parseSseTs(chunk);

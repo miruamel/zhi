@@ -1,4 +1,4 @@
-/** @brief Test runTests. @since 0.1.0 */
+/** @brief Test runTests. @since 0.1.1 */
 import { describe, it, expect } from 'bun:test';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';

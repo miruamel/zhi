@@ -26,6 +26,7 @@ jobs:
         with:
           languages: typescript, javascript
           build-mode: none
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:

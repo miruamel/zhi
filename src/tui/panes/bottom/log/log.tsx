@@ -1,4 +1,4 @@
-/** @brief Log pane: append-only log stream with filters. @since 0.1.0 */
+/** @brief Log pane: append-only log stream with filters. @since 0.1.2 */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import { formatTime, truncate } from '../../../core/format';
@@ -27,7 +27,7 @@ function kindColor(k: LogEntry['kind']): string {
   }
 }
 
-/** @brief Render the log pane (latest N entries, color-coded). @since 0.1.0 */
+/** @brief Render the log pane (latest N entries, color-coded). @since 0.1.2 */
 export function Log({ log, expanded, offset, maxLines }: LogProps) {
   const windowSize = expanded ? maxLines : Math.min(8, maxLines);
   const start = Math.max(0, log.length - offset - windowSize);

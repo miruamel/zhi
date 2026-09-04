@@ -1,4 +1,4 @@
-/** @brief PR / CI pane: PR link + CI status with elapsed. @since 0.1.0 */
+/** @brief PR / CI pane: PR link + CI status with elapsed. @since 0.1.2 */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import { formatMs } from '../../../core/format';
@@ -37,7 +37,7 @@ export interface PrProps {
   expanded?: boolean;
 }
 
-/** @brief Render the PR/CI pane. @since 0.1.0 */
+/** @brief Render the PR/CI pane. @since 0.1.2 */
 export function Pr({ prCi, expanded = true }: PrProps) {
   return (
     <Box

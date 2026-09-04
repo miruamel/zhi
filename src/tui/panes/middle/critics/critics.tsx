@@ -1,4 +1,4 @@
-/** @brief Critics pane: 15-critic weighted Pareto display. @since 0.1.0 */
+/** @brief Critics pane: 15-critic weighted Pareto display. @since 0.1.2 */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import { bar, formatScore } from '../../../core/format';
@@ -53,7 +53,7 @@ function buildKnown(critics: CriticLine[]): Record<string, CriticLine> {
   return out;
 }
 
-/** @brief Render the critics pane (15 bars + avg). @since 0.1.0 */
+/** @brief Render the critics pane (15 bars + avg). @since 0.1.2 */
 export function Critics({ critics, weightedAvg, threshold, expanded = false }: CriticsProps) {
   const known = buildKnown(critics);
   const names = Object.keys(WEIGHTS);

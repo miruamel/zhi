@@ -2,7 +2,7 @@
  * @brief Type guard: true bila hasil withResilience adalah DLQ (gagal definitif).
  * @param {unknown} r - hasil withResilience atau nilai tak terduga.
  * @return {boolean} true bila DLQ.
- * @since 0.1.1
+ * @since 0.1.2
  */
 import type { DLQEntry } from '../../../resil';
 

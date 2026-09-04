@@ -4,7 +4,7 @@
  * @param {string[]} argv - argumen baris perintah (goal + --threshold=N).
  * @return {Promise<LoopContext>} konteks akhir loop (sampai DONE).
  * @throw {Error} bila goal kosong.
- * @since 0.1.0
+ * @since 0.1.2
  */
 import type { LoopContext } from '@engine/loop/wiring/context';
 import type { Critique } from '@engine/critic/aggregate';
@@ -19,7 +19,7 @@ import { parseArgs } from '../../parse-args/parse-args';
 import { mountTui } from '../../../tui/render';
 import type { AppState } from '../../../tui/core/state';
 
-/** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.1 */
+/** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.4 */
 export function toPatch(
   ctx: LoopContext,
   metrics: LoopMetrics,

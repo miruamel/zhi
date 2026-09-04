@@ -1,4 +1,4 @@
-/** @brief App root — the main ink <App> for Zhi TUI. @since 0.1.0 */
+/** @brief App root — the main ink <App> for Zhi TUI. @since 0.1.2 */
 import { Box, Text, useApp, useInput } from 'ink';
 import { useState, useEffect } from 'react';
 import { colors } from './core/colors';
@@ -15,7 +15,7 @@ export interface AppProps {
   onRegister?: (push: (p: Partial<AppState>) => void) => void;
 }
 
-/** @brief Root ink component. @since 0.1.0 */
+/** @brief Root ink component. @since 0.1.2 */
 export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }: AppProps) {
   const { exit } = useApp();
   const [state, setState] = useState<AppState>(initialState);

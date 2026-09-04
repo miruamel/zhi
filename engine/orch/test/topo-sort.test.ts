@@ -1,5 +1,5 @@
 /**
- * @brief Unit: topoSort() — topological order + cycle detection. @since 0.1.0
+ * @brief Unit: topoSort() — topological order + cycle detection. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
 import { topoSort } from '../dag';

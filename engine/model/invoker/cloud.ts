@@ -1,12 +1,12 @@
 /**
  * @brief Invoker cloud OpenAI-compatible (chat/completions).
  * Backend nyata di balik ModelInvoker seam; butuh MODEL_API_KEY.
- * @since 0.1.0
+ * @since 0.1.1
  */
 import { parseStream } from '../stream';
 import type { ModelInvoker } from './types';
 
-/** @brief Opsi inisialisasi CloudModelInvoker. @since 0.1.0 */
+/** @brief Opsi inisialisasi CloudModelInvoker. @since 0.1.1 */
 export interface CloudInvokerOpts {
   /** @brief Base URL API tanpa trailing /v1. Default https://api.openai.com/v1. */
   baseUrl?: string;
@@ -20,7 +20,7 @@ export interface CloudInvokerOpts {
  * @brief Ekstrak token content dari payload SSE (JSON chat/completions).
  * @param {string} payload - baris data: (JSON).
  * @return {string[]} token content (kosong bila bukan JSON/delta).
- * @since 0.1.0
+ * @since 0.1.1
  */
 export function extractTokens(payload: string): string[] {
   try {
@@ -34,7 +34,7 @@ export function extractTokens(payload: string): string[] {
   }
 }
 
-/** @brief Invoker OpenAI-compatible (chat completions). @since 0.1.0 */
+/** @brief Invoker OpenAI-compatible (chat completions). @since 0.1.1 */
 export class CloudModelInvoker implements ModelInvoker {
   private readonly url: string;
   private readonly model: string;

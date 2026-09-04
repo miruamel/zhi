@@ -1,6 +1,6 @@
-/** @brief Circuit breaker: buka bila error rate > threshold dalam window. @since 0.1.0 */
+/** @brief Circuit breaker: buka bila error rate > threshold dalam window. @since 0.1.1 */
 
-/** @brief Konfigurasi breaker. @since 0.1.0 */
+/** @brief Konfigurasi breaker. @since 0.1.1 */
 export interface BreakerConfig {
   /** @brief Jumlah panggilan terakhir yang dilacak. */
   windowSize: number;
@@ -8,7 +8,7 @@ export interface BreakerConfig {
   openThreshold: number;
 }
 
-/** @brief Breaker stateful: catat hasil, buka bila error rate tinggi. @since 0.1.0 */
+/** @brief Breaker stateful: catat hasil, buka bila error rate tinggi. @since 0.1.1 */
 export class CircuitBreaker {
   private calls: boolean[] = [];
 

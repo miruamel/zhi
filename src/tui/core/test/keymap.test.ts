@@ -1,4 +1,4 @@
-/** @brief Test resolveKey: maps key press to action. @since 0.1.0 */
+/** @brief Test resolveKey: maps key press to action. @since 0.1.4 */
 import { describe, test, expect } from 'bun:test';
 import { resolveKey, type KeyAction } from '../keymap';
 

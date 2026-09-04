@@ -1,7 +1,7 @@
-/** @brief Verifikasi statis scaffold modul domain. @since 0.1.0 */
+/** @brief Verifikasi statis scaffold modul domain. @since 0.1.1 */
 import type { ScaffoldFile } from './generate';
 
-/** @brief Hasil verifikasi scaffold. @since 0.1.0 */
+/** @brief Hasil verifikasi scaffold. @since 0.1.1 */
 export interface VerifyResult {
   ok: boolean;
   violations: string[];
@@ -16,7 +16,7 @@ const DEEP_RELATIVE = /\.\.\/\.\./;
 /** @brief Verifikasi scaffold: jumlah file per dir, header Doxygen, import relatif dalam.
  * @param {ScaffoldFile[]} files - hasil generate().
  * @return {VerifyResult} ok + daftar pelanggaran (kosong bila lolos).
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function verify(files: ScaffoldFile[]): VerifyResult {
   const violations: string[] = [];
   const byDir = new Map<string, number>();

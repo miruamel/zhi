@@ -1,5 +1,5 @@
 /**
- * @brief Unit: schedule() — execution order from DAG + allocation. @since 0.1.0
+ * @brief Unit: schedule() — execution order from DAG + allocation. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
 import { allocate, schedule } from '../schedule';

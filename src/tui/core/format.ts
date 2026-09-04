@@ -1,4 +1,4 @@
-/** @brief Pure formatters: time, score, percent, token count, bar. @since 0.1.0 */
+/** @brief Pure formatters: time, score, percent, token count, bar. @since 0.1.2 */
 
 /** @brief Format ms as "1m 23s" or "456ms". @param {number} ms @return {string} */
 export function formatMs(ms: number): string {

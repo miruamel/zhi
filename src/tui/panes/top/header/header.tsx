@@ -1,4 +1,4 @@
-/** @brief Header pane: ASCII banner + loop state badge + version. @since 0.1.0 */
+/** @brief Header pane: ASCII banner + loop state badge + version. @since 0.1.2 */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import { formatMs } from '../../../core/format';
@@ -24,7 +24,7 @@ export interface HeaderProps {
   tokensBudget?: number;
 }
 
-/** @brief Render the header pane (banner + status bar). @since 0.1.0 */
+/** @brief Render the header pane (banner + status bar). @since 0.1.2 */
 export function Header({
   loop,
   goal,

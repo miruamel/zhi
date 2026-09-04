@@ -1,4 +1,4 @@
-/** @brief Test compress: trim konteks by budget + weight. @since 0.1.0 */
+/** @brief Test compress: trim konteks by budget + weight. @since 0.1.1 */
 import { describe, it, expect } from 'bun:test';
 import { compress, type BuildContext } from './compress';
 

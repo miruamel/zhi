@@ -1,5 +1,5 @@
 /**
- * @brief Unit: parseArgs() — argv parsing. @since 0.1.0
+ * @brief Unit: parseArgs() — argv parsing. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
 import { parseArgs } from './parse-args';

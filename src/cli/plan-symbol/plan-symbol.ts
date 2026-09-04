@@ -3,7 +3,7 @@
  * Fallback ke 'main' bila token kosong atau tidak dimulai huruf/underscore.
  * @param {string} plan - string plan/goal.
  * @return {string} identifier aman untuk nama file/branch.
- * @since 0.1.0
+ * @since 0.1.2
  */
 export function planSymbol(plan: string): string {
   const head = plan.split(/[\s>]+/)[0] ?? '';

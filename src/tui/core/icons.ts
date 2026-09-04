@@ -1,4 +1,4 @@
-/** @brief Status glyphs (Plan/Build/Critique/Eval/Commit/Done). @since 0.1.0 */
+/** @brief Status glyphs (Plan/Build/Critique/Eval/Commit/Done). @since 0.1.2 */
 export const glyphs = {
   running: '●',
   done: '✓',

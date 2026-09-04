@@ -1,11 +1,11 @@
-/** @brief Budget allocator + serial scheduler. @since 0.1.0 */
+/** @brief Budget allocator + serial scheduler. @since 0.1.1 */
 import type { Dag, Step } from './types';
 
 /** @brief Alokasikan token per step dari budget total, proporsional pada estimate.
  * @param {Dag} dag - DAG rencana.
  * @param {number} budget - total token tersedia.
  * @return {Map<string, number>} alokasi per stepId.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function allocate(dag: Dag, budget: number): Map<string, number> {
   const sum = dag.nodes.reduce((s, n) => s + n.estimate, 0);
   const out = new Map<string, number>();
@@ -19,7 +19,7 @@ export function allocate(dag: Dag, budget: number): Map<string, number> {
   return out;
 }
 
-/** @brief Hitung depth (jarak dari root) tiap step via topo order. @since 0.1.0 */
+/** @brief Hitung depth (jarak dari root) tiap step via topo order. @since 0.1.1 */
 function depthOf(dag: Dag): Map<string, number> {
   const depth = new Map<string, number>();
   for (const id of dag.order) {
@@ -35,7 +35,7 @@ function depthOf(dag: Dag): Map<string, number> {
  * @param {Dag} dag - DAG rencana.
  * @param {Map<string, number>} alloc - hasil allocate.
  * @return {Step[]} urutan eksekusi.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function schedule(dag: Dag, alloc: Map<string, number>): Step[] {
   const depth = depthOf(dag);
   return [...dag.order]

@@ -1,6 +1,6 @@
-/** @brief State conductor loop Zhi (murni, tanpa dependensi eksternal). @since 0.1.0 */
+/** @brief State conductor loop Zhi (murni, tanpa dependensi eksternal). @since 0.1.1 */
 
-/** @brief State mesin status loop otonom. @since 0.1.0 */
+/** @brief State mesin status loop otonom. @since 0.1.1 */
 export enum LoopState {
   INTAKE = 'INTAKE',
   PLAN = 'PLAN',
@@ -15,7 +15,7 @@ export enum LoopState {
   DONE = 'DONE',
 }
 
-/** @brief Event pemicu transisi antar-state. @since 0.1.0 */
+/** @brief Event pemicu transisi antar-state. @since 0.1.1 */
 export enum LoopEvent {
   GOAL_READY = 'GOAL_READY',
   PLAN_OK = 'PLAN_OK',
@@ -32,7 +32,7 @@ export enum LoopEvent {
   BUDGET_OUT = 'BUDGET_OUT',
 }
 
-/** @brief Input gate sebelum COMMIT. @since 0.1.0 */
+/** @brief Input gate sebelum COMMIT. @since 0.1.1 */
 export interface GateInput {
   /** @brief Skor Pareto agregat dari critic plant. */
   paretoScore: number;
@@ -42,7 +42,7 @@ export interface GateInput {
   qualityGateGreen: boolean;
 }
 
-/** @brief Tabel transisi valid: state -> event -> next state. @since 0.1.0 */
+/** @brief Tabel transisi valid: state -> event -> next state. @since 0.1.1 */
 export const transitions: Record<LoopState, Partial<Record<LoopEvent, LoopState>>> = {
   [LoopState.INTAKE]: { [LoopEvent.GOAL_READY]: LoopState.PLAN },
   [LoopState.PLAN]: {
@@ -76,7 +76,7 @@ export const transitions: Record<LoopState, Partial<Record<LoopEvent, LoopState>
  * @param {LoopState} state - state saat ini.
  * @param {LoopEvent} ev - event pemicu.
  * @return {LoopState|null} next state, atau null bila transisi ilegal.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function transition(state: LoopState, ev: LoopEvent): LoopState | null {
   return transitions[state]?.[ev] ?? null;
 }
@@ -85,7 +85,7 @@ export function transition(state: LoopState, ev: LoopEvent): LoopState | null {
  * @param {LoopState} state - state saat ini.
  * @param {GateInput} input - skor Pareto + status quality-gate.
  * @return {boolean} layak commit.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function gatePass(state: LoopState, input: GateInput): boolean {
   if (state !== LoopState.EVALUATE) return false;
   return input.paretoScore >= input.paretoThreshold && input.qualityGateGreen;

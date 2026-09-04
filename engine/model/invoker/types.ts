@@ -1,6 +1,6 @@
 /**
  * @brief Kontrak pemanggilan model (LLM) untuk satu generasi.
- * @since 0.1.0
+ * @since 0.1.2
  */
 export interface ModelInvoker {
   /**

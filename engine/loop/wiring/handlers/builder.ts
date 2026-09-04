@@ -5,8 +5,7 @@
  * @param {LoopMetrics} [metrics] - bila diberi, setiap handler dibungkus timedStage.
  * @return {Partial<Record<LoopState, StateHandler>>} handler tiap state aktif.
  * @see docs/design/loop.md
- * @since 0.1.0
- */
+ * @since 0.1.2 */
 import { aggregate } from '../../../critic/aggregate';
 import { gate } from '../../../eval/gate';
 import { classifyError, CircuitBreaker, withResilience } from '../../../resil';
@@ -24,7 +23,7 @@ import { isDLQ } from './is-dlq';
  * @param {LoopDeps} deps - deps injeksi.
  * @param {LoopMetrics} [metrics] - optional metrics wrapper.
  * @return {Partial<Record<LoopState, StateHandler>>} map state → handler.
- * @since 0.1.0
+ * @since 0.1.2
  */
 export function buildHandlers(
   ctx: LoopContext,

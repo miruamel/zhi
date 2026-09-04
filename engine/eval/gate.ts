@@ -1,6 +1,6 @@
-/** @brief Gate evaluasi output. @since 0.1.0 */
+/** @brief Gate evaluasi output. @since 0.1.1 */
 
-/** @brief Input evaluasi. @since 0.1.0 */
+/** @brief Input evaluasi. @since 0.1.1 */
 export interface EvalInput {
   /** @brief Skor 0..1. */
   score: number;
@@ -10,7 +10,7 @@ export interface EvalInput {
   blockers: string[];
 }
 
-/** @brief Output evaluasi. @since 0.1.0 */
+/** @brief Output evaluasi. @since 0.1.1 */
 export interface EvalOutput {
   /** @brief Lulus gate. */
   passed: boolean;
@@ -25,7 +25,7 @@ export interface EvalOutput {
  * @param {number} threshold - ambang lulus (default 0.7).
  * @return {EvalOutput} keputusan gate.
  * @see docs/design/eval.md
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function gate(input: EvalInput, threshold = 0.7): EvalOutput {
   const reasons: string[] = [];
   if (input.blockers.length > 0) {

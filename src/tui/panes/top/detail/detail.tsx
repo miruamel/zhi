@@ -1,4 +1,4 @@
-/** @brief Step detail pane: current step info, tokens, elapsed, detail string. @since 0.1.0 */
+/** @brief Step detail pane: current step info, tokens, elapsed, detail string. @since 0.1.2 */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import { formatTokens, formatPct, truncate } from '../../../core/format';
@@ -13,7 +13,7 @@ export interface DetailProps {
   expanded?: boolean;
 }
 
-/** @brief Render the step detail pane. @since 0.1.0 */
+/** @brief Render the step detail pane. @since 0.1.2 */
 export function Detail({
   step,
   loop,

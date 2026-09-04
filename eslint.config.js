@@ -1,7 +1,7 @@
 import jsdoc from 'eslint-plugin-jsdoc';
 import tsParser from '@typescript-eslint/parser';
 
-/** @brief ESLint flat config untuk Zhi (Yan v2.0.0 adapted). @since 0.1.0 */
+/** @brief ESLint flat config untuk Zhi (Yan v2.0.0 adapted). @since 0.1.1 */
 export default [
   {
     ignores: [

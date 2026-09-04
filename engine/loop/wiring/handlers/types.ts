@@ -1,17 +1,16 @@
 /**
  * @brief Kontrak LoopDeps + konstanta retry handler.
- * @since 0.1.1
- */
+ * @since 0.1.2 */
 import type { EvalOutput } from '../../../eval/gate';
 import type { Critique } from '../../../critic/aggregate';
 
-/** @brief Batas retry recovery sebelum abort (selaras resil maxAttempts=3, ADR-003). @since 0.1.1 */
+/** @brief Batas retry recovery sebelum abort (selaras resil maxAttempts=3, ADR-003). @since 0.1.2 */
 export const MAX_RECOVER = 3;
 
-/** @brief Batas retry generate per EXECUTE (selaras resil default). @since 0.1.1 */
+/** @brief Batas retry generate per EXECUTE (selaras resil default). @since 0.1.2 */
 export const GENERATE_RETRY = 3;
 
-/** @brief Dependensi injeksi untuk state LLM-dependent + ambang. @since 0.1.1 */
+/** @brief Dependensi injeksi untuk state LLM-dependent + ambang. @since 0.1.2 */
 export interface LoopDeps {
   /** @brief Normalisasi goal (INTAKE). */
   ingest: (goal: string) => string;

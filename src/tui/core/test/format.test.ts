@@ -1,5 +1,5 @@
 /**
- * @brief Unit: pure formatters (formatMs, formatScore, formatTokens, formatPct, bar, formatTime, truncate, pad). @since 0.1.0
+ * @brief Unit: pure formatters (formatMs, formatScore, formatTokens, formatPct, bar, formatTime, truncate, pad). @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
 import {

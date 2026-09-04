@@ -1,5 +1,5 @@
 /**
- * @brief Unit: planSymbol() — derive identifier dari plan. @since 0.1.0
+ * @brief Unit: planSymbol() — derive identifier dari plan. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
 import { planSymbol } from './plan-symbol';
