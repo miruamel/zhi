@@ -1,0 +1,46 @@
+name: stale
+
+on:
+  schedule:
+    # Daily at 00:00 UTC
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  close-stale:
+    name: Mark and Close Stale Issues & PRs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          # Issues
+          stale-issue-message: >
+            Issue ini tidak ada aktivitas selama 30 hari. Ditandai stale.
+            Jika masih relevansi, silakan berikan update atau akan ditutup dalam 14 hari.
+          close-issue-message: >
+            Issue ini tidak ada aktivitas selama 44 hari dan sudah ditandai stale.
+            Ditutup secara otomatis. Jika diperlukan, buat issue baru dengan referensi ini.
+          days-before-issue-stale: 30
+          days-before-issue-close: 44
+
+          # Pull Requests
+          stale-pr-message: >
+            PR ini tidak ada aktivitas selama 14 hari. Ditandai stale.
+            Jika masih dikerjakan, silakan komentar atau akan ditutup dalam 7 hari.
+          close-pr-message: >
+            PR ini tidak ada aktivitas selama 21 hari dan sudah ditandai stale.
+            Ditutup secara otomatis. Jika diperlukan, buka PR baru.
+          days-before-pr-stale: 14
+          days-before-pr-close: 21
+
+          # Exempt
+          exempt-issue-labels: "p0,p1,security,bug,enhancement"
+          exempt-pr-labels: "p0,p1,security,bug,enhancement,wip,in-progress"
+          exempt-assignees: "miruamel"
+
+          # Operations
+          operations-permission: write
