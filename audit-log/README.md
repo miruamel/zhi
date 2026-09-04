@@ -2,8 +2,8 @@
 
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
-## Entri (69 file, kronologis)
-
+## Entri (70 file, kronologis)
+- `2026-09-04-prettierignore-audit-log-exclusion.md` — `.prettierignore` exclusion untuk `audit-log/entries/`: narrative documents tidak di-format oleh Prettier. Root cause dari 2 CI failure sebelumnya (state-sync-4, state-sync-5). Config-level fix, bukan per-file. CI `33863154899` hijau (Gate 7m15s + Build 5m21s). Branch protection menghalang push langsung ke main; fix di-PR via `fix/prettierignore-audit-log-entries`.
 - `2026-09-04-ci-green-all-runs.md` — Semua CI runs hijau: `ci` + `architecture-guard` pada 3 commit terakhir. Aksi GitHub Actions di-upgrade v4→v6 (Node.js 20 deprecation). Repo bersih, 0 commits di depan origin/main, 63 audit entries konsisten. Gate lokal: exit 0, 365 pass / 0 fail / 726 expect() across 72 files.
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
 - `2026-08-29-remediation-docs.md` — Remediasi docs: nest guides, ADR-005 untuk `docs/design/`.
