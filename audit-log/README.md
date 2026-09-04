@@ -2,7 +2,7 @@
 
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
-## Entri (63 file, kronologis)
+## Entri (64 file, kronologis)
 
 - `2026-09-04-ci-green-all-runs.md` — Semua CI runs hijau: `ci` + `architecture-guard` pada 3 commit terakhir. Aksi GitHub Actions di-upgrade v4→v6 (Node.js 20 deprecation). Repo bersih, 0 commits di depan origin/main, 63 audit entries konsisten. Gate lokal: exit 0, 365 pass / 0 fail / 726 expect() across 72 files.
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
