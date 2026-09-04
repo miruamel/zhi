@@ -6,9 +6,6 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 5
-    ignore:
-      - dependency-type: "all"
-        match-name: "vitest"
     groups:
       types:
         patterns:
