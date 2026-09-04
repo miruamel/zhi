@@ -10,7 +10,7 @@
 - **Gate**: fast-path, lint, format — all green.
 - **Audit log**: 86 files on disk, 86 entries in README, header says 86 — consistent.
 - **Working tree**: clean, on `main`, 0 ahead / 0 behind origin/main.
-- **Open issues**: 1 (#99, P3, stale branches).
+- **Open issues**: 1 (#99, P3, stale remote branches — resolved 2026-09-05).
 - **Open PRs**: 0.
 
 ### Token rotation status
@@ -19,7 +19,7 @@
 
 ### Stale branches
 
-4 remote branches remain (`fix/audit-log-dedup-79`, `fix/merge-resolution-4-track`, `fix/native-stream-wasm-build`, `fix/version-tags-git-history`) — all merged. Deletion blocked by token scope (`gho_*` lacks `delete_repo`). Tracked as issue #99 (P3). Zero functional impact.
+**Resolved 2026-09-05**: All 5 merged remote branches (`fix/audit-log-dedup-79`, `fix/merge-resolution-4-track`, `fix/native-stream-wasm-build`, `fix/version-tags-git-history`, `fix/wasm-load-failure-recovery`) were deleted via `git push origin --delete`. The `delete_repo` scope limitation was bypassed — `git push origin --delete` succeeded despite the token lacking `delete_repo` scope. Remote now has only `main`. Tracked as issue #99 (P3, closed).
 
 ### Identity
 

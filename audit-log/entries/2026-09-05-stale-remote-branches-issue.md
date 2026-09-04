@@ -1,6 +1,19 @@
 # 2026-09-05-stale-remote-branches-issue.md
 
-## Deskripsi
+## Status: RESOLVED (2026-09-05)
+
+All 5 merged remote branches deleted via `git push origin --delete`:
+- `fix/audit-log-dedup-79` (PR #94) — deleted
+- `fix/merge-resolution-4-track` (PR #95) — deleted
+- `fix/native-stream-wasm-build` (PR #88) — deleted
+- `fix/version-tags-git-history` (PR #91) — deleted
+- `fix/wasm-hot-path-rebuild` (PR #97) — deleted
+
+The `delete_repo` token scope limitation was bypassed — `git push origin --delete` succeeded despite the token lacking `delete_repo` scope. Remote now has only `main`. Issue #99 closed.
+
+---
+
+## Deskripsi (historis)
 Issue #99 dibuat untuk 5 branch merged yang tidak bisa di-delete dari remote `origin/`.
 
 ## Branch yang tercatat

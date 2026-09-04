@@ -27,8 +27,8 @@ export async function withResilience<T>(
   const res: RetryResult<T> = await retryWithBudget(fn, max);
   if (ctx.breaker) ctx.breaker.record(res.ok);
   if (res.ok) return res.value as T;
-  const classified = classifyError(res.dlq?.error);
-  if (classified.fatal) return res.dlq as DLQEntry;
+  // ponytail: classifyError result is dead — both branches return res.dlq.
+  // classifyError is still used by loop/wiring/handlers/builder.ts:87 for recovery strategy.
   return res.dlq as DLQEntry;
 }
 
