@@ -25,6 +25,7 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: typescript, javascript
+          disable-improved-incremental-analysis: true
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
