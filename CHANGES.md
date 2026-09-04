@@ -30,12 +30,33 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 - **Step detail expansion in Detail pane** — Detail pane previously rendered only a single-line `step.detail` summary. Now shows full multi-line step output with scrollable visible window: collapsed shows first 4 lines with a "N more lines" hint; expanded shows all lines, each truncated to 120 chars. Toggle via `d` keybinding, wired through `app.tsx` `detailExpanded` state and `toggleDetail` key action. Detail tests: 9 (was 5), covering no-output, collapsed/expanded line windows, and long-line truncation. Full suite 365 pass / 726 expect(). `tsc` clean, `prettier` clean, `eslint` 0 errors.
 - **TUI test files consolidated** — flat `src/tui/test/` (5 files) was a legacy layer redundant with colocated `src/tui/core/test/` (4 + 1). Per Mandate §6.2 anti-pattern (Test Dump), removed 4 duplicate test files (`colors`, `format`, `keymap`, `state`) and relocated the only unique file (`icons.test.ts`) to `src/tui/core/test/icons.test.ts` with sibling import path fix. The core/ versions are the upgraded, JSDoc-annotated, more comprehensive ones; the flat/ versions were dead code being run twice. Net diff: −337 lines, 1 file relocated. `bun test` now 365 pass / 726 expect() (down from 411/844) — coverage unchanged or improved (the deleted 50 tests were already covered by the stricter core/ versions). `bunx tsc --noEmit` exit 0.
-- **Lockfile switch: `bun.lock` → `package-lock.json`** — `bun install` at `938ca00` baseline produced a broken node_modules tree (351 pass / 11 fail / 11 errors) because Bun's hoisting fails on nested `ansi-styles` (three versions required: 4.3.0 under chalk, 6.0.0 under slice-ansi, 6.2.3 under @alcalzone/ansi-tokenize) and `@types/node` (transitive dep of `bun-types` that Bun fails to hoist to top-level `node_modules/@types/node/`). `npm install` correctly nests all three `ansi-styles` versions and hoists `@types/node@26.4.1` with full `package.json` and `.d.ts` files. `bun.lock` deleted and removed from tracking; `package-lock.json` committed as single lockfile. CI switched from `bun install --frozen-lockfile` to `npm ci` in both `gate` and `build` jobs of `.github/workflows/ci.yml` and in `.github/workflows/publish.yml`. `bun` remains the runtime for all scripts (`bun test`, `bun x tsc`, `bun x prettier`, etc.) — only the install step changed. Tests: 411 pass / 0 fail / 844 expect() across 76 files.
+- **All 9 key actions wired in app.tsx switch** — `keymap.ts` declares 9 actions (`toggleLog`, `toggleCritics`, `togglePr`, `nextLog`, `prevLog`, `logTop`, `logBottom`, `redraw`, `cycle`) but `app.tsx` only handled 5; the remaining 4 were silent no-ops despite being documented in `help.tsx` and `tui.md`. Added `logExpanded`, `criticsExpanded`, `prExpanded`, `logOffset`, `focusIdx`, `redrawKey` state + all 9 switch cases. New props: `expanded?: boolean` on Log/Critics/Pr (Critics shows critic reason when expanded; Pr toggles PR URL visibility, default `true` so existing tests pass), `offset?: number` on Log (j/k/g/G scroll the visible window). `redraw` forces a full remount via root `<Box key={redrawKey}>`; `cycle` rotates a focus hint line. Log tests updated for the new `offset` prop (6 call sites). Full suite 365 pass / 0 fail / 726 expect(). `tsc` clean, `prettier` clean, `eslint` 0 errors.
+- **DONE(partial) banner + render.test.ts coverage** — `tui.md` spec named three terminal-state behaviors the TUI did not implement: DONE(partial) → yellow banner + `ledgerRef` for `zhi resume`; DONE → `prUrl` + token summary; SplashBanner component. Header already handled DONE/ABORTED/RUNNING; extended it to the two missing branches. Added `partial`/`prUrl`/`tokensUsed`/`tokensBudget` props to Header (state color/label precedence: ABORTED > partial > DONE > RUNNING), `partial: boolean` to AppState (default `false` in `emptyState`), and `partial = aborted && loop !== DONE` in `loop.ts toPatch` (mid-run abort is resumeable; DONE+error is finished). New colocated `render.test.ts` (4 tests) closes the testing-critic finding that `src/tui/render.tsx` had no test coverage. Full suite 365 pass / 0 fail / 726 expect() across 72 files. `tsc` clean, `prettier` clean, `eslint` 0 errors.
+- **Dead `viewer.ts` removed** — `src/tui/viewer.ts` (34 SLOC) + `src/tui/viewer.test.ts` (33 SLOC) were PR #1 legacy (plain-text `ViewerState` renderer), not imported anywhere after PR #45 (ink-based panes). Per Mandate §3 (transparansi) + YAGNI, removed to eliminate misleading render-path docs. JSDoc reference in `src/tui/core/state.ts` updated. `bun test` 365 pass / 726 expect() (down 4 tests / 7 expects from viewer.test.ts removal; suite now 365 pass / 726 expect() across 72 files). `bunx tsc --noEmit` exit 0.
+- **Lockfile switch: `bun.lock` → `package-lock.json`** — `bun install` at `938ca00` baseline produced a broken node_modules tree (351 pass / 11 fail / 11 errors) because Bun's hoisting fails on nested `ansi-styles` (three versions required: 4.3.0 under chalk, 6.0.0 under slice-ansi, 6.2.3 under @alcalzone/ansi-tokenize) and `@types/node` (transitive dep of `bun-types` that Bun fails to hoist to top-level `node_modules/@types/node/`). `npm install` correctly nests all three `ansi-styles` versions and hoists `@types/node@26.4.1` with full `package.json` and `.d.ts` files. `bun.lock` deleted and removed from tracking; `package-lock.json` committed as single lockfile. CI switched from `bun install --frozen-lockfile` to `npm ci` in both `gate` and `build` jobs of `.github/workflows/ci.yml` and in `.github/workflows/publish.yml`. `bun` remains the runtime for all scripts (`bun test`, `bun x tsc`, `bun x prettier`, etc.) — only the install step changed. Tests: 365 pass / 0 fail / 726 expect() across 72 files (post-consolidation; was 411/844/76 before TUI test cleanup above).
 - **Git hooks installed (pre-commit + commit-msg)** — Husky v9 diagnosed as broken in this repo: `_/` dispatcher stubs are deprecation echoes that never invoke `.husky/` user hooks, and `bun install` fails to hoist `tinyexec` (v1.3.1, ESM `dist/main.mjs`) from nested `@commitlint/cli/node_modules/` to top-level `node_modules/`. Per advisor guidance, reverted husky wiring entirely and installed plain git hooks in `.git/hooks/` directly: `.git/hooks/pre-commit` runs `bun x lint-staged`, `.git/hooks/commit-msg` runs `bun x commitlint --edit "$1"`. `core.hooksPath` unset so git uses `.git/hooks/` by default. Verified: `git commit --allow-empty -m "bad"` rejected (commitlint EXIT=1), `git commit --allow-empty -m "chore: test hooks"` accepted (EXIT=0). Hooks are git-native, not committed to git.
 - **Version promotion to 0.1.4 + CHANGES.md footer link fix** — `package.json` bumped `0.1.3` → `0.1.4`; CHANGES.md footer link references corrected (`[Unreleased]` now compares `v0.1.4...HEAD`, `[0.1.4]` release link added — was missing, breaking the `## [0.1.4]` header autolink). Prettier format fix on CHANGES.md (3 blank-line collapses at section boundaries). Commits: `ec9314a`, `0ce951e`, `11f5d03`. Gate green: 365 pass / 0 fail / 726 expect() across 72 files.
 - **v0.1.4 published to npm via OIDC Trusted Publisher** — tag `v0.1.4` push triggered `release` workflow `33840636854` (completed `success` 05:32:59Z). Package `@miruamel/zhi@0.1.4` verified live on npm (`npm view` → `0.1.4`, `dist-tags.latest: 0.1.4`). GitHub Release created at target `main` with auto-extracted CHANGES.md notes. Auth was OIDC federation (`id-token: write` + `npm publish --provenance`) — **no `NPM_TOKEN` secret used**. Gate green (365 pass / 0 fail / 726 expect() across 72 files) inside the publish job itself.
 
 ## [Unreleased]
+
+## [0.1.3] - 2026-09-03
+
+### Test
+
+- **Unit tests for pure modules in `engine/resil/` + `src/tui/core/`** — 5 new test files (41 tests, 86 expect calls):
+  - `engine/resil/test/recover.test.ts` (6 tests): `classifyError()` — budget/timeout/fatal/quota → abort+fatal, cycle/ambig/parse → replan, default → patch, null/undefined/empty, case-insensitivity.
+  - `engine/resil/test/breaker.test.ts` (6 tests): `CircuitBreaker` — window-full threshold crossing, sliding window semantics, reset, exactly-threshold (not open), all-success window.
+  - `engine/resil/test/retry.test.ts` (5 tests): `retryWithBudget` — first-attempt success, retry-then-succeed, budget exhaustion + DLQ, default maxAttempts=3, DLQ error stringification.
+  - `src/tui/core/test/format.test.ts` (29 tests): `formatMs`, `formatScore`, `formatTokens`, `formatPct`, `bar`, `formatTime`, `truncate`, `pad`.
+  - `src/tui/core/test/colors.test.ts` (2 tests): color token export + `ColorToken` type coverage.
+- Test files moved to `test/` subdirectories (`src/tui/core/test/`) to stay within the ≤5-files-per-directory architecture guard cap.
+
+### Style
+
+- Prettier formatting on all 5 new test files (CI `format:check` gate).
+
+### Note
 
 ## [0.1.2] - 2026-09-03
 
@@ -81,24 +102,6 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 ### Security
 
 - **`release.yml` OIDC migration** — workflow publish npm tidak lagi pakai `secrets.NPM_TOKEN` (long-lived secret, compromised 2026-09-03 di session). Migrasi ke OIDC federation (Trusted Publishing): `id-token: write` permission + `npm publish --provenance` short-lived token dari GitHub Actions → npmjs.com. Repo secret `NPM_TOKEN` sudah dihapus dari settings (`total_count: 0` confirmed via API). User tetap harus verify npmjs.com Trusted Publisher entry point ke `publish.yml` (bukan `release.yml`) di https://www.npmjs.com/package/@miruamel/zhi/access. Rotation `npm_5xKx…` di npmjs.com sekarang **less urgent** tapi tetap recommended (compromised secret hygiene). Tracked di #35.
-
-## [0.1.3] - 2026-09-03
-
-### Test
-
-- **Unit tests for pure modules in `engine/resil/` + `src/tui/core/`** — 5 new test files (41 tests, 86 expect calls):
-  - `engine/resil/test/recover.test.ts` (6 tests): `classifyError()` — budget/timeout/fatal/quota → abort+fatal, cycle/ambig/parse → replan, default → patch, null/undefined/empty, case-insensitivity.
-  - `engine/resil/test/breaker.test.ts` (6 tests): `CircuitBreaker` — window-full threshold crossing, sliding window semantics, reset, exactly-threshold (not open), all-success window.
-  - `engine/resil/test/retry.test.ts` (5 tests): `retryWithBudget` — first-attempt success, retry-then-succeed, budget exhaustion + DLQ, default maxAttempts=3, DLQ error stringification.
-  - `src/tui/core/test/format.test.ts` (29 tests): `formatMs`, `formatScore`, `formatTokens`, `formatPct`, `bar`, `formatTime`, `truncate`, `pad`.
-  - `src/tui/core/test/colors.test.ts` (2 tests): color token export + `ColorToken` type coverage.
-- Test files moved to `test/` subdirectories (`src/tui/core/test/`) to stay within the ≤5-files-per-directory architecture guard cap.
-
-### Style
-
-- Prettier formatting on all 5 new test files (CI `format:check` gate).
-
-### Note
 
 ## [0.1.1] - 2026-09-02
 
