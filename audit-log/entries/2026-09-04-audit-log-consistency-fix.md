@@ -1,4 +1,4 @@
-# 2026-09-04-audit-log-consistency-fix.md
+1:# 2026-09-04-audit-log-consistency-fix.md
 
 ## Context
 
@@ -13,15 +13,15 @@ Investigation of P0 token rotation (Issue #63, already closed by operator) uncov
 ## Tindakan
 
 1. **Created Issue #66** — P2, ops, debt. Closed duplicate Issue #67.
-2. **Fixed README**: Removed stale `prettierignore-audit-log-exclusion` entry, replaced with the actual `npm-token-leak-incident` entry (which was already on disk but had its line collapsed into a header-only duplicate). Count now 72, matches disk.
+2. **Fixed README**: Removed stale `prettierignore-audit-log-exclusion` entry, replaced with the actual `npm-token-leak-incident` entry (which was already on disk but had its line collapsed into a header-only duplicate). Count now 73, matches disk.
 3. **Fixed .prettierignore**: Added `audit-log/entries/` and `audit-log/README.md` exclusions so `format:check` skips narrative documents.
 4. **Recreated git hooks**: `.git/hooks/pre-commit` (lint-staged) and `.git/hooks/commit-msg` (commitlint). Verified: bad commit rejected, good commit accepted.
 5. **Created PR #69** — `fix/audit-log-consistency` → `main`. Config-only + documentation, no code/dependency changes.
 
 ## Verifikasi
 
-- `ls audit-log/entries/ | wc -l` = 72, matches README count
-- `grep -c '^- `2026' audit-log/README.md` = 72
+- `ls audit-log/entries/ | wc -l` = 73, matches README count
+- `grep -c '^- `2026' audit-log/README.md` = 73
 - `bun x prettier --check "audit-log/README.md" --ignore-path .prettierignore` → All matched files use Prettier code style!
 - `git commit --allow-empty -m "bad"` → rejected (commitlint EXIT=1)
 - `git commit --allow-empty -m "chore: test hooks"` → accepted (EXIT=0)
@@ -29,19 +29,17 @@ Investigation of P0 token rotation (Issue #63, already closed by operator) uncov
 - Issue #66: https://github.com/miruamel/zhi/issues/66
 
 ## Status
-
+- Local/remote main: in sync at `9a09618`.
 - Issue #63 (P0 token rotation): **already closed** by operator at 2026-09-04 14:23 UTC. Advisory was stale.
 - npm token: confirmed invalid (401). Publish uses OIDC Trusted Publisher — no token secret needed.
 - Repo secrets: 0 confirmed via `gh api repos/miruamel/zhi/actions/secrets`.
 - Branch protection: 3 required checks (Gate, Build, invariants), enforce_admins true, force-push false.
 - CI: all green on main. 2 non-blocking "Code scanning AI findings" on superseded PR branches.
-- Local/remote main: in sync at `fe73190`.
 
 ## Risiko
 
 Rendah. Config-only + documentation. Tanpa perubahan code atau dependency.
 
-## Branch cleanup pending
-
-Stale local branches: `fix/prettierignore-audit-log-entries`, `fix/token-scrub-final`, `pr60`
-Stale remote branches: `alert-autofix-1`, `fix/prettierignore-audit-log-entries`, `fix/audit-log-sync`
+- Stale local branches: `fix/prettierignore-audit-log-entries`, `fix/token-scrub-final`, `pr60`
+- Stale remote branches: `alert-autofix-1`, `fix/prettierignore-audit-log-entries`, `fix/audit-log-sync`
+- Note: as of 2026-09-04, these branches still exist locally and remotely. Cleanup remains pending.
