@@ -22,7 +22,9 @@ export async function parseStream(chunk: string): Promise<string[]> {
     // Deteksi write barrier: input mengandung data: event tapi output kosong.
     // Chunk tanpa data: event (hanya event:/comment:/id:) akan return [] secara
     // sah dari parser yang berfungsi — jangan disable WASM untuk itu.
-    const hasDataEvent = chunk.includes('data:');
+    // Gunakan regex ^data: (multiline) agar tidak false-positive pada
+    // substring 'data:' di tengah baris (mis. field: data:foo).
+    const hasDataEvent = /^data:/m.test(chunk);
     if (result.length === 0 && chunk.length > 0 && hasDataEvent) {
       disableWasm();
       return parseSseTs(chunk);

@@ -9,19 +9,12 @@
  */
 export async function parseSseTs(chunk: string): Promise<string[]> {
   const out: string[] = [];
-  const lines = chunk.split('\n');
-  for (const line of lines) {
-    if (line.length < 5) continue;
-    if (
-      line[0] !== 'd' ||
-      line[1] !== 'a' ||
-      line[2] !== 't' ||
-      line[3] !== 'a' ||
-      line[4] !== ':'
-    ) {
-      continue;
-    }
-    let payload = line.slice(5);
+  // Regex ^data: (multiline) — match only lines starting with data:,
+  // avoiding the char-by-char comparison loop.
+  const re = /^data:(.*)$/gm;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(chunk)) !== null) {
+    let payload = m[1];
     // Strip semua leading space (Zig strip satu; OpenAI spec strip semua).
     while (payload.startsWith(' ')) payload = payload.slice(1);
     if (payload.length > 0) out.push(payload);
