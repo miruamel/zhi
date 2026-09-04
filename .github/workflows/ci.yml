@@ -60,6 +60,4 @@ jobs:
         run: bun run build
 
       - name: Build Zig WASM
-        run: |
-          export ZIG_BIN=/tmp/zig-linux-x86_64-0.14.0/zig
-          bun run native:build
+        run: bun run native:build
