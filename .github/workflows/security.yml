@@ -22,9 +22,10 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@latest
         with:
           languages: typescript, javascript
+          build-mode: none
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -38,7 +39,7 @@ jobs:
         run: bun run build
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@latest
 
   dependency-scan:
     name: Dependency Vulnerability Scan
