@@ -1,0 +1,33 @@
+{
+  "required_status_checks": {
+    "strict": true,
+    "checks": [
+      {
+        "context": "Gate (lint + format + typecheck + test + arch)",
+        "integration_id": 0
+      },
+      {
+        "context": "Build TypeScript + Native WASM",
+        "integration_id": 0
+      },
+      {
+        "context": "Architecture invariants (files-per-dir + SLOC + circular)",
+        "integration_id": 0
+      }
+    ]
+  },
+  "required_pull_request_reviews": {
+    "required_approving_reviews": 1,
+    "dismiss_stale_reviews": true,
+    "require_code_owner_reviews": false,
+    "allowed_teams": []
+  },
+  "enforce_admins": true,
+  "required_conversation_resolution": true,
+  "allow_force_pushes": false,
+  "allow_deletions": false,
+  "required_signatures": false,
+  "lock_branch": false,
+  "required_linear_history": true,
+  "restrictions": null
+}
