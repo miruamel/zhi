@@ -1,4 +1,4 @@
-/** @brief Test maintainability critic. @since 0.2.0 */
+/** @brief Test maintainability critic. @since 0.1.1 */
 import { test, expect } from 'bun:test';
 import { maintainabilityCritic, codeLines } from './critic';
 

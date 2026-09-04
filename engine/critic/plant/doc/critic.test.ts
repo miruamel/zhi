@@ -1,4 +1,4 @@
-/** @brief Test doc critic (Doxygen @brief enforcement). @since 0.2.0 */
+/** @brief Test doc critic (Doxygen @brief enforcement). @since 0.1.1 */
 import { test, expect } from 'bun:test';
 import { docCritic } from './critic';
 

@@ -1,7 +1,7 @@
-/** @brief Critic: batas SLOC per file (mandate §6.3, hard ≤200). @since 0.1.0 */
+/** @brief Critic: batas SLOC per file (mandate §6.3, hard ≤200). @since 0.1.1 */
 import type { Critique } from '../../aggregate';
 
-/** @brief Rekor satu file yang diaudit plant. @since 0.1.0 */
+/** @brief Rekor satu file yang diaudit plant. @since 0.1.1 */
 export interface FileRecord {
   /** @brief Path relatif file. */
   path: string;
@@ -13,7 +13,7 @@ export interface FileRecord {
  * Skip baris kosong dan baris komentar (garis miring ganda atau blok). Baris blok multi-line dilompati per-baris.
  * @param {string} src - isi file.
  * @return {number} jumlah SLOC.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function countSloc(src: string): number {
   let n = 0;
   for (const line of src.split('\n')) {
@@ -30,7 +30,7 @@ export function countSloc(src: string): number {
  * @param {FileRecord[]} files - kumpulan file.
  * @param {number} [limit=200] - batas SLOC per file.
  * @return {Critique} hasil critic.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function slocCritic(files: FileRecord[], limit = 200): Critique {
   const findings: string[] = [];
   let worst = 0;
