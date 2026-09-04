@@ -43,12 +43,18 @@ State is passed from `loop` via the `onState(state: LoopState, payload)` callbac
 | Key      | Action                                                            |
 | -------- | ----------------------------------------------------------------- |
 | `q`      | quit (loop keeps running in the background; confirm if not DONE). |
+| `esc`    | quit (same as `q`).                                               |
 | `space`  | pause / resume render (not pause loop).                           |
-| `l`      | toggle full Log view.                                             |
-| `c`      | toggle Critics detail.                                            |
-| `p`      | toggle PR / CI detail.                                            |
+| `l`      | toggle full Log view (all entries vs last 8).                     |
+| `c`      | toggle Critics detail (shows critic `reason` when expanded).      |
+| `p`      | toggle PR / CI detail (shows PR URL when expanded).               |
+| `h / ?`  | toggle this help overlay.                                          |
+| `d`      | toggle step detail expansion (multi-line output).                 |
+| `j` / `k`| scroll log window down / up by 1.                                  |
+| `g` / `G`| scroll log to top / bottom.                                        |
+| `r`      | force redraw (full remount).                                       |
+| `tab`    | cycle focus hint (dag·detail·critics·eval·pr·log).                |
 | `ctrl+c` | abort loop (trigger `resil` abort → DONE partial + report).       |
-
 ## Behavior
 
 - TUI renders declaratively; every state transition → re-render the affected pane.
