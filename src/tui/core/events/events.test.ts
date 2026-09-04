@@ -154,7 +154,7 @@ describe('EventBus', () => {
 
   test('emit with no listeners is a no-op returning false', () => {
     const bus = new EventBus<AppEvents>();
-    expect(bus.emit('shutdown', undefined)).toBe(false);
+    expect(bus.emit('shutdown', null)).toBe(false);
     expect(bus.emit('tick', 42)).toBe(false);
   });
 

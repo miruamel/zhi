@@ -23,7 +23,7 @@ describe("FocusManager constructor", () => {
     const fm = new FocusManager(undefined, ORDER);
     const seen = fm.order;
     expect(seen).toEqual(ORDER);
-    seen.push("mutated");
+    seen.push("mutated" as PaneId);
     expect(fm.order).toEqual(ORDER);
   });
 });

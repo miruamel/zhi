@@ -7,34 +7,7 @@ import { createFocusManager, createPerfTracker } from './engine';
 import { createBridge } from './integration/state';
 import { renderPane } from './integration/render';
 import { PaneErrorBoundary } from './integration/error';
-import {
-  Header,
-  Dag,
-  Detail,
-  Metrics,
-  Terminal,
-  Agents,
-  Network,
-  Resources,
-  Critics,
-  Timeline,
-  Stages,
-  Eval,
-  Files,
-  Diff,
-  Secrets,
-  Gate,
-  Audit,
-  Queue,
-  Knowledge,
-  Pr as PrPane,
-  Log,
-  CodeViewer,
-  Config,
-  Help,
-  Notifications,
-  Profile,
-} from './panes';
+
 import type { AppState } from './core/state';
 import type { PaneId } from './engine/focus/index.ts';
 
@@ -60,7 +33,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   const fmRef = useRef(createFocusManager('dag'));
   const fm = fmRef.current;
   const perfRef = useRef(createPerfTracker());
-  const bridgeRef = useRef(createBridge(setState, perfRef.current));
+  const bridgeRef = useRef(createBridge((p) => setState((prev) => ({ ...prev, ...p })), perfRef.current));
 
   useEffect(() => {
     onRegister?.(bridgeRef.current.push.bind(bridgeRef.current));

@@ -30,11 +30,11 @@ export function useGlobalShortcuts(
   actionRef.current = onAction;
 
   useInput((input: string, key: InputKey) => {
-    const event = {
-      ctrl: key.ctrl,
-      shift: key.shift,
-      alt: key.alt,
-      meta: key.meta,
+    const event: Record<string, boolean> = {
+      ctrl: !!key.ctrl,
+      shift: !!key.shift,
+      alt: !!key.alt,
+      meta: !!key.meta,
     };
     const action = registry.match(input, event);
     if (action !== null) actionRef.current(action);
