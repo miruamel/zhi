@@ -84,9 +84,14 @@ Enforced via pre-commit + CI (lihat `docs/standards/commit.md` §commit rule).
 Sebelum claim selesai:
 
 1. Setiap perubahan behavioral punya test (unit/integration) yang gagal tanpa fix.
-2. `gate.ts` (eval) hijau: build ∧ test ∧ lint ∧ secret-scan ∧ quality-gate.
+2. `scripts/gate.ts` (eval) hijau: build ∧ test ∧ lint ∧ secret-scan ∧ quality-gate.
+   - **Fast-path**: Saat `--if-changed` diaktifkan dan semua file yang berubah adalah
+     dokumen/markdown (`.md`, `docs/`, `audit-log/`, `.prettierignore`, `.gitignore`,
+     `.github/workflows/`), typecheck dan test dilewati. Hanya lint + format:check yang dijalankan.
+     Fast-path diaktifkan secara default di `package.json` (`"gate": "bun run scripts/gate.ts --if-changed"`)
+     dan di CI (`.github/workflows/ci.yml` gate job). Tanpa perubahan non-docs,
+     behavior identik — typecheck dan test tetap dijalankan.
 3. Cross-callsite terupdate (pakai `lsp` rename, bukan text replace).
-4. Docs relevan terupdate (`docs/design/*.md`, `CHANGES.md`).
 
 ## Maturity & Version Velocity
 
