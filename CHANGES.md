@@ -40,6 +40,10 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 ## [Unreleased]
 
+### Changed
+
+- **CI actions upgraded v4→v6** — `actions/checkout@v4→v6` and `actions/setup-node@v4→v6` across `ci.yml`, `architecture.yml`, `publish.yml`. Resolves Node.js 20 deprecation warning; no behavioral change. Verified green post-migration (CI run `33841830917`).
+
 ## [0.1.3] - 2026-09-03
 
 ### Test
