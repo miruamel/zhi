@@ -79,6 +79,7 @@ export interface AppState {
   startedAt: number;
   finished: boolean;
   aborted: boolean;
+  partial: boolean;
 }
 
 /** @brief Empty default state. @since 0.1.0 */
@@ -104,5 +105,6 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     startedAt: Date.now(),
     finished: false,
     aborted: false,
+    partial: false,
   };
 }

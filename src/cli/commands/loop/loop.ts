@@ -56,6 +56,7 @@ export function toPatch(
     log: [],
     finished: loop === LoopState.DONE,
     aborted,
+    partial: aborted && loop !== LoopState.DONE,
   };
 }
 

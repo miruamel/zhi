@@ -18,13 +18,39 @@ export interface HeaderProps {
   startedAt: number;
   finished: boolean;
   aborted: boolean;
+  partial?: boolean;
+  prUrl?: string;
+  tokensUsed?: number;
+  tokensBudget?: number;
 }
 
 /** @brief Render the header pane (banner + status bar). @since 0.1.0 */
-export function Header({ loop, goal, startedAt, finished, aborted }: HeaderProps) {
+export function Header({
+  loop,
+  goal,
+  startedAt,
+  finished,
+  aborted,
+  partial,
+  prUrl,
+  tokensUsed,
+  tokensBudget,
+}: HeaderProps) {
   const elapsed = Date.now() - startedAt;
-  const stateColor = aborted ? colors.error : finished ? colors.complete : colors.running;
-  const stateLabel = aborted ? 'ABORTED' : finished ? 'DONE' : 'RUNNING';
+  const stateColor = aborted
+    ? colors.error
+    : partial
+      ? colors.warn
+      : finished
+        ? colors.complete
+        : colors.running;
+  const stateLabel = aborted
+    ? 'ABORTED'
+    : partial
+      ? 'DONE (partial)'
+      : finished
+        ? 'DONE'
+        : 'RUNNING';
   return (
     <Box flexDirection="column" borderStyle="round" borderColor={colors.accent} paddingX={1}>
       {BANNER.map((line, i) => (
@@ -48,6 +74,26 @@ export function Header({ loop, goal, startedAt, finished, aborted }: HeaderProps
         <Text color={colors.fgDim}>goal:</Text>
         <Text color={colors.fg}>{goal.length > 80 ? goal.slice(0, 77) + '…' : goal}</Text>
       </Box>
+      {partial && (
+        <Box marginTop={1} gap={1}>
+          <Text color={colors.warn} bold>
+            ⚠ PARTIAL — run `zhi resume` to continue
+          </Text>
+        </Box>
+      )}
+      {finished && prUrl && (
+        <Box marginTop={1} gap={1}>
+          <Text color={colors.fgDim}>PR:</Text>
+          <Text color={colors.fg}>{prUrl}</Text>
+        </Box>
+      )}
+      {finished && tokensUsed !== undefined && tokensBudget !== undefined && (
+        <Box marginTop={1} gap={1}>
+          <Text color={colors.fgDim}>tokens:</Text>
+          <Text color={colors.fg}>{tokensUsed}</Text>
+          <Text color={colors.fgDim}>/ {tokensBudget}</Text>
+        </Box>
+      )}
     </Box>
   );
 }
