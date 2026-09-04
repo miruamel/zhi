@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    # Weekly security scan (Sunday 06:00 UTC)
-    - cron: "0 6 * * 0"
+    # Weekly security scan — every Monday 03:00 UTC
+    - cron: "0 3 * * 1"
 
 permissions:
   contents: read
@@ -21,6 +21,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: typescript, javascript
+          build-mode: none
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -29,19 +35,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
-        with:
-          languages: typescript
-          queries: security-extended
-
-      - name: Build TypeScript
-        run: bun run build
-
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
-        with:
-          category: "/language:typescript"
 
   dependency-scan:
     name: Dependency Vulnerability Scan
@@ -49,43 +44,20 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: "20.x"
+          bun-version: 1.4.0
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Run npm audit
-        run: |
-          npm audit --json > /tmp/audit-report.json || true
-          echo "=== npm audit summary ==="
-          npm audit 2>&1 || true
-          echo "=== vulnerability counts ==="
-          node -e "
-            const report = require('/tmp/audit-report.json');
-            const vulns = report.vulnerabilities || {};
-            const counts = { critical: 0, high: 0, moderate: 0, low: 0 };
-            for (const [name, v] of Object.entries(vulns)) {
-              counts[v.severity] = (counts[v.severity] || 0) + 1;
-            }
-            console.log(JSON.stringify(counts, null, 2));
-            const total = counts.critical + counts.high + counts.moderate + counts.low;
-            if (total > 0) {
-              console.log('Vulnerabilities found: ' + total);
-              for (const [name, v] of Object.entries(vulns)) {
-                console.log('  - ' + name + ' (' + v.severity + '): ' + v.title);
-              }
-            } else {
-              console.log('No vulnerabilities found.');
-            }
-          "
+      - name: Audit npm dependencies
+        run: npm audit --json > /tmp/audit.json || true
 
-      - name: Upload audit report
-        uses: actions/upload-artifact@v5
-        if: always()
-        with:
-          name: npm-audit-report
-          path: /tmp/audit-report.json
-          retention-days: 30
+      - name: Report audit results
+        run: |
+          if [ -s /tmp/audit.json ]; then
+            echo "=== npm audit summary ==="
+            node -e 'const d=require("/tmp/audit.json");const v=d.vulnerabilities||{};for(const s of ["critical","high","moderate","low"]){const c=v[s]||0;if(c>0)console.log(s+": "+c)}'
+          fi

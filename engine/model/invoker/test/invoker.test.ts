@@ -1,4 +1,4 @@
-/** @brief Test LocalStubInvoker + selectInvoker + extractTokens. @since 0.1.1 */
+/** @brief Test LocalStubInvoker + selectInvoker + extractTokens. @since 0.1.2 */
 import { test, expect } from 'bun:test';
 import { LocalStubInvoker, selectInvoker } from '../index';
 import { extractTokens } from '../cloud';

@@ -2,48 +2,45 @@ name: stale
 
 on:
   schedule:
-    - cron: "0 6 * * 0"
+    # Daily at 00:00 UTC
+    - cron: "0 0 * * *"
   workflow_dispatch:
 
 permissions:
   issues: write
-  pull_requests: write
+  pull-requests: write
 
 jobs:
-  stale:
-    name: Mark inactive issues and PRs as stale
+  close-stale:
+    name: Mark and Close Stale Issues & PRs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/stale@v9
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          stale-issue-message: |
-            This issue has been automatically marked as stale because it has not
-            had any activity for 30 days. It will be closed in 7 days if no
-            further activity occurs. If this issue is still relevant, please
-            comment or update it to keep it open.
-          close-issue-message: |
-            This issue has been automatically closed because it was marked stale
-            7 days ago with no further activity. If you believe this issue is
-            still relevant, please reopen it and provide an update.
-          stale-pr-message: |
-            This pull request has been automatically marked as stale because it
-            has not had any activity for 60 days. It will be closed in 7 days if
-            no further activity occurs. If this PR is still relevant, please
-            comment or update it to keep it open.
-          close-pr-message: |
-            This pull request has been automatically closed because it was marked
-            stale 7 days ago with no further activity. If you still want this
-            change, please reopen the PR and provide an update.
-          days-before-stale-issues: 30
-          days-before-close-issues: 7
-          days-before-stale-prs: 60
-          days-before-close-prs: 7
-          exempt-issues-labels: |
-            pinned
-            security
-            P0
-            P1
-          exempt-pr-labels: |
-            pinned
-            security
+          # Issues
+          stale-issue-message: >
+            Issue ini tidak ada aktivitas selama 30 hari. Ditandai stale.
+            Jika masih relevansi, silakan berikan update atau akan ditutup dalam 14 hari.
+          close-issue-message: >
+            Issue ini tidak ada aktivitas selama 44 hari dan sudah ditandai stale.
+            Ditutup secara otomatis. Jika diperlukan, buat issue baru dengan referensi ini.
+          days-before-issue-stale: 30
+          days-before-issue-close: 44
+
+          # Pull Requests
+          stale-pr-message: >
+            PR ini tidak ada aktivitas selama 14 hari. Ditandai stale.
+            Jika masih dikerjakan, silakan komentar atau akan ditutup dalam 7 hari.
+          close-pr-message: >
+            PR ini tidak ada aktivitas selama 21 hari dan sudah ditandai stale.
+            Ditutup secara otomatis. Jika diperlukan, buka PR baru.
+          days-before-pr-stale: 14
+          days-before-pr-close: 21
+
+          # Exempt
+          exempt-issue-labels: "p0,p1,security,bug,enhancement"
+          exempt-pr-labels: "p0,p1,security,bug,enhancement,wip,in-progress"
+          exempt-assignees: "miruamel"
+
+          # Operations
+          operations-permission: write
