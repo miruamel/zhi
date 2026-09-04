@@ -173,10 +173,8 @@ This is the next tag, currently in `[Unreleased]`. Suggested release notes:
 
 - 🚀 **15/15 critics concrete** (was 4/15). The critic plant is now honest about what it measures.
 - 📦 **Publishable to npm** as `@miruamel/zhi` with provenance (OIDC Trusted Publishing, no long-lived secrets).
-- 🔒 **vitest CVE-2026-47429** (CVSS 9.8) closed by bumping to `^3.2.6`.
-- 🛠 **Tooling baseline** restored: TypeScript strict mode, ESLint flat config, Prettier, Vitest coverage (80% lines / 70% branches), commitlint, lint-staged.
-- 📚 **CI workflow** hardened (no awk-regex injection, no dual lockfile race).
 - 🧹 **Test files split** per atomic-nesting rule (e.g. `orch.test.ts` 157 → 5 atomic files; max 35 SLOC each).
+- 📚 **CI workflow** hardened (no awk-regex injection, no dual lockfile race).
 
 ## Breaking changes
 
@@ -184,8 +182,8 @@ None.
 
 ## Migration
 
+- ~~`vitest` users: bump to `^3.2.6`.~~ **N/A** — vitest was removed entirely in v0.1.3. All tests use `bun:test`.
 - Bun ≥ 1.4.0 required (was ≥ 1.0.0).
-- `vitest` users: bump to `^3.2.6`.
 - `bun install` in CI: use `--frozen-lockfile`.
 
 ## Full changelog

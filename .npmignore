@@ -28,7 +28,6 @@ native/out/
 .prettierrc
 .eslintrc.json
 .prettierrc.json
-vitest.config.ts
 tsconfig*.json
 bun.lock
 package-lock.json
