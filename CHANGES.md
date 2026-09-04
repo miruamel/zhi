@@ -37,9 +37,11 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - `engine/orch/orch.test.ts` (157 SLOC) dipecah → 5 atomic tests (`parse`, `build-dag`, `topo-sort`, `allocate`, `schedule`; max 35 SLOC per file).
 - `engine/resil/resil.test.ts` (172 SLOC) dipecah → 4 atomic tests (`breaker`, `retry`, `recover`, `with-resilience`; max 59 SLOC per file).
 - Arch metrics: max SLOC turun dari 164 → 118 (`engine/build/generate.test.ts`).
+- `src/tui/integration/` flat (14 files) di-restructure → 4 nested subdir (`error/`, `render/`, `shortcuts/`, `state/`), masing-masing ≤4 file dengan barrel `index.ts` per Mandate §6.2/§6.6. Import path normalization di 4 test files (depth 2 → 3 setelah nest) + 2 component imports di `app.tsx`/`layout-render.tsx`.
 
 ### Fixed
 
+- **P1: merge conflict markers** — 8 `<<<<<<< |=======|>>>>>>>` markers di 7 file `src/tui/integration/` dari `stash apply` + `rebase` sequence (commit 9ef6df1..edc1411). Resolved dengan memilih variant yang match codebase convention (no `.ts` extension, no `/index` suffix, double quotes). `bun test` 875/875 pass; `tsc --noEmit` pre-existing debt di integration/ (AppState schema drift, WriteStream pollution, DiffProps/ResourcesProps mismatch) — tracked terpisah, di luar scope refactor ini (Mandate §6.7: 1 modul per PR).
 - CI workflow hardening: `release.yml` awk-regex injection (interpolasi `${TAG#v}` unsafely) → tag format validation `^v[0-9]+\.[0-9]+\.[0-9]+$` + awk pattern via `-v` flag.
 - Dual lockfile race condition: workflow `Install dependencies` step sekarang pass (Bun-only lockfile contract).
 
