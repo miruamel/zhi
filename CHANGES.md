@@ -40,7 +40,9 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 ## [Unreleased]
 
-### Changed
+### Security
+
+- **P0 npm token leak scrubbed from remote `main` history** — plaintext npm publish token (`npm_5xKx…`) leaked in commit `9cbec75` (`audit-log/entries/2026-09-04-state-sync-2.md` line 47), propagated through 268 commits via merges/rebases. Mitigation: `git-filter-repo --replace-text` replaced token with `NPM_TOKEN_REDACTED` across all commits; force-pushed scrubbed history (`0d65a0e`) to `main` after temporarily disabling branch protection (`allow_force_pushes`, `required_linear_history`, `required_status_checks`, `enforce_admins`, `required_pull_request_reviews` all off), then restored all protections to original state. PR #60 closed (superseded). Token rotation on npmjs.com still pending (CLI blocked — `npm token list` returns 401). Tracked in `audit-log/entries/2026-09-04-npm-token-leak-incident.md`.
 
 - **CI actions upgraded v4→v6** — `actions/checkout@v4→v6` and `actions/setup-node@v4→v6` across `ci.yml`, `architecture.yml`, `publish.yml`. Resolves Node.js 20 deprecation warning; no behavioral change. Verified green post-migration (CI run `33841830917`).
 - **Lockfile switch: `bun.lock` → `package-lock.json`** — `bun install` at baseline produced a broken node_modules tree (351 pass / 11 fail / 11 errors) because Bun's hoisting fails on nested `ansi-styles` (three versions required: 4.3.0 under chalk, 6.0.0 under slice-ansi, 6.2.3 under @alcalzone/ansi-tokenize) and `@types/node` (transitive dep of `bun-types` that Bun fails to hoist to top-level). `npm install` correctly nests all three `ansi-styles` versions and hoists `@types/node@26.4.1` with full `package.json` and `.d.ts` files. `bun.lock` deleted and removed from tracking; `package-lock.json` committed as single lockfile. CI switched from `bun install --frozen-lockfile` to `npm ci` in both `gate` and `build` jobs of `.github/workflows/ci.yml` and in `.github/workflows/publish.yml`. `bun` remains the runtime for all scripts (`bun test`, `bun x tsc`, `bun x prettier`, etc.) — only the install step changed. Tests: 365 pass / 0 fail / 726 expect() across 72 files. `npm ci` clean install, 314 packages resolved. `npm ls ansi-styles` confirms proper nesting; `npm ls @types/node` confirms `@types/node@26.4.1` properly hoisted.
@@ -107,7 +109,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 ### Security
 
-- **`release.yml` OIDC migration** — workflow publish npm tidak lagi pakai `secrets.NPM_TOKEN` (long-lived secret, compromised 2026-09-03 di session). Migrasi ke OIDC federation (Trusted Publishing): `id-token: write` permission + `npm publish --provenance` short-lived token dari GitHub Actions → npmjs.com. Repo secret `NPM_TOKEN` sudah dihapus dari settings (`total_count: 0` confirmed via API). User tetap harus verify npmjs.com Trusted Publisher entry point ke `publish.yml` (bukan `release.yml`) di https://www.npmjs.com/package/@miruamel/zhi/access. Rotation `npm_5xKx…` di npmjs.com sekarang **less urgent** tapi tetap recommended (compromised secret hygiene). Tracked di #35.
+- **`release.yml` OIDC migration** — workflow publish npm tidak lagi pakai `secrets.NPM_TOKEN` (long-lived secret, compromised 2026-09-03 di session). Migrasi ke OIDC federation (Trusted Publishing): `id-token: write` permission + `npm publish --provenance` short-lived token dari GitHub Actions → npmjs.com. Repo secret `NPM_TOKEN` sudah dihapus dari settings (`total_count: 0` confirmed via API). User tetap harus verify npmjs.com Trusted Publisher entry point ke `publish.yml` (bukan `release.yml`) di https://www.npmjs.com/package/@miruamel/zhi/access. Rotation `NPM_TOKEN_REDACTED` di npmjs.com sekarang **less urgent** tapi tetap recommended (compromised secret hygiene). Tracked di #35.
 
 ## [0.1.1] - 2026-09-02
 
