@@ -2,7 +2,7 @@
 
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
-## Entri (57 file, kronologis)
+## Entri (58 file, kronologis)
 
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
 - `2026-08-29-remediation-docs.md` — Remediasi docs: nest guides, ADR-005 untuk `docs/design/`.
@@ -61,3 +61,4 @@ Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/
 - `2026-09-04-lockfile-switch.md` — `bun.lock` deleted, `package-lock.json` committed, CI switched from `bun install --frozen-lockfile` to `npm ci`. Bun hoisting broken on `ansi-styles` + `@types/node` chains (351/11/11 → 411/0/844).
 - `2026-09-04-state-sync-3.md` — Twelfth MANDAT re-injection: restored two audit log entries lost in merge `92a4b74`, stale `bun.lock` reference sweep (publish.yml, runbook, repo-metadata, CHANGES.md), added lockfile switch + git hooks entries to `[Unreleased]`.
 - `2026-09-04-version-0.1.4-promotion.md` — Thirteenth MANDAT re-injection: `package.json` version bump `0.1.3` → `0.1.4` (unstaged), CHANGES.md footer link references fixed (`[Unreleased]` now points to `v0.1.4...HEAD`, `[0.1.4]` release link added), Prettier format fix on CHANGES.md. Three commits: `ec9314a`, `0ce951e`, `11f5d03`. Gate green (365/365).
+- `2026-09-04-v0.1.4-published.md` — Fourteenth MANDAT re-injection: v0.1.4 tag push triggered `release` workflow `33840636854`; completed `success` at 05:32:59Z. Package published to npm as `@miruamel/zhi@0.1.4` (verified via `npm view`). GitHub Release created at target `main` with auto-extracted CHANGES.md notes. No token used — OIDC Trusted Publisher (`id-token: write` + `--provenance`) handled auth end-to-end.
