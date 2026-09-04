@@ -4,10 +4,10 @@
 
 Added 2 test files covering 2 previously-untested pure modules in `src/tui/core/`:
 
-| File | Tests | expect() |
-|------|-------|----------|
-| `src/tui/core/test/keymap.test.ts` | 9 | 18 |
-| `src/tui/core/test/state.test.ts` | 9 | 18 |
+| File                               | Tests | expect() |
+| ---------------------------------- | ----- | -------- |
+| `src/tui/core/test/keymap.test.ts` | 9     | 18       |
+| `src/tui/core/test/state.test.ts`  | 9     | 18       |
 
 **Total**: 18 tests, 36 expect() calls. Test count: 393 → 411 pass, 0 fail, 802 → 844 expect() across 74 → 76 files.
 
@@ -33,12 +33,12 @@ The NO_TEST scan identified `src/tui/core/keymap.ts` and `src/tui/core/state.ts`
 
 ## Files changed
 
-| File | Change |
-|------|--------|
-| `src/tui/core/test/keymap.test.ts` | New (9 tests) |
-| `src/tui/core/test/state.test.ts` | New (9 tests) |
-| `README.md` | Test count 393 → 411 (2 refs) |
-| `CHANGES.md` | Added test count delta to Unreleased section |
+| File                               | Change                                       |
+| ---------------------------------- | -------------------------------------------- |
+| `src/tui/core/test/keymap.test.ts` | New (9 tests)                                |
+| `src/tui/core/test/state.test.ts`  | New (9 tests)                                |
+| `README.md`                        | Test count 393 → 411 (2 refs)                |
+| `CHANGES.md`                       | Added test count delta to Unreleased section |
 
 ## Commit
 
