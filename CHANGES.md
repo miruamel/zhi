@@ -38,6 +38,9 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - `engine/resil/resil.test.ts` (172 SLOC) dipecah → 4 atomic tests (`breaker`, `retry`, `recover`, `with-resilience`; max 59 SLOC per file).
 - Arch metrics: max SLOC turun dari 164 → 118 (`engine/build/generate.test.ts`).
 - `src/tui/integration/` flat (14 files) di-restructure → 4 nested subdir (`error/`, `render/`, `shortcuts/`, `state/`), masing-masing ≤4 file dengan barrel `index.ts` per Mandate §6.2/§6.6. Import path normalization di 4 test files (depth 2 → 3 setelah nest) + 2 component imports di `app.tsx`/`layout-render.tsx`.
+- `src/tui/widgets/` flat (26 files) di-restructure → 7 nested subdir per purpose: `badges/`, `status/`, `indicators/`, `wayfinding/`, `picker/`, `structure/`, `data/` (max 5 file per dir per §6.2). `json-view/` nested 3 levels di `data/`. Import path normalization di 26 consumer files.
+- `src/tui/core/` flat (17 files) di-restructure → 9 nested subdir per domain: `animation/`, `events/`, `history/`, `keymap/`, `search/`, `shortcuts/`, `state/`, `storage/`, `markdown/`. `markdown/parser/` + `markdown/render/` nested 2 levels dengan 3-file split (types/blocks/inline, semua ≤110 SLOC). Barrel `index.ts` ditambahkan di 3 subdir tanpa source (keymap, shortcuts, state, style) untuk allow short import.
+- 4 oversized test/source files dipecah untuk comply dengan §6.2 SLOC cap 200: `ansi/ansi.test.ts` (241 → 6 file di 3 subdir), `core/search.test.ts` (222 → 4 file), `core/markdown.test.ts` (202 → 4 file), `core/markdown/parser/ast.ts` (234 → 3 file types/blocks/inline).
 
 ### Fixed
 
