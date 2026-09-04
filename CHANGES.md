@@ -24,6 +24,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 ### Changed
 
 - **TUI test files consolidated** — flat `src/tui/test/` (5 files) was a legacy layer redundant with colocated `src/tui/core/test/` (4 + 1). Per Mandate §6.2 anti-pattern (Test Dump), removed 4 duplicate test files (`colors`, `format`, `keymap`, `state`) and relocated the only unique file (`icons.test.ts`) to `src/tui/core/test/icons.test.ts` with sibling import path fix. The core/ versions are the upgraded, JSDoc-annotated, more comprehensive ones; the flat/ versions were dead code being run twice. Net diff: −337 lines, 1 file relocated. `bun test` now 361 pass / 720 expect() (down from 411/844) — coverage unchanged or improved (the deleted 50 tests were already covered by the stricter core/ versions). `bunx tsc --noEmit` exit 0.
+- **Dead `viewer.ts` removed** — `src/tui/viewer.ts` (34 SLOC) + `src/tui/viewer.test.ts` (33 SLOC) were PR #1 legacy (plain-text `ViewerState` renderer), not imported anywhere after PR #45 (ink-based panes). Per Mandate §3 (transparansi) + YAGNI, removed to eliminate misleading render-path docs. JSDoc reference in `src/tui/core/state.ts` updated. `bun test` 357 pass / 713 expect() (down 4 tests / 7 expects, all from viewer.test.ts). `bunx tsc --noEmit` exit 0.
 
 ## [0.1.2] - 2026-09-03
 
