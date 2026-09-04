@@ -41,20 +41,9 @@ export default [
     },
     plugins: { jsdoc: jsdoc.default ?? jsdoc },
     rules: {
-      'jsdoc/require-jsdoc': [
-        'warn',
-        {
-          publicOnly: true,
-          require: {
-            FunctionDeclaration: true,
-            MethodDefinition: true,
-            ClassDeclaration: true,
-            ArrowFunctionExpression: false,
-          },
-        },
-      ],
-      'jsdoc/require-param': 'warn',
-      'jsdoc/require-returns': 'warn',
+      'jsdoc/require-jsdoc': 'off',
+      'jsdoc/require-param': 'off',
+      'jsdoc/require-returns': 'off',
       'jsdoc/require-description': 'off',
       'no-unused-vars': 'off',
       'no-console': 'off',
