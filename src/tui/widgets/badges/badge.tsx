@@ -1,6 +1,6 @@
 /** @brief Badge widget: colored status pill with solid/outline/dot variants. @since 0.1.1 */
 import { Text } from 'ink';
-import { colors, type ColorToken } from '../../core/style/colors';
+import { colors } from '../../core/style/colors';
 
 export type BadgeVariant = 'solid' | 'outline' | 'dot';
 export type BadgeSize = 'sm' | 'md' | 'lg';
@@ -24,9 +24,10 @@ export const BADGE_COLORS: Record<string, BadgeColor> = {
   scoring: { bg: colors.scoring, fg: colors.bg, border: colors.scoring },
 };
 
+export type BadgeColorKey = keyof typeof BADGE_COLORS;
 export interface BadgeProps {
   children: string;
-  color?: ColorToken;
+  color?: BadgeColorKey;
   variant?: BadgeVariant;
   size?: BadgeSize;
 }

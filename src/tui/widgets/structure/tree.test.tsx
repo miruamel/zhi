@@ -5,15 +5,6 @@ import React from 'react';
 // (WriteStream not imported; type via NodeJS.WriteStream)
 import { Tree, toggleExpanded, type TreeNode } from './tree';
 
-/** @brief Minimal stdout shape ink requires; lets us capture output synchronously. */
-interface CaptureStdout {
-  write: (s: string) => boolean;
-  columns: number;
-  rows: number;
-  on: (..._args: unknown[]) => void;
-  off: (..._args: unknown[]) => void;
-}
-
 function makeStdout(chunks: string[]): NodeJS.WriteStream {
   return {
     write: (s: string) => {

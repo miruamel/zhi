@@ -21,7 +21,7 @@ function wrap(el: React.ReactElement): string {
     on: () => {},
     off: () => {},
   };
-  const inst = render(el, { stdout: stdout as unknown as Parameters<typeof render>[1] });
+  const inst = render(el, { stdout: stdout as unknown as NodeJS.WriteStream });
   inst.unmount();
   return chunks.join('');
 }

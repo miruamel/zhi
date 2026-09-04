@@ -5,10 +5,7 @@ import { render } from 'ink-testing-library';
 import { Network, type NetworkConnection } from './network';
 
 function wrap(el: React.ReactElement): string {
-  const inst = render(el, {
-    stdout: process.stdout as unknown as NodeJS.WriteStream,
-    debug: true,
-  });
+  const inst = render(el);
   const out = inst.lastFrame() ?? '';
   inst.unmount();
   return out;
@@ -102,25 +99,16 @@ test('handles zero bytes without crashing', () => {
 });
 test('wires onDisconnect prop without crashing', () => {
   const captured: string[] = [];
-  const stdout = {
-    write: (s: string) => { captured.push(s); return true; },
-    columns: 80,
-    rows: 24,
-    on: () => {},
-    off: () => {},
-  } as unknown as NodeJS.WriteStream;
   const inst = render(
     React.createElement(Network, {
       connections: sample,
       onDisconnect: (id) => captured.push(id),
     }),
-    { stdout, debug: true },
   );
   inst.unmount();
   // render completes; handler is wired (callback identity preserved)
   expect(captured.length).toBeGreaterThanOrEqual(0);
 });
-
 test('renders with onDisconnect handler without throwing', () => {
   expect(() =>
     wrap(React.createElement(Network, {

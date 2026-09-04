@@ -6,14 +6,6 @@ import { Text } from 'ink';
 // (WriteStream not imported; type via NodeJS.WriteStream)
 import { Tooltip } from './tooltip';
 
-interface CaptureStdout {
-  write: (s: string) => boolean;
-  columns: number;
-  rows: number;
-  on: (..._args: unknown[]) => void;
-  off: (..._args: unknown[]) => void;
-}
-
 function makeStdout(chunks: string[]): NodeJS.WriteStream {
   return {
     write: (s: string) => { chunks.push(s); return true; },

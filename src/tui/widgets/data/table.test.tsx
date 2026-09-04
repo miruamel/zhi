@@ -2,7 +2,7 @@
 import { test, expect } from 'bun:test';
 import React from 'react';
 import { render } from 'ink';
-import { Table } from './table';
+import { Table, type ColumnDef } from './table';
 
 interface Row {
   name: string;
@@ -77,11 +77,11 @@ test('renders title when provided', () => {
 });
 
 test('custom render produces cell text', () => {
-  const cols = [
+  const cols: ColumnDef<Row>[] = [
     {
-      key: 'age' as const,
+      key: 'age',
       label: 'Age',
-      render: (v: number) => `${v}y`,
+      render: (v) => `${v}y`,
     },
   ];
   const out = snapshot(React.createElement(Table<Row>, { columns: cols, rows: sample }));
