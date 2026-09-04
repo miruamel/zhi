@@ -44,7 +44,7 @@
     "native:build": "cd native/stream && bash build.sh",
     "build": "bun run scripts/build.ts",
     "prepare": "",
-    "prepublishOnly": "bun run gate && bun run native:build",
+    "prepublishOnly": "bun run gate && bun run native:build && bun run build",
     "commit": "commitlint --edit"
   },
   "publishConfig": {
