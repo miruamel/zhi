@@ -65,7 +65,7 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with: { bun-version: 1.4.0 }
-      - run: bun install --frozen-lockfile
+      - run: npm ci
       - name: Gate (lint + format + typecheck + test)
         run: bun run gate
       - run: bun run build

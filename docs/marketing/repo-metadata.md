@@ -184,7 +184,7 @@ None.
 
 - ~~`vitest` users: bump to `^3.2.6`.~~ **N/A** — vitest was removed entirely in v0.1.3. All tests use `bun:test`.
 - Bun ≥ 1.4.0 required (was ≥ 1.0.0).
-- `bun install` in CI: use `--frozen-lockfile`.
+- `npm ci` in CI: `bun.lock` deleted, `package-lock.json` is the single lockfile.
 
 ## Full changelog
 
