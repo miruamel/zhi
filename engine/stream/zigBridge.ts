@@ -33,16 +33,19 @@ async function load(): Promise<Loaded> {
   if (cached) return cached;
   if (loading) return loading;
   const p = (async () => {
-    const bytes = readFileSync(WASM_PATH);
-    const { instance } = await WebAssembly.instantiate(bytes, {});
-    const memory = instance.exports.memory as WebAssembly.Memory;
-    const stack = new WebAssembly.Global(
-      { value: 'i32', mutable: true },
-      memory.buffer.byteLength - 16,
-    );
-    cached = { instance, memory, stack };
-    loading = null;
-    return cached;
+    try {
+      const bytes = readFileSync(WASM_PATH);
+      const { instance } = await WebAssembly.instantiate(bytes, {});
+      const memory = instance.exports.memory as WebAssembly.Memory;
+      const stack = new WebAssembly.Global(
+        { value: 'i32', mutable: true },
+        memory.buffer.byteLength - 16,
+      );
+      cached = { instance, memory, stack };
+      return cached;
+    } finally {
+      loading = null;
+    }
   })();
   loading = p;
   return p;
