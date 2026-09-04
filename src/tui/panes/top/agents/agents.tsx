@@ -41,7 +41,7 @@ export function Agents({ agents, onAgentClick, maxLines , focused = true }: Agen
   const limit = maxLines ?? agents.length;
   const visible = agents.slice(0, limit);
 
-  useInput((input, key) => {
+  useInput((_input, key) => {
     if (!focused) return;
     if (key.return && onAgentClick && visible[0]) {
       onAgentClick(visible[0].id);

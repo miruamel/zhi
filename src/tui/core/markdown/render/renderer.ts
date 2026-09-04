@@ -6,8 +6,8 @@
  */
 import React from "react";
 import { Box, Text } from "ink";
-import { colors, type ColorToken } from "../../style/colors.ts";
-import type { MdNode } from "../parser/types.ts";
+import { colors, type ColorToken } from "../../style/colors";
+import type { MdNode } from "../parser/types";
 
 /** @brief Flatten an MdNode tree to a plain-text representation for assertions. @since 0.1.1 */
 type Colors = Record<ColorToken, string>;

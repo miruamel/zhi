@@ -5,7 +5,6 @@ import {
   createPerfTracker,
   measure,
   formatDuration,
-  type PerfMark,
 } from "./perf";
 
 test("start records an open mark with a timestamp", () => {

@@ -1,4 +1,4 @@
-export type { LoopState, NextLoopCondition } from './pipeline.ts';
+export type { LoopState, NextLoopCondition } from './pipeline';
 export {
   LOOP_TRANSITIONS,
   validateTransition,
@@ -6,4 +6,4 @@ export {
   isTerminal,
   stateLabel,
   stateColor,
-} from './pipeline.ts';
+} from './pipeline';

@@ -5,7 +5,7 @@ import {
   resolveLayout,
   getPaneRow,
   togglePane,
-} from "./builder.ts";
+} from "./builder";
 
 describe("DEFAULT_LAYOUT", () => {
   test("contains every pane id", () => {

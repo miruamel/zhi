@@ -9,7 +9,7 @@ import {
   comboToId,
   matchShortcut,
   parseShortcut,
-} from "./shortcuts.ts";
+} from "./shortcuts";
 
 describe("parseShortcut", () => {
   test("parses single key", () => {

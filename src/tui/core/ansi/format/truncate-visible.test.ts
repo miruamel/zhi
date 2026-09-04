@@ -1,6 +1,6 @@
 /** @brief Tests for truncateVisible (visible-width truncate, preserves ANSI). @since 0.1.1 */
 import { describe, expect, test } from 'bun:test';
-import { stripAnsi, truncateVisible, measureWidth } from '../index.ts';
+import { stripAnsi, truncateVisible, measureWidth } from '../index';
 
 describe('truncateVisible', () => {
   test('returns input when shorter than width', () => {

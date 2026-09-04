@@ -1,6 +1,6 @@
 /** @brief Tests for the top-level search() entry point. @since 0.1.1 */
 import { describe, expect, test } from "bun:test";
-import { search, type Searchable } from "./search.ts";
+import { search, type Searchable } from "./search";
 
 describe("search", () => {
   const items: Searchable[] = [

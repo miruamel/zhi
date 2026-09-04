@@ -38,7 +38,7 @@ export function Terminal({
   maxLines = DEFAULT_MAX_LINES,
   title = 'TERMINAL',
   autoScroll = true,
-  onToggleScroll,
+  // onToggleScroll: reserved for future scroll-toggle hotkey wiring
 }: TerminalProps) {
   const visible = lines.slice(-maxLines);
   const hidden = lines.length - visible.length;

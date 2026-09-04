@@ -2,7 +2,7 @@
 import { test, expect } from 'bun:test';
 import { render } from 'ink';
 import React from 'react';
-import type { WriteStream } from 'node:fs';
+// removed: WriteStream from node:fs (ink uses NodeJS.WriteStream)
 import { Badge, BADGE_COLORS } from './badge';
 
 /** @brief Minimal stdout shape ink requires; lets us capture output synchronously. */
@@ -25,7 +25,7 @@ function wrap(el: React.ReactElement): string {
     off: () => {},
   };
   // ink expects WriteStream; our mock satisfies the surface ink actually calls.
-  const inst = render(el, { stdout: stdout as unknown as WriteStream, debug: true });
+  const inst = render(el, { stdout: stdout as unknown as NodeJS.WriteStream, debug: true });
   inst.unmount();
   return chunks.join('');
 }

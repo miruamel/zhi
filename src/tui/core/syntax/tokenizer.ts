@@ -7,11 +7,10 @@
 import {
   type SyntaxLang,
   type Token,
-  type TokenType,
-} from './tokens.ts';
-import { tokenizeJsLike, tokenizeJson } from './lang/js-json.ts';
-import { tokenizeSql, tokenizeBash } from './lang/sql-bash.ts';
-import { tokenizeMarkdown, tokenizeGeneric } from './lang/md-generic.ts';
+} from './tokens';
+import { tokenizeJsLike, tokenizeJson } from './lang/js-json';
+import { tokenizeSql, tokenizeBash } from './lang/sql-bash';
+import { tokenizeMarkdown, tokenizeGeneric } from './lang/md-generic';
 
 /** @brief Map a free-form language hint to a known SyntaxLang. */
 export function normalizeLang(lang?: string): SyntaxLang | null {
@@ -47,12 +46,12 @@ export function tokenize(code: string, lang?: string): Token[] {
 }
 
 // Re-exported for test consumers and downstream modules
-export { tokenizeJsLike } from './lang/js-json.ts';
-export { tokenizeJson } from './lang/js-json.ts';
-export { tokenizeSql } from './lang/sql-bash.ts';
-export { tokenizeBash } from './lang/sql-bash.ts';
-export { tokenizeMarkdown } from './lang/md-generic.ts';
-export { tokenizeGeneric } from './lang/md-generic.ts';
+export { tokenizeJsLike } from './lang/js-json';
+export { tokenizeJson } from './lang/js-json';
+export { tokenizeSql } from './lang/sql-bash';
+export { tokenizeBash } from './lang/sql-bash';
+export { tokenizeMarkdown } from './lang/md-generic';
+export { tokenizeGeneric } from './lang/md-generic';
 
 /** @brief Push whitespace token if non-empty. */
 export function pushWs(tokens: Token[], text: string): void {

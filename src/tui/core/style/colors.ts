@@ -15,6 +15,7 @@ export const colors = {
   scoring: 'magenta' as const,
   forward: 'cyan' as const,
   commit: 'cyan' as const,
+  border: 'gray' as const,
   complete: 'greenBright' as const,
 } as const;
 

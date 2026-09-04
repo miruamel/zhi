@@ -1,6 +1,6 @@
 /** @brief Tests for fuzzyFilter. @since 0.1.1 */
 import { describe, expect, test } from "bun:test";
-import { fuzzyFilter, type Searchable } from "./search.ts";
+import { fuzzyFilter, type Searchable } from "./search";
 
 describe("fuzzyFilter", () => {
   const items: Searchable[] = [

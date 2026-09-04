@@ -11,7 +11,7 @@ import {
   stateLabel,
   validateTransition,
   type LoopState,
-} from './pipeline.ts';
+} from './pipeline';
 
 const ALL_STATES: LoopState[] = [
   'INTAKE',

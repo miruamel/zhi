@@ -6,9 +6,8 @@
  */
 import { Text, Box, useInput } from 'ink';
 import { useState } from 'react';
-import { colors } from '../../../core/style/colors';
-import type { JsonPath, JsonViewProps } from './types.ts';
-import { buildLines } from './renderers.tsx';
+import type { JsonPath, JsonViewProps } from './types';
+import { buildLines } from './renderers';
 
 /** @brief Render a collapsible JSON viewer. @since 0.1.1 */
 export function JsonView({

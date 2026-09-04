@@ -1,6 +1,6 @@
 /** @brief Tests for parseInline (inline markdown elements). @since 0.1.1 */
 import { describe, expect, test } from "bun:test";
-import { parseInline } from "./index.ts";
+import { parseInline } from "./index";
 
 describe("parseInline", () => {
   test("returns single text node for plain input", () => {

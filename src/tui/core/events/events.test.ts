@@ -1,11 +1,11 @@
 import { describe, test, expect } from 'bun:test';
 import { CANCEL, EventBus, createEventBus } from './events';
 
-interface AppEvents {
+type AppEvents = {
   tick: number;
   message: { from: string; text: string };
-  shutdown: void;
-}
+  shutdown: null;
+};
 
 describe('EventBus', () => {
   test('subscribe/emit invokes handler with payload', () => {

@@ -4,8 +4,8 @@
  * Split from tokenizer.ts (462 SLOC) so each file stays under the 250 SLOC ceiling.
  * @since 0.2.0
  */
-import { type Token } from '../tokens.ts';
-import { pushWs, readWhile, isIdentStart, isIdentCont, isDigit } from '../tokenizer.ts';
+import { type Token } from '../tokens';
+import { pushWs, readWhile, isIdentStart, isIdentCont, isDigit } from '../tokenizer';
 
 /** @brief Tokenize Markdown source (headings, inline code, emphasis). */
 export function tokenizeMarkdown(code: string): Token[] {

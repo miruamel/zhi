@@ -4,8 +4,8 @@
  * Split from syntax.ts (590 SLOC) so each file stays under the 200 SLOC ceiling.
  * @since 0.2.0
  */
-import { ANSI_RESET, TOKEN_COLOR } from './tokens.ts';
-import { tokenize } from './tokenizer.ts';
+import { ANSI_RESET, TOKEN_COLOR } from './tokens';
+import { tokenize } from './tokenizer';
 
 /** @brief Convert an ink color name to an ANSI SGR open sequence. */
 function ansiOpen(color: string): string {

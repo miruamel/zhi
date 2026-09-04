@@ -25,6 +25,7 @@ export interface DiffProps {
   diff: DiffFile[];
   maxLines?: number;
   showLineNumbers?: boolean;
+  focused?: boolean;
 }
 
 const DEFAULT_MAX_LINES = 200;

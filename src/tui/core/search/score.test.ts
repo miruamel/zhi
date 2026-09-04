@@ -1,6 +1,6 @@
 /** @brief Tests for fuzzyScore and substringScore. @since 0.1.1 */
 import { describe, expect, test } from "bun:test";
-import { fuzzyScore, substringScore } from "./search.ts";
+import { fuzzyScore, substringScore } from "./search";
 
 describe("fuzzyScore", () => {
   test("returns 0 when query is empty", () => {

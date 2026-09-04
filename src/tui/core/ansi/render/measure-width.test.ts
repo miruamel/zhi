@@ -1,6 +1,6 @@
 /** @brief Tests for measureWidth (visible width, ANSI + CJK aware). @since 0.1.1 */
 import { describe, expect, test } from 'bun:test';
-import { measureWidth } from '../index.ts';
+import { measureWidth } from '../index';
 
 describe('measureWidth', () => {
   test('plain ASCII counts one per char', () => {

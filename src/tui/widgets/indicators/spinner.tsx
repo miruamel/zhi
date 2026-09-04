@@ -1,5 +1,5 @@
 /** @brief Spinner widget: animated cycling frame sequence with optional label. @since 0.1.1 */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Text } from 'ink';
 import { type ColorToken } from '../../core/style/colors';
 

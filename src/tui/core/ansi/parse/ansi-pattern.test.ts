@@ -1,6 +1,6 @@
 /** @brief Tests for ANSI_PATTERN (CSI SGR + OSC regex). @since 0.1.1 */
 import { describe, expect, test } from 'bun:test';
-import { ANSI_PATTERN } from '../index.ts';
+import { ANSI_PATTERN } from '../index';
 
 describe('ANSI_PATTERN', () => {
   test('matches CSI SGR sequences', () => {

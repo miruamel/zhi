@@ -3,7 +3,7 @@ import { test, expect, describe, mock } from 'bun:test';
 import { render } from 'ink';
 import React from 'react';
 import { Text } from 'ink';
-import type { WriteStream } from 'node:fs';
+// (WriteStream not imported; type via NodeJS.WriteStream)
 import { Tooltip } from './tooltip';
 
 interface CaptureStdout {
@@ -14,14 +14,14 @@ interface CaptureStdout {
   off: (..._args: unknown[]) => void;
 }
 
-function makeStdout(chunks: string[]): WriteStream {
+function makeStdout(chunks: string[]): NodeJS.WriteStream {
   return {
-    write: (s) => { chunks.push(s); return true; },
+    write: (s: string) => { chunks.push(s); return true; },
     columns: 120,
     rows: 24,
     on: () => {},
     off: () => {},
-  } as unknown as WriteStream;
+  } as unknown as NodeJS.WriteStream;
 }
 
 function wrap(el: React.ReactElement): string {

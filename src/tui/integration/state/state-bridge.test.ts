@@ -2,7 +2,7 @@
  * @brief Tests for the state bridge. @since 0.1.2
  */
 import { describe, expect, test } from "bun:test";
-import { createBridge, StateBridge } from "./state-bridge.ts";
+import { createBridge, StateBridge } from "./state-bridge";
 import type { AppState } from "../../core/state";
 import { PerfTracker } from "../../engine/perf";
 

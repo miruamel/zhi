@@ -97,6 +97,12 @@ export interface AppState {
   startedAt: number;
   finished: boolean;
   aborted: boolean;
+  /** @brief Currently focused pane id (FocusManager integration). @since 0.2.0 */
+  focusedPane?: string;
+  /** @brief Pipeline status enum (mirrors engine/pipeline). @since 0.2.0 */
+  status?: 'idle' | 'running' | 'paused' | 'done' | 'failed' | 'aborted';
+  /** @brief Convenience alias for `status === 'running'`. @since 0.2.0 */
+  running?: boolean;
 }
 
 /** @brief Empty default state. @since 0.1.0 */

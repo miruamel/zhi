@@ -1,7 +1,7 @@
 /** @brief Tests for mdToInk (block → ink React element). @since 0.1.1 */
 import { describe, expect, test } from "bun:test";
 import React from "react";
-import { mdToInk, parseMd } from "./index.ts";
+import { mdToInk, parseMd } from "./index";
 
 describe("mdToInk", () => {
   test("renders text node as Text element", () => {

@@ -3,7 +3,7 @@ import { test, expect } from 'bun:test';
 import { render } from 'ink';
 import { render as liveRender } from 'ink-testing-library';
 import React from 'react';
-import type { WriteStream } from 'node:fs';
+// (WriteStream not imported; type via NodeJS.WriteStream)
 import { Queue, type QueueTask } from './queue';
 
 interface CaptureStdout {
@@ -14,7 +14,7 @@ interface CaptureStdout {
   off: (..._args: unknown[]) => void;
 }
 
-function makeStdout(chunks: string[]): WriteStream {
+function makeStdout(chunks: string[]): NodeJS.WriteStream {
   return {
     write: (s: string) => {
       chunks.push(s);
@@ -24,7 +24,7 @@ function makeStdout(chunks: string[]): WriteStream {
     rows: 24,
     on: () => {},
     off: () => {},
-  } as unknown as WriteStream;
+  } as unknown as NodeJS.WriteStream;
 }
 
 function wrap(el: React.ReactElement): string {

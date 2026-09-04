@@ -1,6 +1,6 @@
 /** @brief Tests for padVisible (visible-width padding with ANSI + CJK). @since 0.1.1 */
 import { describe, expect, test } from 'bun:test';
-import { padVisible } from '../index.ts';
+import { padVisible } from '../index';
 
 describe('padVisible', () => {
   test('left-pads by default', () => {

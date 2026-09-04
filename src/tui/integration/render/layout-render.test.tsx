@@ -2,7 +2,7 @@
 import { test, expect } from 'bun:test';
 import { render } from 'ink';
 import React from 'react';
-import type { WriteStream } from 'node:fs';
+// removed: WriteStream from node:fs (ink uses NodeJS.WriteStream)
 import { LayoutRenderer } from './layout-render';
 import { emptyState } from '../../core/state';
 import { buildDefaultLayout, togglePane } from '../../engine/layout';
@@ -25,7 +25,7 @@ function wrap(el: React.ReactElement): string {
     on: () => {},
     off: () => {},
   };
-  const inst = render(el, { stdout: stdout as unknown as WriteStream, debug: true });
+  const inst = render(el, { stdout: stdout as unknown as NodeJS.WriteStream, debug: true });
   inst.unmount();
   return chunks.join('');
 }

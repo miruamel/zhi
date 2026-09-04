@@ -2,7 +2,7 @@
 import { test, expect } from 'bun:test';
 import { render } from 'ink';
 import React from 'react';
-import type { WriteStream } from 'node:fs';
+// (WriteStream not imported; type via NodeJS.WriteStream)
 import { Tree, toggleExpanded, type TreeNode } from './tree';
 
 /** @brief Minimal stdout shape ink requires; lets us capture output synchronously. */
@@ -14,7 +14,7 @@ interface CaptureStdout {
   off: (..._args: unknown[]) => void;
 }
 
-function makeStdout(chunks: string[]): WriteStream {
+function makeStdout(chunks: string[]): NodeJS.WriteStream {
   return {
     write: (s: string) => {
       chunks.push(s);
@@ -24,7 +24,7 @@ function makeStdout(chunks: string[]): WriteStream {
     rows: 24,
     on: () => {},
     off: () => {},
-  } as unknown as WriteStream;
+  } as unknown as NodeJS.WriteStream;
 }
 
 function snapshot(el: React.ReactElement): string {

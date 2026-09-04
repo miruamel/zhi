@@ -1,2 +1,2 @@
-export type { PerfMark } from './perf.ts';
-export { PerfTracker, createPerfTracker, measure, formatDuration } from './perf.ts';
+export type { PerfMark } from './perf';
+export { PerfTracker, createPerfTracker, measure, formatDuration } from './perf';

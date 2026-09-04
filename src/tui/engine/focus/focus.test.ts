@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, test } from "bun:test";
-import { FocusManager, createFocusManager, type PaneId } from "./focus.ts";
+import { FocusManager, createFocusManager, type PaneId } from "./focus";
 
 const ORDER: PaneId[] = ["header", "dag", "detail", "metrics"];
 

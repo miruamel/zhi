@@ -11,8 +11,8 @@ import {
   BASH_KEYWORDS,
   type Token,
   type TokenType,
-} from '../tokens.ts';
-import { pushWs, readWhile, isIdentStart, isIdentCont, isDigit } from '../tokenizer.ts';
+} from '../tokens';
+import { pushWs, readWhile, isIdentStart, isIdentCont, isDigit } from '../tokenizer';
 
 /** @brief Tokenize SQL source. */
 export function tokenizeSql(code: string): Token[] {

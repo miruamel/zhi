@@ -1,6 +1,6 @@
 /** @brief Tests for stripAnsi (removes CSI + OSC sequences). @since 0.1.1 */
 import { describe, expect, test } from 'bun:test';
-import { stripAnsi } from '../index.ts';
+import { stripAnsi } from '../index';
 
 describe('stripAnsi', () => {
   test('removes color codes', () => {

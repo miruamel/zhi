@@ -10,8 +10,8 @@ import {
   TS_KEYWORDS,
   type Token,
   type TokenType,
-} from '../tokens.ts';
-import { pushWs, readWhile, isIdentStart, isIdentCont, isDigit } from '../tokenizer.ts';
+} from '../tokens';
+import { pushWs, readWhile, isIdentStart, isIdentCont, isDigit } from '../tokenizer';
 
 /** @brief Tokenize JavaScript/TypeScript/JSX/TSX source. */
 export function tokenizeJsLike(code: string): Token[] {

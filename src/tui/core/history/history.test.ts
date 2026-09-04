@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, test } from "bun:test";
-import { History, createHistory } from "./history.ts";
+import { History, createHistory } from "./history";
 
 describe("History", () => {
   test("starts empty with default size", () => {

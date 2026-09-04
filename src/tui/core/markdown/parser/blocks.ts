@@ -1,5 +1,5 @@
 /** @brief Block-level markdown parser. @since 0.1.1 */
-import { parseInline } from "./inline.ts";
+import { parseInline } from "./inline";
 import {
   FENCE_RE,
   HEADING_RE,
@@ -8,7 +8,7 @@ import {
   QUOTE_RE,
   UL_RE,
   type MdNode,
-} from "./types.ts";
+} from "./types";
 
 /**
  * @brief Parse a markdown string into a flat list of block-level MdNodes.

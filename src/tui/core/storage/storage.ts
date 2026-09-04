@@ -123,8 +123,8 @@ export class FileStorageAdapter implements StorageAdapter {
 /** @brief Debounce window for coalescing rapid writes. @since 0.1.1 */
 const DEBOUNCE_MS = 50;
 
-/** @brief Default storage location (XDG-style). @since 0.1.1 */
-const DEFAULT_PATH = `${process.env["HOME"] ?? "."}/.zhi/storage.json`;
+/** @brief Default storage location (XDG-style). Exported for callers that want to surface a path. @since 0.1.1 */
+export const DEFAULT_PATH = `${process.env["HOME"] ?? "."}/.zhi/storage.json`;
 
 /**
  * @brief Construct the appropriate adapter. Without a path, returns the in-memory variant.

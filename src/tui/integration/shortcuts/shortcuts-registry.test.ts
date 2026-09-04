@@ -2,14 +2,14 @@
 import { test, expect, describe } from "bun:test";
 import { render } from "ink";
 import React from "react";
-import type { WriteStream } from "node:fs";
+// (WriteStream from node:fs intentionally unused — see CaptureStdout interface below)
 import {
   useGlobalShortcuts,
   useShortcut,
   ShortcutRegistry,
   matchShortcut,
   parseShortcut,
-} from "./shortcuts-registry.ts";
+} from "./shortcuts-registry";
 
 /** @brief Minimal stdout shape ink requires; lets us capture output synchronously. */
 interface CaptureStdout {
@@ -29,7 +29,7 @@ function mount(el: React.ReactElement) {
     on: () => {},
     off: () => {},
   };
-  const inst = render(el, { stdout: stdout as unknown as WriteStream, debug: true });
+  const inst = render(el, { stdout: stdout as unknown as NodeJS.WriteStream, debug: true });
   return inst;
 }
 

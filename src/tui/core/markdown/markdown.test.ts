@@ -1,7 +1,7 @@
 /** @brief Tests for parseMd (block-level markdown). @since 0.1.1 */
 import { describe, expect, test } from "bun:test";
 import { colors } from "../style/colors";
-import { mdToText, parseMd } from "./index.ts";
+import { mdToText, parseMd } from "./index";
 
 describe("parseMd blocks", () => {
   test("returns empty array for blank input", () => {

@@ -66,7 +66,7 @@ export function isExpiringSoon(expires: number, now: number = Date.now(), thresh
 
 /** @brief Secrets manager pane (rows + rotate hotkey). @since 0.1.1 */
 export function Secrets({ secrets, onRotate, maxLines = 16 , focused = true }: SecretsProps): React.ReactElement {
-  const [focus, setFocus] = useState(0);
+  const [focus] = useState(0);
   const visible = secrets.slice(0, maxLines);
 
   useInput((input) => {

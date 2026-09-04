@@ -1,6 +1,6 @@
 /** @brief Tests for parseAnsi (SGR → styled segments). @since 0.1.1 */
 import { describe, expect, test } from 'bun:test';
-import { parseAnsi } from '../index.ts';
+import { parseAnsi } from '../index';
 
 describe('parseAnsi', () => {
   test('plain text yields single segment', () => {

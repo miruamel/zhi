@@ -6,8 +6,8 @@
  */
 import { Text } from 'ink';
 import { colors } from '../../../core/style/colors';
-import type { JsonPath, JsonViewProps } from './types.ts';
-import { INDENT, typeOf, primitiveColor, primitiveLabel } from './types.ts';
+import type { JsonPath, JsonViewProps } from './types';
+import { INDENT, typeOf, primitiveColor, primitiveLabel } from './types';
 
 type IsOpenFn = (key: string) => boolean;
 type SetFocused = (k: string) => void;

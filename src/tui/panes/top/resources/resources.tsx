@@ -17,6 +17,7 @@ export interface ResourceSnapshot {
 export interface ResourcesProps {
   resources: ResourceSnapshot;
   width?: number;
+  focused?: boolean;
 }
 
 const SPARK_CHARS = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'];

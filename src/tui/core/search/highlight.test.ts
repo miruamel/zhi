@@ -1,6 +1,6 @@
 /** @brief Tests for highlightMatches. @since 0.1.1 */
 import { describe, expect, test } from "bun:test";
-import { highlightMatches } from "./search.ts";
+import { highlightMatches } from "./search";
 
 describe("highlightMatches", () => {
   test("returns whole text as non-match when query is empty", () => {
