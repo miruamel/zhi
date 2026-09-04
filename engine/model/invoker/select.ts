@@ -1,7 +1,7 @@
 /**
  * @brief Pilih backend via model/router: micro (endpoint local) selalu stub lokal;
  * heavy/light (9router/omp) pakai cloud bila MODEL_API_KEY ada, else stub.
- * @since 0.1.0
+ * @since 0.1.2
  */
 import type { TaskKind } from '../router';
 import { route } from '../router';
@@ -13,7 +13,7 @@ import type { ModelInvoker } from './types';
  * @brief Pilih invoker berdasarkan router config + env.
  * @param {TaskKind} [kind='generate'] - jenis task (route menentukan endpoint).
  * @return {ModelInvoker} invoker aktif.
- * @since 0.1.0
+ * @since 0.1.2
  */
 export function selectInvoker(kind: TaskKind = 'generate'): ModelInvoker {
   const backend = route(kind);

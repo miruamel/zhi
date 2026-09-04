@@ -2,7 +2,7 @@
  * @brief Parse argv CLI Zhi: argumen non-flag pertama = goal, --threshold=N default 0.8.
  * @param {string[]} argv - argumen baris perintah (biasanya `process.argv.slice(2)`).
  * @return {{goal: string; threshold: number}} goal + ambang Pareto.
- * @since 0.1.0
+ * @since 0.1.2
  */
 export function parseArgs(argv: string[]): { goal: string; threshold: number } {
   const goal = argv.find((a) => !a.startsWith('--')) ?? '';

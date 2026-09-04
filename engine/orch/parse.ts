@@ -1,4 +1,4 @@
-/** @brief Task parser: tokenisasi goal -> Intent + constraints. @since 0.1.0 */
+/** @brief Task parser: tokenisasi goal -> Intent + constraints. @since 0.1.1 */
 import type { Constraint, Intent } from './types';
 
 const STOPWORDS = new Set([
@@ -32,7 +32,7 @@ export { STOPWORDS };
  * @return {Intent} intent (tokens + constraints).
  * @throw {Error} bila goal kosong/whitespace-only.
  * @see docs/design/orch.md
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function parseGoal(goal: string): Intent {
   const raw = goal.trim();
   if (!raw) throw new Error('orch: goal kosong');
@@ -46,7 +46,7 @@ export function parseGoal(goal: string): Intent {
 /** @brief Ekstrak constraint sederhana dari teks goal.
  * @param {string} raw - teks goal asli.
  * @return {Constraint[]} constraint terdeteksi.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function extractConstraints(raw: string): Constraint[] {
   const out: Constraint[] = [];
   const lang = raw.match(/\b(?:in|dengan|using|pakai)\s+([a-z+#]+)/i);

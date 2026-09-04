@@ -1,4 +1,4 @@
-/** @brief Orkestrasi evaluasi: test + secret-scan -> gate. @since 0.1.0 */
+/** @brief Orkestrasi evaluasi: test + secret-scan -> gate. @since 0.1.1 */
 import { gate, type EvalOutput } from './gate';
 import { runTests } from './test';
 import { scanSecrets } from './security';
@@ -7,7 +7,7 @@ import { scanSecrets } from './security';
  * @param {string} worktree - path worktree absolut.
  * @return {EvalOutput} keputusan gate (passed bila tanpa blocker).
  * @see docs/design/eval.md
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function evaluate(worktree: string): EvalOutput {
   const t = runTests(worktree);
   const s = scanSecrets(worktree);

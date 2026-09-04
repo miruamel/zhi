@@ -1,6 +1,6 @@
-/** @brief Retry budget (max-3) + Dead Letter Queue. @since 0.1.0 */
+/** @brief Retry budget (max-3) + Dead Letter Queue. @since 0.1.1 */
 
-/** @brief Entri DLQ: kegagalan final yang tak boleh dibuang diam-diam. @since 0.1.0 */
+/** @brief Entri DLQ: kegagalan final yang tak boleh dibuang diam-diam. @since 0.1.1 */
 export interface DLQEntry {
   /** @brief Pesan error terakhir. */
   error: string;
@@ -10,7 +10,7 @@ export interface DLQEntry {
   at: number;
 }
 
-/** @brief Hasil retry: sukses atau DLQ. @since 0.1.0 */
+/** @brief Hasil retry: sukses atau DLQ. @since 0.1.1 */
 export interface RetryResult<T> {
   /** @brief True bila fn sukses. */
   ok: boolean;
@@ -26,7 +26,7 @@ export interface RetryResult<T> {
  * @param {() => Promise<T>} fn - operasi yang mungkin gagal.
  * @param {number} maxAttempts - batas retry (default 3).
  * @return {Promise<RetryResult<T>>} hasil atau DLQ.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export async function retryWithBudget<T>(
   fn: () => Promise<T>,
   maxAttempts = 3,

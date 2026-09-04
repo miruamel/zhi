@@ -1,4 +1,4 @@
-/** @brief TUI color tokens (match assets/doc-header.svg palette). @since 0.1.0 */
+/** @brief TUI color tokens (match assets/doc-header.svg palette). @since 0.1.2 */
 
 export const colors = {
   bg: 'black' as const,

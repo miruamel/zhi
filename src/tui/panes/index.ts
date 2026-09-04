@@ -1,4 +1,4 @@
-/** @brief Panes barrel — re-exports all pane components. @since 0.1.0 */
+/** @brief Panes barrel — re-exports all pane components. @since 0.1.2 */
 export { Header } from './top/header/header';
 export { Dag } from './top/dag/dag';
 export { Detail } from './top/detail/detail';

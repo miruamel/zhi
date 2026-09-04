@@ -4,7 +4,7 @@
  * TTY default → TUI (ink). Non-TTY → stdout ringkasan.
  * Mendispatch subcommand: `gen`, `critique:repo`, atau default (run loop).
  * Dijalankan langsung via `bun src/cli/index.ts <goal>` atau import main() untuk test.
- * @since 0.1.0
+ * @since 0.1.2
  */
 import type { LoopContext } from '../../engine/loop/wiring/context';
 import { genCommand } from './commands/gen/gen';

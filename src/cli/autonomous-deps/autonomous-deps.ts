@@ -4,7 +4,7 @@
  * @param {LoopDeps} base - deps offline pembuka.
  * @param {string} goal - goal loop untuk pesan commit + isolate path.
  * @return {LoopDeps} deps enriched (atau base bila env var absent).
- * @since 0.1.0
+ * @since 0.1.2
  */
 import type { LoopDeps } from '@engine/loop/wiring/handlers';
 import { gitIsolate, gitCommit, ghPrOpen } from '@engine/loop/wiring/git';

@@ -4,7 +4,7 @@
  * compress() fallback ke no-op bila budget tidak cukup.
  * @param {number} threshold - ambang Pareto (0..1).
  * @return {LoopDeps} deps siap pakai untuk buildHandlers.
- * @since 0.1.0
+ * @since 0.1.2
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';

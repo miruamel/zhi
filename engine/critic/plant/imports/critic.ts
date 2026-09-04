@@ -1,4 +1,4 @@
-/** @brief Critic: deteksi deep relative import >3 (mandate §6.7, §6.11). @since 0.1.0 */
+/** @brief Critic: deteksi deep relative import >3 (mandate §6.7, §6.11). @since 0.1.1 */
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
@@ -9,7 +9,7 @@ const IMPORT_RE = /^\s*import\s+.*from\s+['"]([^'"]+)['"]/;
  * @param {FileRecord[]} files - kumpulan file.
  * @param {number} [maxUp=3] - batas naik level relatif.
  * @return {Critique} hasil critic.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function importsCritic(files: FileRecord[], maxUp = 3): Critique {
   const findings: string[] = [];
   let count = 0;

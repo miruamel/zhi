@@ -1,4 +1,4 @@
-/** @brief Entri konteks loop yang bisa dikompres. @since 0.1.0 */
+/** @brief Entri konteks loop yang bisa dikompres. @since 0.1.1 */
 export interface ContextEntry {
   /** @brief Kunci unik entri. */
   key: string;
@@ -8,7 +8,7 @@ export interface ContextEntry {
   text: string;
 }
 
-/** @brief Konteks loop yang dikompres agar muat budget karakter. @since 0.1.0 */
+/** @brief Konteks loop yang dikompres agar muat budget karakter. @since 0.1.1 */
 export interface BuildContext {
   /** @brief Entri konteks (urutan bebas). */
   entries: ContextEntry[];
@@ -20,7 +20,7 @@ export interface BuildContext {
  * @param {BuildContext} ctx - konteks sebelum kompresi.
  * @return {BuildContext} konteks terkompresi (total karakter <= budget).
  * @see docs/design/build.md (compress: jaga konteks loop panjang)
- * @since 0.1.0 */
+ * @since 0.1.1 */
 // ponytail: urutan asli tidak dipertahankan, hanya prioritas bobot; bila urutan
 // stateful dibutuhkan, ganti sort dengan stable-keep-by-recency.
 export function compress(ctx: BuildContext): BuildContext {

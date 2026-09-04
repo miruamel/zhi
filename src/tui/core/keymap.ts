@@ -1,4 +1,4 @@
-/** @brief Keymap: maps key press to action. @since 0.1.0 */
+/** @brief Keymap: maps key press to action. @since 0.1.2 */
 export type KeyAction =
   | 'quit'
   | 'toggleLog'

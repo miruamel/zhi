@@ -1,9 +1,9 @@
 /**
  * @brief TUI application state shape (derived from LoopMetrics + LoopLogger).
- * @since 0.1.0
+ * @since 0.1.2
  */
 
-/** @brief Single critic score line. @since 0.1.0 */
+/** @brief Single critic score line. @since 0.1.2 */
 export interface CriticLine {
   name: string;
   score: number;
@@ -11,7 +11,7 @@ export interface CriticLine {
   reason?: string;
 }
 
-/** @brief Per-stage eval status. @since 0.1.0 */
+/** @brief Per-stage eval status. @since 0.1.2 */
 export interface EvalStage {
   name: string;
   ok: boolean;
@@ -19,7 +19,7 @@ export interface EvalStage {
   durationMs: number;
 }
 
-/** @brief Full eval report. @since 0.1.0 */
+/** @brief Full eval report. @since 0.1.2 */
 export interface EvalReport {
   build: EvalStage;
   test: EvalStage;
@@ -29,7 +29,7 @@ export interface EvalReport {
   weightedAvg: number;
 }
 
-/** @brief One DAG step in the conductor plan. @since 0.1.0 */
+/** @brief One DAG step in the conductor plan. @since 0.1.2 */
 export interface DagStep {
   id: string;
   kind: 'generate' | 'verify' | 'critique' | 'eval' | 'commit' | 'pr' | 'classify' | 'isolate';
@@ -39,7 +39,7 @@ export interface DagStep {
   detail?: string;
 }
 
-/** @brief Log entry from LoopLogger. @since 0.1.0 */
+/** @brief Log entry from LoopLogger. @since 0.1.2 */
 export interface LogEntry {
   ts: number;
   runId: string;
@@ -50,7 +50,7 @@ export interface LogEntry {
   msg: string;
 }
 
-/** @brief Active PR / CI state. @since 0.1.0 */
+/** @brief Active PR / CI state. @since 0.1.2 */
 export interface PrCiState {
   prUrl?: string;
   prNumber?: number;
@@ -58,7 +58,7 @@ export interface PrCiState {
   ciDurationMs?: number;
 }
 
-/** @brief Top-level TUI app state. @since 0.1.0 */
+/** @brief Top-level TUI app state. @since 0.1.2 */
 export interface AppState {
   loop: string;
   goal: string;
@@ -82,7 +82,7 @@ export interface AppState {
   partial: boolean;
 }
 
-/** @brief Empty default state. @since 0.1.0 */
+/** @brief Empty default state. @since 0.1.2 */
 export function emptyState(goal: string, tokensBudget: number): AppState {
   return {
     loop: 'INTAKE',

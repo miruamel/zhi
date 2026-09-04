@@ -1,4 +1,4 @@
-/** @brief DAG builder + cycle detector + topological sort. @since 0.1.0 */
+/** @brief DAG builder + cycle detector + topological sort. @since 0.1.1 */
 import type { Dag, Edge, Intent, Step } from './types';
 import { CycleError } from './types';
 import { STOPWORDS } from './parse';
@@ -8,7 +8,7 @@ import { STOPWORDS } from './parse';
  * @param {Edge[]} edges - edge dependensi.
  * @return {string[]} urutan topologis ID step.
  * @throw {CycleError} bila siklus tak terpecahkan.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function topoSort(nodes: Step[], edges: Edge[]): string[] {
   const adj = new Map<string, string[]>();
   const indeg = new Map<string, number>();
@@ -47,7 +47,7 @@ export function topoSort(nodes: Step[], edges: Edge[]): string[] {
  * @return {Dag} node + edge, terurut topologis.
  * @throw {CycleError} bila siklus tak terpecahkan.
  * @see docs/design/orch.md
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function buildDag(intent: Intent): Dag {
   const clauses = intent.raw
     .split(/[,\n;]/)

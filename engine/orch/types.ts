@@ -1,6 +1,6 @@
-/** @brief Tipe data planner Zhi (murni, 0 dependensi eksternal). @since 0.1.0 */
+/** @brief Tipe data planner Zhi (murni, 0 dependensi eksternal). @since 0.1.1 */
 
-/** @brief Constraint hasil parse goal. @since 0.1.0 */
+/** @brief Constraint hasil parse goal. @since 0.1.1 */
 export interface Constraint {
   /** @brief Jenis constraint (language|budget|file|other). */
   kind: string;
@@ -8,7 +8,7 @@ export interface Constraint {
   value: string;
 }
 
-/** @brief Intent terstruktur dari goal berbahasa alami. @since 0.1.0 */
+/** @brief Intent terstruktur dari goal berbahasa alami. @since 0.1.1 */
 export interface Intent {
   /** @brief Teks goal asli. */
   raw: string;
@@ -18,7 +18,7 @@ export interface Intent {
   constraints: Constraint[];
 }
 
-/** @brief Satu step dalam DAG rencana. @since 0.1.0 */
+/** @brief Satu step dalam DAG rencana. @since 0.1.1 */
 export interface Step {
   /** @brief ID unik step (s0, s1, ...). */
   id: string;
@@ -32,7 +32,7 @@ export interface Step {
   priority: number;
 }
 
-/** @brief Edge dependensi terarah. @since 0.1.0 */
+/** @brief Edge dependensi terarah. @since 0.1.1 */
 export interface Edge {
   /** @brief Step sumber (harus selesai dulu). */
   from: string;
@@ -40,7 +40,7 @@ export interface Edge {
   to: string;
 }
 
-/** @brief DAG rencana bebas-siklus, terurut topologis. @since 0.1.0 */
+/** @brief DAG rencana bebas-siklus, terurut topologis. @since 0.1.1 */
 export interface Dag {
   /** @brief Semua step. */
   nodes: Step[];
@@ -50,7 +50,7 @@ export interface Dag {
   order: string[];
 }
 
-/** @brief Error bila DAG mengandung siklus. @since 0.1.0 */
+/** @brief Error bila DAG mengandung siklus. @since 0.1.1 */
 export class CycleError extends Error {
   /** @brief ID step yang membentuk siklus. */
   readonly cycle: string[];

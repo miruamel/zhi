@@ -1,12 +1,12 @@
-/** @brief Model router: pilih backend + tier per task. @since 0.1.0 */
+/** @brief Model router: pilih backend + tier per task. @since 0.1.1 */
 
-/** @brief Jenis task yang dirutekan ke LLM. @since 0.1.0 */
+/** @brief Jenis task yang dirutekan ke LLM. @since 0.1.1 */
 export type TaskKind = 'generate' | 'critique' | 'verify' | 'format' | 'classify' | 'tag';
 
-/** @brief Tier komputasi (berat/ringan/mikro). @since 0.1.0 */
+/** @brief Tier komputasi (berat/ringan/mikro). @since 0.1.1 */
 export type Tier = 'heavy' | 'light' | 'micro';
 
-/** @brief Backend terpilih untuk sebuah task. @since 0.1.0 */
+/** @brief Backend terpilih untuk sebuah task. @since 0.1.1 */
 export interface Backend {
   /** @brief Tier komputasi. */
   tier: Tier;
@@ -20,7 +20,7 @@ export interface Backend {
  * @param {TaskKind} kind - jenis task.
  * @return {Backend} backend terpilih.
  * @see docs/design/model.md
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function route(kind: TaskKind): Backend {
   switch (kind) {
     case 'generate':

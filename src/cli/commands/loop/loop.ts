@@ -4,7 +4,7 @@
  * @param {string[]} argv - argumen baris perintah (goal + --threshold=N).
  * @return {Promise<LoopContext>} konteks akhir loop (sampai DONE).
  * @throw {Error} bila goal kosong.
- * @since 0.1.0
+ * @since 0.1.2
  */
 import type { LoopContext } from '@engine/loop/wiring/context';
 import type { Critique } from '@engine/critic/aggregate';
