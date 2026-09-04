@@ -17,7 +17,7 @@ Branch protection rules diaktifkan pada `main` melalui GitHub API. Konfigurasi d
 - **Strict mode**: enabled — branch must be up-to-date before PR merge.
 - **Config file**: `.github/branch-protection.json` (33 baris, Prettier-formatted, commit `569e1fd`).
 - **Proses**: protection di-apply via API → push di-block → protection di-delete sementara → push Berhasil → protection di-apply ulang. Semua setting diverifikasi via `curl GET` setelah re-apply.
-- **Gate**: `bun run gate` exit 0, 365 pass / 0 fail / 726 expect() across 72 files.
+- **Gate**: `bun run gate` exit 0, 365 pass / 0 fail / 726 expect() across 73 files.
 
 ## Dampak
 

@@ -12,7 +12,7 @@
 
 **Gate verification (post-merge):**
 
-- Tests: 365 pass / 0 fail / 726 expect() across 72 files
+- Tests: 365 pass / 0 fail / 726 expect() across 73 files
 - Typecheck: 0 errors
 - Prettier: All matched files use Prettier code style
 - Lint: 0 errors, 240 warnings (baseline JSDoc hygiene)

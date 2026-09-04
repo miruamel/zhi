@@ -19,7 +19,7 @@ Commit `9cbec75` ("docs: audit log state sync after fourth mandate re-injection"
 No token-dependent work attempted (§7.1 still active for `NPM_TOKEN_REDACTED`).
 ```
 
-The token was embedded in an audit log entry documenting a prior security incident (§7.1 token rotation). It was committed to public history and propagated through 70+ commits via merges and rebases.
+- The token was embedded in an audit log entry documenting a prior security incident (§7.1 token rotation). It was committed to public history and propagated through 268 commits via merges and rebases.
 
 ## Impact
 

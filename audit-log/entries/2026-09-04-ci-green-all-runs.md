@@ -13,7 +13,7 @@ Semua CI runs hijau: `ci` + `architecture-guard` pada 3 commit terakhir. Aksi Gi
 - **Aksi upgrade**: `actions/checkout@v4` → `v6`, `actions/setup-node@v4` → `v6`. Alasan: GitHub Actions runner memaksa Node.js 24, Node.js 20 deprecated (per changelog GitHub 2025-09-19). Upgrade menghindari warning tanpa breaking change.
 - **Repo state**: `main` bersih, 0 commits di depan `origin/main`. Catatan: tag `v0.1.4` ada di remote (commit `73d1d2d8`, pre-rebase) — tidak terkait dengan state CI saat ini.
 - **Audit log**: 74 entries, README count = 74, konsisten.
-- **Gate lokal**: `bun run gate` exit 0, 365 pass / 0 fail / 726 expect() across 72 files.
+- **Gate lokal**: `bun run gate` exit 0, 365 pass / 0 fail, 726 expect() across 73 files.
 
 ## Dampak
 
@@ -28,6 +28,6 @@ Tidak ada perubahan perilaku. Hanya upgrade versi action CI yang mengurangi depr
 
 - `gh run list --limit 3`: semua `completed success`
 - `git status`: clean, 0 ahead
-- `bun run gate`: exit 0, 365/0/726/72
+- `bun run gate`: exit 0, 365/0/726/73
 - `ls audit-log/entries/ | wc -l`: 74
 - `grep -n "Entri (" audit-log/README.md`: "74 file"

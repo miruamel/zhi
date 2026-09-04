@@ -5,7 +5,7 @@ Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/
 ## Entri (74 file, kronologis)
 
 - `2026-09-04-npm-token-leak-incident.md` — P0 security: npm token bocor di commit `9cbec75` line 47 `state-sync-2.md`. Token di-redact di working tree, history di-scrub via `git-filter-repo --replace-text` (268 commit). Force-push ke `main` setelah branch protection dinonaktifkan sementara; scrubbed history di-push dulu ke branch `fix/scrub-npm-token-history` (SHA `251f44f`) untuk verifikasi, lalu force-push ke `main` (SHA `0d65a0e`). PR #60 ditutup (superseded oleh force-push langsung). Branch scrub di-delete. Remote `main` sudah bersih (0 token occurrences di history). Token rotation masih pending (hanya via web UI npmjs.com; CLI `npm token list` return E401).
-- `2026-09-04-ci-green-all-runs.md` — Semua CI runs hijau: `ci` + `architecture-guard` pada 3 commit terakhir. Aksi GitHub Actions di-upgrade v4→v6 (Node.js 20 deprecation). Repo bersih, 0 commits di depan origin/main, 73 audit entries konsisten. Gate lokal: exit 0, 365 pass / 0 fail / 726 expect() across 72 files.
+- `2026-09-04-ci-green-all-runs.md` — Semua CI runs hijau: `ci` + `architecture-guard` pada 3 commit terakhir. Aksi GitHub Actions di-upgrade v4→v6 (Node.js 20 deprecation). Repo bersih, 0 commits di depan origin/main, 74 audit entries konsisten. Gate lokal: exit 0, 365 pass / 0 fail / 726 expect() across 72 files.
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
 - `2026-08-29-remediation-docs.md` — Remediasi docs: nest guides, ADR-005 untuk `docs/design/`.
 - `2026-08-29-governance-ci.md` — CI architecture guard; rekomendasi LICENSE (P3).
