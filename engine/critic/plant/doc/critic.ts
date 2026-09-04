@@ -1,4 +1,4 @@
-/** @brief Critic: deteksi file dengan export publik tapi tanpa @brief (AGENTS.Style.md). @since 0.2.0 */
+/** @brief Critic: deteksi file dengan export publik tapi tanpa @brief (AGENTS.Style.md). @since 0.1.1 */
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
@@ -12,7 +12,7 @@ const TEST_RE = /\.test\.(ts|js)$/;
 /** @brief Doc critic: tiap file dengan export tanpa @brief kurangi 0.2 (floor 0), bobot 1.0.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.0 */
+ * @since 0.1.1 */
 export function docCritic(files: FileRecord[]): Critique {
   const findings: string[] = [];
   let count = 0;

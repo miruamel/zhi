@@ -1,4 +1,4 @@
-/** @brief Critic: deteksi pelanggaran style (any type, ts-ignore). @since 0.2.0 */
+/** @brief Critic: deteksi pelanggaran style (any type, ts-ignore). @since 0.1.1 */
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
@@ -7,7 +7,7 @@ const STYLE_RES: RegExp[] = [/:\s*any\b/, /\bas\s+any\b/, /@ts-ignore/, /@ts-noc
 /** @brief Style critic: any/ts-ignore kurangi 0.15 (floor 0), bobot 1.0.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.0 */
+ * @since 0.1.1 */
 export function styleCritic(files: FileRecord[]): Critique {
   const findings: string[] = [];
   let count = 0;

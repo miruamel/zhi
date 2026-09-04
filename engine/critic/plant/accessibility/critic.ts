@@ -1,4 +1,4 @@
-/** @brief Critic: deteksi anti-pattern aksesibilitas dasar di kode UI generated. @since 0.2.0 */
+/** @brief Critic: deteksi anti-pattern aksesibilitas dasar di kode UI generated. @since 0.1.1 */
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
@@ -14,7 +14,7 @@ const TEST_RE = /\.test\.(ts|tsx|js|jsx)$/;
 /** @brief Accessibility critic: tiap temuan kurangi 0.1 (floor 0), bobot 1.0.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.0 */
+ * @since 0.1.1 */
 export function accessibilityCritic(files: FileRecord[]): Critique {
   const findings: string[] = [];
   let count = 0;

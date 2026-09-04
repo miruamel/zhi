@@ -1,4 +1,4 @@
-/** @brief Critic: DX hygiene repo-wide (README quickstart, AGENTS.md, test script). @since 0.2.0 */
+/** @brief Critic: DX hygiene repo-wide (README quickstart, AGENTS.md, test script). @since 0.1.1 */
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Critique } from '../../../aggregate';
@@ -6,7 +6,7 @@ import type { Critique } from '../../../aggregate';
 /** @brief DX critic: README quickstart + AGENTS.md + package.json test script. Penalti 0.2/finding, floor 0, bobot 0.8.
  * @param {string} root - path repo (bukan per-file).
  * @return {Critique} hasil critic.
- * @since 0.2.0 */
+ * @since 0.1.1 */
 export function dxCritic(root: string): Critique {
   const findings: string[] = [];
   const readme = join(root, 'README.md');

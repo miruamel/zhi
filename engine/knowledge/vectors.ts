@@ -1,6 +1,6 @@
-/** @brief Store vektor in-memory + cosine search (atomic). @since 0.3.0 */
+/** @brief Store vektor in-memory + cosine search (atomic). @since 0.1.1 */
 
-/** @brief Entri vektor. @since 0.3.0 */
+/** @brief Entri vektor. @since 0.1.1 */
 export interface VectorEntry {
   /** @brief ID unik (overwrite bila sama). */
   id: string;
@@ -10,7 +10,7 @@ export interface VectorEntry {
   meta?: Record<string, unknown>;
 }
 
-/** @brief Hasil pencarian ter-score. @since 0.3.0 */
+/** @brief Hasil pencarian ter-score. @since 0.1.1 */
 export interface ScoredEntry {
   /** @brief ID entri. */
   id: string;
@@ -20,7 +20,7 @@ export interface ScoredEntry {
   meta?: Record<string, unknown>;
 }
 
-/** @brief Penyimpanan vektor in-memory dengan pencarian cosine top-k. @since 0.3.0 */
+/** @brief Penyimpanan vektor in-memory dengan pencarian cosine top-k. @since 0.1.1 */
 export class VectorStore {
   private entries = new Map<string, VectorEntry>();
   private dim = 0;
