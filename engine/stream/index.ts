@@ -19,7 +19,7 @@ export async function parseStream(chunk: string): Promise<string[]> {
   if (!isWasmAvailable()) return parseSseTs(chunk);
   try {
     const result = await parseSseWasm(chunk);
-    if (result.length === 0 && chunk.length > 0) {
+    if (result.length === 0 && chunk.length > 0 && chunk.includes('data:')) {
       // Deteksi write barrier: input non-kosong tapi output kosong.
       // Disable WASM permanen, fallback.
       disableWasm();

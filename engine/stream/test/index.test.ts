@@ -6,7 +6,7 @@
  */
 import { describe, expect, it, beforeEach } from 'bun:test';
 import { parseStream } from '../index';
-import { disableWasm, resetWasm } from '../zigBridge';
+import { disableWasm, isWasmAvailable, resetWasm } from '../zigBridge';
 
 describe('parseStream write-barrier detection', () => {
   beforeEach(() => {
@@ -23,6 +23,24 @@ describe('parseStream write-barrier detection', () => {
     const result = await parseStream('data: hello\n\n');
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBeGreaterThan(0);
+    resetWasm();
+  });
+
+  it('does not disable WASM for event-only chunks (no data:)', async () => {
+    // Event-only chunks (heartbeat, comment, id:) legitimately
+    // return [] from a working parser. The write-barrier guard
+    // must not fire on them — only chunks containing data: events
+    // can trigger a false-positive disable.
+    const result = await parseStream('event: heartbeat\n\n');
+    expect(Array.isArray(result)).toBe(true);
+    expect(isWasmAvailable()).toBe(true);
+    resetWasm();
+  });
+
+  it('does not disable WASM for comment-only chunks', async () => {
+    const result = await parseStream(':keepalive\n\n');
+    expect(Array.isArray(result)).toBe(true);
+    expect(isWasmAvailable()).toBe(true);
     resetWasm();
   });
 });
