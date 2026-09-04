@@ -5,6 +5,7 @@ export type KeyAction =
   | 'toggleCritics'
   | 'togglePr'
   | 'toggleHelp'
+  | 'toggleDetail'
   | 'pauseResume'
   | 'abort'
   | 'redraw'
@@ -22,6 +23,7 @@ const map: Record<string, KeyAction> = {
   p: 'togglePr',
   h: 'toggleHelp',
   '?': 'toggleHelp',
+  d: 'toggleDetail',
   ' ': 'pauseResume',
   enter: 'unknown',
   escape: 'quit',
