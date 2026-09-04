@@ -2,7 +2,7 @@
 
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
-## Entri (58 file, kronologis)
+## Entri (59 file, kronologis)
 
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
 - `2026-08-29-remediation-docs.md` — Remediasi docs: nest guides, ADR-005 untuk `docs/design/`.
@@ -62,3 +62,4 @@ Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/
 - `2026-09-04-lockfile-switch.md` — `bun.lock` deleted, `package-lock.json` committed, CI switched from `bun install --frozen-lockfile` to `npm ci`. Bun hoisting broken on `ansi-styles` + `@types/node` chains (351/11/11 → 411/0/844).
 - `2026-09-04-state-sync-3.md` — Twelfth MANDAT re-injection: restored two audit log entries lost in merge `92a4b74`, stale `bun.lock` reference sweep (publish.yml, runbook, repo-metadata, CHANGES.md), added lockfile switch + git hooks entries to `[Unreleased]`.
 - `2026-09-04-rebase-completion.md` — Rebase conflict resolution selesai: CHANGES.md + audit-log/README.md merged tanpa kehilangan content, gate kembali hijau (365 pass / 0 fail / 726 expect()).
+- `2026-09-04-audit-log-consistency.md` — Audit log README tidak konsisten dengan isi direktori: entry `rebase-completion.md` ada di disk tapi tidak terdaftar, dan count 57 vs 58 file. Diperbaiki: count diubah 58→59 (entry sendiri ditambahkan), `rebase-completion.md` ditambahkan ke daftar. Verifikasi: `ls audit-log/entries/ | wc -l` = 59, `grep -c "rebase-completion" audit-log/README.md` = 1, `bun run gate` exit 0.
