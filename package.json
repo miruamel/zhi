@@ -74,7 +74,7 @@
     "bun": ">=1.4.0"
   },
   "dependencies": {
-    "ink": "^4",
+    "ink": "^7",
     "react": "^18",
     "@types/react": "^18"
   },
