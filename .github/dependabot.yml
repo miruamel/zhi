@@ -6,6 +6,16 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "react"
+      - dependency-name: "@types/react"
+      - dependency-name: "typescript"
+      - dependency-name: "ink"
+      - dependency-name: "eslint"
+      - dependency-name: "eslint-plugin-jsdoc"
+      - dependency-name: "@commitlint/cli"
+      - dependency-name: "@commitlint/config-conventional"
+      - dependency-name: "lint-staged"
     groups:
       types:
         patterns:
@@ -21,3 +31,6 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 3
+    ignore:
+      - dependency-name: "actions/checkout"
+      - dependency-name: "actions/setup-node"
