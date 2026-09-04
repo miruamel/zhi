@@ -5,10 +5,21 @@ set -euo pipefail
 cd "$(dirname "$0")"
 mkdir -p ../out
 
-# Try each candidate zig binary; use the first that successfully compiles.
-# Some PATH entries are stripped ELF binaries that report a version but
-# cannot find their own installation directory (build-lib fails).
-ZIG_BIN=""
+# Honor ZIG_BIN if set (CI exports it); fall back to probe loop otherwise.
+ZIG_BIN="${ZIG_BIN:-}"
+if [ -n "$ZIG_BIN" ] && [ -x "$ZIG_BIN" ]; then
+  rm -f ../out/stream.wasm
+  if "$ZIG_BIN" build-lib parse.zig \
+      -target wasm32-freestanding \
+      -O ReleaseSmall \
+      -fPIC \
+      -femit-bin=../out/stream.wasm 2>/dev/null; then
+    echo "zig: $ZIG_BIN (from env)"
+  else
+    ZIG_BIN=""
+  fi
+fi
+if [ -z "$ZIG_BIN" ]; then
 for cand in $(command -v zig 2>/dev/null) /tmp/zig-linux-aarch64-0.14.0/zig /tmp/zig-linux-x86_64-0.14.0/zig; do
   if [ -z "$cand" ] || [ ! -x "$cand" ]; then continue; fi
   rm -f ../out/stream.wasm
@@ -21,6 +32,7 @@ for cand in $(command -v zig 2>/dev/null) /tmp/zig-linux-aarch64-0.14.0/zig /tmp
     break
   fi
 done
+fi
 
 if [ -z "$ZIG_BIN" ]; then
   echo "ERROR: no usable zig binary (all candidates failed)" >&2
