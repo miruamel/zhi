@@ -31,6 +31,23 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - **Lockfile switch: `bun.lock` → `package-lock.json`** — `bun install` at `938ca00` baseline produced a broken node_modules tree (351 pass / 11 fail / 11 errors) because Bun's hoisting fails on nested `ansi-styles` (three versions required: 4.3.0 under chalk, 6.0.0 under slice-ansi, 6.2.3 under @alcalzone/ansi-tokenize) and `@types/node` (transitive dep of `bun-types` that Bun fails to hoist to top-level `node_modules/@types/node/`). `npm install` correctly nests all three `ansi-styles` versions and hoists `@types/node@26.4.1` with full `package.json` and `.d.ts` files. `bun.lock` deleted and removed from tracking; `package-lock.json` committed as single lockfile. CI switched from `bun install --frozen-lockfile` to `npm ci` in both `gate` and `build` jobs of `.github/workflows/ci.yml` and in `.github/workflows/publish.yml`. `bun` remains the runtime for all scripts (`bun test`, `bun x tsc`, `bun x prettier`, etc.) — only the install step changed. Tests: 411 pass / 0 fail / 844 expect() across 76 files.
 - **Git hooks installed (pre-commit + commit-msg)** — Husky v9 diagnosed as broken in this repo: `_/` dispatcher stubs are deprecation echoes that never invoke `.husky/` user hooks, and `bun install` fails to hoist `tinyexec` (v1.3.1, ESM `dist/main.mjs`) from nested `@commitlint/cli/node_modules/` to top-level `node_modules/`. Per advisor guidance, reverted husky wiring entirely and installed plain git hooks in `.git/hooks/` directly: `.git/hooks/pre-commit` runs `bun x lint-staged`, `.git/hooks/commit-msg` runs `bun x commitlint --edit "$1"`. `core.hooksPath` unset so git uses `.git/hooks/` by default. Verified: `git commit --allow-empty -m "bad"` rejected (commitlint EXIT=1), `git commit --allow-empty -m "chore: test hooks"` accepted (EXIT=0). Hooks are git-native, not committed to git.
 
+## [0.1.3] - 2026-09-03
+
+### Test
+
+- **Unit tests for pure modules in `engine/resil/` + `src/tui/core/`** — 5 new test files (41 tests, 86 expect calls):
+  - `engine/resil/test/recover.test.ts` (6 tests): `classifyError()` — budget/timeout/fatal/quota → abort+fatal, cycle/ambig/parse → replan, default → patch, null/undefined/empty, case-insensitivity.
+  - `engine/resil/test/breaker.test.ts` (6 tests): `CircuitBreaker` — window-full threshold crossing, sliding window semantics, reset, exactly-threshold (not open), all-success window.
+  - `engine/resil/test/retry.test.ts` (5 tests): `retryWithBudget` — first-attempt success, retry-then-succeed, budget exhaustion + DLQ, default maxAttempts=3, DLQ error stringification.
+  - `src/tui/core/test/format.test.ts` (29 tests): `formatMs`, `formatScore`, `formatTokens`, `formatPct`, `bar`, `formatTime`, `truncate`, `pad`.
+  - `src/tui/core/test/colors.test.ts` (2 tests): color token export + `ColorToken` type coverage.
+- Test files moved to `test/` subdirectories (`src/tui/core/test/`) to stay within the ≤5-files-per-directory architecture guard cap.
+
+### Style
+
+- Prettier formatting on all 5 new test files (CI `format:check` gate).
+
+### Note
 ## [0.1.2] - 2026-09-03
 
 ### Added
@@ -76,23 +93,6 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 - **`release.yml` OIDC migration** — workflow publish npm tidak lagi pakai `secrets.NPM_TOKEN` (long-lived secret, compromised 2026-09-03 di session). Migrasi ke OIDC federation (Trusted Publishing): `id-token: write` permission + `npm publish --provenance` short-lived token dari GitHub Actions → npmjs.com. Repo secret `NPM_TOKEN` sudah dihapus dari settings (`total_count: 0` confirmed via API). User tetap harus verify npmjs.com Trusted Publisher entry point ke `publish.yml` (bukan `release.yml`) di https://www.npmjs.com/package/@miruamel/zhi/access. Rotation `npm_5xKx…` di npmjs.com sekarang **less urgent** tapi tetap recommended (compromised secret hygiene). Tracked di #35.
 
-## [0.1.3] - 2026-09-03
-
-### Test
-
-- **Unit tests for pure modules in `engine/resil/` + `src/tui/core/`** — 5 new test files (41 tests, 86 expect calls):
-  - `engine/resil/test/recover.test.ts` (6 tests): `classifyError()` — budget/timeout/fatal/quota → abort+fatal, cycle/ambig/parse → replan, default → patch, null/undefined/empty, case-insensitivity.
-  - `engine/resil/test/breaker.test.ts` (6 tests): `CircuitBreaker` — window-full threshold crossing, sliding window semantics, reset, exactly-threshold (not open), all-success window.
-  - `engine/resil/test/retry.test.ts` (5 tests): `retryWithBudget` — first-attempt success, retry-then-succeed, budget exhaustion + DLQ, default maxAttempts=3, DLQ error stringification.
-  - `src/tui/core/test/format.test.ts` (29 tests): `formatMs`, `formatScore`, `formatTokens`, `formatPct`, `bar`, `formatTime`, `truncate`, `pad`.
-  - `src/tui/core/test/colors.test.ts` (2 tests): color token export + `ColorToken` type coverage.
-- Test files moved to `test/` subdirectories (`src/tui/core/test/`) to stay within the ≤5-files-per-directory architecture guard cap.
-
-### Style
-
-- Prettier formatting on all 5 new test files (CI `format:check` gate).
-
-### Note
 ## [0.1.1] - 2026-09-02
 
 ### Security
