@@ -10,7 +10,7 @@ Rebase conflict resolution selesai: CHANGES.md + audit-log/README.md merged tanp
 - **CHANGES.md**: 3 conflict region resolved. Region 1 (Divergent TUI lineage) — HEAD dipilih (cross-ref `[0.1.2]` + test count 365). Region 2 (0.1.2/0.1.3 reorder) — HEAD content dipertahankan, 0.1.3 block dipindahkan sebelum 0.1.2 secara manual. Region 3 (Note section) — HEAD dipilih.
 - **audit-log/README.md**: 2 conflict region resolved. Region 1 (header count) — "56 file" dipertahankan, stale `+## Entri (53 file)` line dihapus. Region 2 (entry groups) — kedua group digabung: `monitor-cycle-1` (theirs) + 3 HEAD entries (`git-hooks-install`, `lockfile-switch`, `state-sync-3`). Count diperbarui 56 → 57.
 - **Format**: Prettier menemukan 2 file perlu format setelah rebase, di-fix via `--write`. Commit: `style: prettier format after rebase conflict resolution`.
-- **Gate**: `bun run gate` exit 0. 365 pass / 0 fail / 726 expect() across 72 files. Lint 240 problems (0 errors). Critic findings false positive (temp dir copy).
+- **Gate**: `bun run gate` exit 0. 365 pass / 0 fail / 726 expect() across 73 files. Lint 240 problems (0 errors). Critic findings false positive (temp dir copy).
 
 ## Dampak
 

@@ -6,7 +6,7 @@
  */
 import { describe, expect, it, beforeEach } from 'bun:test';
 import { parseStream } from '../index';
-import { disableWasm, resetWasm } from '../zigBridge';
+import { disableWasm, isWasmAvailable, resetWasm } from '../zigBridge';
 
 describe('parseStream write-barrier detection', () => {
   beforeEach(() => {
@@ -24,5 +24,25 @@ describe('parseStream write-barrier detection', () => {
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBeGreaterThan(0);
     resetWasm();
+  });
+
+  it('does NOT disable WASM for event-only chunks (no data: event)', async () => {
+    // WASM write barrier makes parseSseWasm return [] for all chunks in
+    // this env, but event-only chunks legitimately return [] from a
+    // working parser. The dispatcher must distinguish: only disable
+    // when a chunk containing data: events produces empty output.
+    const result = await parseStream('event: heartbeat\n\n');
+    expect(result).toEqual([]);
+    // WASM should still be available — this is a valid empty result,
+    // not a write-barrier symptom.
+    expect(isWasmAvailable()).toBe(true);
+  });
+
+  it('disables WASM when data: chunk produces empty output (write barrier)', async () => {
+    // In this env parseSseWasm returns [] for data: chunks too —
+    // that IS the write barrier. Dispatcher must detect and fallback.
+    const result = await parseStream('data: hello\n\n');
+    expect(result.length).toBeGreaterThan(0);
+    expect(isWasmAvailable()).toBe(false);
   });
 });

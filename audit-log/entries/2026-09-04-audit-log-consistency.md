@@ -26,4 +26,4 @@ Audit log konsisten dengan filesystem. Tidak ada perubahan pada entry `.md` atau
 
 - `ls audit-log/entries/ | wc -l`: 58
 - `grep -n "Entri (" audit-log/README.md`: baris 5, "58 file"
-- `bun run gate`: exit 0, 365 pass / 0 fail / 726 expect() across 72 files
+- `bun run gate`: exit 0, 365 pass / 0 fail / 726 expect() across 73 files
