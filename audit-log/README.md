@@ -2,7 +2,8 @@
 
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
-## Entri (52 file, kronologis)
+-## Entri (52 file, kronologis)
++## Entri (53 file, kronologis)
 
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
 - `2026-08-29-remediation-docs.md` — Remediasi docs: nest guides, ADR-005 untuk `docs/design/`.
@@ -51,6 +52,7 @@ Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/
 - `2026-09-04-pr47-closure.md` — PR #47 (`fix/tui-tsc-debt`) closed as superseded; branch deleted.
 - `2026-09-04-pr48-closure.md` — PR #48 (`fix/tui-tsc-debt-2-widgets`) closed as superseded; branch deleted.
 - `2026-09-04-pr49-closure.md` — PR #49 (`fix/tui-tsc-debt-3-tests`) closed as superseded; branch deleted. Fourth in divergent TUI lineage.
+- `2026-09-04-pr50-closure.md` — PR #50 (`fix/tui-tsc-debt-4-app`) closed as superseded; branch deleted. Fifth in divergent TUI lineage.
 - `2026-09-04-state-sync.md` — Consolidated entry reconciling audit log with actual repo state.
 - `2026-09-04-state-sync-2.md` — Consolidated state sync after fourth MANDAT re-injection: PR #49 closure, docs sweep, index rebuild.
 - `2026-09-04-stream-test-determinism.md` — `parseSseWasm` fail-closed guard; stream tests env-independent.
