@@ -92,7 +92,7 @@ export function Breadcrumb({
                   {onSeparate ? '' : separator}
                 </Text>
               )}
-              {onSeparate && onSeparate(item, idx)}
+              {onSeparate ? (() => { onSeparate(item, idx); return null; })() : null}
             </React.Fragment>
           );
         }
@@ -104,7 +104,7 @@ export function Breadcrumb({
                 {onSeparate ? '' : separator}
               </Text>
             )}
-            {onSeparate && onSeparate(item, idx)}
+            {onSeparate ? (() => { onSeparate(item, idx); return null; })() : null}
           </React.Fragment>
         );
       })}

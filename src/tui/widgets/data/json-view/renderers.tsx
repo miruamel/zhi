@@ -6,7 +6,7 @@
  */
 import { Text } from 'ink';
 import { colors } from '../../../core/style/colors';
-import type { JsonPath, JsonViewProps } from './types';
+import type { JsonPath } from './types';
 import { INDENT, typeOf, primitiveColor, primitiveLabel } from './types';
 
 type IsOpenFn = (key: string) => boolean;
@@ -19,9 +19,11 @@ interface RenderedLine {
 }
 
 /** @brief Toggle marker (+/-) for collapsible containers. @since 0.1.1 */
-export function toggleMarker(open: boolean, isFocused: boolean, onSelect: () => void): React.ReactNode {
+export function toggleMarker(open: boolean, isFocused: boolean, _onSelect: () => void): React.ReactNode {
+  // onSelect dropped: Ink 4.x has no onClick on Text or Box; navigation via useInput instead.
+  // The unused parameter is kept for caller compatibility (renderObject / renderArray).
   return (
-    <Text color={isFocused ? colors.accent : colors.fgDim} inverse={isFocused} onClick={onSelect}>
+    <Text color={isFocused ? colors.accent : colors.fgDim} inverse={isFocused}>
       {open ? '−' : '+'}
     </Text>
   );

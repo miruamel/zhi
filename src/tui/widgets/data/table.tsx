@@ -154,8 +154,11 @@ export function Table<T = Record<string, unknown>>({
           const rowBg = striped && idx % 2 === 1 ? STRIPED_BG : undefined;
           const handleClick = onRowClick ? () => onRowClick(originalIndex) : undefined;
           return (
-            <Box key={originalIndex} onClick={handleClick as never}>
-              {renderRow(cells, { bg: rowBg })}
+            <Box>
+              {/* @ts-expect-error Ink Box lacks onClick prop; runtime no-op until Ink 5+ */}
+              <Box key={originalIndex} onClick={handleClick}>
+                {renderRow(cells, { bg: rowBg })}
+              </Box>
             </Box>
           );
         })
