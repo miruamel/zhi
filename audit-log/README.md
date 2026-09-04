@@ -2,7 +2,7 @@
 
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
-## Entri (68 file, kronologis)
+## Entri (69 file, kronologis)
 
 - `2026-09-04-ci-green-all-runs.md` — Semua CI runs hijau: `ci` + `architecture-guard` pada 3 commit terakhir. Aksi GitHub Actions di-upgrade v4→v6 (Node.js 20 deprecation). Repo bersih, 0 commits di depan origin/main, 63 audit entries konsisten. Gate lokal: exit 0, 365 pass / 0 fail / 726 expect() across 72 files.
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
@@ -71,4 +71,5 @@ Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/
 - `2026-09-04-dependabot-vitest-ignore-removal.md` — Hapus `ignore.vitest` dari `.github/dependabot.yml`: nol referensi `vitest` di repo, CVE-2026-47429 adalah false positive. dependabot.yml 26→21 baris. Tanpa perubahan perilaku Dependabot.
 - `2026-09-04-dependabot-pr-triage.md` — Tutup 7 Dependabot PR (#51–#57) sekaligus: semua major-version bump tanpa security driver, repo experimental (0.1.4). Tambah ignore rules di `dependabot.yml` untuk 9 npm + 2 github-actions dependency. npm audit: 0 vulnerabilities.
 - `2026-09-04-state-sync-5.md` — State sync kelima: push 2 commit terakhir ke origin/main, verifikasi npm audit (0 vulnerabilities setelah rebuild lockfile), dan konfirmasi tidak ada actionable gap. Repo bersih, 0 commits di depan origin/main.
+- `2026-09-04-branch-protection-enabled.md` — Branch protection rules diaktifkan pada `main` via GitHub API. 3 required status checks (Gate, Build, Architecture invariants), 1 required approval, stale reviews dismissed, admins enforced, force-push/deletions disabled, linear history required, conversation resolution required. Push langsung ke `main` di-block (GH006). Config di `.github/branch-protection.json`, commit `569e1fd`. Gate: exit 0, 365/0/726/72.
 - `2026-09-04-state-sync-4.md` — State sync keempat: reconcile README dengan disk (66→67), verifikasi gate exit 0 (365/0/726/72), konfirmasi 0 open PR/issue, ADR-013 sudah ada, CHANGES.md valid. Repo bersih, tidak ada actionable gap.
