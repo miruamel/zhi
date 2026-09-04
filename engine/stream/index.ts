@@ -1,7 +1,7 @@
 /**
  * @brief Dispatcher parser SSE: coba WASM (zigBridge), fallback ke TS bila write barrier gagal.
  * Konsumer (`engine/model/stream`) import `parseStream` dari sini.
- * @since 0.1.1
+ * @since 0.1.2
  */
 import { parseSseTs } from './parseSseTs';
 import { disableWasm, isWasmAvailable, parseSseWasm } from './zigBridge';
@@ -13,7 +13,7 @@ import { disableWasm, isWasmAvailable, parseSseWasm } from './zigBridge';
  * fallback ke parser TS untuk request ini dan selanjutnya.
  * @param {string} chunk - chunk SSE (UTF-8).
  * @return {Promise<string[]>} payload data per event.
- * @since 0.1.1
+ * @since 0.1.2
  */
 export async function parseStream(chunk: string): Promise<string[]> {
   if (!isWasmAvailable()) return parseSseTs(chunk);
