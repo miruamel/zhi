@@ -3,7 +3,7 @@
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
 ## Entri (70 file, kronologis)
-- `2026-09-04-npm-token-leak-incident.md` — P0 security: npm token bocor di commit `9cbec75` line 47 `state-sync-2.md`. Token di-redact di working tree, history di-scrub via `git-filter-repo --replace-text` (268 commit). Force-push di-block oleh branch protection; scrubbed history di-push ke branch `fix/scrub-npm-token-history` (SHA `251f44f`). PR #59 pending merge. Token harus di-rotate di npmjs.com. Remote `main` masih berisi token di history-nya.
+- `2026-09-04-npm-token-leak-incident.md` — P0 security: npm token bocor di commit `9cbec75` line 47 `state-sync-2.md`. Token di-redact di working tree, history di-scrub via `git-filter-repo --replace-text` (268 commit). Force-push di-block oleh branch protection; scrubbed history di-push ke branch `fix/scrub-npm-token-history` (SHA `251f44f`). PR #60 pending merge. Token harus di-rotate di npmjs.com. Remote `main` masih berisi token di history-nya.
 
 - `2026-09-04-ci-green-all-runs.md` — Semua CI runs hijau: `ci` + `architecture-guard` pada 3 commit terakhir. Aksi GitHub Actions di-upgrade v4→v6 (Node.js 20 deprecation). Repo bersih, 0 commits di depan origin/main, 63 audit entries konsisten. Gate lokal: exit 0, 365 pass / 0 fail / 726 expect() across 72 files.
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
