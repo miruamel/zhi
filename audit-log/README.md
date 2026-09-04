@@ -2,7 +2,7 @@
 
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
-## Entri (57 file, kronologis)
+## Entri (58 file, kronologis)
 
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
 - `2026-08-29-remediation-docs.md` — Remediasi docs: nest guides, ADR-005 untuk `docs/design/`.
@@ -61,3 +61,4 @@ Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/
 - `2026-09-04-git-hooks-install.md` — Husky v9 diagnosed broken; reverted wiring, installed plain git hooks in `.git/hooks/` (pre-commit + commit-msg). `tinyexec` hoisting fix. Verified: bad commit rejected, good commit accepted.
 - `2026-09-04-lockfile-switch.md` — `bun.lock` deleted, `package-lock.json` committed, CI switched from `bun install --frozen-lockfile` to `npm ci`. Bun hoisting broken on `ansi-styles` + `@types/node` chains (351/11/11 → 411/0/844).
 - `2026-09-04-state-sync-3.md` — Twelfth MANDAT re-injection: restored two audit log entries lost in merge `92a4b74`, stale `bun.lock` reference sweep (publish.yml, runbook, repo-metadata, CHANGES.md), added lockfile switch + git hooks entries to `[Unreleased]`.
+- `2026-09-04-rebase-completion.md` — Rebase conflict resolution selesai: CHANGES.md + audit-log/README.md merged tanpa kehilangan content, gate kembali hijau (365 pass / 0 fail / 726 expect()).
