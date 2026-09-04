@@ -44,7 +44,4 @@ Four files exceed 100 SLOC; all have co-located or sibling tests:
 ### CHANGES.md accurate
 
 `## [Unreleased]` section reflects all changes since `v0.1.3`. Test counts updated (411 pass). No version bump warranted: all commits since `v0.1.3` are `style:`/`fix:`/`test:`/`ci:`/`docs:` — zero `feat:` or breaking changes.
-
-## Decision
-
-No changes made. Repo is at steady state: all gates green, working tree clean, no actionable debt. The audit log entry for `keymap + state test coverage` (commit `4917214`) was already Prettier-formatted in a prior pass (`475b5ed`); re-verified clean.
+**Superseded by** `2026-09-04-state-sync.md`. Subsequent commits (vitest reference cleanup `f93bb3c`, Prettier fix `472aac8`) occurred after this entry was written. The "no changes made" claim is accurate for the sweep itself but not for the session as a whole.
