@@ -49,7 +49,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - `assets/` — `favicon.svg` (64×64), `logo.svg` (360×96), `og-banner.svg` (1200×630), `doc-header.svg` (1200×120), `glyphs.svg` (800×96), `banner.txt` (ASCII splash), `assets/README.md` (asset index + color palette).
 - `BUSINESS.md` — positioning, ICP, pricing (proposed), competitive landscape (vs Claude Code/OMP/Aider/KiloCode/Hermes), value prop canvas.
 - `docs/marketing/` — `landing-copy.md` (hero/problem/how-it-works/features/FAQ for zhi.dev), `social-bio.md` (GitHub/X/LinkedIn/npm bios), `use-cases.md` (8 concrete user stories), `repo-metadata.md` (checklist of forgotten small details), `README.md` (index).
-- `.prettierignore` — exclude `dist/`, `native/out/`, `.zig-cache/`, `.nyc_output/`, `coverage/`, `bun.lock` (generated / not source).
+- `.prettierignore` — exclude `dist/`, `native/out/`, `.zig-cache/`, `.nyc_output/`, `coverage/`, `package-lock.json` (generated / not source).
 - `.gitignore` — tambah `dist/` (TS emit, bukan source).
 - **Ink TUI** — `src/tui/` (18 files, 4 dirs): `app.tsx` (root ink component with `useState` + `useEffect` + `useInput` + `useApp`), `render.tsx` (`mountTui()` entry, `RenderOptions`), `state.ts` (`AppState`, `DagStep`, `CriticLine`, `EvalReport`, `PrCiState`, `LogEntry`, `emptyState()`), `colors.ts`, `format.ts`, `icons.ts`, `keymap.ts`, `viewer.ts`, `viewer.test.ts` (4 tests pass). 6 panes per `docs/guides/tui.md` spec: DAG, Step Detail, Critics, Eval, PR/CI, Log (+ Help overlay). `onRegister` prop pattern (not bus/patch-sink) — `ZhiApp` receives `onRegister?: (push) => void`, calls it in `useEffect` with a `setState`-merging closure. `mountTui` exposes `onRegister` in `RenderOptions`. `loop.ts` uses a `holder.push` mutable ref. `engine/loop/driver.ts`: added `abort()` method (`this.state = LoopState.DONE`). `src/cli/index.ts`: rewritten — `main()` now dispatches `gen`/`critique:repo`/`loopCommandTui` (TTY) or `loopCommand` (non-TTY). `loopCommandTui` subscribes to `driver.onTransition`, emits `toPatch()` snapshots. `toPatch()` returns plain `Partial<AppState>` (shallow patches only; `PartialDeep<T>` type alias was added speculatively then dropped — it poisoned React `setState` spread with `undefined` per leaf). `LoopDriver.abort()` added as small justified engine change (was `private readonly`, made public).
 
@@ -125,7 +125,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
   - `tests/setup.ts` (bun:test minimal beforeEach/afterEach)
 - `package.json` scripts: `gate`, `lint`, `lint:fix`, `format`, `format:check`, `typecheck`, `test`, `test:ci`, `test:watch`, `arch:check`, `arch:metrics`, `native:build`.
 - `native/out/stream.wasm` rebuilt with Zig 0.14.0 (`wasm32-freestanding -fno-entry --export=parse_sse`).
-- `.gitignore` entries: `native/.zig-cache/`, `coverage/`, `*.tsbuildinfo`, `bun.lock`.
+- `.gitignore` entries: `native/.zig-cache/`, `coverage/`, `*.tsbuildinfo`, `package-lock.json`.
 
 ### Gate Status
 
