@@ -30,6 +30,7 @@ Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/
 - `2026-09-04-state-sync.md` — Consolidated entry reconciling audit log with actual repo state; supersedes stale claims in `final-convergence.md` and `pr47-closure.md`.
 - `2026-09-04-stream-test-determinism.md` — `parseSseWasm` fail-closed guard added; stream tests rewritten to be env-independent.
 - `2026-09-04-topatch-coverage.md` — Test coverage audit: 155 source files scanned against 76 test files; 19 files without direct tests, all resolved.
+- `2026-09-04-pr49-closure.md` — PR #49 (`fix/tui-tsc-debt-3-tests`) closed as superseded; branch deleted. Fourth in the divergent-TUI-lineage series.
 - `2026-09-04-zig-0.16.0-fix.md` — Zig 0.16.0 build fix for `native/stream/parse.zig`.
 
 ## Invarian yang dilacak
