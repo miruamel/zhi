@@ -12,3 +12,6 @@ coverage/
 
 # Lockfiles (generated, not formatted)
 bun.lock
+# Audit log entries — narrative documents, not source code
+audit-log/entries/
+audit-log/README.md
