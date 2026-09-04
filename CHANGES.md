@@ -48,6 +48,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - Prettier formatting on all 5 new test files (CI `format:check` gate).
 
 ### Note
+
 ## [0.1.2] - 2026-09-03
 
 ### Added
