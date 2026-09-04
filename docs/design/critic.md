@@ -69,7 +69,7 @@ Current concrete critics: 15 (11 single-file via `composeCritiques` + 4 repo-wid
 
 ## Roadmap
 
-- All 15 critics are concrete. Additional critics (Doc, DevOps, Legal, Privacy, DX, Accessibility, Security, Perf, Testing, Style) were promoted from stub → concrete gradually in `docs/guides/roadmap.md` v0.2.0+. Each addition = new `plant/<name>/` directory + register in `composeCritiques` + test. Per-critic semantics (what is measured, weights, penalty) deserve a short ADR.
+- All 15 critics are concrete (see table above). Additional critics were promoted from stub → concrete gradually in `docs/guides/roadmap.md` v0.2.0+. Each addition = new `plant/<name>/` directory + register in `composeCritiques` + test. Per-critic semantics (what is measured, weights, penalty) deserve a short ADR.
 
 ## Cross-link
 
