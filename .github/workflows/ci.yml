@@ -32,17 +32,8 @@ jobs:
       - name: Architecture guard (custom bash checks)
         run: bash .github/workflows/architecture-guard.sh
 
-      - name: Lint
-        run: bun run lint
-
-      - name: Format check
-        run: bun run format:check
-
-      - name: Typecheck
-        run: bun run typecheck
-
-      - name: Test
-        run: bun run test
+      - name: Gate (lint + format + typecheck + test, docs-only fast-path)
+        run: bun run gate
 
   build:
     name: Build TypeScript + Native WASM

@@ -30,7 +30,7 @@
   "scripts": {
     "test": "bun test",
     "test:ci": "bun test --coverage --reporter=junit --reporter-outfile=coverage/coverage.xml",
-    "gate": "bun run lint && bun run format:check && bun run typecheck && bun run test",
+    "gate": "bun run scripts/gate.ts --if-changed",
     "test:watch": "bun test --watch",
     "lint": "bun x eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "bun x eslint . --ext .ts,.tsx,.js,.jsx --fix",
