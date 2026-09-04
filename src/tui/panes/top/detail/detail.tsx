@@ -1,7 +1,7 @@
 /** @brief Step detail pane: current step info, tokens, elapsed, detail string. @since 0.1.0 */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
-import { formatTokens, formatPct } from '../../../core/format';
+import { formatTokens, formatPct, truncate } from '../../../core/format';
 import type { DagStep } from '../../../core/state';
 
 export interface DetailProps {
@@ -10,11 +10,25 @@ export interface DetailProps {
   tokensUsed: number;
   tokensBudget: number;
   recoverAttempts: number;
+  expanded?: boolean;
 }
 
 /** @brief Render the step detail pane. @since 0.1.0 */
-export function Detail({ step, loop, tokensUsed, tokensBudget, recoverAttempts }: DetailProps) {
+export function Detail({
+  step,
+  loop,
+  tokensUsed,
+  tokensBudget,
+  recoverAttempts,
+  expanded = false,
+}: DetailProps) {
   const pct = tokensBudget > 0 ? tokensUsed / tokensBudget : 0;
+  const detailText = step?.detail ?? '';
+  const hasDetail = detailText.length > 0;
+  const lines = hasDetail ? detailText.split('\n') : [];
+  const visible = expanded ? lines : lines.slice(0, 4);
+  const hidden = expanded ? 0 : Math.max(0, lines.length - 4);
+
   return (
     <Box
       flexDirection="column"
@@ -24,7 +38,7 @@ export function Detail({ step, loop, tokensUsed, tokensBudget, recoverAttempts }
       flexGrow={1}
     >
       <Text color={colors.warn} bold>
-        ⏵ STEP DETAIL
+        ⏵ STEP DETAIL {expanded ? '▾' : '▸'}
       </Text>
       <Box gap={1}>
         <Text color={colors.fgDim}>state:</Text>
@@ -48,7 +62,23 @@ export function Detail({ step, loop, tokensUsed, tokensBudget, recoverAttempts }
               <Text color={colors.fgDim}> used {formatTokens(step.tokensUsed)}</Text>
             )}
           </Box>
-          {step.detail && <Text color={colors.fgDim}> {step.detail}</Text>}
+          {hasDetail ? (
+            <Box flexDirection="column" marginTop={1}>
+              <Text color={colors.fgDim} bold>
+                output {lines.length} lines
+              </Text>
+              {visible.map((line, i) => (
+                <Text key={i} color={colors.fg}>
+                  {truncate(line, 120)}
+                </Text>
+              ))}
+              {hidden > 0 && (
+                <Text color={colors.fgDim}>… {hidden} more lines (press d to expand)</Text>
+              )}
+            </Box>
+          ) : (
+            <Text color={colors.fgDim}> (no output yet)</Text>
+          )}
         </>
       ) : (
         <Text color={colors.fgDim}> (idle — waiting for {loop})</Text>

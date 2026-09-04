@@ -70,4 +70,71 @@ describe('Detail', () => {
     expect(out).toContain('500');
     expect(out).toContain('1.0k');
   });
+
+  it('shows no output message when step has no detail', () => {
+    const step: DagStep = { id: 's1', kind: 'generate', status: 'running' };
+    const out = renderToString(
+      Detail({
+        step,
+        loop: 'GENERATE',
+        tokensUsed: 0,
+        tokensBudget: 1000,
+        recoverAttempts: 0,
+      }) as any,
+    );
+    expect(out).toContain('no output yet');
+  });
+
+  it('shows first 4 detail lines when collapsed', () => {
+    const detail = Array.from({ length: 10 }, (_, i) => `line ${i}`).join('\n');
+    const step: DagStep = { id: 's1', kind: 'generate', status: 'running', detail };
+    const out = renderToString(
+      Detail({
+        step,
+        loop: 'GENERATE',
+        tokensUsed: 0,
+        tokensBudget: 1000,
+        recoverAttempts: 0,
+        expanded: false,
+      }) as any,
+    );
+    expect(out).toContain('line 0');
+    expect(out).toContain('line 3');
+    expect(out).not.toContain('line 9');
+    expect(out).toContain('6 more lines');
+  });
+
+  it('shows all detail lines when expanded', () => {
+    const detail = Array.from({ length: 10 }, (_, i) => `line ${i}`).join('\n');
+    const step: DagStep = { id: 's1', kind: 'generate', status: 'running', detail };
+    const out = renderToString(
+      Detail({
+        step,
+        loop: 'GENERATE',
+        tokensUsed: 0,
+        tokensBudget: 1000,
+        recoverAttempts: 0,
+        expanded: true,
+      }) as any,
+    );
+    expect(out).toContain('line 0');
+    expect(out).toContain('line 9');
+    expect(out).not.toContain('more lines');
+  });
+
+  it('truncates long lines to 120 chars', () => {
+    const detail = 'x'.repeat(200);
+    const step: DagStep = { id: 's1', kind: 'generate', status: 'running', detail };
+    const out = renderToString(
+      Detail({
+        step,
+        loop: 'GENERATE',
+        tokensUsed: 0,
+        tokensBudget: 1000,
+        recoverAttempts: 0,
+        expanded: true,
+      }) as any,
+    );
+    expect(out).toContain('…');
+  });
 });

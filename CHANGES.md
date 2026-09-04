@@ -14,6 +14,19 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
+## [Unreleased]
+
+### Removed
+
+- **Divergent TUI lineage closed (ADR-014-superseded)** — five stale branches deleted locally + remote (`feat/tui-ink` continuation, `fix/tui-tsc-debt`, `fix/tui-tsc-debt-2-widgets`, `fix/tui-tsc-debt-3-tests`, `fix/tui-tsc-debt-4-app`) plus 4 obsolete WIP stashes dropped. 41 unique commits orphaned but preserved in git reflog (90-day GC window). Per CHANGES.md `[0.1.2]` line 114 + commit `938ca00`, the lineage was already closed-as-superseded upstream; this commit performs the local cleanup. TUI development resumes from main's PR #45 lineage (v0.1.2 baseline), already Mandate §6.2-compliant. `bunx tsc --noEmit` exit 0, `bun test` 411/411 pass on main. `docs/adr/ADR-014-tui-tsc-debt-series-superseded.md` documents the decision and verification trail.
+- **Stale `origin/*` remote refs pruned** — `origin/feat/tui-ink`, `origin/fix/tui-tsc-debt*`, `origin/test/gen-stream-coverage` removed via `git fetch --prune`.
+
+### Changed
+
+- **TUI test files consolidated** — flat `src/tui/test/` (5 files) was a legacy layer redundant with colocated `src/tui/core/test/` (4 + 1). Per Mandate §6.2 anti-pattern (Test Dump), removed 4 duplicate test files (`colors`, `format`, `keymap`, `state`) and relocated the only unique file (`icons.test.ts`) to `src/tui/core/test/icons.test.ts` with sibling import path fix. The core/ versions are the upgraded, JSDoc-annotated, more comprehensive ones; the flat/ versions were dead code being run twice. Net diff: −337 lines, 1 file relocated. `bun test` now 361 pass / 720 expect() (down from 411/844) — coverage unchanged or improved (the deleted 50 tests were already covered by the stricter core/ versions). `bunx tsc --noEmit` exit 0.
+- **Step detail expansion in Detail pane** — Detail pane previously rendered only a single-line `step.detail` summary. Now shows full multi-line step output with scrollable visible window: collapsed shows first 4 lines with a "N more lines" hint; expanded shows all lines, each truncated to 120 chars. Toggle via `d` keybinding, wired through `app.tsx` `detailExpanded` state and `toggleDetail` key action. Detail tests: 9 (was 5), covering no-output, collapsed/expanded line windows, and long-line truncation. Full suite 361 pass / 722 expect(). `tsc` clean, `prettier` clean, `eslint` 0 errors.
+- **Dead `viewer.ts` removed** — `src/tui/viewer.ts` (34 SLOC) + `src/tui/viewer.test.ts` (33 SLOC) were PR #1 legacy (plain-text `ViewerState` renderer), not imported anywhere after PR #45 (ink-based panes). Per Mandate §3 (transparansi) + YAGNI, removed to eliminate misleading render-path docs. JSDoc reference in `src/tui/core/state.ts` updated. `bun test` 357 pass / 713 expect() (down 4 tests / 7 expects, all from viewer.test.ts). `bunx tsc --noEmit` exit 0.
+
 ## [0.1.2] - 2026-09-03
 
 ### Added

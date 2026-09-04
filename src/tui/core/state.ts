@@ -1,5 +1,5 @@
 /**
- * @brief TUI application state shape (derived from viewer.ts + LoopMetrics + LoopLogger).
+ * @brief TUI application state shape (derived from LoopMetrics + LoopLogger).
  * @since 0.1.0
  */
 

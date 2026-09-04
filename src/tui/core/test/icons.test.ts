@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test';
-import { glyphs, type GlyphKey } from '../core/icons';
+import { glyphs, type GlyphKey } from '../icons';
 
 describe('tui icons', () => {
   it('has all expected glyphs', () => {

@@ -9,7 +9,7 @@ const BINDINGS: Array<[string, string]> = [
   ['c', 'toggle critics detail'],
   ['p', 'toggle PR/CI detail'],
   ['h / ?', 'toggle this help'],
-  ['j / k', 'log scroll down / up'],
+  ['d', 'toggle detail expansion'],
   ['g / G', 'log top / bottom'],
   ['r', 'force redraw'],
   ['tab', 'cycle focus'],
