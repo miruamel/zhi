@@ -2,7 +2,7 @@
 
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
-## Entri (64 file, kronologis)
+## Entri (65 file, kronologis)
 
 - `2026-09-04-ci-green-all-runs.md` — Semua CI runs hijau: `ci` + `architecture-guard` pada 3 commit terakhir. Aksi GitHub Actions di-upgrade v4→v6 (Node.js 20 deprecation). Repo bersih, 0 commits di depan origin/main, 63 audit entries konsisten. Gate lokal: exit 0, 365 pass / 0 fail / 726 expect() across 72 files.
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
@@ -67,4 +67,5 @@ Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/
 - `2026-09-04-rebase-completion.md` — Rebase conflict resolution selesai: CHANGES.md + audit-log/README.md merged tanpa kehilangan content, gate kembali hijau (365 pass / 0 fail / 726 expect()).
 - `2026-09-04-audit-log-consistency.md` — Audit log README tidak konsisten dengan isi direktori: entry `rebase-completion.md` ada di disk tapi tidak terdaftar, dan count 57 vs 58 file. Diperbaiki: count diubah 58→59 (entry sendiri ditambahkan), `rebase-completion.md` ditambahkan ke daftar. Verifikasi: `ls audit-log/entries/ | wc -l` = 59, `grep -c "rebase-completion" audit-log/README.md` = 1, `bun run gate` exit 0.
 - `2026-09-04-merge-resolution-2.md` — Second merge resolution: `audit-log/README.md` header count conflict (60 vs 59) resolved to 61 (actual disk count). Upstream `b655c7a` action-version bump merged cleanly. Author amended to `miruamel-bot`. All gates green.
-- `2026-09-04-dependabot-config.md` — Dependabot config added (commit `4c7589a`): weekly npm + GitHub Actions schedule, 5 npm PRs / 3 actions PRs. vitest ignored (CVE-2026-47429 false positive). Groups: types, lint. Closes dependency monitoring gap. Low risk, config-only.
+- `2026-09-04-dependabot-config.md` — Dependabot config added (commit `4c7589a`): weekly npm + GitHub Actions schedule, 5 npm PRs / 3 actions PRs. Groups: types, lint. Closes dependency monitoring gap. Low risk, config-only. **Superseded**: vitest ignore rule removed (commit `96419f7`) — zero vitest refs in repo, CVE-2026-47429 false positive made the ignore moot.
+- `2026-09-04-dependabot-vitest-ignore-removal.md` — Hapus `ignore.vitest` dari `.github/dependabot.yml`: nol referensi `vitest` di repo, CVE-2026-47429 adalah false positive. dependabot.yml 26→21 baris. Tanpa perubahan perilaku Dependabot.
