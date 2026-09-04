@@ -81,6 +81,13 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 ## [Unreleased]
 
+### Added
+
+- **Unit tests for `src/tui/core/keymap.ts` + `state.ts`** — 2 new test files (18 tests, 36 expect calls):
+  - `src/tui/core/test/keymap.test.ts` (9 tests): `resolveKey()` — single-char key→action mapping (q/l/c/p/r/j/k/g/G/space/tab), help keys (h/?), escape→quit, enter→unknown, unknown→unknown, ctrl+c→abort, ctrl+c without ctrl→toggleCritics (map fallback), return type assertion.
+  - `src/tui/core/test/state.test.ts` (9 tests): `emptyState()` — goal passthrough, tokensBudget passthrough, initial INTAKE state, empty arrays (steps/critics/log), eval stages all false, metrics zeros, prCi unknown, finished/aborted false, startedAt recent, tokensUsed 0.
+- Test count: 393 → 411 pass, 0 fail, 802 → 844 expect() calls across 74 → 76 files.
+
 ### Fixed
 
 - **`engine/stream` mock.module leak** — `index.test.ts` mocked `zigBridge` via `mock.module`, which leaks across test files in Bun 1.4.0. The leak propagated through `cloud.ts` → `parseStream` → `../stream` → `./zigBridge` into `invoker.test.ts`, surfacing as `SyntaxError: export 'isWasmAvailable' not found`. Removed `mock.module` from both files; `zigBridge.test.ts` now exercises real `parseSseWasm` (throws in proot env — expected) and the `disableWasm`/`isWasmAvailable`/`resetWasm` state API.
