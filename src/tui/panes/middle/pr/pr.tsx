@@ -34,10 +34,11 @@ function ciLabel(status: PrCiState['ciStatus']): string {
 
 export interface PrProps {
   prCi: PrCiState;
+  expanded?: boolean;
 }
 
 /** @brief Render the PR/CI pane. @since 0.1.0 */
-export function Pr({ prCi }: PrProps) {
+export function Pr({ prCi, expanded = true }: PrProps) {
   return (
     <Box
       flexDirection="column"
@@ -49,7 +50,7 @@ export function Pr({ prCi }: PrProps) {
       <Text color={colors.commit} bold>
         ⇡ PR / CI
       </Text>
-      {prCi.prUrl ? (
+      {prCi.prUrl && expanded ? (
         <Box gap={1}>
           <Text color={colors.fgDim}>PR</Text>
           <Text color={colors.fg}>#{prCi.prNumber ?? '?'}</Text>

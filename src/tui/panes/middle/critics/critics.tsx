@@ -44,6 +44,7 @@ export interface CriticsProps {
   critics: CriticLine[];
   weightedAvg: number;
   threshold: number;
+  expanded?: boolean;
 }
 
 function buildKnown(critics: CriticLine[]): Record<string, CriticLine> {
@@ -53,7 +54,7 @@ function buildKnown(critics: CriticLine[]): Record<string, CriticLine> {
 }
 
 /** @brief Render the critics pane (15 bars + avg). @since 0.1.0 */
-export function Critics({ critics, weightedAvg, threshold }: CriticsProps) {
+export function Critics({ critics, weightedAvg, threshold, expanded = false }: CriticsProps) {
   const known = buildKnown(critics);
   const names = Object.keys(WEIGHTS);
   const passed = weightedAvg >= threshold;
@@ -93,12 +94,13 @@ export function Critics({ critics, weightedAvg, threshold }: CriticsProps) {
         const color =
           c.score >= threshold ? colors.done : c.score < 0.4 ? colors.failed : colors.warn;
         return (
-          <Box key={name}>
+          <Box key={name} flexDirection="column">
             <Text color={color}>
               {icon} {name.padEnd(16)} w={w.toFixed(1)}{' '}
             </Text>
             <Text color={color}>{bar(c.score, 14)}</Text>
             <Text color={color}>{formatScore(c.score)}</Text>
+            {expanded && c.reason ? <Text color={colors.fgDim}> {c.reason}</Text> : null}
           </Box>
         );
       })}

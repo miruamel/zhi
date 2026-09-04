@@ -7,6 +7,7 @@ import type { LogEntry } from '../../../core/state';
 export interface LogProps {
   log: LogEntry[];
   expanded: boolean;
+  offset: number;
   maxLines: number;
 }
 
@@ -27,8 +28,11 @@ function kindColor(k: LogEntry['kind']): string {
 }
 
 /** @brief Render the log pane (latest N entries, color-coded). @since 0.1.0 */
-export function Log({ log, expanded, maxLines }: LogProps) {
-  const visible = expanded ? log.slice(-maxLines) : log.slice(-Math.min(8, maxLines));
+export function Log({ log, expanded, offset, maxLines }: LogProps) {
+  const windowSize = expanded ? maxLines : Math.min(8, maxLines);
+  const start = Math.max(0, log.length - offset - windowSize);
+  const end = Math.max(start + 1, log.length - offset);
+  const visible = log.slice(start, end);
   const hiddenCount = log.length - visible.length;
   return (
     <Box

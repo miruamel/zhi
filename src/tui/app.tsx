@@ -22,6 +22,12 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   const [paused, setPaused] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [detailExpanded, setDetailExpanded] = useState(false);
+  const [logExpanded, setLogExpanded] = useState(false);
+  const [criticsExpanded, setCriticsExpanded] = useState(false);
+  const [prExpanded, setPrExpanded] = useState(false);
+  const [logOffset, setLogOffset] = useState(0);
+  const [focusIdx, setFocusIdx] = useState(0);
+  const [redrawKey, setRedrawKey] = useState(0);
 
   useEffect(() => {
     onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
@@ -48,6 +54,33 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
       case 'toggleDetail':
         setDetailExpanded((e: boolean) => !e);
         break;
+      case 'toggleLog':
+        setLogExpanded((e: boolean) => !e);
+        break;
+      case 'toggleCritics':
+        setCriticsExpanded((e: boolean) => !e);
+        break;
+      case 'togglePr':
+        setPrExpanded((e: boolean) => !e);
+        break;
+      case 'nextLog':
+        setLogOffset((o: number) => o + 1);
+        break;
+      case 'prevLog':
+        setLogOffset((o: number) => Math.max(0, o - 1));
+        break;
+      case 'logTop':
+        setLogOffset(0);
+        break;
+      case 'logBottom':
+        setLogOffset(Math.max(0, state.log.length - 40));
+        break;
+      case 'redraw':
+        setRedrawKey((k: number) => k + 1);
+        break;
+      case 'cycle':
+        setFocusIdx((i: number) => (i + 1) % 6);
+        break;
       default:
         break;
     }
@@ -55,7 +88,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
 
   const currentStep = state.steps.find((s) => s.id === state.currentStepId);
   return (
-    <Box flexDirection="column" paddingX={1}>
+    <Box key={redrawKey} flexDirection="column" paddingX={1}>
       <Header
         loop={state.loop}
         goal={state.goal}
@@ -79,20 +112,21 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
           critics={state.critics}
           weightedAvg={state.eval.weightedAvg}
           threshold={threshold}
+          expanded={criticsExpanded}
         />
       </Box>
       <Box marginTop={1} gap={1}>
         <Eval evalReport={state.eval} />
-        <PrPane prCi={state.prCi} />
+        <PrPane prCi={state.prCi} expanded={prExpanded} />
       </Box>
       <Box marginTop={1}>
-        <Log log={state.log} expanded={false} maxLines={40} />
+        <Log log={state.log} expanded={logExpanded} offset={logOffset} maxLines={40} />
       </Box>
       <Box marginTop={1}>
         <Help paused={paused} showHelp={showHelp} />
       </Box>
       <Box marginTop={1}>
-        <Text color={colors.fgDim}>Zhi (志) v0.1.1 · MIT · {paused ? 'PAUSED' : 'RUNNING'}</Text>
+        <Text color={colors.fgDim}>focus: dag·detail·critics·eval·pr·log [{focusIdx % 6}]</Text>
       </Box>
     </Box>
   );
