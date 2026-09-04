@@ -95,6 +95,10 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         startedAt={state.startedAt}
         finished={state.finished}
         aborted={state.aborted}
+        partial={state.partial}
+        prUrl={state.prCi.prUrl}
+        tokensUsed={state.tokensUsed}
+        tokensBudget={state.tokensBudget}
       />
       <Box marginTop={1} gap={1}>
         <Dag steps={state.steps} currentStepId={state.currentStepId} currentLoop={state.loop} />
