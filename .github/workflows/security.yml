@@ -23,7 +23,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: typescript, javascript, zig
+          languages: typescript, javascript
           queries: security-extended
 
       - name: Setup Bun
@@ -37,21 +37,10 @@ jobs:
       - name: Build TypeScript
         run: bun run build
 
-      - name: Setup Zig 0.16.0 (direct download; setup-zig mirror lacks 0.16.0)
-        run: |
-          ZIG_VER=0.16.0
-          URL="https://ziglang.org/download/${ZIG_VER}/zig-x86_64-linux-${ZIG_VER}.tar.xz"
-          curl -fsSL "$URL" -o /tmp/zig.tar.xz
-          tar -xf /tmp/zig.tar.xz -C /opt
-          echo "/opt/zig-x86_64-linux-${ZIG_VER}" >> "$GITHUB_PATH"
-
-      - name: Build Zig WASM
-        run: bun run native:build
-
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:typescript-javascript-zig"
+          category: "/language:typescript-javascript"
 
   dependency-scan:
     name: Dependency Vulnerability Scan
