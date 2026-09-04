@@ -29,8 +29,8 @@ Zero functional impact. Branch ini sudah merged, tidak aktif, tidak memengaruhi 
 P3 — kebersihan repo, tidak ada urgency bisnis.
 
 ## Verifikasi
-- `git branch -r` → 6 refs (5 stale + `origin/main`)
+- `git branch -r` → 5 refs (4 stale + `origin/main`)
 - `gh issue list --state open` → 1 issue (#99)
 - `gh pr list --state open` → 0 PR
 - Gate: fast-path passed, lint clean, format clean
-- Audit log: 84 file di disk, 84 entry di README, header 84 — konsisten
+- Audit log: 86 file di disk, 86 entry di README, header 86 — konsisten

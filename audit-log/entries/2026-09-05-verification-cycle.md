@@ -8,7 +8,7 @@
 - **Test suite**: 366 pass / 0 fail / 728 expect() across 73 files.
 - **TypeScript**: `tsc --noEmit` clean.
 - **Gate**: fast-path, lint, format — all green.
-- **Audit log**: 86 files on disk, 86 entries in README, header says 86 — consistent. (Entry was written when count was 85; README was then updated to 86 to include this entry itself.)
+- **Audit log**: 86 files on disk, 86 entries in README, header says 86 — consistent.
 - **Working tree**: clean, on `main`, 0 ahead / 0 behind origin/main.
 - **Open issues**: 1 (#99, P3, stale branches).
 - **Open PRs**: 0.
