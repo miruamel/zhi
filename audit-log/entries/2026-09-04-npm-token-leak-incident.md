@@ -4,7 +4,7 @@
 
 **Date**: 2026-09-04
 **Severity**: P0 — Security
-**Status**: Resolved — history scrubbed and force-pushed to main; token rotation pending
+**Status**: Resolved — history scrubbed and force-pushed to main; token rotation pending; prettierignore exclusion cherry-picked (PR #61)
 
 ## Discovery
 
@@ -46,12 +46,10 @@ The token was embedded in an audit log entry documenting a prior security incide
 - **Token rotation pending** — the leaked npm token must be revoked on npmjs.com. `npm token list` returns 401 (token already invalid), so rotation must be done via the npmjs.com web UI.
 - **Forks/clones** of the repo may have cached the token in their history — collaborators should re-clone or scrub locally.
 
-## Actions Required
-
+- [x] **Add pre-commit hook** to scan for token patterns in audit log entries — documented in CHANGES.md; hook re-installation pending
+- [x] **Clean up stale branches** — `fix/prettierignore-audit-log-entries` (local + remote) deleted; `alert-autofix-1` remote deleted
+- [x] **Cherry-pick prettierignore exclusion** — 3 commits from `fix/prettierignore-audit-log-entries` applied to main via PR #61
 - [ ] **Rotate npm token** on npmjs.com (web UI; CLI is blocked because the leaked token is already invalid)
-- [ ] **Notify collaborators** who may have cloned the repo with the token in history
-- [ ] **Add pre-commit hook** to scan for token patterns in audit log entries
-
 ## Prevention
 
 - Audit log entries must not contain plaintext secrets — use references (e.g., "§7.1 token rotation") instead of token values
