@@ -5,7 +5,7 @@
  * @param {string} chunk - chunk SSE (UTF-8).
  * @return {Promise<string[]>} payload data per event (tanpa prefix `data:`).
  * @see native/stream/parse.zig
- * @since 0.1.1
+ * @since 0.1.2
  */
 export async function parseSseTs(chunk: string): Promise<string[]> {
   const out: string[] = [];

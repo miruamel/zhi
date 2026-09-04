@@ -19,7 +19,7 @@ import { parseArgs } from '../../parse-args/parse-args';
 import { mountTui } from '../../../tui/render';
 import type { AppState } from '../../../tui/core/state';
 
-/** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.1 */
+/** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.4 */
 export function toPatch(
   ctx: LoopContext,
   metrics: LoopMetrics,

@@ -4,6 +4,6 @@
  * Logic + WASM/TS fallback hidup di `engine/stream/index.ts`.
  * @see engine/stream/index.ts
  * @see native/stream/parse.zig
- * @since 0.1.1
+ * @since 0.1.2
  */
 export { parseStream } from '../stream';
