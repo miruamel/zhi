@@ -16,7 +16,7 @@ TypeScript errors via 4 incremental PR buckets (A: 119 errors sweep, B: 12 widge
 prop, C: 8 test-helper, D: 5 Bridge updater).
 
 That lineage **diverged from main's PR #45 TUI baseline**. Branches and PRs
-#46–#50 were closed without merge (CHANGES.md `[0.1.2]` line 114, commit
+#46–#50 were closed without merge (CHANGES.md `[0.1.2]`, commit
 `938ca00` "docs: log PR #50 closure (fifth divergent TUI lineage)").
 
 ## Decision
@@ -42,7 +42,7 @@ That lineage **diverged from main's PR #45 TUI baseline**. Branches and PRs
 format,icons,keymap}.tsx` from the divergent lineage). Cherry-pick would
   either no-op or introduce drift.
 - **Merge 36+ refactor commits to main** — rejected. Per CHANGES.md [0.1.2]
-  line 114, "Merge state was DIRTY; 184 files changed, 13883 insertions."
+  "Merge state was DIRTY; 184 files changed, 13883 insertions."
   High conflict risk, low value (main's TUI already has equivalent structure
   from PR #45 lineage).
 - **Continue fixing 137 tsc errors on the divergent branch** — rejected. Per
@@ -76,7 +76,7 @@ bun test             # 411 pass, 0 fail, 844 expect() calls
 
 ## References
 
-- CHANGES.md `[0.1.2]` line 114 — closure rationale
+- CHANGES.md `[0.1.2]` — closure rationale
 - Commit `938ca00` — "docs: log PR #50 closure (fifth divergent TUI lineage)"
 - Commit `1ebbbfc` — v0.1.2 (PR #44 i18n EN + business docs + visual upgrade)
 - PR #45 — `feat(tui): ink-based TUI with 6 panes` (merged 2026-09-03T16:33:23Z)
