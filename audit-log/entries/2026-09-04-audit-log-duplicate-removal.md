@@ -1,0 +1,3 @@
+# 2026-09-04-audit-log-duplicate-removal.md
+
+Audit log README duplicate entries removed: 3 stale entries (`2026-09-04-version-0.1.4-promotion.md`, `2026-09-04-v0.1.4-published.md`, `2026-09-04-zig-0.16.0-fix.md`) that had been re-inserted at lines 6–8 alongside their existing counterparts at lines 66, 71, 72. Header count corrected from 80 to 76 (matching 76 files on disk). Commit `8164d4e`. All three CI workflows green (ci: 51s, security: 1m1s, architecture-guard: 21s).
