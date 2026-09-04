@@ -119,10 +119,7 @@ Side-effect revert: `bun.lock` + `package.json` di-mutate oleh `bun test` (resol
 
 ## Status implementasi
 
-- Restructure: **pushed** di commit `14c9873` ke `origin/feat/tui-ink`
-- Conflict resolution: **pushed** di commit `46bb718` ke `origin/feat/tui-ink`
-- HEAD: `46bb718` di branch `feat/tui-ink`
-- Tests: 875/875 pass, 0 fail
-- Bun test runtime: hijau
+- Path normalization + barrel exports: **pushed** di commit `c1900f0` ke `origin/feat-tui-ink`
+- HEAD: `c1900f0` di branch `feat/tui-ink`
 - `tsc --noEmit`: merah karena pre-existing debt (lihat "Risiko")
 - Next: open PR `feat/tui-ink` → `main` setelah widget layer debt di-PR terpisah
