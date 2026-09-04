@@ -55,7 +55,7 @@ jobs:
       - name: Build Zig WASM
         run: bun run native:build
 
-      - name: Build TypeScript to dist/
+      - name: Build TypeScript to dist/ (copies WASM into dist/)
         run: bun run build
 
       - name: Publish to npm (@miruamel/zhi) via OIDC Trusted Publisher
