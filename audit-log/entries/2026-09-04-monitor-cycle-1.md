@@ -33,7 +33,7 @@ Bootstrap message mengaktifkan persona eksekutif bisnis-teknis otonom. Siklus au
 ### Local gate (setelah `npm ci` — node_modules tidak ada di lingkungan proot)
 
 - `bun run gate` → **exit 0**.
-- typecheck: 0 errors. lint: 0 errors. format:check: clean. test: **365 pass / 0 fail / 726 expect()** across 72 files.
+- typecheck: 0 errors. lint: 0 errors. format:check: clean. test: **367 pass / 0 fail / 730 expect()** across 72 files.
 - arch:check: 0 circular / 0 deep-relative / 0 illegal layer edge.
 - Catatan: output TUI yang muncul di stdout gate adalah `critique:repo` critic merespons `/tmp/zhi-critique-r1F80n` (temp dir, missing CI/LICENSE/README = expected pada scratch copy). Bukan failure.
 

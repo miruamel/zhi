@@ -96,16 +96,16 @@ flowchart TD
 
 ## Status
 
-Most engine modules exist with green tests (`bun test` 365 pass / 0 fail / 726 expect() across 72 files).
+Most engine modules exist with green tests (`bun test` 367 pass / 0 fail / 730 expect() across 73 files).
 
 **Gate status (latest run):**
 
 | Gate         | Status                                                 |
 | ------------ | ------------------------------------------------------ |
 | typecheck    | ✅ 0 errors                                            |
-| lint         | ✅ 0 errors (131 JSDoc warnings = baseline)            |
+| lint         | ✅ 0 errors                                            |
 | format:check | ✅ clean                                               |
-| test         | ✅ 365 pass / 0 fail / 726 expect()                    |
+| test         | ✅ 367 pass / 0 fail / 730 expect()                    |
 | arch:check   | ✅ 0 circular / 0 deep-relative / 0 illegal layer edge |
 
 ---
