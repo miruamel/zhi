@@ -2,7 +2,7 @@
  * @brief Unit: parseStream — dispatcher fallback logic (WASM disabled + catch).
  * WASM write barrier is broken in proot env (parseSseWasm returns []), so we test
  * the dispatcher's fallback logic deterministically by disabling WASM rather
- * than relying on env-specific breakage. @since 0.6.0
+ * than relying on env-specific breakage. @since 0.1.2
  */
 import { describe, expect, it, beforeEach } from 'bun:test';
 import { parseStream } from '../index';

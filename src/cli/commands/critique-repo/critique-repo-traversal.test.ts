@@ -1,7 +1,7 @@
 /**
  * @brief Unit: critiqueRepoCommand() — parent-directory traversal (lines 21-24).
  * Runs from a temp subdir without markers; walks up to temp dir with marker.
- * @since 0.6.0
+ * @since 0.1.2
  */
 import { describe, expect, it, beforeEach, afterEach } from 'bun:test';
 import { mkdtempSync, rmSync, mkdirSync, writeFileSync } from 'node:fs';

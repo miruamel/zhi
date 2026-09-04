@@ -1,7 +1,7 @@
 /**
  * @brief Unit: genCommand — happy path + error.
  * Capture stdout agar tidak bocor ke test runner.
- * @since 0.5.0
+ * @since 0.1.2
  */
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
 import { genCommand } from './gen';

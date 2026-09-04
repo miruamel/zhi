@@ -3,7 +3,7 @@
  * @param {string[]} args - [domain] [--stream]
  * @return {Promise<LoopContext>} konteks minimal (goal=domain).
  * @throw {Error} bila domain kosong.
- * @since 0.4.0
+ * @since 0.1.2
  */
 import type { LoopContext } from '@engine/loop/wiring/context';
 import { generate as scaffold, generateStream } from '@engine/build/generate';

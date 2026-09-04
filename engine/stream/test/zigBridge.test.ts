@@ -2,7 +2,7 @@
  * @brief Unit: zigBridge — disableWasm/isWasmAvailable + parseSseWasm write-barrier detection.
  * WASM write barrier is broken in proot env (parseSseWasm throws), so we test the
  * disable path that parseStream relies on, plus the exported helpers.
- * @since 0.6.0
+ * @since 0.1.2
  */
 import { describe, expect, it, beforeEach } from 'bun:test';
 import { parseSseWasm, disableWasm, isWasmAvailable, resetWasm } from '../zigBridge';

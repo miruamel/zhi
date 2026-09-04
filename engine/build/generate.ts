@@ -45,7 +45,7 @@ export async function generate(spec: GenSpec, invoker?: ModelInvoker): Promise<S
 /** @brief Stream generasi modul domain (token plan). Fallback batch bila invoker tak stream.
  * @param {GenSpec} spec - spesifikasi domain.
  * @param {ModelInvoker} [invoker] - bila ada & stream, alirkan token; else batch.
- * @return {AsyncGenerator<string>} token plan (atau satu chunk batch). @since 0.4.0 */
+ * @return {AsyncGenerator<string>} token plan (atau satu chunk batch). @since 0.1.1 */
 export async function* generateStream(
   spec: GenSpec,
   invoker?: ModelInvoker,

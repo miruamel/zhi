@@ -1,6 +1,6 @@
 /**
  * @brief Unit: toPatch — ctx+metrics+loop → AppState patch (pure, no TUI).
- * @since 0.5.0
+ * @since 0.1.4
  */
 import { describe, expect, it } from 'bun:test';
 import type { Critique } from '@engine/critic/aggregate';
