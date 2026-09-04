@@ -21,6 +21,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   const [state, setState] = useState<AppState>(initialState);
   const [paused, setPaused] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [detailExpanded, setDetailExpanded] = useState(false);
 
   useEffect(() => {
     onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
@@ -43,6 +44,9 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         break;
       case 'toggleHelp':
         setShowHelp((h: boolean) => !h);
+        break;
+      case 'toggleDetail':
+        setDetailExpanded((e: boolean) => !e);
         break;
       default:
         break;
@@ -67,6 +71,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
           tokensUsed={state.tokensUsed}
           tokensBudget={state.tokensBudget}
           recoverAttempts={state.metrics.recoverAttempts}
+          expanded={detailExpanded}
         />
       </Box>
       <Box marginTop={1} gap={1}>
