@@ -75,8 +75,8 @@
   },
   "dependencies": {
     "ink": "^4",
-    "react": "^18",
-    "@types/react": "^18"
+    "react": "^19",
+    "@types/react": "^19"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.0.0",
