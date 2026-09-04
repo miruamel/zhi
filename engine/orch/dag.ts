@@ -25,8 +25,9 @@ export function topoSort(nodes: Step[], edges: Edge[]): string[] {
   for (const [id, d] of indeg) if (d === 0) queue.push(id);
   const order: string[] = [];
   const seen = new Set<string>();
-  while (queue.length) {
-    const id = queue.shift()!;
+  let head = 0;
+  while (head < queue.length) {
+    const id = queue[head++]!;
     if (seen.has(id)) continue;
     seen.add(id);
     order.push(id);
