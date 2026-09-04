@@ -34,22 +34,12 @@ async function load(): Promise<Loaded> {
   if (loading) return loading;
   const p = (async () => {
     const bytes = readFileSync(WASM_PATH);
-    const memory = new WebAssembly.Memory({ initial: 4 });
-    const table = new WebAssembly.Table({ initial: 1, element: 'anyfunc' });
+    const { instance } = await WebAssembly.instantiate(bytes, {});
+    const memory = instance.exports.memory as WebAssembly.Memory;
     const stack = new WebAssembly.Global(
       { value: 'i32', mutable: true },
       memory.buffer.byteLength - 16,
     );
-    const imports = {
-      env: {
-        memory,
-        __indirect_function_table: table,
-        __stack_pointer: stack,
-        __memory_base: MEMORY_BASE,
-        __table_base: 0,
-      },
-    };
-    const { instance } = await WebAssembly.instantiate(bytes, imports);
     cached = { instance, memory, stack };
     loading = null;
     return cached;

@@ -44,9 +44,6 @@ jobs:
       - name: Gate (lint + format + typecheck + test)
         run: bun run gate
 
-      - name: Build TypeScript to dist/
-        run: bun run build
-
       - name: Setup Zig 0.16.0 (direct download; setup-zig mirror lacks 0.16.0)
         run: |
           ZIG_VER=0.16.0
@@ -57,6 +54,9 @@ jobs:
 
       - name: Build Zig WASM
         run: bun run native:build
+
+      - name: Build TypeScript to dist/
+        run: bun run build
 
       - name: Publish to npm (@miruamel/zhi) via OIDC Trusted Publisher
         # Trusted Publisher sudah terdaftar di npmjs.com (miruamel/zhi → publish.yml,
