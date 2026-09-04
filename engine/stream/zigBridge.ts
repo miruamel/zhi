@@ -20,15 +20,15 @@ export type Loaded = {
   stack: WebAssembly.Global;
 };
 
-const cached: Loaded | null = null;
-const loading: Promise<Loaded> | null = null;
+let cached: Loaded | null = null;
+let loading: Promise<Loaded> | null = null;
 let wasmAvailable = true;
 
 /**
  * @brief Load instance WASM (singleton) dengan ABI import Zig.
  * @return {Promise<Loaded>} instance + memory + stack pointer.
  * @throw {Error} bila WASM file hilang atau instantiate gagal.
- * @since 0.1.2
+ */
 async function load(): Promise<Loaded> {
   if (cached) return cached;
   if (loading) return loading;
