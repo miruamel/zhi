@@ -54,6 +54,7 @@ Out of scope:
 | ---------- | -------------- | -------- | ------------------------------------------------------------------------- | -------- |
 | 2026-09-02 | CVE-2026-47429 | 9.8 crit | vitest UI server arbitrary file read + write + execute via path traversal | v0.1.1   |
 | 2026-09-02 | (internal)     | high     | npm `NPM_TOKEN` long-lived secret in GitHub repo (compromised in session) | v0.1.1   |
+
 - **Note**: `vitest` was removed entirely in v0.1.3 (commit `7b81ec1`). The CVE-2026-47429 entry above is preserved as a historical audit record — the vulnerable dependency is no longer in the tree, but the advisory documents what happened and when it was fixed.
 
 ## Best practices for users
