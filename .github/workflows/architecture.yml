@@ -1,6 +1,8 @@
 name: architecture-guard
 
 on: [push, pull_request]
+permissions:
+  contents: read
 
 jobs:
   invariants:
