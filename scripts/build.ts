@@ -19,7 +19,9 @@ if (r.status !== 0) {
   process.exit(r.status ?? 1);
 }
 
-console.log('[build] copy native/out/stream.wasm -> dist/native/out/stream.wasm');
+// Copy Zig WASM ke dist/ agar zigBridge.ts (relative path ../../native/out/stream.wasm)
+// tetap berfungsi di package terpublish. Tanpa langkah ini, readFileSync selalu throws
+// dan WASM hot path tidak pernah dijalankan (hanya fallback TS).
 const wasmSrc = join(process.cwd(), 'native', 'out', 'stream.wasm');
 const wasmDst = join(process.cwd(), 'dist', 'native', 'out', 'stream.wasm');
 mkdirSync(dirname(wasmDst), { recursive: true });
