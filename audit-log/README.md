@@ -3,6 +3,7 @@
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
 ## Entri (57 file, kronologis)
+
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
 - `2026-08-29-remediation-docs.md` — Remediasi docs: nest guides, ADR-005 untuk `docs/design/`.
 - `2026-08-29-governance-ci.md` — CI architecture guard; rekomendasi LICENSE (P3).
