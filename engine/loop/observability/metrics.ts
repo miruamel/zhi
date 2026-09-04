@@ -1,7 +1,7 @@
 import type { StateHandler } from '../driver';
 import { LoopState } from '../states';
 
-/** @brief Satu catatan eksekusi stage loop. @since 0.5.0 */
+/** @brief Satu catatan eksekusi stage loop. @since 0.1.1 */
 export interface StageRecord {
   /** @brief Nama state (INTAKE, PLAN, ...). */
   readonly stage: string;
@@ -13,7 +13,7 @@ export interface StageRecord {
   readonly error?: string;
 }
 
-/** @brief Kumpulkan metrik siklus loop: latency per stage, error, attempts. @since 0.5.0 */
+/** @brief Kumpulkan metrik siklus loop: latency per stage, error, attempts. @since 0.1.1 */
 export class LoopMetrics {
   private readonly records: StageRecord[] = [];
   /** @brief Jumlah attempt recovery (dari ctx.attempts). */
@@ -41,7 +41,7 @@ export class LoopMetrics {
   }
 }
 
-/** @brief Bungkus handler dengan pengukuran latency + error. @since 0.5.0 */
+/** @brief Bungkus handler dengan pengukuran latency + error. @since 0.1.1 */
 export function timedStage(stage: string, fn: StateHandler, metrics: LoopMetrics): StateHandler {
   return async (state: LoopState) => {
     const t0 = performance.now();

@@ -75,7 +75,7 @@ export class CloudModelInvoker implements ModelInvoker {
    * @brief Stream chat/completions (SSE) → token per yield. Henti pada [DONE].
    * @param {string} prompt - instruksi.
    * @return {AsyncGenerator<string>} token delta content.
-   * @since 0.4.0
+   * @since 0.1.1
    */
   async *stream(prompt: string): AsyncGenerator<string> {
     const res = await fetch(this.url, {

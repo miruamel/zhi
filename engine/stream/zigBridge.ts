@@ -116,7 +116,7 @@ export function isWasmAvailable(): boolean {
 }
 /**
  * @brief Non-aktifkan WASM (fallback ke TS parser).
- * @since 0.6.0
+ * @since 0.1.2
  */
 export function disableWasm(): void {
   wasmAvailable = false;
@@ -124,7 +124,7 @@ export function disableWasm(): void {
 
 /**
  * @brief Reset WASM availability to true (test helper).
- * @since 0.6.0
+ * @since 0.1.2
  */
 export function resetWasm(): void {
   wasmAvailable = true;

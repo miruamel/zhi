@@ -1,4 +1,4 @@
-/** @brief Logger terstruktur loop dengan correlation ID (runId). @since 0.6.0 */
+/** @brief Logger terstruktur loop dengan correlation ID (runId). @since 0.1.1 */
 export class LoopLogger {
   /** @brief ID korelasi per siklus (trace lintas transisi). */
   readonly runId: string;
