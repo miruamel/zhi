@@ -65,11 +65,11 @@ export function aggregate(critiques: Critique[], threshold?: number): AggregateR
 - Empty `critiques` → `aggregate` fails closed (`passed: false`, `score: 0`).
 - `architecture` guard errors (spawn / signal / stderr) → `score: 0` + finding; other aggregation is not cancelled.
 
-Current concrete critics: 15 (11 single-file via `composeCritiques` + 4 repo-wide via `composeHygiene`: devops, legal, dx, testing). v0.2.0 + v0.1.0 stubs (Security/Perf/Testing/Style) graduated. `composeCritiques` evaluates ONE generated artifact (`src/cli.ts:57`); `composeHygiene(root)` evaluates the repo root (run via `bun run cli critique:repo`).
+Current concrete critics: 15 (11 single-file via `composeCritiques` + 4 repo-wide via `composeHygiene`: devops, legal, dx, testing). All 15 are concrete implementations; the initial 5 critics (architecture, sloc, imports, maintainability, todo) shipped in v0.1.0, and the remaining 10 graduated from roadmap stubs across the v0.1.x series (Security/Perf/Testing/Style in v0.1.0; Architecture/Doc/Privacy/Accessibility in v0.1.1; DevOps/Legal/DX/Testing in v0.1.2). `composeCritiques` evaluates ONE generated artifact (`src/cli.ts:57`); `composeHygiene(root)` evaluates the repo root (run via `bun run cli critique:repo`).
 
 ## Roadmap
 
-- All 15 critics are concrete (see table above). Additional critics were promoted from stub → concrete gradually in `docs/guides/roadmap.md` v0.2.0+. Each addition = new `plant/<name>/` directory + register in `composeCritiques` + test. Per-critic semantics (what is measured, weights, penalty) deserve a short ADR.
+- All 15 critics are concrete (see table above). No additional critics are planned; per-critic semantics (what is measured, weights, penalty) deserve a short ADR.
 
 ## Cross-link
 
