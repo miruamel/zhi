@@ -44,7 +44,7 @@ export class LoopDriver {
     this.onTransition?.(from, ev, next);
     return true;
   }
-  /** @brief Force-stop: set state DONE tanpa transisi. @since 0.1.1 */
+  /** @brief Force-stop: set state DONE tanpa transisi. @since 0.1.2 */
   abort(): void {
     this.state = LoopState.DONE;
   }
