@@ -14,14 +14,14 @@ No `.github/dependabot.yml` existed — dependency monitoring was entirely manua
 ```yaml
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule: weekly (monday)
     open-pull-requests-limit: 5
     ignore: vitest (CVE-2026-47429 false positive)
     groups: types (@types/*), lint (eslint*, prettier, @typescript-eslint/*)
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule: weekly (monday)
     open-pull-requests-limit: 3
 ```
