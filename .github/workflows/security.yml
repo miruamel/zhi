@@ -9,9 +9,9 @@ on:
     # Weekly security scan — every Monday 03:00 UTC
     - cron: "0 3 * * 1"
 
-permissions:
   contents: read
   security-events: write
+  actions: read
 
 jobs:
   codeql:
@@ -24,7 +24,6 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: typescript, javascript
-          queries: security-extended
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
