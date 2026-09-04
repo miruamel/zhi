@@ -19,9 +19,11 @@ export async function parseStream(chunk: string): Promise<string[]> {
   if (!isWasmAvailable()) return parseSseTs(chunk);
   try {
     const result = await parseSseWasm(chunk);
-    if (result.length === 0 && chunk.length > 0) {
-      // Deteksi write barrier: input non-kosong tapi output kosong.
-      // Disable WASM permanen, fallback.
+    // Deteksi write barrier: input mengandung data: event tapi output kosong.
+    // Chunk tanpa data: event (hanya event:/comment:/id:) akan return [] secara
+    // sah dari parser yang berfungsi — jangan disable WASM untuk itu.
+    const hasDataEvent = chunk.includes('data:');
+    if (result.length === 0 && chunk.length > 0 && hasDataEvent) {
       disableWasm();
       return parseSseTs(chunk);
     }
