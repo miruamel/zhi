@@ -2,7 +2,7 @@
  * @brief Subcommand `critique:repo`: jalankan hygiene repo-wide pada repo root.
  * Resolve root via marker AGENTS.md/package.json (naik dari cwd), fallback ke cwd.
  * @return {Promise<LoopContext>} konteks minimal (goal='critique:repo').
- * @since 0.2.0
+ * @since 0.1.2
  */
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';

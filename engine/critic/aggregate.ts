@@ -1,6 +1,6 @@
-/** @brief Agregator multi-critic untuk gate kualitas. @since 0.1.0 */
+/** @brief Agregator multi-critic untuk gate kualitas. @since 0.1.1 */
 
-/** @brief Hasil satu critic. @since 0.1.0 */
+/** @brief Hasil satu critic. @since 0.1.1 */
 export interface Critique {
   /** @brief Nama critic (security/perf/style/...). */
   name: string;
@@ -12,7 +12,7 @@ export interface Critique {
   findings: string[];
 }
 
-/** @brief Hasil agregasi. @since 0.1.0 */
+/** @brief Hasil agregasi. @since 0.1.1 */
 export interface AggregateResult {
   /** @brief Skor tertimbang 0..1. */
   score: number;
@@ -29,7 +29,7 @@ export interface AggregateResult {
  * @param {number} threshold - ambang lulus (default 0.7).
  * @return {AggregateResult} hasil agregasi.
  * @see docs/design/critic.md
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function aggregate(critiques: Critique[], threshold = 0.7): AggregateResult {
   if (critiques.length === 0) {
     return { score: 0, passed: false, byCritic: {}, findings: [] };

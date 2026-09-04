@@ -40,13 +40,13 @@ Score `generate` output through concrete critics, then `aggregate` computes a we
 /** @brief Run every plant critic on a collection of files.
  * @param {FileRecord[]} files
  * @return {Critique[]} one result per critic (ready to aggregate).
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function composeCritiques(files: FileRecord[]): Critique[];
 
 /** @brief Weighted aggregation -> commit-ready?
  * @param {Critique[]} critiques @param {number} [threshold=0.7]
  * @return {AggregateResult} pass + score + findings.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function aggregate(critiques: Critique[], threshold?: number): AggregateResult;
 ```
 
@@ -65,7 +65,7 @@ export function aggregate(critiques: Critique[], threshold?: number): AggregateR
 - Empty `critiques` → `aggregate` fails closed (`passed: false`, `score: 0`).
 - `architecture` guard errors (spawn / signal / stderr) → `score: 0` + finding; other aggregation is not cancelled.
 
-Current concrete critics: 15 (11 single-file via `composeCritiques` + 4 repo-wide via `composeHygiene`: devops, legal, dx, testing). All 15 are concrete implementations; the initial 5 critics (architecture, sloc, imports, maintainability, todo) shipped in v0.1.0, and the remaining 10 graduated from roadmap stubs across the v0.1.x series (Security/Perf/Testing/Style in v0.1.0; Architecture/Doc/Privacy/Accessibility in v0.1.1; DevOps/Legal/DX/Testing in v0.1.2). `composeCritiques` evaluates ONE generated artifact (`src/cli.ts:57`); `composeHygiene(root)` evaluates the repo root (run via `bun run cli critique:repo`).
+Current concrete critics: 15 (11 single-file via `composeCritiques` + 4 repo-wide via `composeHygiene`: devops, legal, dx, testing). All 15 shipped in v0.1.1 (all critic commits are dated 2026-08-30 and are ancestors of the v0.1.1 tag; no `v0.1.0` tag exists). `composeCritiques` evaluates ONE generated artifact (`src/cli.ts:57`); `composeHygiene(root)` evaluates the repo root (run via `bun run cli critique:repo`).
 
 ## Roadmap
 

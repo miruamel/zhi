@@ -1,4 +1,4 @@
-/** @brief Critic: deteksi sink injeksi berbahaya (mandate §7, §12). @since 0.2.0 */
+/** @brief Critic: deteksi sink injeksi berbahaya (mandate §7, §12). @since 0.1.1 */
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
@@ -22,7 +22,7 @@ const SINK_RES: SinkPattern[] = [
 /** @brief Security critic: tiap sink injeksi kurangi 0.3 (floor 0), bobot 1.5.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.0 */
+ * @since 0.1.1 */
 export function securityCritic(files: FileRecord[]): Critique {
   const findings: string[] = [];
   let count = 0;

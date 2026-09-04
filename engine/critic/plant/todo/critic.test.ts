@@ -1,4 +1,4 @@
-/** @brief Test todo critic. @since 0.1.0 */
+/** @brief Test todo critic. @since 0.1.1 */
 import { test, expect } from 'bun:test';
 import { todoCritic } from './critic';
 

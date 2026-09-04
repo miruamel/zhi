@@ -1,12 +1,12 @@
-/** @brief Critic: arsitektural drift via CI guard (repo-wide holistic). @since 0.1.0 */
+/** @brief Critic: arsitektural drift via CI guard (repo-wide holistic). @since 0.1.1 */
 import { spawnSync } from 'child_process';
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-/** @brief Path script CI architecture guard (sumber tunggal aturan layer). @since 0.1.0 */
+/** @brief Path script CI architecture guard (sumber tunggal aturan layer). @since 0.1.1 */
 const GUARD = new URL('../../../../scripts/ci/architecture/check-circular.ts', import.meta.url);
 
-/** @brief Hasil parse stdout guard. @since 0.1.0 */
+/** @brief Hasil parse stdout guard. @since 0.1.1 */
 export interface GuardReport {
   infraError: string | null;
   circular: number;
@@ -23,7 +23,7 @@ function countSection(stdout: string, header: string): number {
   return m[1].split('\n').filter((l) => l.startsWith('  ') && l.length > 2).length;
 }
 
-/** @brief Parse stdout guard: hitung pelanggaran per kategori. @param {string} stdout @param {string} stderr @return {GuardReport} @since 0.1.0 */
+/** @brief Parse stdout guard: hitung pelanggaran per kategori. @param {string} stdout @param {string} stderr @return {GuardReport} @since 0.1.1 */
 export function parseGuard(stdout: string, stderr: string): GuardReport {
   return {
     infraError: stderr.trim() || null,
@@ -39,7 +39,7 @@ export function parseGuard(stdout: string, stderr: string): GuardReport {
  * `files` diterima untuk keseragaman antarmuka, diabaikan dengan sengaja.
  * @param {FileRecord[]} _files - diabaikan (holistic check, lihat JSDoc).
  * @return {Critique} graduated: 0 violations → 1; penalti 0.5 per circular, 0.25 per deep, 0.5 per illegal.
- * @since 0.1.0 */
+ * @since 0.1.1 */
 export function architectureCritic(_files: FileRecord[]): Critique {
   const res = spawnSync('bun', ['run', GUARD.pathname], { encoding: 'utf8' });
   if (res.error) {

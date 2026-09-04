@@ -1,4 +1,4 @@
-/** @brief Critic: deteksi kebocoran secret (mandate §7.1). @since 0.2.0 */
+/** @brief Critic: deteksi kebocoran secret (mandate §7.1). @since 0.1.1 */
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
@@ -27,7 +27,7 @@ const SECRET_RES: SecretPattern[] = [
 /** @brief Privacy critic: setiap kecocokan secret kurangi skor 0.5 (floor 0), bobot 1.5.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.0 */
+ * @since 0.1.1 */
 export function privacyCritic(files: FileRecord[]): Critique {
   const findings: string[] = [];
   let count = 0;
