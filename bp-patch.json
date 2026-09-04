@@ -2,9 +2,9 @@
   "required_status_checks": {
     "strict": true,
     "checks": [
-      {"context": "invariants"},
-      {"context": "Gate (lint + format + typecheck + test + arch)"},
-      {"context": "Build TypeScript + Native WASM"}
+      { "context": "invariants" },
+      { "context": "Gate (lint + format + typecheck + test + arch)" },
+      { "context": "Build TypeScript + Native WASM" }
     ]
   },
   "required_pull_request_reviews": {
