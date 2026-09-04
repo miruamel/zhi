@@ -2,8 +2,8 @@
 import { describe, it, expect } from 'bun:test';
 import { render } from 'ink';
 import React from 'react';
-import { ProgressBar } from './widgets/progress';
-import { StatCard } from './widgets/stat';
+import { ProgressBar } from './widgets/indicators/progress';
+import { StatCard } from './widgets/badges/stat';
 import { Stages } from './panes/middle/stages';
 import { Knowledge } from './panes/bottom/knowledge';
 import { CodeViewer } from './panes/bottom/code';
