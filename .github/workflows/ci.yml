@@ -59,7 +59,7 @@ jobs:
       - name: Build TypeScript
         run: bun run build
 
-      - name: Build Zig WASM (best-effort)
+      - name: Build Zig WASM
         run: |
           export ZIG_BIN=/tmp/zig-linux-x86_64-0.14.0/zig
-          bun run native:build || echo "WASM build skipped (env issue)"
+          bun run native:build

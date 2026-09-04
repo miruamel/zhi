@@ -6,23 +6,26 @@ set -euo pipefail
 cd "$(dirname "$0")"
 mkdir -p ../out
 
-# Resolve zig: PATH may point to a stripped ELF that cannot find its own
-# install directory. Try candidates in order, use the first that compiles.
-zig_candidates=(
-  "/tmp/zig-linux-aarch64-0.14.0/zig"
-  "$(command -v zig 2>/dev/null || true)"
-)
-zig_bin=""
-for cand in "${zig_candidates[@]}"; do
-  [ -z "$cand" ] && continue
-  [ -x "$cand" ] || continue
-  if "$cand" build-lib --help >/dev/null 2>&1; then
-    zig_bin="$cand"
-    break
-  fi
-done
+# Resolve zig: honor ZIG_BIN if set, then try candidates.
+# PATH may point to a stripped ELF that cannot find its own install directory.
+zig_bin="${ZIG_BIN:-}"
+if [ -z "$zig_bin" ] || ! "$zig_bin" build-lib --help >/dev/null 2>&1; then
+  zig_candidates=(
+    "/tmp/zig-linux-aarch64-0.14.0/zig"
+    "$(command -v zig 2>/dev/null || true)"
+  )
+  zig_bin=""
+  for cand in "${zig_candidates[@]}"; do
+    [ -z "$cand" ] && continue
+    [ -x "$cand" ] || continue
+    if "$cand" build-lib --help >/dev/null 2>&1; then
+      zig_bin="$cand"
+      break
+    fi
+  done
+fi
 if [ -z "$zig_bin" ]; then
-  echo "ERROR: no usable zig binary found in PATH or candidates"; exit 1
+  echo "ERROR: no usable zig binary found in ZIG_BIN, PATH, or candidates"; exit 1
 fi
 
 # -dynamic is rejected by wasm32-freestanding target (Zig 0.14.0).
