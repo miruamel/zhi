@@ -1,4 +1,4 @@
-/** @brief Unit: LoopLogger terstruktur + correlation ID. @since 0.6.0 */
+/** @brief Unit: LoopLogger terstruktur + correlation ID. @since 0.1.1 */
 import { describe, it, expect } from 'bun:test';
 import { LoopLogger } from './logger';
 

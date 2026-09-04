@@ -1,4 +1,4 @@
-/** @brief Critic: Testing hygiene repo-wide (setiap source dir punya test). @since 0.2.0 */
+/** @brief Critic: Testing hygiene repo-wide (setiap source dir punya test). @since 0.1.1 */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import type { Critique } from '../../../aggregate';
@@ -62,7 +62,7 @@ function dirHasTests(src: string): boolean {
 /** @brief Testing critic: tiap source non-trivial di dir tanpa test = finding. Penalti 0.2, floor 0, bobot 1.0.
  * @param {string} root - path repo (bukan per-file).
  * @return {Critique} hasil critic.
- * @since 0.2.0 */
+ * @since 0.1.1 */
 export function testingCritic(root: string): Critique {
   const findings: string[] = [];
   for (const src of sources(root)) {

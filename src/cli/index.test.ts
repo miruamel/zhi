@@ -1,5 +1,5 @@
 /**
- * @brief Integration: cli boot main() — full loop run dari argv. @since 0.1.0
+ * @brief Integration: cli boot main() — full loop run dari argv. @since 0.1.1
  */
 import { describe, expect, it } from 'bun:test';
 import type { Critique } from '../../engine/critic/aggregate';

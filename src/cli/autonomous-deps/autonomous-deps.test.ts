@@ -1,7 +1,7 @@
 /**
  * @brief Unit: autonomousDeps() — env gate + ZHI_AUTO_PR=1 enrichment.
  * Real git/gh/evaluate are never invoked; we verify typeof closures + base passthrough.
- * @since 0.6.0
+ * @since 0.1.2
  */
 import { describe, expect, it, beforeEach, afterEach } from 'bun:test';
 import { autonomousDeps } from './autonomous-deps';

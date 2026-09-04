@@ -1,5 +1,5 @@
 /**
- * @brief Unit: color tokens — type-level smoke test. @since 0.1.0
+ * @brief Unit: color tokens — type-level smoke test. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
 import { colors, type ColorToken } from '../colors';

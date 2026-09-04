@@ -1,4 +1,4 @@
-/** @brief Test render entry: mountTui / renderSnapshot return unmountable handles. @since 0.1.0 */
+/** @brief Test render entry: mountTui / renderSnapshot return unmountable handles. @since 0.1.4 */
 import { describe, it, expect } from 'bun:test';
 import { mountTui, renderSnapshot } from './render';
 import { emptyState } from './core/state';

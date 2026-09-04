@@ -1,4 +1,4 @@
-/** @brief TUI render entry: bootstrap ink <ZhiApp> with state. @since 0.1.0 */
+/** @brief TUI render entry: bootstrap ink <ZhiApp> with state. @since 0.1.2 */
 import { render as inkRender } from 'ink';
 import { ZhiApp } from './app';
 import { emptyState } from './core/state';
@@ -14,7 +14,7 @@ export interface RenderOptions {
   onRegister?: (push: (p: Partial<AppState>) => void) => void;
 }
 
-/** @brief Mount the TUI with the given initial state. @since 0.1.0 */
+/** @brief Mount the TUI with the given initial state. @since 0.1.2 */
 export function mountTui(opts: RenderOptions): { unmount: () => void } {
   const initial = emptyState(opts.goal, opts.tokensBudget);
   const inst = inkRender(
@@ -29,7 +29,7 @@ export function mountTui(opts: RenderOptions): { unmount: () => void } {
   return { unmount: () => inst.unmount() };
 }
 
-/** @brief Render a static snapshot of state (no live loop). @since 0.1.0 */
+/** @brief Render a static snapshot of state (no live loop). @since 0.1.2 */
 export function renderSnapshot(state: AppState, threshold: number): { unmount: () => void } {
   const inst = inkRender(<ZhiApp initialState={state} threshold={threshold} />);
   return { unmount: () => inst.unmount() };

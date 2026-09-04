@@ -1,4 +1,4 @@
-/** @brief Test composer plant + integrasi aggregate. @since 0.1.0 */
+/** @brief Test composer plant + integrasi aggregate. @since 0.1.1 */
 import { test, expect } from 'bun:test';
 import { composeCritiques, composeHygiene } from './compose';
 import { aggregate } from '../aggregate';

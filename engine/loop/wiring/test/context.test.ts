@@ -1,4 +1,4 @@
-/** @brief Contract test LoopContext (pure type). @since 0.2.0 */
+/** @brief Contract test LoopContext (pure type). @since 0.1.1 */
 import { test, expect } from 'bun:test';
 import type { LoopContext } from '../context';
 

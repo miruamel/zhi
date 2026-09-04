@@ -1,4 +1,4 @@
-/** @brief Test emptyState: factory for default AppState. @since 0.1.0 */
+/** @brief Test emptyState: factory for default AppState. @since 0.1.4 */
 import { describe, test, expect } from 'bun:test';
 import { emptyState } from '../state';
 

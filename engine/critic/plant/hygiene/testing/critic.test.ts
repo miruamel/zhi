@@ -1,4 +1,4 @@
-/** @brief Test Testing hygiene critic. @since 0.2.0 */
+/** @brief Test Testing hygiene critic. @since 0.1.1 */
 import { test, expect } from 'bun:test';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';

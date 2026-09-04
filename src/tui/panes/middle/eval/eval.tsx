@@ -1,4 +1,4 @@
-/** @brief Eval pane: build/test/security/gate stages. @since 0.1.0 */
+/** @brief Eval pane: build/test/security/gate stages. @since 0.1.2 */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import { formatMs, formatPct } from '../../../core/format';
@@ -9,7 +9,7 @@ export interface EvalProps {
   evalReport: EvalReport;
 }
 
-/** @brief Render the eval pane (per-stage status). @since 0.1.0 */
+/** @brief Render the eval pane (per-stage status). @since 0.1.2 */
 export function Eval({ evalReport }: EvalProps) {
   const stages = [evalReport.build, evalReport.test, evalReport.security, evalReport.gate];
   const allOk = stages.every((s) => s.ok);

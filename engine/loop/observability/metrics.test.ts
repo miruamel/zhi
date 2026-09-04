@@ -1,4 +1,4 @@
-/** @brief Unit: LoopMetrics + timedStage. @since 0.5.0 */
+/** @brief Unit: LoopMetrics + timedStage. @since 0.1.1 */
 import { describe, it, expect } from 'bun:test';
 import { LoopMetrics, timedStage } from './metrics';
 import { LoopEvent, LoopState } from '../states';

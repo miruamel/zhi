@@ -1,4 +1,4 @@
-/** @brief Test imports critic. @since 0.1.0 */
+/** @brief Test imports critic. @since 0.1.1 */
 import { test, expect } from 'bun:test';
 import { importsCritic } from './critic';
 

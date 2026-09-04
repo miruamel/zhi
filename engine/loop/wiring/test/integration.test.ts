@@ -1,4 +1,4 @@
-/** @brief Integration: jalankan loop utuh via driver+wiring+states. @since 0.1.0 */
+/** @brief Integration: jalankan loop utuh via driver+wiring+states. @since 0.1.1 */
 import { describe, it, expect } from 'bun:test';
 import { LoopDriver } from '../../driver';
 import { LoopState } from '../../states';

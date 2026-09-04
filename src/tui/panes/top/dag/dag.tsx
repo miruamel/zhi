@@ -1,4 +1,4 @@
-/** @brief DAG pane: step list with status icons. @since 0.1.0 */
+/** @brief DAG pane: step list with status icons. @since 0.1.2 */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import { glyphs } from '../../../core/icons';
@@ -26,7 +26,7 @@ export interface DagProps {
   currentLoop: string;
 }
 
-/** @brief Render the DAG pane (step list with status). @since 0.1.0 */
+/** @brief Render the DAG pane (step list with status). @since 0.1.2 */
 export function Dag({ steps, currentStepId, currentLoop }: DagProps) {
   if (steps.length === 0) {
     return (

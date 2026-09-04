@@ -1,4 +1,4 @@
-/** @brief Test sloc critic. @since 0.1.0 */
+/** @brief Test sloc critic. @since 0.1.1 */
 import { test, expect } from 'bun:test';
 import { slocCritic, countSloc } from './critic';
 

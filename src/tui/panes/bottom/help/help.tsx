@@ -1,4 +1,4 @@
-/** @brief Help / keybindings footer pane. @since 0.1.0 */
+/** @brief Help / keybindings footer pane. @since 0.1.2 */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 
@@ -21,7 +21,7 @@ export interface HelpProps {
   showHelp?: boolean;
 }
 
-/** @brief Render the keybindings footer (always visible). @since 0.1.0 */
+/** @brief Render the keybindings footer (always visible). @since 0.1.2 */
 export function Help({ paused, showHelp }: HelpProps) {
   if (!showHelp) {
     return (

@@ -1,5 +1,5 @@
 /**
- * @brief Unit: buildDag() — orch DAG construction. @since 0.1.0
+ * @brief Unit: buildDag() — orch DAG construction. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
 import { buildDag } from '../dag';

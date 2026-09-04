@@ -2,11 +2,11 @@ import { describe, it, expect } from 'bun:test';
 import { verify } from './verify';
 import type { ScaffoldFile } from './generate';
 
-/** @brief Scaffold valid: 2 file, masing-masing punya @brief. @since 0.1.0 */
+/** @brief Scaffold valid: 2 file, masing-masing punya @brief. @since 0.1.1 */
 function good(): ScaffoldFile[] {
   return [
-    { path: 'engine/x/handlers/index.ts', content: '/** @brief h. @since 0.1.0 */\n' },
-    { path: 'engine/x/services/index.ts', content: '/** @brief s. @since 0.1.0 */\n' },
+    { path: 'engine/x/handlers/index.ts', content: '/** @brief h. @since 0.1.1 */\n' },
+    { path: 'engine/x/services/index.ts', content: '/** @brief s. @since 0.1.1 */\n' },
   ];
 }
 
@@ -26,7 +26,7 @@ describe('verify', () => {
   it('flags >5 files per dir', () => {
     const files = Array.from({ length: 6 }, (_, i) => ({
       path: `engine/x/d/f${i}.ts`,
-      content: '/** @brief. @since 0.1.0 */\n',
+      content: '/** @brief. @since 0.1.1 */\n',
     }));
     const r = verify(files);
     expect(r.ok).toBe(false);
@@ -37,7 +37,7 @@ describe('verify', () => {
     const r = verify([
       {
         path: 'engine/x/a.ts',
-        content: '/** @brief. @since 0.1.0 */\nimport { b } from "../../../b";\n',
+        content: '/** @brief. @since 0.1.1 */\nimport { b } from "../../../b";\n',
       },
     ]);
     expect(r.ok).toBe(false);

@@ -1,5 +1,5 @@
 /**
- * @brief Unit: retryWithBudget — bounded retry + DLQ. @since 0.1.0
+ * @brief Unit: retryWithBudget — bounded retry + DLQ. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
 import { retryWithBudget } from '../retry';

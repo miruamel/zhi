@@ -1,5 +1,5 @@
 /**
- * @brief Unit: CircuitBreaker — windowed error-rate breaker. @since 0.1.0
+ * @brief Unit: CircuitBreaker — windowed error-rate breaker. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
 import { CircuitBreaker } from '../breaker';

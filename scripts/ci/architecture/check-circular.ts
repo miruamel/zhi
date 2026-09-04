@@ -1,4 +1,4 @@
-/** @brief Cek circular dependency + deep relative import (mandate §6.10, §6.11, §6.14). @since 0.1.0 */
+/** @brief Cek circular dependency + deep relative import (mandate §6.10, §6.11, §6.14). @since 0.1.1 */
 import { readdirSync, readFileSync, statSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 

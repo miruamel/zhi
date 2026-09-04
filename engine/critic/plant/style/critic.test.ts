@@ -1,4 +1,4 @@
-/** @brief Test style critic (weak types). @since 0.2.0 */
+/** @brief Test style critic (weak types). @since 0.1.1 */
 import { test, expect } from 'bun:test';
 import { styleCritic } from './critic';
 
