@@ -6,7 +6,7 @@ jobs:
   invariants:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Files per directory (<=5; root exempt §6.2; ADR-005/ADR-006 allow docs/design, audit-log/entries)
         run: |
