@@ -1,6 +1,6 @@
 {
   "name": "@miruamel/zhi",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "type": "module",
   "maturity": "experimental",
   "description": "Autonomous terminal coding agent with multi-critic loop engine (Bun-native TS).",
