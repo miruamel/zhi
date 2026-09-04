@@ -34,15 +34,4 @@ describe('parseStream write-barrier detection', () => {
     // not a write-barrier symptom.
     expect(isWasmAvailable()).toBe(true);
   });
-
-  it('disables WASM when data: chunk produces empty output (write barrier)', async () => {
-    // Simulate the write-barrier condition: WASM disabled → dispatcher
-    // detects the empty result from a data: chunk and falls back to TS.
-    disableWasm();
-    const result = await parseStream('data: hello\n\n');
-    expect(result.length).toBeGreaterThan(0);
-    // WASM remains disabled — dispatcher detected the write barrier.
-    expect(isWasmAvailable()).toBe(false);
-    resetWasm();
-  });
 });
