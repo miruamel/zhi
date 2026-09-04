@@ -2,15 +2,16 @@
 
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
-## Entri (62 file, kronologis)
+## Entri (63 file, kronologis)
 
+- `2026-09-04-ci-green-all-runs.md` — Semua CI runs hijau: `ci` + `architecture-guard` pada 3 commit terakhir. Aksi GitHub Actions di-upgrade v4→v6 (Node.js 20 deprecation). Repo bersih, 0 commits di depan origin/main, 62 audit entries konsisten. Gate lokal: exit 0, 365 pass / 0 fail / 726 expect() across 72 files.
 - `2026-08-29-discovery-zhi.md` — Discovery awal: metrik struktur, pelanggaran arsitektur, pemindaian secret.
 - `2026-08-29-remediation-docs.md` — Remediasi docs: nest guides, ADR-005 untuk `docs/design/`.
 - `2026-08-29-governance-ci.md` — CI architecture guard; rekomendasi LICENSE (P3).
 - `2026-08-29-ci-lint-fix.md` — Self-review: hapus `*.py` dari guard; `bun test` ditunda.
 - `2026-08-29-ci-fix-git-exclusion.md` — CI merah karena `.git` di-scan; perbaiki prune.
-- `2026-08-29-license-mit.md` — LICENSE MIT + ADR-006 exception untuk `audit-log/entries/`.
 - `2026-08-29-ci-fix-sloc-total.md` — CI SLOC guard false-positive pada baris `total` wc; filter `$2 != "total"`.
+- `2026-08-29-license-mit.md` — LICENSE MIT + ADR-006 exception untuk `audit-log/entries/`.
 - `2026-08-29-native-stream-wasm.md` — native/stream Zig→WASM: parse.zig, build.sh, stream.ts wrapper, test; deviasi build.zig (zig build hang).
 - `2026-08-29-architecture-metrics.md` — §6.14 metrics scanner: 31 code files, sloc.avg 29.5, sloc.max 72, 0 god, depth 2–6, 0 circular, 0 deep-relative, 0 fat dirs.
 - `2026-08-29-audit-log-remote-sync.md` — `miruamel/audit-log` (private) dibuat via `gh repo create`; sync 19 file via REST Contents API (receive-pack stall).
