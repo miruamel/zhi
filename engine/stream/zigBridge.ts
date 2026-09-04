@@ -32,7 +32,16 @@ let wasmAvailable = true;
 async function load(): Promise<Loaded> {
   if (cached) return cached;
   if (loading) return loading;
-  const p = (async () => {
+  // Set loading BEFORE any work runs so the finally block's
+  // reset isn't overwritten by a post-IIFE assignment.
+  let resolve!: (v: Loaded) => void;
+  let reject!: (e: Error) => void;
+  const p = new Promise<Loaded>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  loading = p;
+  try {
     const bytes = readFileSync(WASM_PATH);
     const { instance } = await WebAssembly.instantiate(bytes, {});
     const memory = instance.exports.memory as WebAssembly.Memory;
@@ -41,10 +50,12 @@ async function load(): Promise<Loaded> {
       memory.buffer.byteLength - 16,
     );
     cached = { instance, memory, stack };
+    resolve(cached);
+  } catch (e) {
+    reject(e as Error);
+  } finally {
     loading = null;
-    return cached;
-  })();
-  loading = p;
+  }
   return p;
 }
 
@@ -124,4 +135,13 @@ export function disableWasm(): void {
  */
 export function resetWasm(): void {
   wasmAvailable = true;
+}
+
+/**
+ * @brief Reset singleton cache (test helper — also clears loading promise).
+ * @since 0.1.2
+ */
+export function resetCache(): void {
+  cached = null;
+  loading = null;
 }
