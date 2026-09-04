@@ -2,7 +2,9 @@
 
 Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/zhi` public). Dipelihara per mandat v6.0 §13.
 
-## Entri (70 file, kronologis)
+## Entri (71 file, kronologis)
+- `2026-09-04-prettierignore-audit-log-exclusion.md` — `.prettierignore` exclusion untuk `audit-log/entries/`: narrative documents tidak di-format oleh Prettier. Root cause dari 2 CI failure sebelumnya (state-sync-4, state-sync-5). Config-level fix, bukan per-file. CI `33863154899` hijau (Gate 7m15s + Build 5m21s). Branch protection menghalang push langsung ke main; fix di-PR via `fix/prettierignore-audit-log-entries`.
+- `2026-09-04-prettierignore-audit-log-exclusion.md` — `.prettierignore` exclusion untuk `audit-log/entries/`: narrative documents tidak di-format oleh Prettier. Root cause dari 2 CI failure sebelumnya (state-sync-4, state-sync-5). Config-level fix, bukan per-file. CI `33863154899` hijau (Gate 7m15s + Build 5m21s). Branch protection menghalang push langsung ke main; fix di-PR via `fix/prettierignore-audit-log-entries`.
 - `2026-09-04-npm-token-leak-incident.md` — P0 security: npm token bocor di commit `9cbec75` line 47 `state-sync-2.md`. Token di-redact di working tree, history di-scrub via `git-filter-repo --replace-text` (268 commit). Force-push di-block oleh branch protection; scrubbed history di-push ke branch `fix/scrub-npm-token-history` (SHA `251f44f`). PR #60 pending merge. Token harus di-rotate di npmjs.com. Remote `main` masih berisi token di history-nya.
 
 - `2026-09-04-ci-green-all-runs.md` — Semua CI runs hijau: `ci` + `architecture-guard` pada 3 commit terakhir. Aksi GitHub Actions di-upgrade v4→v6 (Node.js 20 deprecation). Repo bersih, 0 commits di depan origin/main, 63 audit entries konsisten. Gate lokal: exit 0, 365 pass / 0 fail / 726 expect() across 72 files.
@@ -59,7 +61,6 @@ Audit trail otonom untuk proyek miruamel (lokal: `/root/zhi`, remote: `miruamel/
 - `2026-09-04-stream-test-determinism.md` — `parseSseWasm` fail-closed guard; stream tests env-independent.
 - `2026-09-04-topatch-coverage.md` — Test coverage: 155 source files vs 76 test files; 19 gaps, all resolved.
 - `2026-09-04-zig-0.16.0-fix.md` — Zig 0.16.0 build fix untuk `native/stream/parse.zig` (URL valid; transient failure).
-- `2026-09-04-monitor-cycle-1.md` — Siklus Pantau autonomous pertama: state repo bersih, CI hijau, 0 issue/PR terbuka, gate local exit 0 (365 pass). Ditemukan: ADR-013 numbering gap (dokumentasi via `docs/adr/ADR-013-numbering-gap.md`), CHANGES.md duplicate `## [Unreleased]` block (digabung ke 0.1.3 + urut ulang subsection), audit-log README count 53→54.
 - `2026-09-04-git-hooks-install.md` — Husky v9 diagnosed broken; reverted wiring, installed plain git hooks in `.git/hooks/` (pre-commit + commit-msg). `tinyexec` hoisting fix. Verified: bad commit rejected, good commit accepted.
 - `2026-09-04-lockfile-switch.md` — `bun.lock` deleted, `package-lock.json` committed, CI switched from `bun install --frozen-lockfile` to `npm ci`. Bun hoisting broken on `ansi-styles` + `@types/node` chains (351/11/11 → 411/0/844).
 - `2026-09-04-state-sync-3.md` — Twelfth MANDAT re-injection: restored two audit log entries lost in merge `92a4b74`, stale `bun.lock` reference sweep (publish.yml, runbook, repo-metadata, CHANGES.md), added lockfile switch + git hooks entries to `[Unreleased]`.
