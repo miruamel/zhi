@@ -14,7 +14,7 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
-## [Unreleased]
+## [0.1.6] - 2026-09-06
 
 ### Added
 
