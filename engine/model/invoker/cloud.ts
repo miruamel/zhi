@@ -6,6 +6,9 @@
 import { parseStream } from '../stream';
 import type { ModelInvoker } from './types';
 
+/** @brief Batas waktu default per HTTP request (ms). @since 0.1.2 */
+const DEFAULT_TIMEOUT_MS = 30000;
+
 /** @brief Opsi inisialisasi CloudModelInvoker. @since 0.1.1 */
 export interface CloudInvokerOpts {
   /** @brief Base URL API tanpa trailing /v1. Default https://api.openai.com/v1. */
@@ -14,6 +17,8 @@ export interface CloudInvokerOpts {
   model?: string;
   /** @brief API key (dari env MODEL_API_KEY). */
   apiKey: string;
+  /** @brief Batas waktu HTTP request (ms). Default 30000. 0 = dinonaktifkan. */
+  timeoutMs?: number;
 }
 
 /**
@@ -34,17 +39,25 @@ export function extractTokens(payload: string): string[] {
   }
 }
 
+/** @brief Buat AbortSignal dengan timeout (bila didukung). @param {number} ms - ms; 0 = none. @return {AbortSignal | undefined} @since 0.1.2 */
+function signalOrUndefined(ms: number): AbortSignal | undefined {
+  if (ms <= 0) return undefined;
+  return AbortSignal.timeout(ms);
+}
+
 /** @brief Invoker OpenAI-compatible (chat completions). @since 0.1.1 */
 export class CloudModelInvoker implements ModelInvoker {
   private readonly url: string;
   private readonly model: string;
   private readonly apiKey: string;
+  private readonly timeoutMs: number;
 
   /** @brief Bind endpoint + kredensial. @param {CloudInvokerOpts} opts - baseUrl/model/apiKey. */
   constructor(opts: CloudInvokerOpts) {
     this.url = `${opts.baseUrl ?? 'https://api.openai.com/v1'}/chat/completions`;
     this.model = opts.model ?? 'gpt-4o-mini';
     this.apiKey = opts.apiKey;
+    this.timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   }
 
   /**
@@ -61,6 +74,7 @@ export class CloudModelInvoker implements ModelInvoker {
         messages: [{ role: 'user', content: prompt }],
         temperature: 0,
       }),
+      signal: signalOrUndefined(this.timeoutMs),
     });
     if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status} ${await res.text()}`);
     const data = (await res.json()) as {
@@ -87,6 +101,7 @@ export class CloudModelInvoker implements ModelInvoker {
         temperature: 0,
         stream: true,
       }),
+      signal: signalOrUndefined(this.timeoutMs),
     });
     if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status} ${await res.text()}`);
     const body = res.body;

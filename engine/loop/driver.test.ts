@@ -54,4 +54,48 @@ describe('LoopDriver', () => {
       /illegal/,
     );
   });
+  it('run() throws on step timeout', async () => {
+    const d = new LoopDriver();
+    await expect(
+      d.run(
+        {
+          [LoopState.INTAKE]: () =>
+            new Promise<LoopEvent>(() => {
+              /* never resolves */
+            }),
+        },
+        64,
+        50,
+      ),
+    ).rejects.toThrow(/step timeout/);
+  });
+
+  it('run() with stepTimeoutMs=0 disables timeout (rejects advance to budget)', async () => {
+    const d = new LoopDriver();
+    const seq: Partial<Record<LoopState, LoopEvent>> = {
+      [LoopState.INTAKE]: LoopEvent.GOAL_READY,
+      [LoopState.PLAN]: LoopEvent.PLAN_OK,
+      [LoopState.ISOLATE]: LoopEvent.ISOLATED,
+    };
+    await expect(
+      d.run(
+        {
+          [LoopState.INTAKE]: () =>
+            new Promise<LoopEvent>((resolve) =>
+              queueMicrotask(() => resolve(seq[LoopState.INTAKE]!)),
+            ),
+          [LoopState.PLAN]: () =>
+            new Promise<LoopEvent>((resolve) =>
+              queueMicrotask(() => resolve(seq[LoopState.PLAN]!)),
+            ),
+          [LoopState.ISOLATE]: () =>
+            new Promise<LoopEvent>((resolve) =>
+              queueMicrotask(() => resolve(seq[LoopState.ISOLATE]!)),
+            ),
+        },
+        2,
+        0,
+      ),
+    ).rejects.toThrow(/budget exceeded/);
+  });
 });

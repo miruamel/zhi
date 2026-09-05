@@ -2,15 +2,27 @@
 import { spawnSync } from 'node:child_process';
 import { resolve } from 'node:path';
 
-/** @brief Jalankan perintah; return stdout atau throw bila exit != 0. @since 0.1.1 */
-function run(cmd: string[], cwd = process.cwd()): string {
-  const r = spawnSync(cmd[0], cmd.slice(1), { cwd, encoding: 'utf8' });
+/** @brief Batas waktu default per command (ms). @since 0.1.2 */
+const DEFAULT_TIMEOUT_MS = 30000;
+
+/** @brief Jalankan perintah; return stdout atau throw bila exit != 0.
+ * @param {string[]} cmd - perintah + argumen.
+ * @param {string} cwd - working directory.
+ * @param {number} timeoutMs - batas waktu dalam ms (default 30000). 0 = dinonaktifkan.
+ * @return {string} stdout.
+ * @since 0.1.1 */
+function run(cmd: string[], cwd = process.cwd(), timeoutMs = DEFAULT_TIMEOUT_MS): string {
+  const r = spawnSync(cmd[0], cmd.slice(1), {
+    cwd,
+    encoding: 'utf8',
+    timeout: timeoutMs || undefined,
+  });
+  if (r.error) throw new Error(`git/gh spawn error: ${cmd.join(' ')} -> ${r.error.message}`);
   if (r.status !== 0) {
     throw new Error(`git/gh failed: ${cmd.join(' ')} -> ${r.stderr?.trim() ?? r.status}`);
   }
   return r.stdout ?? '';
 }
-
 /** @brief Derivasi nama branch dari goal. @since 0.1.1 */
 export function branchSlug(goal: string): string {
   const slug = goal
