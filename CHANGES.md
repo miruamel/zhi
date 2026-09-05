@@ -14,7 +14,12 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
-## [Unreleased]
+## [0.1.6] - 2026-09-06
+
+### Added
+
+- **Multi-platform binary release via `bun build --compile`** — `publish.yml` now produces native binaries for `linux-x64`, `macos-x64`, `macos-arm64`, `windows-x64` and attaches them to the GitHub Release alongside SHA256 checksums. Users can download a self-contained `zhi` binary without needing Bun or Node.js installed.
+- **Developer utility scripts** — root-level executable scripts: `dev.sh` (watch mode), `setup.sh` (initial setup), `install.sh` (deps + build), `test.sh` (with args passthrough), `release.sh` (version tag helper), `clean.sh` (remove artifacts), `lint.sh [--fix]`, `format.sh`, `ci.sh` (full local CI), `build.sh`, `verify.sh` (clean + install + build + gate).
 
 ### Added
 
