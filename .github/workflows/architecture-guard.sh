@@ -11,13 +11,13 @@ ROOT="${1:-.}"
 echo "[guard] files-per-directory (<=5; root + docs/design + docs/adr + audit-log/entries exempt)"
 
 violations=0
-while IFS= read -r d; do
+while IFS= read -r d || break; do
   # Skip exempt dirs (root, design, adr, audit-log entries, this script's folder, node_modules,
   #   native/out, .husky, assets, dist, and any test/ dir — test files are exempt from
   #   files-per-dir source cap per mandate §6.2; they live under test/ by convention).
   # Match top dir OR any subpath under it ("./foo" or "./foo/bar/baz").
   case "$d" in
-    "$ROOT"|"./docs/design"|"./docs/design"/*|"./docs/adr"|"./docs/adr"/*|"./audit-log/entries"|"./audit-log/entries"/*|"./.git"|"./.git"/*|"./node_modules"|"./node_modules"/*|"./.github"|"./.github"/*|"./native/out"|"./native/out"/*|"./.husky"|"./.husky"/*|"./assets"|"./assets"/*|"./dist"|"./dist"/*)
+    "$ROOT"|"./docs/design"|"./docs/design"/*|"./docs/adr"|"./docs/adr"/*|"./audit-log/entries"|"./audit-log/entries"/*|"./.git"|"./.git"/*|"./node_modules"|"./node_modules"/*|"./.github"|"./.github"/*|"./native/out"|"./native/out"/*|"./.husky"|"./.husky"/*|"./assets"|"./assets"/*|"./dist"|"./dist"/*|"./test"|"./test"/*|*"/test"|*"/test"/*)
       continue
       ;;
     esac
@@ -37,7 +37,7 @@ echo "[guard] ok: files-per-dir"
 echo "[guard] SLOC per code file (<=150 hard cap per mandate §6.2; <=250 never)"
 
 violations=0
-while IFS= read -r -d '' f; do
+while IFS= read -r -d '' f || break; do
   loc=$(wc -l < "$f" 2>/dev/null || echo 0)
   if [ "$loc" -gt 150 ]; then
     echo "[guard] VIOLATION SLOC: $f ($loc lines > 150)"

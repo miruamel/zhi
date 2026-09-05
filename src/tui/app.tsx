@@ -2,8 +2,8 @@
 import { Box, Text, useApp, useInput } from 'ink';
 import { useState, useEffect } from 'react';
 import { colors } from './core/colors';
-import { resolveKey } from './core/keymap';
-import { applyKeyAction } from './core/keyhandler';
+import { resolveKey } from './core/handlers/keymap';
+import { applyKeyAction } from './core/handlers/keyhandler';
 import { Header, Dag, Detail, Critics, Eval, Pr as PrPane, Log, Help } from './panes';
 import type { AppState } from './core/state';
 

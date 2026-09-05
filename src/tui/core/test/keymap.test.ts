@@ -1,6 +1,6 @@
 /** @brief Test resolveKey: maps key press to action. @since 0.1.4 */
 import { describe, test, expect } from 'bun:test';
-import { resolveKey, type KeyAction } from '../keymap';
+import { resolveKey, type KeyAction } from '../handlers/keymap';
 
 describe('resolveKey', () => {
   test('maps single-char keys to actions', () => {
