@@ -128,6 +128,9 @@ jobs:
 
       - name: Build binary (${{ matrix.platform }})
         id: build
+        # Explicit `shell: bash` — Windows runners default to pwsh, where
+        # `FILE="..."` assignment syntax is invalid.
+        shell: bash
         run: |
           FILE="zhi-${{ matrix.platform }}${{ matrix.ext }}"
           bun build --compile ./dist/src/cli/index.js --outfile "$FILE"
@@ -135,6 +138,7 @@ jobs:
           echo "size=$(stat -c%s "$FILE")" >> "$GITHUB_OUTPUT"
 
       - name: Compute checksum
+        shell: bash
         run: |
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             certutil -hashfile "${{ steps.build.outputs.file }}" SHA256 | grep -v ":" | tr -d " " > "${{ steps.build.outputs.file }}.sha256"
@@ -191,11 +195,19 @@ jobs:
         run: bun run build
 
       - name: Publish to npm
-        # --ignore-existing makes re-runs idempotent: skips already-published
-        # versions instead of failing with "cannot publish over the previously
-        # published versions". Without it, a failed create-release (which
-        # needs npm-publish) blocks the entire release on every re-run.
-        run: npm publish --provenance --access public --ignore-existing
+        # npm publish is non-idempotent: re-running after the first success
+        # fails with "cannot publish over the previously published versions".
+        # Check first and skip if already published, so the job exits 0 and
+        # does not block create-release on re-runs.
+        # NOTE: `npm publish --ignore-existing` is NOT a valid flag on npm 11
+        # (it is silently ignored and the publish still fails). Use a check.
+        run: |
+          VERSION=$(node -e "console.log(require('./package.json').version)")
+          if npm view "zhi@$VERSION" version >/dev/null 2>&1; then
+            echo "zhi@$VERSION already published; skipping npm publish"
+          else
+            npm publish --provenance --access public
+          fi
 
   create-release:
     name: Create Release
