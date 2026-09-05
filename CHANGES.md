@@ -16,6 +16,10 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 ## [Unreleased]
 
+### Added
+
+- **Multi-platform binary release via `bun build --compile`** — `publish.yml` now produces native binaries for `linux-x64`, `macos-x64`, `macos-arm64`, `windows-x64` and attaches them to the GitHub Release alongside SHA256 checksums. Users can download a self-contained `zhi` binary without needing Bun or Node.js installed.
+
 ## [0.1.5] - 2026-09-06
 
 ### Security
