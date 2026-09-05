@@ -9,7 +9,7 @@
 
 set -euo pipefail
 
-ROOT="${1:-.}"; shift
+ROOT="${1:-.}"; [ "$#" -gt 0 ] && shift
 
 SLOC_ONLY=false
 if [ "$#" -gt 0 ] && [ "$1" = "--sloc-only" ]; then
