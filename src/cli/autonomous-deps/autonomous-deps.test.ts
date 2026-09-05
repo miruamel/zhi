@@ -49,12 +49,13 @@ describe('autonomousDeps ZHI_AUTO_PR=1', () => {
     else process.env['ZHI_AUTO_PR'] = origEnv;
   });
 
-  it('enriches with 4 handler closures (typeof function)', () => {
+  it('enriches with 5 handler closures (typeof function)', () => {
     const out = autonomousDeps(base, 'goal-x');
     expect(typeof out.isolate).toBe('function');
     expect(typeof out.commit).toBe('function');
     expect(typeof out.prOpen).toBe('function');
     expect(typeof out.eval).toBe('function');
+    expect(typeof out.ciWatch).toBe('function');
     // Base passthrough
     expect(out.ingest).toBe(base.ingest);
     expect(out.plan).toBe(base.plan);
