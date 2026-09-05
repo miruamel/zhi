@@ -31,11 +31,25 @@ describe('gitIsolate + gitCommit (execSync-only)', () => {
   const branch = 'feat/build-isolated-feature';
   beforeAll(() => {
     process.chdir(repo);
-    execSync('git init -q && git config user.email t@t.t && git config user.name t && git commit --allow-empty -q -m init');
+    execSync(
+      'git init -q && git config user.email t@t.t && git config user.name t && git commit --allow-empty -q -m init',
+    );
     // Cleanup any stale state first
-    try { execSync(`git worktree remove --force "${wt}"`, { stdio: 'pipe' }); } catch { /* ignore */ }
-    try { execSync(`git branch -D "${branch}"`, { stdio: 'pipe' }); } catch { /* ignore */ }
-    try { rmSync(wt, { recursive: true, force: true }); } catch { /* ignore */ }
+    try {
+      execSync(`git worktree remove --force "${wt}"`, { stdio: 'pipe' });
+    } catch {
+      /* ignore */
+    }
+    try {
+      execSync(`git branch -D "${branch}"`, { stdio: 'pipe' });
+    } catch {
+      /* ignore */
+    }
+    try {
+      rmSync(wt, { recursive: true, force: true });
+    } catch {
+      /* ignore */
+    }
     // Probe: does git worktree add work right now?
     try {
       execSync(`git worktree add /tmp/zhi-wt-probe -b feat/probe`, { stdio: 'pipe' });
@@ -47,19 +61,31 @@ describe('gitIsolate + gitCommit (execSync-only)', () => {
   });
   afterAll(() => {
     process.chdir(orig);
-    try { execSync(`git worktree remove --force "${wt}"`, { stdio: 'pipe' }); } catch { /* ignore */ }
-    try { execSync(`git -C "${repo}" branch -D "${branch}"`, { stdio: 'pipe' }); } catch { /* ignore */ }
+    try {
+      execSync(`git worktree remove --force "${wt}"`, { stdio: 'pipe' });
+    } catch {
+      /* ignore */
+    }
+    try {
+      execSync(`git -C "${repo}" branch -D "${branch}"`, { stdio: 'pipe' });
+    } catch {
+      /* ignore */
+    }
     rmSync(repo, { recursive: true, force: true });
   });
   it('creates isolated worktree and commits inside it', () => {
     // Run git commands with explicit cwd to avoid process.cwd() pollution
     execSync(`git worktree add "${wt}" -b "${branch}"`, { cwd: repo, stdio: 'pipe' });
     expect(existsSync(wt)).toBe(true);
-    expect(execSync(`git -C "${wt}" rev-parse --abbrev-ref HEAD`, { stdio: 'pipe' }).toString().trim()).toBe(branch);
+    expect(
+      execSync(`git -C "${wt}" rev-parse --abbrev-ref HEAD`, { stdio: 'pipe' }).toString().trim(),
+    ).toBe(branch);
     writeFileSync(join(wt, 'x.txt'), 'hi');
     execSync(`git -C "${wt}" add -A`, { stdio: 'pipe' });
     execSync(`git -C "${wt}" commit -m "add x"`, { stdio: 'pipe' });
-    expect(execSync(`git -C "${wt}" log --oneline`, { stdio: 'pipe' }).toString()).toContain('add x');
+    expect(execSync(`git -C "${wt}" log --oneline`, { stdio: 'pipe' }).toString()).toContain(
+      'add x',
+    );
     execSync(`git worktree remove --force "${wt}"`, { stdio: 'pipe' });
   });
 });

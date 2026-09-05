@@ -57,9 +57,21 @@ export function gitIsolate(goal: string): string {
   const wt = worktreePath(branch);
   // Idempotent cleanup: rmSync handles dirs that aren't valid git worktrees
   // (git worktree remove exits 128 for those), then git cleanup handles the rest.
-  try { rmSync(wt, { recursive: true, force: true }); } catch { /* ignore */ }
-  try { run(['git', 'worktree', 'remove', '--force', wt]); } catch { /* ignore */ }
-  try { run(['git', 'branch', '-D', branch]); } catch { /* ignore */ }
+  try {
+    rmSync(wt, { recursive: true, force: true });
+  } catch {
+    /* ignore */
+  }
+  try {
+    run(['git', 'worktree', 'remove', '--force', wt]);
+  } catch {
+    /* ignore */
+  }
+  try {
+    run(['git', 'branch', '-D', branch]);
+  } catch {
+    /* ignore */
+  }
   run(['git', 'worktree', 'add', wt, '-b', branch]);
   return wt;
 }
