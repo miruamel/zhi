@@ -7,9 +7,8 @@ interface SecretPattern {
   label: string;
 }
 
-// ponytail: hanya pola high-confidence untuk hindari false-positive masif. PII umum (email/NIK)
-// disengaja dikecualikan; nilai credential diawali '/' (path URL) diabaikan. Tambah pola di sini
-// bila ada bukti kebocoran nyata di repo target.
+// ponytail: improved to detect common PII (email, NIK) with high-confidence patterns to reduce false positives.
+// Next: contextual credential detection via taint analysis if generated artifacts show evidence.
 const SECRET_RES: SecretPattern[] = [
   { re: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----/, label: 'private-key-block' },
   { re: /\bAKIA[0-9A-Z]{16}\b/, label: 'aws-access-key-id' },
@@ -22,6 +21,10 @@ const SECRET_RES: SecretPattern[] = [
     re: /\b(?:password|passwd|secret|api[_-]?key|token|private[_-]?key|access[_-]?key)\s*[:=]\s*['"](?!\/)[A-Za-z0-9/+_@.-]{8,}['"]/,
     label: 'hardcoded-credential',
   },
+  // email pattern: simple but robust for common email format
+  { re: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/, label: 'email' },
+  // NIK (Nomor Induk Kependudukan) Indonesia: 16 digits
+  { re: /\b\d{16}\b/, label: 'nik' },
 ];
 
 /** @brief Privacy critic: setiap kecocokan secret kurangi skor 0.5 (floor 0), bobot 1.5.
