@@ -70,9 +70,11 @@ describe('main() dispatch', () => {
         main(['--unknown-flag'], {
           gen: () => Promise.resolve(fakeCtx('')),
           critique: () => Promise.resolve(fakeCtx('')),
-          loop: () => { throw new Error('cli: goal kosong'); },
+          loop: () => {
+            throw new Error('cli: goal kosong');
+          },
           loopTui: () => Promise.resolve(fakeCtx('')),
-        })
+        }),
       ).rejects.toThrow(/goal kosong/);
     } finally {
       Object.defineProperty(process.stdout, 'isTTY', { value: original, configurable: true });

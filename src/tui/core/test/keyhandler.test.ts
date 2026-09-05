@@ -9,17 +9,39 @@ import type { AppState } from '../state';
 function makeDeps(overrides: Partial<import('../keyhandler').KeyHandlerDeps> = {}) {
   const calls: Record<string, unknown[]> = {};
   const deps: import('../keyhandler').KeyHandlerDeps = {
-    setState: (p: Partial<AppState>) => { calls.setState = [p]; },
-    setPaused: (v: unknown) => { calls.setPaused = [v]; },
-    setShowHelp: (v: unknown) => { calls.setShowHelp = [v]; },
-    setDetailExpanded: (v: unknown) => { calls.setDetailExpanded = [v]; },
-    setLogExpanded: (v: unknown) => { calls.setLogExpanded = [v]; },
-    setCriticsExpanded: (v: unknown) => { calls.setCriticsExpanded = [v]; },
-    setPrExpanded: (v: unknown) => { calls.setPrExpanded = [v]; },
-    setLogOffset: (v: unknown) => { calls.setLogOffset = [v]; },
-    setFocusIdx: (v: unknown) => { calls.setFocusIdx = [v]; },
-    setRedrawKey: (v: unknown) => { calls.setRedrawKey = [v]; },
-    exit: () => { calls.exit = []; },
+    setState: (p: Partial<AppState>) => {
+      calls.setState = [p];
+    },
+    setPaused: (v: unknown) => {
+      calls.setPaused = [v];
+    },
+    setShowHelp: (v: unknown) => {
+      calls.setShowHelp = [v];
+    },
+    setDetailExpanded: (v: unknown) => {
+      calls.setDetailExpanded = [v];
+    },
+    setLogExpanded: (v: unknown) => {
+      calls.setLogExpanded = [v];
+    },
+    setCriticsExpanded: (v: unknown) => {
+      calls.setCriticsExpanded = [v];
+    },
+    setPrExpanded: (v: unknown) => {
+      calls.setPrExpanded = [v];
+    },
+    setLogOffset: (v: unknown) => {
+      calls.setLogOffset = [v];
+    },
+    setFocusIdx: (v: unknown) => {
+      calls.setFocusIdx = [v];
+    },
+    setRedrawKey: (v: unknown) => {
+      calls.setRedrawKey = [v];
+    },
+    exit: () => {
+      calls.exit = [];
+    },
     log: [],
     ...overrides,
   };

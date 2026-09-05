@@ -37,7 +37,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   useInput((input: string, key: { [k: string]: boolean }) => {
     const action = resolveKey(input, key);
     applyKeyAction(action, {
-      setState,
+      setState: (p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })),
       setPaused,
       setShowHelp,
       setDetailExpanded,
@@ -69,11 +69,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         tokensBudget={state.tokensBudget}
       />
       <Box marginTop={1} gap={1}>
-        <Dag
-          steps={state.steps}
-          currentStepId={state.currentStepId}
-          currentLoop={state.loop}
-        />
+        <Dag steps={state.steps} currentStepId={state.currentStepId} currentLoop={state.loop} />
         <Detail
           step={currentStep ?? undefined}
           loop={state.loop}
