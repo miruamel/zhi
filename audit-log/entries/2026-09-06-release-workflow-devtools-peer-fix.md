@@ -33,3 +33,22 @@ Yang lebih penting: `react-devtools-core` **tidak ada** di `package-lock.json`/`
 - Commit `51d77e5` di branch `fix/release-workflow-devtools-peer`, PR #133, closes #130.
 - Supersedes PR #131 (`npm ci` tidak mencukupi).
 - npm package `0.1.6` sudah benar (323 file, WASM ada). Yang hilang: GitHub Release artifacts (binary + checksum).
+## Tahap tiga: npm publish --ignore-existing tidak berlaku (run 33985298555)
+Re-run setelah PR #133 merge masih gagal, tapi di tempat lain:
+
+1. **`npm publish --ignore-existing` tidak ada di npm 11.** `npm publish --help` tidak menampilkan flag tersebut, dan CI mengabaikannya secara silent — publish tetap gagal dengan `You cannot publish over the previously published versions: 0.1.6` (job `Publish to npm`, exit code 1). Karena `create-release` punya `needs: npm-publish`, seluruh release terhenti.
+   **Fix:** ganti dengan pengecekan eksplisit: `npm view "zhi@$VERSION" version` → bila sudah ada, skip publish (exit 0); bila tidak, jalankan `npm publish --provenance --access public`.
+
+2. **Windows binary job gagal karena shell default pwsh.** `Build binary (windows-x64)` gagal pada `FILE="zhi-windows-x64.exe"` — runner Windows default ke PowerShell, di mana syntax assignment `VAR="..."` tidak valid (error: `Cannot find type for FILE`).
+   **Fix:** tambahkan `shell: bash` eksplisit ke step `Build binary` dan `Compute checksum`. Tiga binary lain (linux-x64, macos-x64, macos-arm64) sudah sukses — bukti bahwa `npm install -D react-devtools-core --no-save` bekerja.
+
+## Verifikasi (update)
+- [x] Reproduksi secara lokal: `npm ci` saja meninggalkan `react-devtools-core` kosong; compile gagal.
+- [x] `npm install -D react-devtools-core@^4.19.1 --no-save` + `bun build --compile` → binary 81M, `--help` berjalan sukses.
+- [x] `--external` ditolak di runtime (DEV branch masih mengimpor devtools.js).
+- [x] `npm publish --ignore-existing` TIDAK berlaku di npm 11 (diabaikan secara silent).
+- [x] Binary 81M berjalan: `--help` sukses.
+- [x] CI hijau pada PR #133 (Gate, arch-guard, build, CodeQL, dependency scan, Devin Review semua SUCCESS).
+- [x] PR #133 merged ke main (`05dc992`).
+- [x] Run 33985298555: 3/4 binary jobs sukses (linux-x64, macos-x64, macos-arm64); windows-x64 gagal karena pwsh (diperbaiki); npm-publish gagal karena flag tidak valid (diperbaiki).
+- [ ] Re-run `release` workflow untuk `v0.1.6` menghasilkan GitHub Release dengan 4 binary + 4 .sha256
