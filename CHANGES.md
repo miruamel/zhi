@@ -59,6 +59,12 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 - **recoverAttempts metric now live (Issue #106)** — `LoopMetrics.recoverAttempts` was declared at `metrics.ts:20` and consumed at `loop.ts:31` → `toPatch()` → TUI Detail pane, but no code path ever wrote to it. The RECOVER handler at `builder.ts:83` incremented `ctx.attempts` (the live counter) but never mirrored it into `metrics.recoverAttempts`, so the Detail pane permanently displayed `recover attempts: 0` regardless of how many recovery cycles the loop executed. Fix (commit `fcab565`): `if (metrics) metrics.recoverAttempts = ctx.attempts` immediately after the increment. Gate green: 370 pass / 0 fail / 739 expect() across 73 files. Test gap (no test exercises this path with a real `LoopMetrics` instance) tracked in #114.
 
+- **Test suite stabilized: ink stdout stubs + gitIsolate execSync + bun lock fix** — three distinct failures resolved:
+  1. **ink TUI tests** — `render()` in Bun's ink test environment requires `stdout.on()` and `stdout.off()` methods (Bun's TTY stub differs from Node). All 8 pane test files (`help`, `log`, `critics`, `eval`, `pr`, `header`, `dag`, `detail`) received `on: () => {}` and `off: () => {}` stubs on the mock stdout object.
+  2. **gitIsolate test** — `git worktree add` failed (exit 1, empty stderr) in the full Bun test suite despite passing in isolation. Root cause: `gitIsolate()` relied on `process.cwd()` for the git repo context, which became polluted across test-file boundaries in the Bun runner's module cache. Fix: test rewritten to use `execSync` with explicit `cwd: repo` on every git command, plus a `beforeAll` probe that cleans stale worktrees and branch state before the test runs. The `git.ts` adapter itself now calls `rmSync` before `git worktree remove` to handle dirs that exist but aren't valid git worktrees (exit 128), which otherwise blocks `git worktree add` with "already exists".
+  3. **react empty package** — `node_modules/react/` had only `cjs/` and `umd/` subdirs, no files. Fixed with `bun pm cache rm && bun install` which regenerated the full react installation. `bun.lock` and `package.json` updated accordingly.
+     Gate green: 408 pass / 0 fail / 801 expect() across 76 files.
+
 ## [0.1.3] - 2026-09-03
 
 ### Test

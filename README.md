@@ -96,7 +96,7 @@ flowchart TD
 
 ## Status
 
-Most engine modules exist with green tests (`bun test` 367 pass / 0 fail / 730 expect() across 73 files).
+Most engine modules exist with green tests (`bun test` 408 pass / 0 fail / 801 expect() across 76 files).
 
 **Gate status (latest run):**
 
@@ -105,7 +105,7 @@ Most engine modules exist with green tests (`bun test` 367 pass / 0 fail / 730 e
 | typecheck    | ✅ 0 errors                                            |
 | lint         | ✅ 0 errors                                            |
 | format:check | ✅ clean                                               |
-| test         | ✅ 367 pass / 0 fail / 730 expect()                    |
+| test         | ✅ 408 pass / 0 fail / 801 expect()                    |
 | arch:check   | ✅ 0 circular / 0 deep-relative / 0 illegal layer edge |
 
 ---
