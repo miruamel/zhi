@@ -54,4 +54,28 @@ describe('retryWithBudget', () => {
     }, 2);
     expect(r.dlq!.error).toContain('object error');
   });
+
+  it('aborts immediately on fatal error (no retry budget consumed)', async () => {
+    let calls = 0;
+    const r = await retryWithBudget(async () => {
+      calls++;
+      throw new Error('fatal: budget exhausted');
+    }, 5);
+    expect(r.ok).toBe(false);
+    expect(r.attempts).toBe(1);
+    expect(calls).toBe(1);
+    expect(r.dlq).toBeDefined();
+    expect(r.dlq!.error).toContain('fatal: budget exhausted');
+  });
+
+  it('retries transient errors up to budget', async () => {
+    let calls = 0;
+    const r = await retryWithBudget(async () => {
+      calls++;
+      throw new Error('parse ambiguity');
+    }, 3);
+    expect(r.ok).toBe(false);
+    expect(r.attempts).toBe(3);
+    expect(calls).toBe(3);
+  });
 });

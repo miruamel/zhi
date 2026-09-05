@@ -1,4 +1,4 @@
-/** @brief Retry budget (max-3) + Dead Letter Queue. @since 0.1.1 */
+import { classifyError } from './recover';
 
 /** @brief Entri DLQ: kegagalan final yang tak boleh dibuang diam-diam. @since 0.1.1 */
 export interface DLQEntry {
@@ -38,6 +38,13 @@ export async function retryWithBudget<T>(
       return { ok: true, value, attempts: attempt };
     } catch (e) {
       lastErr = e;
+      if (classifyError(e).fatal) {
+        return {
+          ok: false,
+          attempts: attempt,
+          dlq: { error: String(e), attempts: attempt, at: Date.now() },
+        };
+      }
     }
   }
   return {
