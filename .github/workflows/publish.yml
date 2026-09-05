@@ -254,8 +254,6 @@ jobs:
             --notes "$NOTES" \
             --target main \
             --verify-tag \
-            artifacts/*.exe \
-            artifacts/zhi-* \
-            artifacts/*.sha256
+            artifacts/zhi-*
 
           echo "[release] GitHub Release created for $TAG"
