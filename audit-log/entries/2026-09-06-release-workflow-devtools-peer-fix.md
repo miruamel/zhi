@@ -52,3 +52,26 @@ Re-run setelah PR #133 merge masih gagal, tapi di tempat lain:
 - [x] PR #133 merged ke main (`05dc992`).
 - [x] Run 33985298555: 3/4 binary jobs sukses (linux-x64, macos-x64, macos-arm64); windows-x64 gagal karena pwsh (diperbaiki); npm-publish gagal karena flag tidak valid (diperbaiki).
 - [ ] Re-run `release` workflow untuk `v0.1.6` menghasilkan GitHub Release dengan 4 binary + 4 .sha256
+
+## Tahap empat: npm publish pre-check tidak mengenali package scoped (run 33985885471)
+Setelah PR #135 merge, re-run ketiga masih gagal di `Publish to npm` dengan error yang sama:
+`You cannot publish over the previously published versions: 0.1.6.`
+
+**Akar masalah:** pre-check menggunakan nama tidak-scoped:
+```bash
+if npm view "zhi@$VERSION" version >/dev/null 2>&1; then
+```
+Tapi `package.json` mendeklarasikan `"name": "@miruamel/zhi"`. `npm view zhi@0.1.6` mengembalikan 404, jadi pre-check tidak pernah short-circuit dan `npm publish` tetap dijalankan — lalu gagal.
+
+**Fix:** baca `NAME` dari `package.json` supaya bekerja untuk package scoped maupun tidak-scoped:
+```bash
+NAME=$(node -e "console.log(require('./package.json').name)")
+if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+```
+Commit `fc30b8e`, PR #137, closes #130.
+
+## Verifikasi (update)
+- [x] Run 33985885471: semua 4 binary jobs SUKSES (linux-x64, macos-x64, macos-arm64, windows-x64) — bukti fix devtools peer (PR #133) dan fix `shell: bash` (PR #135).
+- [x] `npm publish` masih gagal karena pre-check menggunakan nama tidak-scoped.
+- [ ] CI hijau pada PR #137.
+- [ ] Re-run `release` workflow untuk `v0.1.6` menghasilkan GitHub Release dengan 4 binary + 4 .sha256

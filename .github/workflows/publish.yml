@@ -203,8 +203,9 @@ jobs:
         # (it is silently ignored and the publish still fails). Use a check.
         run: |
           VERSION=$(node -e "console.log(require('./package.json').version)")
-          if npm view "zhi@$VERSION" version >/dev/null 2>&1; then
-            echo "zhi@$VERSION already published; skipping npm publish"
+          NAME=$(node -e "console.log(require('./package.json').name)")
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "$NAME@$VERSION already published; skipping npm publish"
           else
             npm publish --provenance --access public
           fi
