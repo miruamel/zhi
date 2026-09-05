@@ -73,24 +73,22 @@
   "engines": {
     "bun": ">=1.4.0"
   },
-  "dependencies": {
-    "ink": "^4",
-    "react": "^18",
-    "@types/react": "^18"
-  },
   "devDependencies": {
-    "@commitlint/cli": "^19.0.0",
-    "@commitlint/config-conventional": "^19.0.0",
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "@types/react": "^18.3.31",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
-    "bun-types": "1.4.0",
-    "eslint": "9.39.5",
-    "eslint-plugin-jsdoc": "^50.0.0",
+    "bun-types": "^1.4.1",
+    "eslint": "^10.10.0",
+    "eslint-plugin-jsdoc": "^64.3.5",
     "eslint-visitor-keys": "^5.0.1",
     "husky": "^9.0.0",
-    "lint-staged": "^15.0.0",
+    "ink": "^4.4.1",
+    "lint-staged": "^17.4.1",
     "prettier": "^3.0.0",
-    "typescript": "^5.4.0"
+    "react": "^18.3.1",
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

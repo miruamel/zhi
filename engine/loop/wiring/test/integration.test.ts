@@ -45,10 +45,14 @@ describe('loop integration', () => {
     let calls = 0;
     const ctx: LoopContext = { goal: 'fix bug' };
     const seen: LoopState[] = [];
+    const metrics = new LoopMetrics();
     const driver = new LoopDriver({ onTransition: (from) => seen.push(from) });
-    await driver.run(buildHandlers(ctx, deps({ critique: () => (++calls === 1 ? low : high) })));
+    await driver.run(
+      buildHandlers(ctx, deps({ critique: () => (++calls === 1 ? low : high) }), metrics),
+    );
     expect(driver.finished).toBe(true);
     expect(seen.includes(LoopState.RECOVER)).toBe(true);
+    expect(metrics.recoverAttempts).toBe(1);
     expect(ctx.aggregate?.score).toBe(1);
   });
 
@@ -62,10 +66,12 @@ describe('loop integration', () => {
 
   it('aborts gracefully after recover budget (no infinite spin)', async () => {
     const ctx: LoopContext = { goal: 'x' };
+    const metrics = new LoopMetrics();
     const driver = new LoopDriver();
-    await driver.run(buildHandlers(ctx, deps({ critique: () => low })));
+    await driver.run(buildHandlers(ctx, deps({ critique: () => low }), metrics));
     expect(driver.finished).toBe(true);
     expect(ctx.attempts).toBe(3);
+    expect(metrics.recoverAttempts).toBe(3);
     expect(ctx.error).toMatch(/recover exhausted/);
   });
   it('records per-stage metrics when metrics passed', async () => {

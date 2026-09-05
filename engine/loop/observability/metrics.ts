@@ -29,15 +29,15 @@ export class LoopMetrics {
     return this.records;
   }
 
-  /** @brief Ringkasan agregat. @return {{totalMs:number;errors:number;stages:number}} */
-  summary(): { totalMs: number; errors: number; stages: number } {
+  /** @brief Ringkasan agregat. @return {{totalMs:number;errors:number;stages:number;recoverAttempts:number}} */
+  summary(): { totalMs: number; errors: number; stages: number; recoverAttempts: number } {
     let totalMs = 0;
     let errors = 0;
     for (const r of this.records) {
       totalMs += r.ms;
       if (!r.ok) errors++;
     }
-    return { totalMs, errors, stages: this.records.length };
+    return { totalMs, errors, stages: this.records.length, recoverAttempts: this.recoverAttempts };
   }
 }
 
