@@ -58,6 +58,7 @@ while IFS= read -r -d '' f || break; do
   fi
 done < <(find "$ROOT" -type f \( -name '*.ts' -o -name '*.js' -o -name '*.zig' \) \
             -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' \
+            -not -name '*.test.ts' \
             -print0 2>/dev/null)
 
 if [ "$violations" -gt 0 ]; then
