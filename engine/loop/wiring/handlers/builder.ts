@@ -81,6 +81,7 @@ export function buildHandlers(
     },
     [LoopState.RECOVER]: () => {
       ctx.attempts = (ctx.attempts ?? 0) + 1;
+      if (metrics) metrics.recoverAttempts = ctx.attempts;
       const signal = [
         ctx.eval ? ctx.eval.reasons.join(' ') : '',
         ctx.aggregate ? `pareto ${ctx.aggregate.score} < ${deps.paretoThreshold}` : '',
