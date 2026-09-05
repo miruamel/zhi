@@ -24,7 +24,6 @@ export function toPatch(
   ctx: LoopContext,
   metrics: LoopMetrics,
   loop: LoopState,
-  aborted: boolean,
 ): Partial<AppState> {
   return {
     loop,
@@ -33,7 +32,7 @@ export function toPatch(
       name: c.name,
       score: c.score,
       abstain: false,
-      reason: c.findings[0],
+      reason: c.findings[0] ?? 'passes without issues',
     })),
     eval: {
       build: { name: 'build', ok: false, detail: '', durationMs: 0 },
@@ -55,8 +54,8 @@ export function toPatch(
     },
     log: [],
     finished: loop === LoopState.DONE,
-    aborted,
-    partial: aborted && loop !== LoopState.DONE,
+    aborted: !!ctx.aborted,
+    partial: !!ctx.aborted && loop !== LoopState.DONE,
   };
 }
 
@@ -87,7 +86,7 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
   const driver = new LoopDriver({
     onTransition: (_from, _ev, to) => {
       logger.transition(_from, _ev, to);
-      holder.push?.(toPatch(ctx, metrics, to, !!ctx.error));
+      holder.push?.(toPatch(ctx, metrics, to));
     },
   });
   const handlers = buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics);
@@ -95,7 +94,10 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
     goal,
     threshold,
     tokensBudget: 100_000,
-    onAbort: () => driver.abort(),
+    onAbort: () => {
+      ctx.aborted = true;
+      driver.abort();
+    },
     onQuit: () => {
       unmount();
       process.exit(0);

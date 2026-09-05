@@ -24,6 +24,8 @@ export interface LoopContext {
   prUrl?: string;
   /** @brief Pesan error terakhir. */
   error?: string;
+  /** @brief Loop di-abort (bila error fatal). */
+  aborted?: boolean;
   /** @brief Budget komputasi terpakai. */
   budgetUsed?: number;
   /** @brief Jumlah recovery yang sudah dicoba (RECOVER). */
