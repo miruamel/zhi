@@ -110,6 +110,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install ink devtools peer
+        # ink's optional peer `react-devtools-core` is statically resolved by
+        # `bun build --compile` even though it is runtime-guarded behind
+        # `process.env['DEV'] === 'true'` in ink/build/reconciler.js.
+        # `--no-save` keeps it out of the lockfile: it is ink's peer, not zhi's.
+        run: npm install -D react-devtools-core@^4.19.1 --no-save
+
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
