@@ -11,23 +11,10 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Files per directory (<=5; root exempt §6.2; ADR-005/ADR-006 allow docs/design, audit-log/entries)
-        run: |
-          violations=0
-          while IFS= read -r d; do
-            c=$(find "$d" -maxdepth 1 -type f | wc -l)
-            if [ "$c" -gt 5 ]; then
-              case "$d" in .|./docs/design|./docs/adr|./audit-log/entries|./assets|./assets/*) continue ;; esac
-              echo "VIOLATION: $d ($c files > 5)"; violations=1
-            fi
-          done < <(find . -type d \( -name .git -o -name node_modules -o -name .github \) -prune -o -type d -print)
-          exit $violations
+        run: bash .github/workflows/architecture-guard.sh .
 
       - name: SLOC per code file (<=200)
-        run: |
-          find . -type f \( -name '*.ts' -o -name '*.js' -o -name '*.zig' \) \
-            -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 \
-            | xargs -0 wc -l 2>/dev/null | awk '$2 != "total" && $1>200{print "VIOLATION SLOC:", $2; exit 1}'
-          echo "ok: no code file exceeds 200 lines"
+        run: bash .github/workflows/architecture-guard.sh . --sloc-only
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:

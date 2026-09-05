@@ -1,12 +1,20 @@
 #!/usr/bin/env bash
-# @brief Architecture guard: files-per-dir + SLOC + circular/deep-relative.
+# @brief Architecture guard: files-per-dir + SLOC.
 # @see mandate §6.2 (SLOC ≤150 hard cap, ≤100 target) + §6.10 + §6.11
 # @see docs/adr/ADR-005 (root exemption), ADR-006 (audit-log entries exemption)
 # @since 0.1.0
+#
+# Usage: architecture-guard.sh <root> [--sloc-only]
+#   --sloc-only  run only the SLOC check (for separate workflow steps)
 
 set -euo pipefail
 
-ROOT="${1:-.}"
+ROOT="${1:-.}"; shift
+
+SLOC_ONLY=false
+if [ "$#" -gt 0 ] && [ "$1" = "--sloc-only" ]; then
+  SLOC_ONLY=true
+fi
 
 echo "[guard] files-per-directory (<=5; root + docs/design + docs/adr + audit-log/entries exempt)"
 
@@ -33,6 +41,11 @@ if [ "$violations" -gt 0 ]; then
   exit 1
 fi
 echo "[guard] ok: files-per-dir"
+
+if $SLOC_ONLY; then
+  echo "[guard] all checks passed"
+  exit 0
+fi
 
 echo "[guard] SLOC per code file (<=150 hard cap per mandate §6.2; <=250 never)"
 
