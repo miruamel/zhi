@@ -7,7 +7,7 @@
  * @since 0.1.2
  */
 import type { LoopDeps } from '@engine/loop/wiring/handlers';
-import { gitIsolate, gitCommit, ghPrOpen } from '@engine/loop/wiring/git';
+import { gitIsolate, gitCommit, ghPrOpen, ghCiWatch } from '@engine/loop/wiring/git';
 import { evaluate } from '@engine/eval/index';
 
 /** @brief Aktifkan git/gh nyata bila ZHI_AUTO_PR=1. @param {LoopDeps} base @param {string} goal @return {LoopDeps} */
@@ -21,5 +21,6 @@ export function autonomousDeps(base: LoopDeps, goal: string): LoopDeps {
     commit: (wt) => gitCommit(wt, 'chore: autoloop generated changes'),
     prOpen: (wt, t, b) => ghPrOpen(wt, t, b),
     eval: (wt) => evaluate(wt),
+    ciWatch: () => ghCiWatch(),
   };
 }

@@ -68,7 +68,10 @@ export function buildHandlers(
       ctx.eval =
         deps.eval && ctx.worktree
           ? deps.eval(ctx.worktree)
-          : gate({ score: ctx.aggregate?.score ?? 0, criteria: [], blockers: [] });
+          : gate(
+              { score: ctx.aggregate?.score ?? 0, criteria: [], blockers: [] },
+              deps.paretoThreshold,
+            );
       const ok = gatePass(LoopState.EVALUATE, {
         paretoScore: ctx.aggregate?.score ?? 0,
         paretoThreshold: deps.paretoThreshold,

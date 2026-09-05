@@ -28,7 +28,7 @@ export function toPatch(
 ): Partial<AppState> {
   return {
     loop,
-    metrics: { stages: 0, errors: 0, totalMs: 0, recoverAttempts: metrics.recoverAttempts },
+    metrics: { ...metrics.summary(), recoverAttempts: metrics.recoverAttempts },
     critics: (ctx.critiques ?? []).map((c: Critique) => ({
       name: c.name,
       score: c.score,
