@@ -13,12 +13,133 @@ on:
 
 permissions:
   contents: write
-  id-token: write # Required for npm provenance (sigstore)
+  id-token: write
 
 jobs:
-  release:
-    name: Build + Publish
+  gate:
+    name: Gate
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Gate
+        run: bun run gate
+
+  prepare:
+    name: Prepare build
+    runs-on: ubuntu-latest
+    needs: gate
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Zig 0.16.0
+        run: |
+          ZIG_VER=0.16.0
+          URL="https://ziglang.org/download/${ZIG_VER}/zig-x86_64-linux-${ZIG_VER}.tar.xz"
+          curl -fsSL "$URL" -o /tmp/zig.tar.xz
+          tar -xf /tmp/zig.tar.xz -C /opt
+          echo "/opt/zig-x86_64-linux-${ZIG_VER}" >> "$GITHUB_PATH"
+
+      - name: Build Zig WASM
+        run: bun run native:build
+
+      - name: Build TypeScript to dist/
+        run: bun run build
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist/
+            node_modules/
+
+  build-binary:
+    name: Build binary (${{ matrix.platform }})
+    runs-on: ${{ matrix.os }}
+    needs: gate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-x64
+            ext: ""
+          - os: macos-latest
+            platform: macos-x64
+            ext: ""
+          - os: macos-latest
+            platform: macos-arm64
+            ext: ""
+          - os: windows-latest
+            platform: windows-x64
+            ext: ".exe"
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist/
+            node_modules/
+
+      - name: Build binary (${{ matrix.platform }})
+        id: build
+        run: |
+          FILE="zhi-${{ matrix.platform }}${{ matrix.ext }}"
+          bun build --compile ./dist/cli.js --outfile "$FILE"
+          echo "file=$FILE" >> "$GITHUB_OUTPUT"
+          echo "size=$(stat -c%s "$FILE")" >> "$GITHUB_OUTPUT"
+
+      - name: Compute checksum
+        run: |
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            certutil -hashfile "${{ steps.build.outputs.file }}" SHA256 | grep -v ":" | tr -d " " > "${{ steps.build.outputs.file }}.sha256"
+          else
+            shasum -a 256 "${{ steps.build.outputs.file }}" > "${{ steps.build.outputs.file }}.sha256"
+          fi
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-${{ matrix.platform }}
+          path: |
+            ${{ steps.build.outputs.file }}
+            ${{ steps.build.outputs.file }}.sha256
+
+  npm-publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    needs: gate
     steps:
       - uses: actions/checkout@v6
         with:
@@ -30,7 +151,7 @@ jobs:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Upgrade npm to latest
+      - name: Upgrade npm
         run: npm install -g npm@11
 
       - name: Setup Bun
@@ -41,10 +162,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Gate (lint + format + typecheck + test)
-        run: bun run gate
-
-      - name: Setup Zig 0.16.0 (direct download; setup-zig mirror lacks 0.16.0)
+      - name: Setup Zig 0.16.0
         run: |
           ZIG_VER=0.16.0
           URL="https://ziglang.org/download/${ZIG_VER}/zig-x86_64-linux-${ZIG_VER}.tar.xz"
@@ -52,44 +170,61 @@ jobs:
           tar -xf /tmp/zig.tar.xz -C /opt
           echo "/opt/zig-x86_64-linux-${ZIG_VER}" >> "$GITHUB_PATH"
 
-      - name: Build Zig WASM
+      - name: Build WASM
         run: bun run native:build
 
-      - name: Build TypeScript to dist/ (copies WASM into dist/)
+      - name: Build dist
         run: bun run build
 
-      - name: Publish to npm (@miruamel/zhi) via OIDC Trusted Publisher
-        # Trusted Publisher sudah terdaftar di npmjs.com (miruamel/zhi → publish.yml,
-        # scopes: npm publish + npm stage publish). Pakai OIDC; tidak butuh NPM_TOKEN.
-        run: |
-          # `id-token: write` (line 16) + `--provenance` (sigstore) memberi npmjs.com
-          # signed OIDC token dari GitHub Actions → npm verify trust → publish.
-          npm publish --provenance --access public
-          echo "[release] published to npm registry via OIDC"
+      - name: Publish to npm
+        run: npm publish --provenance --access public
 
-      - name: Create GitHub Release
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [gate, build-binary]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download all binaries
+        uses: actions/download-artifact@v4
+        with:
+          pattern: binary-*
+          path: artifacts/
+          merge-multiple: true
+
+      - name: Display artifacts
+        run: ls -lh artifacts/
+
+      - name: Create GitHub Release
         run: |
-          # Validate tag format (vX.Y.Z only) to prevent awk-regex injection.
           TAG="${GITHUB_REF_NAME}"
           if ! [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::Invalid tag format '$TAG' (expected vX.Y.Z)"
+            echo "::error::Invalid tag format '$TAG'"
             exit 1
           fi
           VERSION="${TAG#v}"
-          # Extract notes dari CHANGES.md untuk version ini (section [X.Y.Z]).
+
           NOTES=$(awk -v ver="$VERSION" '
             $0 ~ "^## \\[" ver "\\]" {p=1; next}
             p && /^## \[/ {exit}
             p {print}
           ' CHANGES.md)
           if [ -z "$NOTES" ]; then
-            NOTES="Release $TAG. Lihat CHANGES.md untuk detail."
+            NOTES="Release $TAG"
           fi
+
           gh release create "$TAG" \
             --title "$TAG" \
             --notes "$NOTES" \
             --target main \
-            --verify-tag
+            --verify-tag \
+            artifacts/*.exe \
+            artifacts/zhi-* \
+            artifacts/*.sha256
+
           echo "[release] GitHub Release created for $TAG"
