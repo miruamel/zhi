@@ -3,7 +3,7 @@
  * Testable without ink rendering. @since 0.1.4
  */
 import type { KeyAction } from './keymap';
-import type { AppState } from './state';
+import type { AppState } from '../state';
 
 export interface KeyHandlerDeps {
   setState: (patch: Partial<AppState>) => void;
