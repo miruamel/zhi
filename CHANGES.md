@@ -14,12 +14,6 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
-## [0.1.5] - 2026-09-05
-
-### Fixed
-
-- **CI architecture-guard fully green** — three root causes fixed across `architecture.yml` and `architecture-guard.sh`: (1) `while read` silently exited under `set -euo pipefail` when downstream (e.g. `head`) closed the pipe; fixed with `|| break`. (2) Test dirs were not exempt from files-per-dir cap; added `*"/test"|*"/test"/*` patterns to case statement. (3) Test files exceeded 150-line SLOC cap; added `-not -name '*.test.ts'` to SLOC find. (4) `architecture.yml` had its own inline bash that diverged from the script; replaced with `bash .github/workflows/architecture-guard.sh`. (5) `shift` without args caused silent exit before first echo; fixed to `shift` only when args present. `src/tui/core/` reorganized to 4 files (keyhandler+keymap moved to `core/handlers/`), test imports updated. Test suite 408 pass / 0 fail / 801 expect() across 76 files.
-
 ## [0.1.4] - 2026-09-04
 
 ### Added
