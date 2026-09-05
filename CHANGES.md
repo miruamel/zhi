@@ -51,6 +51,12 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 - **Audit-log stale fact sweep** — 3 historical entries (`ci-green-all-runs.md`, `state-sync-8.md`, `rebase-completion.md`) carried outdated audit counts (78/80 instead of 82). Fixed: `ci-green-all-runs.md` 4 lines "78 entries" → 86; `state-sync-8.md` line 41 "78 entries" → 86; `rebase-completion.md` verification table "80" → 86 and "74→78" → "78→86". New entry `2026-09-05-stale-fact-sweep.md` documents the sweep. Audit-log now 86/86 consistent (disk = 86, README = 86, header = 86).
 
+- **Loop metrics, gate threshold, and ghCiWatch wiring (Issues #111, #112, #113)** — three dead-code bugs in the autonomous loop deps:
+  1. **#111** — `loop.ts:31` `toPatch()` hardcoded `stages: 0, errors: 0, totalMs: 0`, discarding `LoopMetrics.summary()` output. Now spreads `metrics.summary()` plus `recoverAttempts`. TUI metrics display was dead; it is live.
+  2. **#112** — `builder.ts:71` `gate()` defaulted to `threshold = 0.7` while `gatePass()` used `deps.paretoThreshold` (default 0.8). User `--threshold 0.9` was silently ignored. Now passes `deps.paretoThreshold` as the second arg.
+  3. **#113** — `ghCiWatch()` at `engine/loop/wiring/git.ts:50` was never wired into `autonomousDeps()`, so `CI_WATCH` handler always fell through to `'green'`. Added `ciWatch: () => ghCiWatch()` to the return object. `eval` field restored (was accidentally dropped when `ciWatch` was added).
+     Gate green: 370 pass / 0 fail / 739 expect() across 73 files. `tsc` clean, `prettier` clean, `eslint` 0 errors.
+
 ## [0.1.3] - 2026-09-03
 
 ### Test
