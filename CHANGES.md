@@ -57,6 +57,8 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
   3. **#113** — `ghCiWatch()` at `engine/loop/wiring/git.ts:50` was never wired into `autonomousDeps()`, so `CI_WATCH` handler always fell through to `'green'`. Added `ciWatch: () => ghCiWatch()` to the return object. `eval` field restored (was accidentally dropped when `ciWatch` was added).
      Gate green: 370 pass / 0 fail / 739 expect() across 73 files. `tsc` clean, `prettier` clean, `eslint` 0 errors.
 
+- **recoverAttempts metric now live (Issue #106)** — `LoopMetrics.recoverAttempts` was declared at `metrics.ts:20` and consumed at `loop.ts:31` → `toPatch()` → TUI Detail pane, but no code path ever wrote to it. The RECOVER handler at `builder.ts:83` incremented `ctx.attempts` (the live counter) but never mirrored it into `metrics.recoverAttempts`, so the Detail pane permanently displayed `recover attempts: 0` regardless of how many recovery cycles the loop executed. Fix (commit `fcab565`): `if (metrics) metrics.recoverAttempts = ctx.attempts` immediately after the increment. Gate green: 370 pass / 0 fail / 739 expect() across 73 files. Test gap (no test exercises this path with a real `LoopMetrics` instance) tracked in #114.
+
 ## [0.1.3] - 2026-09-03
 
 ### Test
