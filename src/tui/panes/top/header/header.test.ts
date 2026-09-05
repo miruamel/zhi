@@ -11,8 +11,10 @@ function renderToString(el: ReactNode): string {
       chunks.push(chunk);
       return true;
     },
-  };
-  const inst = render(el as any, { stdout: stdout as any });
+    on: () => {},
+    off: () => {},
+  } as any;
+  const inst = render(el as any, { stdout });
   inst.unmount();
   return chunks.join('');
 }

@@ -1,6 +1,7 @@
 /** @brief Adapter git/gh deterministik untuk state ISOLATE/PR_OPEN/CI_WATCH. @since 0.1.1 */
 import { spawnSync, type SpawnSyncReturns } from 'node:child_process';
 import { resolve } from 'node:path';
+import { rmSync } from 'node:fs';
 
 /** @brief Batas waktu default per command (ms). @since 0.1.2 */
 const DEFAULT_TIMEOUT_MS = 30000;
@@ -26,6 +27,7 @@ export function run(
     cwd,
     encoding: 'utf8',
     timeout: timeoutMs || undefined,
+    input: '',
   }) as SpawnSyncReturns<string>;
   if (r.error) throw new Error(`git/gh spawn error: ${cmd.join(' ')} -> ${r.error.message}`);
   if (r.status !== 0) {
@@ -53,6 +55,11 @@ export function worktreePath(branch: string): string {
 export function gitIsolate(goal: string): string {
   const branch = branchSlug(goal);
   const wt = worktreePath(branch);
+  // Idempotent cleanup: rmSync handles dirs that aren't valid git worktrees
+  // (git worktree remove exits 128 for those), then git cleanup handles the rest.
+  try { rmSync(wt, { recursive: true, force: true }); } catch { /* ignore */ }
+  try { run(['git', 'worktree', 'remove', '--force', wt]); } catch { /* ignore */ }
+  try { run(['git', 'branch', '-D', branch]); } catch { /* ignore */ }
   run(['git', 'worktree', 'add', wt, '-b', branch]);
   return wt;
 }
