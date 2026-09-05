@@ -1,7 +1,6 @@
 /** @brief Orchestrator resilience: breaker + retry + recovery. @since 0.1.1 */
 import { CircuitBreaker } from './breaker';
 import { retryWithBudget, type RetryResult, type DLQEntry } from './retry';
-import { classifyError } from './recover';
 
 /** @brief Context resilience untuk withResilience. @since 0.1.1 */
 export interface ResilCtx {
