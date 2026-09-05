@@ -21,6 +21,10 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 - **Multi-platform binary release via `bun build --compile`** — `publish.yml` now produces native binaries for `linux-x64`, `macos-x64`, `macos-arm64`, `windows-x64` and attaches them to the GitHub Release alongside SHA256 checksums. Users can download a self-contained `zhi` binary without needing Bun or Node.js installed.
 - **Developer utility scripts** — root-level executable scripts: `dev.sh` (watch mode), `setup.sh` (initial setup), `install.sh` (deps + build), `test.sh` (with args passthrough), `release.sh` (version tag helper), `clean.sh` (remove artifacts), `lint.sh [--fix]`, `format.sh`, `ci.sh` (full local CI), `build.sh`, `verify.sh` (clean + install + build + gate).
 
+### Fixed
+
+- **`publish.yml` binary build failures (root cause: two issues)** — (1) `build-binary` jobs had `needs: gate` but not `needs: prepare`, so binary jobs started before the `dist` artifact was uploaded. Changed to `needs: [gate, prepare]`. (2) `package.json` entry points (`bin`, `main`, `exports`) referenced `./dist/cli.js` and `./dist/index.js`, but `tsc` with `rootDir: "./"` and `outDir: "./dist"` outputs to `dist/src/cli/index.js` and `dist/src/index.js`. Fixed `bin` → `./dist/src/cli/index.js`, `main`/`module`/`exports` → `./dist/src/index.js`, and `publish.yml` binary build command → `./dist/src/cli/index.js`. `create-release` now also waits for `npm-publish`. Debug `ls dist/` step added to binary jobs for future diagnostics.
+
 ## [0.1.5] - 2026-09-06
 
 ### Security

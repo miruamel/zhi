@@ -5,15 +5,15 @@
   "maturity": "experimental",
   "description": "Autonomous terminal coding agent with multi-critic loop engine (Bun-native TS).",
   "bin": {
-    "zhi": "./dist/cli.js"
+    "zhi": "./dist/src/cli/index.js"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
     },
     "./engine/*": "./dist/engine/*.js",
     "./src/*": "./dist/src/*.js",

@@ -108,11 +108,14 @@ jobs:
           name: dist
           path: dist/
 
+      - name: List dist contents
+        run: ls -la dist/ && ls -la dist/src/cli/
+
       - name: Build binary (${{ matrix.platform }})
         id: build
         run: |
           FILE="zhi-${{ matrix.platform }}${{ matrix.ext }}"
-          bun build --compile ./dist/cli.js --outfile "$FILE"
+          bun build --compile ./dist/src/cli/index.js --outfile "$FILE"
           echo "file=$FILE" >> "$GITHUB_OUTPUT"
           echo "size=$(stat -c%s "$FILE")" >> "$GITHUB_OUTPUT"
 
