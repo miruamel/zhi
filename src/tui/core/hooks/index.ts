@@ -4,5 +4,5 @@
 export { useDebounce } from './useDebounce';
 export { useThrottle } from './useThrottle';
 export { useLocalStorage } from './useLocalStorage';
-export { useStream } from './useStream';
+export { useStream } from './stream/useStream';
 export { useFocus, type NavigationState } from './useNavigation';
