@@ -60,4 +60,19 @@ jobs:
           if [ -s /tmp/audit.json ]; then
             echo "=== npm audit summary ==="
             node -e 'const d=require("/tmp/audit.json");const v=d.vulnerabilities||{};for(const s of ["critical","high","moderate","low"]){const c=v[s]||0;if(c>0)console.log(s+": "+c)}'
-          fi
+  gitleaks:
+    name: Secret Detection (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install gitleaks
+        run: |
+          curl -L https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_linux_x64.tar.gz -o /tmp/gitleaks.tar.gz
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp/
+          sudo cp /tmp/gitleaks /usr/local/bin/
+
+      - name: Run gitleaks
+        run: gitleaks detect --source . --config .gitleaks.toml --verbose --no-git
