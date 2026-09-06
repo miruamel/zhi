@@ -16,11 +16,17 @@ import { generate as scaffold } from '@engine/build/generate';
 import { verify } from '@engine/build/verify';
 import { compress } from '@engine/build/context/compress';
 import { composeCritiques } from '@engine/critic/plant/compose';
+import type { CruiserRunner } from '@engine/critic/plant/architecture/critic';
 import { selectInvoker } from '@engine/model/invoker';
 import { planSymbol } from '../plan-symbol/plan-symbol';
 
-/** @brief Deps loop mode offline: LocalStubInvoker, no git, no gh. @param {number} threshold @return {LoopDeps} */
-export function offlineDeps(threshold: number): LoopDeps {
+/** @brief Deps loop mode offline: LocalStubInvoker, no git, no gh.
+ * @param {number} threshold - ambang Pareto (0..1).
+ * @param {CruiserRunner} [architectureRunner] - injectable for tests; defaults to real dependency-cruiser.
+ * @return {LoopDeps} deps siap pakai untuk buildHandlers.
+ * @since 0.1.2
+ */
+export function offlineDeps(threshold: number, architectureRunner?: CruiserRunner): LoopDeps {
   return {
     ingest: (g) => g.trim(),
     plan: (g) => {
@@ -46,7 +52,7 @@ export function offlineDeps(threshold: number): LoopDeps {
         : `// verify: FAIL\n${report.violations.map((v) => `//   - ${v}`).join('\n')}`;
       return `${body}\n${verdict}`;
     },
-    critique: (code) => composeCritiques([{ path: 'generated.ts', content: code }]),
+    critique: (code) => composeCritiques([{ path: 'generated.ts', content: code }], architectureRunner),
     compress: (code) =>
       compress({ entries: [{ key: 'code', weight: 1, text: code }], budget: 20000 }).entries[0]
         ?.text ?? '',
