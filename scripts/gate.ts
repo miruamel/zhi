@@ -1,11 +1,9 @@
 #!/usr/bin/env bun
 /**
- *   bun run scripts/gate.ts              # full gate (lint + format + typecheck + native:build + test)
- *   bun run scripts/gate.ts --if-changed # skip typecheck+test when only docs/markdown changed
- * @brief Gate orchestrator: lint + format + typecheck + test, with optional docs-only fast-path.
+ * @brief Gate orchestrator: lint + format + typecheck + native:build + test, dengan fast-path opsional.
  *
  * Usage:
- *   bun run scripts/gate.ts              # full gate
+ *   bun run scripts/gate.ts              # full gate (lint + format + typecheck + native:build + test)
  *   bun run scripts/gate.ts --if-changed # skip typecheck+test when only docs/markdown changed
  *
  * When --if-changed is passed, the script inspects the diff between the current

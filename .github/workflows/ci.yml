@@ -32,7 +32,13 @@ jobs:
       - name: Architecture guard (custom bash checks)
         run: bash .github/workflows/architecture-guard.sh
 
-      - name: Gate (lint + format + typecheck + test, docs-only fast-path)
+      - name: Setup Zig 0.14.0 (gate needs native:build for WASM artifact)
+        run: |
+          curl -L https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz -o /tmp/zig.tar.xz
+          tar -xJf /tmp/zig.tar.xz -C /tmp/
+          echo "ZIG_BIN=/tmp/zig-linux-x86_64-0.14.0/zig" >> $GITHUB_ENV
+
+      - name: Gate (lint + format + typecheck + native:build + test, docs-only fast-path)
         run: bun run gate
 
   build:
