@@ -69,6 +69,7 @@ export async function loopCommand(argv: string[]): Promise<LoopContext> {
   const driver = new LoopDriver({
     onTransition: (from, ev, to) => logger.transition(from, ev, to),
   });
+  metrics.reset();
   await driver.run(buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics));
   const s = metrics.summary();
   console.log(`[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}`);
@@ -106,6 +107,7 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
       holder.push = p;
     },
   });
+  metrics.reset();
   await driver.run(handlers);
   unmount();
   const s = metrics.summary();
