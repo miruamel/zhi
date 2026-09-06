@@ -7,12 +7,10 @@ interface SinkPattern {
   label: string;
 }
 
-// ponytail: hanya sink eksplisit high-confidence. Sink kontekstual (SQL tanpa
-// parameter) butuh analisis alur; di luar scope static single-file. Tambah di sini
-// bila ada bukti injeksi nyata di artefak generated.
+// ponytail: improved to catch Function and new Function. Next: contextual SQL injection via taint analysis if generated artifacts show evidence.
 const SINK_RES: SinkPattern[] = [
   { re: /(?<!\.)\beval\s*\(/, label: 'eval-call' },
-  { re: /\bnew\s+Function\s*\(/, label: 'new-function' },
+  { re: /\b(?:new\s+)?Function\s*\(/, label: 'function-call' },
   { re: /innerHTML\s*=/, label: 'innerHTML-assign' },
   { re: /dangerouslySetInnerHTML/, label: 'dangerously-set-inner-html' },
   { re: /\bchild_process\.(exec|execSync)\s*\(/, label: 'child-process-exec' },

@@ -8,11 +8,9 @@ export interface VerifyResult {
 }
 
 const MAX_FILES_PER_DIR = 5;
-// ponytail: cukup deteksi ../.. (3+ level naik) sebagai pelanggaran deep-relative.
+// ponytail: hitung level naik persis (>=2 level naik dianggap pelanggaran).
 // Scaffold saat ini belum punya import nyata; aturan ini siap saat generate mulai
-// menulis import antar-modul. Upgrade: hitung level naik persis, bukan regex.
-const DEEP_RELATIVE = /\.\.\/\.\./;
-
+// menulis import antar-modul.
 /** @brief Verifikasi scaffold: jumlah file per dir, header Doxygen, import relatif dalam.
  * @param {ScaffoldFile[]} files - hasil generate().
  * @return {VerifyResult} ok + daftar pelanggaran (kosong bila lolos).
@@ -25,9 +23,17 @@ export function verify(files: ScaffoldFile[]): VerifyResult {
     byDir.set(dir, (byDir.get(dir) ?? 0) + 1);
     if (!/@brief/.test(f.content)) violations.push(`missing @brief: ${f.path}`);
     for (const line of f.content.split('\n')) {
-      if (/^\s*import\s/.test(line) && DEEP_RELATIVE.test(line)) {
-        violations.push(`deep relative import: ${f.path}`);
-        break;
+      const match = line.match(/^\s*import\s+.*from\s+['"]([^'"]+)['"]/);
+      if (match) {
+        const spec = match[1];
+        if (spec.startsWith('.')) {
+          const ups = (spec.match(/\.\.\//g) ?? []).length;
+          if (ups >= 2) {
+            // 2 or more levels up is considered a violation
+            violations.push(`deep relative import (${ups} levels up): ${f.path}`);
+            break;
+          }
+        }
       }
     }
   }
