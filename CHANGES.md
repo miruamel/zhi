@@ -19,7 +19,10 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 ### Fixed
 
 - **TS6133 unused variable errors in critic plants** — `tsc --noEmit` with `noUnusedLocals: true` caught two unused `const` declarations: `ONCLICK_RE` in `engine/critic/plant/accessibility/critic.ts` and `EXPORT_RE`/`BRIEF_RE` in `engine/critic/plant/doc/critic.ts`. All three removed. Gate green: 412 pass / 0 fail / 821 expect() across 76 files.
-- **`.qwen/` session files excluded from git** — `.qwen/` directory (Qwen Code tooling, NgodingPakeAI sync state) was not in `.gitignore`, causing temporary session files to leak into git history. Added `.qwen/` to the local tooling exclusion section of `.gitignore`.
+- **Gate builds native WASM before test (Issue #146, PR #147)** — `scripts/gate.ts` ran `bun run test` without first building the native WASM artifact (`native/out/stream.wasm`). The artifact is gitignored, so a fresh checkout had no WASM — SSE parser tests failed with empty results. Added `run('native:build', 'bun run native:build')` between typecheck and test in the full-gate path. CI gate job now installs Zig 0.14.0 before running the gate (the build job installed Zig only after the gate). Release gate job (`publish.yml`) also got Zig 0.16.0. Verified: `rm -rf native/out && bun run scripts/gate.ts` → 408 pass / 0 fail / 801 expect() across 76 files.
+- **Gate shallow-clone safety net (Issue #146, PR #147)** — `getChangedFiles()` failed both diffs on shallow PR checkouts (no `origin/main` ref, no `HEAD~1`), returning an empty file list. The fast-path then skipped typecheck + native:build + test on every PR. Added a guard: empty diff → full gate, never fast-path. CI gate job now uses `fetch-depth: 0`.
+- **`curl -f` on all Zig download calls (Issue #146, PR #147)** — `curl -L` without `-f` in `ci.yml` gate and build jobs would save an HTML error page on a 404/500, then `tar -xJf` fails with a confusing message. Both calls now use `curl -fsSL`, matching `publish.yml` and `architecture.yml`.
+- **Issue #143 closed** — `.gitignore` was unconditionally treated as docs-only by `isDocsOnly()`, allowing the fast-path to skip typecheck+test when `.gitignore` changed alongside docs. Fixed in PR #144 (commit `b269aad`): removed `.gitignore` from the allowlist. `scripts/gate.test.ts` (22 cases) covers the classification. Gate green: 408 pass / 0 fail / 801 expect() across 76 files.
 
 ## [0.1.6] - 2026-09-06
 
@@ -189,11 +192,14 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 | lint         | n/a (no eslint)   | 0 errors (124 JSDoc `@returns` warnings = baseline) |
 | format:check | n/a               | clean                                               |
 | test         | 210 pass / 4 fail | 214 pass / 0 fail                                   |
-
+[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.7...HEAD
+[0.1.7]: https://github.com/miruamel/zhi/releases/tag/v0.1.7
 ## [0.1.0] - 2026-08-29
 
 First tagged baseline. See [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md) for the full 2026-08-29 → 2026-08-30 development log (15 entries; note: that history uses inconsistent version headers `[0.1.0]` duplicated and a non-monotonic `0.1.0..0.6.0` block — preserved as-is for authorial record).
-[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.7...HEAD
+[0.1.7]: https://github.com/miruamel/zhi/releases/tag/v0.1.7
+[0.1.6]: https://github.com/miruamel/zhi/releases/tag/v0.1.6
 [0.1.5]: https://github.com/miruamel/zhi/releases/tag/v0.1.5
 [0.1.4]: https://github.com/miruamel/zhi/releases/tag/v0.1.4
 [0.1.3]: https://github.com/miruamel/zhi/releases/tag/v0.1.3
