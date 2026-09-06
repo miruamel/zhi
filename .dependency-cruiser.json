@@ -1,0 +1,40 @@
+{
+  "forbidden": [
+    {
+      "name": "no-circular",
+      "severity": "error",
+      "from": {},
+      "to": {
+        "circular": true
+      }
+    },
+    {
+      "name": "no-engine-to-src",
+      "severity": "error",
+      "from": { "path": "^engine/" },
+      "to": { "path": "^src/" },
+      "comment": "engine must not depend on src (app layer)"
+    },
+    {
+      "name": "no-engine-to-native",
+      "severity": "error",
+      "from": { "path": "^engine/" },
+      "to": { "path": "^native/" },
+      "comment": "engine must not depend on native directly"
+    },
+    {
+      "name": "no-src-to-engine-value",
+      "severity": "error",
+      "from": { "path": "^src/", "dependencyTypes": ["value"] },
+      "to": { "path": "^engine/" },
+      "comment": "src must not depend on engine at runtime (type-only imports allowed)"
+    }
+  ],
+  "options": {
+    "doNotFollow": {
+      "path": "node_modules"
+    },
+    "tsPreCompilationDeps": true,
+    "reporterOptions": {}
+  }
+}

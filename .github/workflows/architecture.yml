@@ -36,7 +36,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - name: Circular + deep-relative import check (§6.10, §6.11)
-        run: bun scripts/ci/architecture/check-circular.ts
+      - name: dependency-cruiser (circular + layer separation)
+        run: npx dependency-cruiser --validate src/ engine/ scripts/
       - name: bun test
         run: bun test
