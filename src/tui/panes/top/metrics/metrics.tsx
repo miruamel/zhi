@@ -18,10 +18,27 @@ export interface MetricsPaneProps {
 }
 
 /** @brief Render the metrics pane. @since 0.2.0 */
-export function MetricsPane({ tokensUsed, tokensBudget, elapsedMs, stepsCompleted, stepsTotal, successRate, costEstimate, sparkline }: MetricsPaneProps) {
+export function MetricsPane({
+  tokensUsed,
+  tokensBudget,
+  elapsedMs,
+  stepsCompleted,
+  stepsTotal,
+  successRate,
+  costEstimate,
+  sparkline,
+}: MetricsPaneProps) {
   return (
-    <Box flexDirection="column" borderStyle="round" borderColor={colors.accentBlue} paddingX={1} flexGrow={1}>
-      <Text color={colors.accentBlue} bold>_METRICS</Text>
+    <Box
+      flexDirection="column"
+      borderStyle="round"
+      borderColor={colors.accentBlue}
+      paddingX={1}
+      flexGrow={1}
+    >
+      <Text color={colors.accentBlue} bold>
+        _METRICS
+      </Text>
       <Metrics
         tokensUsed={tokensUsed}
         tokensBudget={tokensBudget}

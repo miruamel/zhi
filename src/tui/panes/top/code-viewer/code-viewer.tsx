@@ -15,26 +15,44 @@ export interface CodeViewerProps {
 }
 
 /** @brief Render a code viewer pane with line numbers and syntax highlighting. @since 0.2.0 */
-export function CodeViewer({ path, content, language, scroll = 0, maxLines = 30 }: CodeViewerProps) {
+export function CodeViewer({
+  path,
+  content,
+  language,
+  scroll = 0,
+  maxLines = 30,
+}: CodeViewerProps) {
   if (!content) {
     return (
-      <Box flexDirection="column" borderStyle="round" borderColor={colors.fgDim} paddingX={1} flexGrow={1}>
-        <Text color={colors.acent} bold>_CODE</Text>
+      <Box
+        flexDirection="column"
+        borderStyle="round"
+        borderColor={colors.fgDim}
+        paddingX={1}
+        flexGrow={1}
+      >
+        <Text color={colors.accent} bold>
+          _CODE
+        </Text>
         <Text color={colors.fgDim}> (no file loaded)</Text>
       </Box>
     );
   }
 
   const rawLines = content.split('\n');
-  const lines: CodeLine[] = rawLines
-    .slice(scroll, scroll + maxLines)
-    .map((line, i) => ({
-      number: scroll + i + 1,
-      content: line,
-    }));
+  const lines: CodeLine[] = rawLines.slice(scroll, scroll + maxLines).map((line, i) => ({
+    number: scroll + i + 1,
+    content: line,
+  }));
 
   return (
-    <Box flexDirection="column" borderStyle="round" borderColor={colors.forward} paddingX={1} flexGrow={1}>
+    <Box
+      flexDirection="column"
+      borderStyle="round"
+      borderColor={colors.forward}
+      paddingX={1}
+      flexGrow={1}
+    >
       <Text color={colors.forward} bold>
         _CODE {path ? `· ${path}` : ''}
       </Text>

@@ -2,16 +2,31 @@
  * @fileoverview App root — the main ink <App> for Zhi TUI. @since 0.1.2
  * @updated 0.2.0 — integrated Arranger, StatusBar, CommandPalette, useFocus
  */
-import { Box, Text, useApp, useInput } from 'ink';
-import { useState, useLayoutEffect, useCallback } from 'react';
-import { colors } from './core/colors';
+import { Box, useApp, useInput } from 'ink';
+import { useState } from 'react';
 import { resolveKey } from './core/handlers/keymap';
 import { applyKeyAction } from './core/handlers/keyhandler';
 import { Arranger } from './core/arranger';
 import { StatusBar } from './widgets/status-bar';
 import { CommandPalette, type CommandItem } from './widgets/command-palette';
 import { useFocus } from './core/hooks';
-import { CodeViewer, FileTree, MetricsPane, DiffViewer, TerminalPane, NetworkPane, AgentsPane, HelpPane, Header, Dag, Detail, Critics, Eval, Pr as PrPane, Log } from './panes';
+import {
+  CodeViewer,
+  FileTree,
+  MetricsPane,
+  DiffViewer,
+  TerminalPane,
+  NetworkPane,
+  AgentsPane,
+  HelpPane,
+  Header,
+  Dag,
+  Detail,
+  Critics,
+  Eval,
+  Pr as PrPane,
+  Log,
+} from './panes';
 import type { AppState } from './core/state';
 
 export interface AppProps {
@@ -27,14 +42,14 @@ export interface AppProps {
 export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }: AppProps) {
   const { exit } = useApp();
   const [state, setState] = useState<AppState>(initialState);
-  const [paused, setPaused] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
+  const [, setPaused] = useState(false);
+  const [, setShowHelp] = useState(false);
+  const [, setFocusIdx] = useState(0);
   const [detailExpanded, setDetailExpanded] = useState(false);
   const [logExpanded, setLogExpanded] = useState(false);
   const [criticsExpanded, setCriticsExpanded] = useState(false);
   const [prExpanded, setPrExpanded] = useState(false);
   const [logOffset, setLogOffset] = useState(0);
-  const [focusIdx, setFocusIdx] = useState(0);
   const [redrawKey, setRedrawKey] = useState(0);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [mode, setMode] = useState<'normal' | 'command' | 'search'>('normal');
@@ -43,27 +58,89 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
   const paneOrder = arranger.visiblePanes();
   const nav = useFocus(paneOrder, 0);
 
-  useLayoutEffect(() => {
-    onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
-  }, [onRegister]);
+  // Register setState push callback for external loop integration
+  onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
+
+  const pushState = (patch: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...patch }));
 
   const commands: CommandItem[] = [
     { id: 'quit', label: 'Quit', description: 'Exit the TUI', shortcut: 'q', action: () => exit() },
-    { id: 'pause', label: 'Pause / Resume', description: 'Toggle stream pause', shortcut: 'Space', action: () => setPaused((p) => !p) },
-    { id: 'abort', label: 'Abort', description: 'Stop the current run', shortcut: 'Ctrl+C', action: () => onAbort?.() },
-    { id: 'help', label: 'Help', description: 'Show keybindings', shortcut: 'h', action: () => setShowHelp((h) => !h) },
-    { id: 'log', label: 'Toggle Log', description: 'Show/hide log pane', shortcut: 'l', action: () => setLogExpanded((e) => !e) },
-    { id: 'critics', label: 'Toggle Critics', description: 'Show/hide critics pane', shortcut: 'c', action: () => setCriticsExpanded((e) => !e) },
-    { id: 'pr', label: 'Toggle PR', description: 'Show/hide PR pane', shortcut: 'p', action: () => setPrExpanded((e) => !e) },
-    { id: 'detail', label: 'Toggle Detail', description: 'Show/hide detail pane', shortcut: 'd', action: () => setDetailExpanded((e) => !e) },
-    { id: 'redraw', label: 'Redraw', description: 'Force re-render', shortcut: 'r', action: () => setRedrawKey((k) => k + 1) },
-    { id: 'reset', label: 'Reset Layout', description: 'Restore default pane layout', action: () => arranger.reset() },
-    { id: 'next', label: 'Next Pane', description: 'Move focus to next pane', shortcut: 'Tab', action: () => nav.move(1) },
-    { id: 'prev', label: 'Previous Pane', description: 'Move focus to previous pane', shortcut: 'Shift+Tab', action: () => nav.move(-1) },
+    {
+      id: 'pause',
+      label: 'Pause / Resume',
+      description: 'Toggle stream pause',
+      shortcut: 'Space',
+      action: () => setPaused((p) => !p),
+    },
+    {
+      id: 'abort',
+      label: 'Abort',
+      description: 'Stop the current run',
+      shortcut: 'Ctrl+C',
+      action: () => onAbort?.(),
+    },
+    {
+      id: 'log',
+      label: 'Toggle Log',
+      description: 'Show/hide log pane',
+      shortcut: 'l',
+      action: () => setLogExpanded((e) => !e),
+    },
+    {
+      id: 'critics',
+      label: 'Toggle Critics',
+      description: 'Show/hide critics pane',
+      shortcut: 'c',
+      action: () => setCriticsExpanded((e) => !e),
+    },
+    {
+      id: 'pr',
+      label: 'Toggle PR',
+      description: 'Show/hide PR pane',
+      shortcut: 'p',
+      action: () => setPrExpanded((e) => !e),
+    },
+    {
+      id: 'detail',
+      label: 'Toggle Detail',
+      description: 'Show/hide detail pane',
+      shortcut: 'd',
+      action: () => setDetailExpanded((e) => !e),
+    },
+    {
+      id: 'redraw',
+      label: 'Redraw',
+      description: 'Force re-render',
+      shortcut: 'r',
+      action: () => setRedrawKey((k) => k + 1),
+    },
+    {
+      id: 'reset',
+      label: 'Reset Layout',
+      description: 'Restore default pane layout',
+      action: () => arranger.reset(),
+    },
+    {
+      id: 'next',
+      label: 'Next Pane',
+      description: 'Move focus to next pane',
+      shortcut: 'Tab',
+      action: () => nav.move(1),
+    },
+    {
+      id: 'prev',
+      label: 'Previous Pane',
+      description: 'Move focus to previous pane',
+      shortcut: 'Shift+Tab',
+      action: () => nav.move(-1),
+    },
   ];
 
   useInput(
-    (input: string, key: { ctrl?: boolean; meta?: boolean; shift?: boolean; return?: boolean; escape?: boolean }) => {
+    (
+      input: string,
+      key: { ctrl?: boolean; meta?: boolean; shift?: boolean; return?: boolean; escape?: boolean },
+    ) => {
       if (paletteOpen) return;
       const action = resolveKey(input, key);
       switch (action) {
@@ -85,10 +162,6 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         case 'abort':
           onAbort?.();
           break;
-        case 'cycle':
-          setFocusIdx((i) => (i + 1) % 6);
-          nav.move(1);
-          break;
         case 'nextPane':
           nav.move(1);
           break;
@@ -103,7 +176,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
           break;
         default:
           applyKeyAction(action, {
-            setState,
+            setState: pushState,
             setPaused,
             setShowHelp,
             setDetailExpanded,
@@ -119,7 +192,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
             log: state.log,
           });
       }
-    }
+    },
   );
 
   const currentStep = state.steps.find((s) => s.id === state.currentStepId);
@@ -156,9 +229,9 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         />
       </Box>
       <Box marginTop={1} gap={1}>
-        <Dag steps={state.steps} currentStepId={state.currentStepId} />
+        <Dag steps={state.steps} currentStepId={state.currentStepId} currentLoop={state.loop} />
         <Detail
-          step={currentStep ?? null}
+          step={currentStep ?? undefined}
           loop={state.loop}
           tokensUsed={state.tokensUsed}
           tokensBudget={state.tokensBudget}
@@ -173,25 +246,17 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
           threshold={threshold}
           expanded={criticsExpanded}
         />
-        <Eval eval={state.eval} />
+        <Eval evalReport={state.eval} />
         <DiffViewer diff={state.diff} />
         <PrPane prCi={state.prCi} expanded={prExpanded} />
       </Box>
       <Box marginTop={1} gap={1}>
         <TerminalPane lines={state.terminalLines} />
-        <NetworkPane
-          requests={state.networkRequests}
-          online={state.networkOnline}
-        />
+        <NetworkPane requests={state.networkRequests} online={state.networkOnline} />
         <AgentsPane agents={state.agents} />
       </Box>
       <Box marginTop={1}>
-        <Log
-          log={state.log}
-          expanded={logExpanded}
-          offset={logOffset}
-          maxLines={40}
-        />
+        <Log log={state.log} expanded={logExpanded} offset={logOffset} maxLines={40} />
       </Box>
       <Box marginTop={1}>
         <HelpPane />
@@ -200,7 +265,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         tokensUsed={state.tokensUsed}
         tokensBudget={state.tokensBudget}
         elapsedMs={Date.now() - state.startedAt}
-        step={currentStep?.name}
+        step={currentStep?.kind}
         stepCount={state.steps.filter((s) => s.status === 'done').length}
         stepTotal={state.steps.length}
         gitBranch={state.git?.branch}
@@ -213,7 +278,10 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
       <CommandPalette
         open={paletteOpen}
         commands={commands}
-        onClose={() => { setPaletteOpen(false); setMode('normal'); }}
+        onClose={() => {
+          setPaletteOpen(false);
+          setMode('normal');
+        }}
         onExecute={(cmd) => cmd.action()}
       />
     </Box>

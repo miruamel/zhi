@@ -24,7 +24,7 @@ export function useFocus(paneOrder: string[], initial = 0) {
     (delta: number) => {
       setFocusIndex((i) => Math.max(0, Math.min(paneOrder.length - 1, i + delta)));
     },
-    [paneOrder.length]
+    [paneOrder.length],
   );
 
   const jump = useCallback(
@@ -32,10 +32,10 @@ export function useFocus(paneOrder: string[], initial = 0) {
       if (index >= 0 && index < paneOrder.length) {
         setFocusIndex(index);
         setHistory((h) => [...h, paneOrder[index]]);
-        setHistoryIndex((h) => h.length);
+        setHistoryIndex((prev) => prev + 1);
       }
     },
-    [paneOrder]
+    [paneOrder],
   );
 
   const goBack = useCallback(() => {

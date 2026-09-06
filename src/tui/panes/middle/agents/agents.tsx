@@ -4,7 +4,7 @@
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
-import { Badge, Gauge } from '../../../widgets';
+import { Badge } from '../../../widgets';
 
 export interface AgentInfo {
   id: string;
@@ -28,8 +28,16 @@ const STATUS_COLOR = {
 /** @brief Render the agents pane. @since 0.2.0 */
 export function AgentsPane({ agents }: AgentsPaneProps) {
   return (
-    <Box flexDirection="column" borderStyle="round" borderColor={colors.scoring} paddingX={1} flexGrow={1}>
-      <Text color={colors.scoring} bold>_AGENTS ({agents.length})</Text>
+    <Box
+      flexDirection="column"
+      borderStyle="round"
+      borderColor={colors.scoring}
+      paddingX={1}
+      flexGrow={1}
+    >
+      <Text color={colors.scoring} bold>
+        _AGENTS ({agents.length})
+      </Text>
       {agents.map((a) => (
         <Box key={a.id} gap={1} marginTop={1}>
           <Badge label={a.status} color={STATUS_COLOR[a.status]} />

@@ -1,14 +1,17 @@
 # ADR-001: TUI Architecture for Zhi Autonomous Agent
 
 ## Status
+
 Proposed
 
 ## Context
+
 Zhi需要一个企业级TUI，参考Claude Code、OMP(ECC)、Hermes、OpenCode的功能特性。当前TUI仅~2.3k SLOC，需要扩展到50k-120k SLOC以支持丰富的功能。
 
 ## Decision
 
 ### Core Principles
+
 1. **Layer-first architecture** - 遵循AGENTS.md的≤4 files/folder规则
 2. **Reactive state management** - 使用Zustand-like store管理状态
 3. **Component-based panes** - 每个pane独立、可复用
@@ -17,21 +20,21 @@ Zhi需要一个企业级TUI，参考Claude Code、OMP(ECC)、Hermes、OpenCode�
 
 ### Reference Feature Matrix
 
-| Feature | Claude Code | OMP/ECC | Hermes | OpenCode | Zhi TUI |
-|---------|------------|---------|--------|----------|---------|
-| Streaming output | ✓ | - | ✓ | - | ✓ |
-| File tree | ✓ | - | - | ✓ | ✓ |
-| Diff viewer | ✓ | - | - | ✓ | ✓ |
-| Command palette | ✓ | - | - | - | ✓ |
-| Agent memory | - | ✓ | - | - | ✓ |
-| Session history | - | ✓ | - | - | ✓ |
-| Multi-agent view | - | - | ✓ | - | ✓ |
-| Notifications | - | - | ✓ | - | ✓ |
-| Terminal emulator | - | - | - | ✓ | ✓ |
-| Git integration | - | - | - | ✓ | ✓ |
-| Status bar | ✓ | - | - | ✓ | ✓ |
-| Metrics dashboard | - | ✓ | - | - | ✓ |
-| Search/fuzzy find | ✓ | - | - | - | ✓ |
+| Feature           | Claude Code | OMP/ECC | Hermes | OpenCode | Zhi TUI |
+| ----------------- | ----------- | ------- | ------ | -------- | ------- |
+| Streaming output  | ✓           | -       | ✓      | -        | ✓       |
+| File tree         | ✓           | -       | -      | ✓        | ✓       |
+| Diff viewer       | ✓           | -       | -      | ✓        | ✓       |
+| Command palette   | ✓           | -       | -      | -        | ✓       |
+| Agent memory      | -           | ✓       | -      | -        | ✓       |
+| Session history   | -           | ✓       | -      | -        | ✓       |
+| Multi-agent view  | -           | -       | ✓      | -        | ✓       |
+| Notifications     | -           | -       | ✓      | -        | ✓       |
+| Terminal emulator | -           | -       | -      | ✓        | ✓       |
+| Git integration   | -           | -       | -      | ✓        | ✓       |
+| Status bar        | ✓           | -       | -      | ✓        | ✓       |
+| Metrics dashboard | -           | ✓       | -      | -        | ✓       |
+| Search/fuzzy find | ✓           | -       | -      | -        | ✓       |
 
 ### Folder Structure
 
@@ -252,3 +255,4 @@ src/tui/
 
 ## Date: 2026-09-06
 ## Author: Zhi (autonomous agent)
+```

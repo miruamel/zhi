@@ -5,7 +5,7 @@
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../core/colors';
-import { formatMs, formatTokens, bar } from '../../core/format';
+import { formatMs, bar } from '../../core/format';
 
 export interface StatusBarProps {
   tokensUsed: number;
@@ -56,10 +56,13 @@ export function StatusBar({
   const tokenPct = tokensBudget > 0 ? (tokensUsed / tokensBudget) * 100 : 0;
   const tokenColor = tokenPct > 90 ? colors.error : tokenPct > 75 ? colors.warn : colors.fg;
   const modeColor =
-    mode === 'command' ? colors.accentBlue
-    : mode === 'search' ? colors.warn
-    : mode === 'insert' ? colors.running
-    : colors.fgDim;
+    mode === 'command'
+      ? colors.accentBlue
+      : mode === 'search'
+        ? colors.warn
+        : mode === 'insert'
+          ? colors.running
+          : colors.fgDim;
 
   return (
     <Box flexDirection="column">
@@ -75,7 +78,10 @@ export function StatusBar({
           {step && (
             <>
               <Text color={colors.fgDim}>│</Text>
-              <Cell label="step" value={stepCount !== undefined ? `${stepCount}/${stepTotal}` : step} />
+              <Cell
+                label="step"
+                value={stepCount !== undefined ? `${stepCount}/${stepTotal}` : step}
+              />
             </>
           )}
           {gitBranch && (

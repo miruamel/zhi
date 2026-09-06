@@ -9,7 +9,7 @@ import type { ReactNode } from 'react';
 export function renderToString(el: ReactNode): string {
   const chunks: string[] = [];
   const originalWrite = process.stdout.write.bind(process.stdout);
-  process.stdout.write = ((chunk: string) => {
+  process.stdout.write = ((chunk: string | Buffer) => {
     chunks.push(typeof chunk === 'string' ? chunk : chunk.toString());
     return true;
   }) as any;

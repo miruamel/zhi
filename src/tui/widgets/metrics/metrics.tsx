@@ -2,7 +2,7 @@
  * @fileoverview Metrics — aggregate display widget.
  * @since 0.2.0
  */
-import { Text } from 'ink';
+import { Box, Text } from 'ink';
 import { colors } from '../../core/colors';
 import { formatTokens, formatMs } from '../../core/format';
 
@@ -17,12 +17,22 @@ export interface MetricsProps {
 }
 
 /** @brief Render a metrics summary panel. @since 0.2.0 */
-export function Metrics({ tokensUsed, tokensBudget, elapsedMs, stepsCompleted, stepsTotal, successRate, costEstimate }: MetricsProps) {
+export function Metrics({
+  tokensUsed,
+  tokensBudget,
+  elapsedMs,
+  stepsCompleted,
+  stepsTotal,
+  successRate,
+  costEstimate,
+}: MetricsProps) {
   return (
-    <Text flexDirection="column">
+    <Box flexDirection="column">
       <Text>
         <Text color={colors.accent}>Tokens: </Text>
-        <Text>{formatTokens(tokensUsed)} / {formatTokens(tokensBudget)}</Text>
+        <Text>
+          {formatTokens(tokensUsed)} / {formatTokens(tokensBudget)}
+        </Text>
       </Text>
       <Text>
         <Text color={colors.accent}>Time: </Text>
@@ -30,7 +40,9 @@ export function Metrics({ tokensUsed, tokensBudget, elapsedMs, stepsCompleted, s
       </Text>
       <Text>
         <Text color={colors.accent}>Steps: </Text>
-        <Text>{stepsCompleted}/{stepsTotal}</Text>
+        <Text>
+          {stepsCompleted}/{stepsTotal}
+        </Text>
         <Text dimColor> ({Math.round(successRate * 100)}%)</Text>
       </Text>
       {costEstimate !== undefined && (
@@ -39,6 +51,6 @@ export function Metrics({ tokensUsed, tokensBudget, elapsedMs, stepsCompleted, s
           <Text>${costEstimate.toFixed(4)}</Text>
         </Text>
       )}
-    </Text>
+    </Box>
   );
 }

@@ -17,7 +17,13 @@ const TOGGLE_KEYS = ['l/c/p/h'];
 export function Help({ paused = false, showHelp = false }: HelpProps) {
   if (showHelp) {
     return (
-      <Box flexDirection="column" borderStyle="round" borderColor={colors.accentBlue} paddingX={2} paddingY={1}>
+      <Box
+        flexDirection="column"
+        borderStyle="round"
+        borderColor={colors.accentBlue}
+        paddingX={2}
+        paddingY={1}
+      >
         <Text color={colors.accentBlue} bold>
           KEYBINDINGS
         </Text>
@@ -27,12 +33,12 @@ export function Help({ paused = false, showHelp = false }: HelpProps) {
           </Text>
         )}
         <Box marginTop={1} flexDirection="column" gap={0}>
-          <Text color={colors.fgDim}>  q       quit</Text>
-          <Text color={colors.fgDim}>  Space   pause / resume</Text>
-          <Text color={colors.fgDim}>  Ctrl+C  abort</Text>
-          <Text color={colors.fgDim}>  h       toggle help</Text>
-          <Text color={colors.fgDim}>  Tab     cycle panels</Text>
-          <Text color={colors.fgDim}>  l/c/p/h toggle panels</Text>
+          <Text color={colors.fgDim}> q quit</Text>
+          <Text color={colors.fgDim}> Space pause / resume</Text>
+          <Text color={colors.fgDim}> Ctrl+C abort</Text>
+          <Text color={colors.fgDim}> h toggle help</Text>
+          <Text color={colors.fgDim}> Tab cycle panels</Text>
+          <Text color={colors.fgDim}> l/c/p/h toggle panels</Text>
         </Box>
       </Box>
     );

@@ -14,10 +14,12 @@ describe('CodeViewer', () => {
   });
 
   it('renders code with line numbers', () => {
-    const out = renderToString(CodeViewer({
-      content: 'const x = 1\nconst y = 2',
-      path: 'test.ts',
-    }));
+    const out = renderToString(
+      CodeViewer({
+        content: 'const x = 1\nconst y = 2',
+        path: 'test.ts',
+      }),
+    );
     expect(out).toContain('const');
     expect(out).toContain('test.ts');
   });

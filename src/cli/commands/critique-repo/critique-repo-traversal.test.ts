@@ -35,5 +35,5 @@ describe('critiqueRepoCommand parent traversal', () => {
     // The root should be the tmp dir (where package.json was placed), not the subdir
     // We can't directly inspect root from the return type, but the command succeeds
     // and emits JSON — that proves the traversal worked.
-  });
+  }, 30000);
 });

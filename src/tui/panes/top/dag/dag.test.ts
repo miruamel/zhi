@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test';
-import { renderToString } from "../../../core/test/render";
+import { renderToString } from '../../../core/test/render';
 import { Dag } from './dag';
 import type { DagStep } from '../../../core/state';
 

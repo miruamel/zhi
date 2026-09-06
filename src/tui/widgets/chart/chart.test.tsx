@@ -13,7 +13,14 @@ describe('Chart', () => {
   });
 
   it('renders bar chart rows', () => {
-    const out = renderToString(Chart({ data: [{ label: 'A', value: 5 }, { label: 'B', value: 10 }] }));
+    const out = renderToString(
+      Chart({
+        data: [
+          { label: 'A', value: 5 },
+          { label: 'B', value: 10 },
+        ],
+      }),
+    );
     expect(out).toContain('A');
     expect(out).toContain('B');
     expect(out).toContain('█');

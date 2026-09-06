@@ -1,7 +1,7 @@
 /**
  * @fileoverview Throttle hook — limits callback frequency. @since 0.2.0
  */
-import { useState, useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 /** @brief Throttle a callback to at most once per interval. @since 0.2.0 */
 export function useThrottle<T extends (...args: any[]) => any>(fn: T, limit: number): T {
@@ -17,17 +17,20 @@ export function useThrottle<T extends (...args: any[]) => any>(fn: T, limit: num
         lastRun.current = now;
         fn(...args);
       } else if (!timeoutRef.current) {
-        timeoutRef.current = setTimeout(() => {
-          lastRun.current = Date.now();
-          timeoutRef.current = null;
-          if (lastArgs.current) {
-            fn(...lastArgs.current);
-            lastArgs.current = null;
-          }
-        }, limit - (now - lastRun.current));
+        timeoutRef.current = setTimeout(
+          () => {
+            lastRun.current = Date.now();
+            timeoutRef.current = null;
+            if (lastArgs.current) {
+              fn(...lastArgs.current);
+              lastArgs.current = null;
+            }
+          },
+          limit - (now - lastRun.current),
+        );
       }
     },
-    [fn, limit]
+    [fn, limit],
   );
 
   return throttled as T;

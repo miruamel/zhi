@@ -38,7 +38,13 @@ function fuzzyMatch(text: string, query: string): boolean {
 }
 
 /** @brief Render the command palette modal. @since 0.2.0 */
-export function CommandPalette({ open, commands, onClose, onExecute, placeholder = 'Type to search...' }: CommandPaletteProps) {
+export function CommandPalette({
+  open,
+  commands,
+  onClose,
+  onExecute,
+  placeholder = 'Type to search...',
+}: CommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(0);
 
@@ -47,25 +53,42 @@ export function CommandPalette({ open, commands, onClose, onExecute, placeholder
     .filter((c) => fuzzyMatch(c.label, query) || fuzzyMatch(c.description ?? '', query))
     .slice(0, 20);
 
-  useInput((input: string, key: { return?: boolean; escape?: boolean; up?: boolean; down?: boolean; tab?: boolean }) => {
-    if (key.escape) { onClose(); return; }
-    if (key.return) {
-      const cmd = filtered[selected];
-      if (cmd) { onExecute?.(cmd); onClose(); }
-      return;
-    }
-    if (key.up) setSelected((s) => Math.max(0, s - 1));
-    if (key.down) setSelected((s) => Math.min(filtered.length - 1, s + 1));
-    if (input && !key.up && !key.down && !key.escape && !key.return && !key.tab) {
-      setQuery((q) => q + input);
-      setSelected(0);
-    }
-  });
+  useInput(
+    (
+      input: string,
+      key: { return?: boolean; escape?: boolean; up?: boolean; down?: boolean; tab?: boolean },
+    ) => {
+      if (key.escape) {
+        onClose();
+        return;
+      }
+      if (key.return) {
+        const cmd = filtered[selected];
+        if (cmd) {
+          onExecute?.(cmd);
+          onClose();
+        }
+        return;
+      }
+      if (key.up) setSelected((s) => Math.max(0, s - 1));
+      if (key.down) setSelected((s) => Math.min(filtered.length - 1, s + 1));
+      if (input && !key.up && !key.down && !key.escape && !key.return && !key.tab) {
+        setQuery((q) => q + input);
+        setSelected(0);
+      }
+    },
+  );
 
   if (!open) return null;
 
   return (
-    <Box flexDirection="column" borderStyle="double" borderColor={colors.accentBlue} paddingX={2} paddingY={1}>
+    <Box
+      flexDirection="column"
+      borderStyle="double"
+      borderColor={colors.accentBlue}
+      paddingX={2}
+      paddingY={1}
+    >
       <Box gap={1}>
         <Text color={colors.accentBlue} bold>
           ◈
@@ -85,12 +108,8 @@ export function CommandPalette({ open, commands, onClose, onExecute, placeholder
               <Text color={i === selected ? colors.fg : colors.fgDim} bold={i === selected}>
                 {cmd.label}
               </Text>
-              {cmd.shortcut && (
-                <Text color={colors.fgDim}>{cmd.shortcut}</Text>
-              )}
-              {cmd.description && (
-                <Text color={colors.fgDim}>— {cmd.description}</Text>
-              )}
+              {cmd.shortcut && <Text color={colors.fgDim}>{cmd.shortcut}</Text>}
+              {cmd.description && <Text color={colors.fgDim}>— {cmd.description}</Text>}
             </Box>
           ))
         )}

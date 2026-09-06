@@ -15,7 +15,14 @@ export interface ProgressProps {
 }
 
 /** @brief Render a horizontal progress bar. @since 0.2.0 */
-export function Progress({ value, max = 100, width = 20, label, color = colors.accent, showPct = true }: ProgressProps) {
+export function Progress({
+  value,
+  max = 100,
+  width = 20,
+  label,
+  color = colors.accent,
+  showPct = true,
+}: ProgressProps) {
   const pct = Math.max(0, Math.min(1, value / max));
   const filled = Math.round(pct * width);
   const bar = '█'.repeat(filled) + '░'.repeat(width - filled);

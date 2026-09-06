@@ -13,23 +13,17 @@ const cmds = [
 
 describe('CommandPalette', () => {
   it('renders nothing when closed', () => {
-    const out = renderToString(
-      <CommandPalette open={false} commands={cmds} onClose={() => {}} />
-    );
+    const out = renderToString(<CommandPalette open={false} commands={cmds} onClose={() => {}} />);
     expect(out.trim()).toBe('');
   });
 
   it('renders when open', () => {
-    const out = renderToString(
-      <CommandPalette open={true} commands={cmds} onClose={() => {}} />
-    );
+    const out = renderToString(<CommandPalette open={true} commands={cmds} onClose={() => {}} />);
     expect(out).toContain('Type to search');
   });
 
   it('shows all commands when open', () => {
-    const out = renderToString(
-      <CommandPalette open={true} commands={cmds} onClose={() => {}} />
-    );
+    const out = renderToString(<CommandPalette open={true} commands={cmds} onClose={() => {}} />);
     expect(out).toContain('Open Settings');
     expect(out).toContain('Show Log');
   });

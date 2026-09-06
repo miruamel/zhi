@@ -8,7 +8,9 @@ import { renderToString } from '../../core/test/render';
 
 describe('Table', () => {
   it('renders headers and separator', () => {
-    const out = renderToString(Table({ headers: ['Name', 'Age'], rows: [{ Name: 'Bob', Age: 30 }] }));
+    const out = renderToString(
+      Table({ headers: ['Name', 'Age'], rows: [{ Name: 'Bob', Age: 30 }] }),
+    );
     expect(out).toContain('Name');
     expect(out).toContain('Age');
     expect(out).toContain('─');

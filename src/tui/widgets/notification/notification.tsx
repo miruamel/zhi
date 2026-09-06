@@ -34,9 +34,7 @@ export function Notification({ message, type = 'info', onClose }: NotificationPr
     <Text>
       <Text color={TYPE_COLORS[type]}>{TYPE_ICONS[type]} </Text>
       <Text>{message}</Text>
-      {onClose && (
-        <Text dimColor> [esc]</Text>
-      )}
+      {onClose && <Text dimColor> [esc]</Text>}
     </Text>
   );
 }

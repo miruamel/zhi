@@ -14,9 +14,11 @@ describe('DiffViewer', () => {
   });
 
   it('renders diff lines', () => {
-    const out = renderToString(DiffViewer({
-      diff: '+added\n-old',
-    }));
+    const out = renderToString(
+      DiffViewer({
+        diff: '+added\n-old',
+      }),
+    );
     expect(out).toContain('+');
     expect(out).toContain('-');
   });

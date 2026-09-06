@@ -18,7 +18,7 @@ export interface TabsProps {
 }
 
 /** @brief Render a horizontal tab bar. @since 0.2.0 */
-export function Tabs({ tabs, active, onChange }: TabsProps) {
+export function Tabs({ tabs, active }: TabsProps) {
   return (
     <Text>
       {tabs.map((t, i) => {

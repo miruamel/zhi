@@ -19,9 +19,11 @@ describe('NetworkPane', () => {
   });
 
   it('renders request data', () => {
-    const out = renderToString(NetworkPane({
-      requests: [{ url: '/api/test', status: 200, durationMs: 50, timestamp: Date.now() }],
-    }));
+    const out = renderToString(
+      NetworkPane({
+        requests: [{ url: '/api/test', status: 200, durationMs: 50, timestamp: Date.now() }],
+      }),
+    );
     expect(out).toContain('/api/test');
     expect(out).toContain('200');
   });

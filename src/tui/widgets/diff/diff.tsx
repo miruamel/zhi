@@ -2,7 +2,7 @@
  * @fileoverview Diff — unified diff display.
  * @since 0.2.0
  */
-import { Text } from 'ink';
+import { Box, Text } from 'ink';
 import { colors } from '../../core/colors';
 
 export interface DiffLine {
@@ -34,14 +34,19 @@ export function parseDiff(text: string): DiffLine[] {
     } else {
       oldNum++;
       newNum++;
-      result.push({ type: 'context', oldNum, newNum, content: line.startsWith(' ') ? line.slice(1) : line });
+      result.push({
+        type: 'context',
+        oldNum,
+        newNum,
+        content: line.startsWith(' ') ? line.slice(1) : line,
+      });
     }
   }
   return result;
 }
 
 /** @brief Render a unified diff. @since 0.2.0 */
-export function Diff({ lines, maxWidth = 80 }: DiffProps) {
+export function Diff({ lines }: DiffProps) {
   const colors_map = {
     context: colors.fgDim,
     added: colors.done,
@@ -50,18 +55,19 @@ export function Diff({ lines, maxWidth = 80 }: DiffProps) {
   const prefix = { context: ' ', added: '+', removed: '-' };
 
   return (
-    <Text flexDirection="column">
+    <Box flexDirection="column">
       {lines.map((line, i) => (
         <Text key={i}>
           <Text dimColor>
-            {line.oldNum != null ? String(line.oldNum).padStart(5) : '     '}
-            {' '}
-            {line.newNum != null ? String(line.newNum).padStart(5) : '     '}
-            {' '}
+            {line.oldNum != null ? String(line.oldNum).padStart(5) : '     '}{' '}
+            {line.newNum != null ? String(line.newNum).padStart(5) : '     '}{' '}
           </Text>
-          <Text color={colors_map[line.type]}>{prefix[line.type]}{line.content}</Text>
+          <Text color={colors_map[line.type]}>
+            {prefix[line.type]}
+            {line.content}
+          </Text>
         </Text>
       ))}
-    </Text>
+    </Box>
   );
 }

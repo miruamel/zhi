@@ -28,11 +28,15 @@ const ICONS: Record<string, string> = {
 };
 
 /** @brief Render a tree view. @since 0.2.0 */
-export function Tree({ nodes, onExpand, onSelect, selected }: TreeProps) {
+export function Tree({ nodes, selected }: TreeProps) {
   const renderNode = (node: TreeNode, depth: number) => {
     const hasChildren = (node.children?.length ?? 0) > 0;
     const isExpanded = node.expanded ?? true;
-    const icon = hasChildren ? (isExpanded ? ICONS.folderOpen : ICONS.folder) : (node.icon ?? ICONS.file);
+    const icon = hasChildren
+      ? isExpanded
+        ? ICONS.folderOpen
+        : ICONS.folder
+      : (node.icon ?? ICONS.file);
     const indent = '  '.repeat(depth);
     const isSel = node.id === selected;
 
@@ -41,9 +45,7 @@ export function Tree({ nodes, onExpand, onSelect, selected }: TreeProps) {
         <Text>
           <Text dimColor>{indent}</Text>
           <Text>{icon} </Text>
-          {hasChildren && (
-            <Text dimColor>{isExpanded ? '▾ ' : '▸ '}</Text>
-          )}
+          {hasChildren && <Text dimColor>{isExpanded ? '▾ ' : '▸ '}</Text>}
           <Text color={isSel ? colors.accent : colors.fg}>{node.label}</Text>
         </Text>
         {hasChildren && isExpanded && node.children!.map((child) => renderNode(child, depth + 1))}
@@ -51,9 +53,5 @@ export function Tree({ nodes, onExpand, onSelect, selected }: TreeProps) {
     );
   };
 
-  return (
-    <Box flexDirection="column">
-      {nodes.map((n) => renderNode(n, n.indent ?? 0))}
-    </Box>
-  );
+  return <Box flexDirection="column">{nodes.map((n) => renderNode(n, n.indent ?? 0))}</Box>;
 }

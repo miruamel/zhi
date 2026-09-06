@@ -62,7 +62,13 @@ export function buildTree(files: FileTreeEntry[]): TreeNode[] {
 export function FileTree({ files, root, selected, onSelect }: FileTreeProps) {
   const nodes = buildTree(files);
   return (
-    <Box flexDirection="column" borderStyle="round" borderColor={colors.complete} paddingX={1} flexGrow={1}>
+    <Box
+      flexDirection="column"
+      borderStyle="round"
+      borderColor={colors.complete}
+      paddingX={1}
+      flexGrow={1}
+    >
       <Text color={colors.complete} bold>
         _FILES {root ? `· ${root}` : ''} ({files.length})
       </Text>

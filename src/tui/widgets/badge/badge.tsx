@@ -17,8 +17,7 @@ export function Badge({ label, color = colors.fgDim, bg }: BadgeProps) {
     <Text>
       <Text backgroundColor={bg} color={color}>
         {' '}
-        {label}
-        {' '}
+        {label}{' '}
       </Text>
     </Text>
   );

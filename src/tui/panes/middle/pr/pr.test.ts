@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test';
-import { renderToString } from "../../../core/test/render";
+import { renderToString } from '../../../core/test/render';
 import { Pr } from './pr';
 import type { PrCiState } from '../../../core/state';
 

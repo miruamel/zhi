@@ -21,15 +21,31 @@ export interface NetworkPaneProps {
 }
 
 /** @brief Render the network pane. @since 0.2.0 */
-export function NetworkPane({ requests, online = true, latencyMs = 0, errorRate = 0 }: NetworkPaneProps) {
+export function NetworkPane({
+  requests,
+  online = true,
+  latencyMs = 0,
+  errorRate = 0,
+}: NetworkPaneProps) {
   const recent = requests.slice(-10);
   const latencies = recent.map((r) => r.durationMs);
 
   return (
-    <Box flexDirection="column" borderStyle="round" borderColor={colors.commit} paddingX={1} flexGrow={1}>
-      <Text color={colors.commit} bold>_NETWORK</Text>
+    <Box
+      flexDirection="column"
+      borderStyle="round"
+      borderColor={colors.commit}
+      paddingX={1}
+      flexGrow={1}
+    >
+      <Text color={colors.commit} bold>
+        _NETWORK
+      </Text>
       <Box gap={1} marginTop={1}>
-        <Badge label={online ? '● ONLINE' : '● OFFLINE'} color={online ? colors.done : colors.error} />
+        <Badge
+          label={online ? '● ONLINE' : '● OFFLINE'}
+          color={online ? colors.done : colors.error}
+        />
         {latencyMs > 0 && <Text color={colors.fgDim}>latency: {latencyMs}ms</Text>}
         {errorRate > 0 && <Text color={colors.error}>errors: {(errorRate * 100).toFixed(1)}%</Text>}
       </Box>

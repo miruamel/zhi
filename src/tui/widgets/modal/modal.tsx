@@ -16,7 +16,13 @@ export interface ModalProps {
 export function Modal({ open, title, onClose, children }: ModalProps) {
   if (!open) return null;
   return (
-    <Box flexDirection="column" borderStyle="round" borderColor={colors.accentBlue} paddingX={2} paddingY={1}>
+    <Box
+      flexDirection="column"
+      borderStyle="round"
+      borderColor={colors.accentBlue}
+      paddingX={2}
+      paddingY={1}
+    >
       {title && (
         <Text bold color={colors.accent}>
           {title}

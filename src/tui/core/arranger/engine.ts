@@ -25,7 +25,10 @@ export function findNode(node: LayoutNode, id: string): LayoutNode | null {
 }
 
 /** @brief Find parent of a node. @since 0.2.0 */
-export function findParent(node: LayoutNode, id: string): { parent: LayoutNode; index: number } | null {
+export function findParent(
+  node: LayoutNode,
+  id: string,
+): { parent: LayoutNode; index: number } | null {
   if (node.children) {
     for (let i = 0; i < node.children.length; i++) {
       if (node.children[i].id === id) return { parent: node, index: i };
@@ -55,11 +58,10 @@ export function splitNode(
   root: LayoutNode,
   paneId: string,
   direction: SplitDirection,
-  constraints: Record<string, LayoutConstraint> = {}
+  _constraints: Record<string, LayoutConstraint> = {},
 ): LayoutNode {
   const node = findNode(root, paneId);
   if (!node || node.type !== 'leaf') return root;
-  const cons = constraints[paneId] ?? { minSize: 5, maxSize: 95 };
   const half = (node.size ?? 50) / 2;
   return replaceNode(root, paneId, {
     id: paneId,
@@ -78,7 +80,9 @@ function replaceNode(root: LayoutNode, id: string, replacement: LayoutNode): Lay
   if (!root.children) return root;
   return {
     ...root,
-    children: root.children.map((c) => (c.id === id ? replacement : replaceNode(c, id, replacement))),
+    children: root.children.map((c) =>
+      c.id === id ? replacement : replaceNode(c, id, replacement),
+    ),
   };
 }
 
@@ -86,7 +90,7 @@ function replaceNode(root: LayoutNode, id: string, replacement: LayoutNode): Lay
 export function applyEvent(
   root: LayoutNode,
   event: LayoutEvent,
-  constraints: Record<string, LayoutConstraint> = {}
+  constraints: Record<string, LayoutConstraint> = {},
 ): LayoutNode {
   const next = cloneNode(root);
   switch (event.type) {
@@ -95,7 +99,7 @@ export function applyEvent(
       if (node) {
         node.size = Math.max(
           constraints[event.id]?.minSize ?? 5,
-          Math.min(constraints[event.id]?.maxSize ?? 95, event.size)
+          Math.min(constraints[event.id]?.maxSize ?? 95, event.size),
         );
       }
       return next;
@@ -120,7 +124,7 @@ export function applyEvent(
     }
     case 'close': {
       const parent = findParent(next, event.id);
-      if (parent) {
+      if (parent?.parent?.children) {
         parent.parent.children = parent.parent.children.filter((_, i) => i !== parent.index);
       }
       return next;
@@ -143,7 +147,7 @@ export class Arranger {
 
   constructor(
     options: { constraints?: Record<string, LayoutConstraint> } = {},
-    initial?: LayoutNode
+    initial?: LayoutNode,
   ) {
     const { DEFAULT_LAYOUT, DEFAULT_CONSTRAINTS } = require('./types');
     this.root = cloneNode(initial ?? DEFAULT_LAYOUT);
@@ -167,7 +171,6 @@ export class Arranger {
   findParent(id: string): { parent: LayoutNode; index: number } | null {
     return findParent(this.root, id);
   }
-
 
   /** @brief Subscribe to layout changes. @since 0.2.0 */
   subscribe(listener: (snapshot: LayoutSnapshot) => void): () => void {

@@ -2,8 +2,7 @@
  * @fileoverview Terminal — embedded shell output pane.
  * @since 0.2.0
  */
-import { Text } from 'ink';
-import { colors } from '../../core/colors';
+import { Box, Text } from 'ink';
 
 export interface TerminalProps {
   lines: string[];
@@ -15,12 +14,12 @@ export interface TerminalProps {
 export function Terminal({ lines, maxLines = 20 }: TerminalProps) {
   const visible = lines.slice(-maxLines);
   return (
-    <Text flexDirection="column">
+    <Box flexDirection="column">
       {visible.map((line, i) => (
-        <Text key={i} dimColor={line.startsWith('$') || line.startsWith('>')}>
+        <Text key={i} dimColor={line.startsWith('$') || line.startsWith('')}>
           {line}
         </Text>
       ))}
-    </Text>
+    </Box>
   );
 }

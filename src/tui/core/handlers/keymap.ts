@@ -50,7 +50,10 @@ const map: Record<string, KeyAction> = {
 };
 
 /** @brief Map key press to action. @param {string} input - raw key string from useInput. @return {KeyAction} */
-export function resolveKey(input: string, key: { ctrl?: boolean; meta?: boolean; shift?: boolean }): KeyAction {
+export function resolveKey(
+  input: string,
+  key: { ctrl?: boolean; meta?: boolean; shift?: boolean; escape?: boolean },
+): KeyAction {
   if (key.ctrl && input === 'c') return 'abort';
   if (key.ctrl && input === 'k') return 'openPalette';
   if (key.ctrl && input === 'p') return 'openPalette';

@@ -16,7 +16,12 @@ export interface SparklineProps {
 const BLOCKS = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'];
 
 /** @brief Render a compact sparkline from numeric data. @since 0.2.0 */
-export function Sparkline({ data, width = 20, color = colors.accent, showLabels = false }: SparklineProps) {
+export function Sparkline({
+  data,
+  width = 20,
+  color = colors.accent,
+  showLabels = false,
+}: SparklineProps) {
   if (data.length === 0) return <Text dimColor>—</Text>;
 
   const min = Math.min(...data);

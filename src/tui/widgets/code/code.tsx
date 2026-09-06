@@ -2,7 +2,7 @@
  * @fileoverview Code — syntax-highlighted code display.
  * @since 0.2.0
  */
-import { Text } from 'ink';
+import { Box, Text } from 'ink';
 import { colors } from '../../core/colors';
 
 export interface CodeLine {
@@ -18,27 +18,63 @@ export interface CodeProps {
 }
 
 const KEYWORDS = new Set([
-  'const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while',
-  'class', 'interface', 'type', 'import', 'export', 'from', 'async', 'await',
-  'new', 'this', 'super', 'extends', 'implements', 'public', 'private', 'protected',
-  'static', 'abstract', 'true', 'false', 'null', 'undefined', 'void', 'number',
-  'string', 'boolean', 'object', 'array', 'typeof', 'instanceof', 'in',
+  'const',
+  'let',
+  'var',
+  'function',
+  'return',
+  'if',
+  'else',
+  'for',
+  'while',
+  'class',
+  'interface',
+  'type',
+  'import',
+  'export',
+  'from',
+  'async',
+  'await',
+  'new',
+  'this',
+  'super',
+  'extends',
+  'implements',
+  'public',
+  'private',
+  'protected',
+  'static',
+  'abstract',
+  'true',
+  'false',
+  'null',
+  'undefined',
+  'void',
+  'number',
+  'string',
+  'boolean',
+  'object',
+  'array',
+  'typeof',
+  'instanceof',
+  'in',
 ]);
 
 /** @brief Render code with basic syntax highlighting. @since 0.2.0 */
-export function Code({ lines, language, maxWidth = 80 }: CodeProps) {
+export function Code({ lines }: CodeProps) {
   const highlightToken = (token: string): React.ReactNode => {
     const t = token.trim();
     if (!t) return token;
     if (KEYWORDS.has(t)) return <Text color={colors.accentBlue}>{token}</Text>;
-    if (t.startsWith('//') || t.startsWith('#') || t.startsWith('/*')) return <Text dimColor>{token}</Text>;
+    if (t.startsWith('//') || t.startsWith('#') || t.startsWith('/*'))
+      return <Text dimColor>{token}</Text>;
     if (/^["'`]/.test(t)) return <Text color={colors.warn}>{token}</Text>;
     if (/^\d/.test(t)) return <Text color={colors.complete}>{token}</Text>;
     return <Text>{token}</Text>;
   };
 
   return (
-    <Text flexDirection="column">
+    <Box flexDirection="column">
       {lines.map((line) => (
         <Text key={line.number}>
           <Text dimColor>{String(line.number).padStart(4)} │ </Text>
@@ -49,6 +85,6 @@ export function Code({ lines, language, maxWidth = 80 }: CodeProps) {
           </Text>
         </Text>
       ))}
-    </Text>
+    </Box>
   );
 }

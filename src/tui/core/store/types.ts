@@ -4,8 +4,6 @@
  * @package zhi
  */
 
-import type { FC, ReactNode } from 'react';
-
 // ============================================================================
 // Store Types
 // ============================================================================
@@ -41,7 +39,25 @@ export type KeyboardMode = 'normal' | 'insert' | 'command' | 'search';
 export type ThemeName = 'dark' | 'light' | 'codespaces' | 'nord' | 'dracula';
 
 /** Pane id */
-export type PaneId = 'header' | 'dag' | 'detail' | 'file-tree' | 'code-viewer' | 'metrics' | 'critics' | 'eval' | 'diff' | 'terminal' | 'agents' | 'network' | 'log' | 'help' | 'command-palette' | 'notifications' | 'status-bar' | 'config';
+export type PaneId =
+  | 'header'
+  | 'dag'
+  | 'detail'
+  | 'file-tree'
+  | 'code-viewer'
+  | 'metrics'
+  | 'critics'
+  | 'eval'
+  | 'diff'
+  | 'terminal'
+  | 'agents'
+  | 'network'
+  | 'log'
+  | 'help'
+  | 'command-palette'
+  | 'notifications'
+  | 'status-bar'
+  | 'config';
 
 /** Pane visibility */
 export interface PaneVisibility {
@@ -57,7 +73,8 @@ export interface PaneSizes {
 export type StepStatus = 'pending' | 'running' | 'done' | 'error' | 'skipped';
 
 /** DAG step type */
-export type StepType = 'research' | 'planning' | 'coding' | 'testing' | 'review' | 'deployment' | 'unknown';
+export type StepType =
+  'research' | 'planning' | 'coding' | 'testing' | 'review' | 'deployment' | 'unknown';
 
 /** DAG step */
 export interface DagStep {

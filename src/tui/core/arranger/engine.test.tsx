@@ -61,7 +61,9 @@ describe('Arranger', () => {
   it('subscribe fires on dispatch', () => {
     const a = new Arranger();
     let calls = 0;
-    a.subscribe(() => { calls++; });
+    a.subscribe(() => {
+      calls++;
+    });
     a.dispatch({ type: 'resize', id: 'dag', size: 30 });
     expect(calls).toBeGreaterThan(0);
   });

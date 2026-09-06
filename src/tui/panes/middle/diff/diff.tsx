@@ -21,7 +21,10 @@ export function parseDiff(diff: string): DiffLine[] {
   for (const line of lines) {
     if (line.startsWith('@@')) {
       const m = line.match(/@@ -(\d+),?\d* \+(\d+),?\d* @@/);
-      if (m) { oldNum = parseInt(m[1], 10); newNum = parseInt(m[2], 10); }
+      if (m) {
+        oldNum = parseInt(m[1], 10);
+        newNum = parseInt(m[2], 10);
+      }
       result.push({ type: 'context', content: line });
     } else if (line.startsWith('+')) {
       result.push({ type: 'added', newNum: newNum++, content: line.slice(1) });
@@ -40,8 +43,16 @@ export function parseDiff(diff: string): DiffLine[] {
 export function DiffViewer({ diff, maxLines = 30 }: DiffViewerProps) {
   if (!diff) {
     return (
-      <Box flexDirection="column" borderStyle="round" borderColor={colors.fgDim} paddingX={1} flexGrow={1}>
-        <Text color={colors.accent} bold>_DIFF</Text>
+      <Box
+        flexDirection="column"
+        borderStyle="round"
+        borderColor={colors.fgDim}
+        paddingX={1}
+        flexGrow={1}
+      >
+        <Text color={colors.accent} bold>
+          _DIFF
+        </Text>
         <Text color={colors.fgDim}> (no diff)</Text>
       </Box>
     );
@@ -49,8 +60,16 @@ export function DiffViewer({ diff, maxLines = 30 }: DiffViewerProps) {
 
   const lines = parseDiff(diff).slice(0, maxLines);
   return (
-    <Box flexDirection="column" borderStyle="round" borderColor={colors.warn} paddingX={1} flexGrow={1}>
-      <Text color={colors.warn} bold>_DIFF ({lines.length} lines)</Text>
+    <Box
+      flexDirection="column"
+      borderStyle="round"
+      borderColor={colors.warn}
+      paddingX={1}
+      flexGrow={1}
+    >
+      <Text color={colors.warn} bold>
+        _DIFF ({lines.length} lines)
+      </Text>
       <Diff lines={lines} />
     </Box>
   );

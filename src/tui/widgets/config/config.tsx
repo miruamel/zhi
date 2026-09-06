@@ -2,7 +2,7 @@
  * @fileoverview Config — settings panel widget.
  * @since 0.2.0
  */
-import { Text } from 'ink';
+import { Box, Text } from 'ink';
 import { colors } from '../../core/colors';
 
 export interface ConfigEntry {
@@ -18,7 +18,7 @@ export interface ConfigProps {
 /** @brief Render a configuration key-value panel. @since 0.2.0 */
 export function Config({ entries }: ConfigProps) {
   return (
-    <Text flexDirection="column">
+    <Box flexDirection="column">
       {entries.map((e) => (
         <Text key={e.key}>
           <Text color={colors.accentBlue}>{e.key}:</Text>
@@ -27,6 +27,6 @@ export function Config({ entries }: ConfigProps) {
           {e.description && <Text dimColor> — {e.description}</Text>}
         </Text>
       ))}
-    </Text>
+    </Box>
   );
 }

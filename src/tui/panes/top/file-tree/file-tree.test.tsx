@@ -8,9 +8,11 @@ import { renderToString } from '../../../core/test/render';
 
 describe('FileTree', () => {
   it('renders file list', () => {
-    const out = renderToString(FileTree({
-      files: [{ path: 'src/index.ts', type: 'file' }],
-    }));
+    const out = renderToString(
+      FileTree({
+        files: [{ path: 'src/index.ts', type: 'file' }],
+      }),
+    );
     expect(out).toContain('FILES');
     expect(out).toContain('index.ts');
   });

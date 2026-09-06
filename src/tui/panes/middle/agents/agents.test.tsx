@@ -14,9 +14,11 @@ describe('AgentsPane', () => {
   });
 
   it('renders agent list', () => {
-    const out = renderToString(AgentsPane({
-      agents: [{ id: '1', name: 'Coder', status: 'running', tasksCompleted: 3 }],
-    }));
+    const out = renderToString(
+      AgentsPane({
+        agents: [{ id: '1', name: 'Coder', status: 'running', tasksCompleted: 3 }],
+      }),
+    );
     expect(out).toContain('Coder');
     expect(out).toContain('running');
   });

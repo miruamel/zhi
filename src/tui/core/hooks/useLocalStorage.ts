@@ -10,11 +10,17 @@ export function useLocalStorage<T>(key: string, initial: T): [T, (v: T) => void]
     try {
       const raw = localStorage.getItem(key);
       if (raw !== null) setValue(JSON.parse(raw));
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }, [key]);
   const set = (v: T) => {
     setValue(v);
-    try { localStorage.setItem(key, JSON.stringify(v)); } catch { /* ignore */ }
+    try {
+      localStorage.setItem(key, JSON.stringify(v));
+    } catch {
+      /* ignore */
+    }
   };
   return [value, set];
 }

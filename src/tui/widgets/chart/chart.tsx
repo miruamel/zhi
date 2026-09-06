@@ -2,7 +2,7 @@
  * @fileoverview Chart — simple bar/line chart.
  * @since 0.2.0
  */
-import { Text } from 'ink';
+import { Box, Text } from 'ink';
 import { colors } from '../../core/colors';
 
 export interface ChartDataPoint {
@@ -34,7 +34,7 @@ export function Chart({ data, width = 30, color = colors.accent, type = 'bar' }:
   }
 
   return (
-    <Text flexDirection="column">
+    <Box flexDirection="column">
       {data.map((d) => {
         const barLen = Math.round((d.value / max) * width);
         return (
@@ -45,6 +45,6 @@ export function Chart({ data, width = 30, color = colors.accent, type = 'bar' }:
           </Text>
         );
       })}
-    </Text>
+    </Box>
   );
 }
