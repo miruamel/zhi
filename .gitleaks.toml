@@ -15,11 +15,13 @@ paths = [
   "docs/.*",
   ".*\\.md$",
   "node_modules/.*",
-  ".husky/pre-commit"
+  ".husky/pre-commit",
+  ".github/workflows/security.yml"
 ]
 regexes = [
   "(?i)secret.*detection",  # pre-commit hook comment
-  "(?i)password.*generate.*key"  # node_modules type defs
+  "(?i)password.*generate.*key",  # node_modules type defs
+  "(?i)secret detection.*gitleaks"  # security.yml job name
 ]
 
 [[rules]]
