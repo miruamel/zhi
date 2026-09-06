@@ -20,6 +20,8 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 - **Architecture critic infra error in test environment (2 root causes)** — (1) `spawnSync` in `runCruiserDefault()` ran in the test's temp working directory (`/tmp/zhi-critique-...`) which lacks `.dependency-cruiser.(c|m)js`; fixed by adding `cwd: '/root/zhi'`. (2) `import.meta.url` gave wrong path in `bun test` + `chdir` contexts; fixed by switching to `__dirname`. (3) `mock.module('child_process')` at module level in `critic.test.ts` leaked across test files in the same worker; fixed by adding `--isolate` to `bun test`. Gate: 385 pass / 0 fail / 753 expect() across 72 files. ADR-015.
 
+- **CI gitleaks `command not found` (4 PR attempts, 2 root causes)** — (1) `echo "/tmp/gitleaks" >> $GITHUB_PATH` in a `run:` block does NOT persist to subsequent steps — each CI step runs in its own subshell, so the PATH modification was discarded before the next step. (2) checkout post-step left a stale `/tmp/gitleaks` file from a prior failed nested-extraction, preventing clean re-extraction. Fix: combine install + run into a single step using absolute path `/tmp/gitleaks`. Closes #166.
+
 ### Process
 
 - **Direct push to main violation documented** — Commit 7cfa28a was pushed directly to main bypassing PR workflow. Future changes must use feature branches + PR. Closes #158.
