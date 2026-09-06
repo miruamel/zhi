@@ -21,7 +21,7 @@ function isDocsOnly(filePath: string): boolean {
   if (filePath.endsWith('.md')) return true;
   if (filePath.startsWith('docs/')) return true;
   if (filePath.startsWith('audit-log/')) return true;
-  if (filePath === '.prettierignore' || filePath === '.gitignore') return true;
+  if (filePath === '.prettierignore') return true;
   if (filePath.startsWith('.github/workflows/')) return true;
   return false;
 }
@@ -41,7 +41,7 @@ const tests: Array<[string, boolean]> = [
   ['CHANGES.md', false],
   ['docs/ARCHITECTURE.md', false],
   ['.prettierignore', false],
-  ['.gitignore', false],
+  ['.gitignore', true],
   ['.github/workflows/ci.yml', false],
   ['src/cli.ts', true],
   ['package.json', true],
