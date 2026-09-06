@@ -1,6 +1,4 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # @brief Pre-commit hook: gitleaks secret detection
 # @see mandate §4 (Security), §5 (Quality Gates)
 # @since 0.1.8
