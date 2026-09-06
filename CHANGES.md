@@ -14,6 +14,13 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
+## [0.1.7] - 2026-09-06
+
+### Fixed
+
+- **TS6133 unused variable errors in critic plants** — `tsc --noEmit` with `noUnusedLocals: true` caught two unused `const` declarations: `ONCLICK_RE` in `engine/critic/plant/accessibility/critic.ts` and `EXPORT_RE`/`BRIEF_RE` in `engine/critic/plant/doc/critic.ts`. All three removed. Gate green: 412 pass / 0 fail / 821 expect() across 76 files.
+- **`.qwen/` session files excluded from git** — `.qwen/` directory (Qwen Code tooling, NgodingPakeAI sync state) was not in `.gitignore`, causing temporary session files to leak into git history. Added `.qwen/` to the local tooling exclusion section of `.gitignore`.
+
 ## [0.1.6] - 2026-09-06
 
 ### Added
