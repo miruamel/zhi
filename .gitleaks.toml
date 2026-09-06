@@ -1,0 +1,89 @@
+# @brief gitleaks configuration for secret detection
+# @see https://github.com/gitleaks/gitleaks
+# @since 0.1.8
+
+[allowlist]
+description = "Allowlisted patterns for false positives"
+paths = [
+  "CHANGES.md",
+  "package-lock.json",
+  ".*\\.test\\.ts$",
+  ".*\\.test\\.tsx$",
+  ".*\\.spec\\.ts$",
+  ".*\\.spec\\.tsx$",
+  "audit-log/.*",
+  "docs/.*",
+  ".*\\.md$",
+  "node_modules/.*",
+  ".husky/pre-commit"
+]
+regexes = [
+  "(?i)secret.*detection",  # pre-commit hook comment
+  "(?i)password.*generate.*key"  # node_modules type defs
+]
+
+[[rules]]
+description = "Generic API Key"
+id = "generic-api-key"
+regex = '''(?i)(api[_-]?key|apikey|secret[_-]?key|access[_-]?token)['"\s:=]+[a-zA-Z0-9_\-]{20,}'''
+tags = ["key", "API"]
+
+[[rules]]
+description = "Generic Secret"
+id = "generic-secret"
+regex = '''(?i)(secret|password|passwd|pwd)['"\s:=]+[a-zA-Z0-9_\-]{8,}'''
+tags = ["secret", "password"]
+
+[[rules]]
+description = "AWS Access Key"
+id = "aws-access-key"
+regex = '''(?i)AKIA[0-9A-Z]{16}'''
+tags = ["AWS", "key"]
+
+[[rules]]
+description = "AWS Secret Key"
+id = "aws-secret-key"
+regex = '''(?i)aws[_-]?secret[_-]?access[_-]?key['"\s:=]+[a-zA-Z0-9/+=]{40}'''
+tags = ["AWS", "secret"]
+
+[[rules]]
+description = "GitHub Token"
+id = "github-token"
+regex = '''(?i)gh[opsu]_[a-zA-Z0-9]{36,}'''
+tags = ["GitHub", "token"]
+
+[[rules]]
+description = "NPM Token"
+id = "npm-token"
+regex = '''(?i)npm_[a-zA-Z0-9]{36,}'''
+tags = ["NPM", "token"]
+
+[[rules]]
+description = "Private Key"
+id = "private-key"
+regex = '''-----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----'''
+tags = ["key", "private"]
+
+[[rules]]
+description = "Slack Token"
+id = "slack-token"
+regex = '''(?i)xox[baprs]-[a-zA-Z0-9-]{10,}'''
+tags = ["Slack", "token"]
+
+[[rules]]
+description = "Discord Token"
+id = "discord-token"
+regex = '''(?i)[MN][A-Za-z\d]{23}\.[\w-]{6}\.[\w-]{27}'''
+tags = ["Discord", "token"]
+
+[[rules]]
+description = "JWT Token"
+id = "jwt-token"
+regex = '''eyJ[a-zA-Z0-9_-]{10,}\.eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}'''
+tags = ["JWT", "token"]
+
+[[rules]]
+description = "Database URL with credentials"
+id = "database-url"
+regex = '''(?i)(postgres|mysql|mongodb|redis)://[^:]+:[^@]+@'''
+tags = ["database", "credentials"]

@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# @brief Pre-commit hook: gitleaks secret detection
+# @see mandate §4 (Security), §5 (Quality Gates)
+# @since 0.1.8
+
+echo "[pre-commit] Running gitleaks secret scan..."
+
+# Check if gitleaks is available
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "[pre-commit] gitleaks not found, installing via npx..."
+  npx gitleaks@latest detect --source . --config .gitleaks.toml --verbose --no-git || {
+    echo "[pre-commit] FAIL: gitleaks detected secrets!"
+    exit 1
+  }
+else
+  gitleaks detect --source . --config .gitleaks.toml --verbose --no-git || {
+    echo "[pre-commit] FAIL: gitleaks detected secrets!"
+    exit 1
+  }
+fi
+
+echo "[pre-commit] gitleaks: no secrets detected"
