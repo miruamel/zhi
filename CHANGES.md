@@ -192,11 +192,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 | lint         | n/a (no eslint)   | 0 errors (124 JSDoc `@returns` warnings = baseline) |
 | format:check | n/a               | clean                                               |
 | test         | 210 pass / 4 fail | 214 pass / 0 fail                                   |
-[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.7...HEAD
-[0.1.7]: https://github.com/miruamel/zhi/releases/tag/v0.1.7
-## [0.1.0] - 2026-08-29
 
-First tagged baseline. See [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md) for the full 2026-08-29 → 2026-08-30 development log (15 entries; note: that history uses inconsistent version headers `[0.1.0]` duplicated and a non-monotonic `0.1.0..0.6.0` block — preserved as-is for authorial record).
 [Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.7...HEAD
 [0.1.7]: https://github.com/miruamel/zhi/releases/tag/v0.1.7
 [0.1.6]: https://github.com/miruamel/zhi/releases/tag/v0.1.6
