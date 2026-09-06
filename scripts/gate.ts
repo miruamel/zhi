@@ -1,5 +1,7 @@
 #!/usr/bin/env bun
 /**
+ *   bun run scripts/gate.ts              # full gate (lint + format + typecheck + native:build + test)
+ *   bun run scripts/gate.ts --if-changed # skip typecheck+test when only docs/markdown changed
  * @brief Gate orchestrator: lint + format + typecheck + test, with optional docs-only fast-path.
  *
  * Usage:
@@ -119,6 +121,7 @@ async function main(): Promise<void> {
   run('lint', 'bun run lint');
   run('format:check', 'bun run format:check');
   run('typecheck', 'bun run typecheck');
+  run('native:build', 'bun run native:build');
   run('test', 'bun run test');
   console.log('[gate] all checks passed');
 }
