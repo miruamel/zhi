@@ -100,20 +100,29 @@ async function main(): Promise<void> {
   if (fastPath) {
     const baseRef = resolveBaseRef();
     const files = getChangedFiles(baseRef);
-    const nonDocs = files.filter(isNonDocs);
 
-    if (nonDocs.length === 0) {
+    // Empty diff = git unavailable or shallow clone — never take the fast
+    // path. An empty file list would otherwise skip typecheck + test.
+    if (files.length === 0) {
       console.log(
-        `[gate] --if-changed: ${files.length} file(s) changed, all docs/markdown — skipping typecheck + test`,
+        '[gate] --if-changed: no diff available (shallow clone or git unavailable) — running full gate',
       );
-      run('lint', 'bun run lint');
-      run('format:check', 'bun run format:check');
-      console.log('[gate] fast-path passed');
-      return;
+    } else {
+      const nonDocs = files.filter(isNonDocs);
+
+      if (nonDocs.length === 0) {
+        console.log(
+          `[gate] --if-changed: ${files.length} file(s) changed, all docs/markdown — skipping typecheck + test`,
+        );
+        run('lint', 'bun run lint');
+        run('format:check', 'bun run format:check');
+        console.log('[gate] fast-path passed');
+        return;
+      }
+      console.log(
+        `[gate] --if-changed: ${nonDocs.length} non-docs file(s) changed (${nonDocs.join(', ')}) — running full gate`,
+      );
     }
-    console.log(
-      `[gate] --if-changed: ${nonDocs.length} non-docs file(s) changed (${nonDocs.join(', ')}) — running full gate`,
-    );
   }
 
   run('lint', 'bun run lint');

@@ -32,6 +32,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Setup Zig 0.16.0 (gate runs native:build)
+        run: |
+          ZIG_VER=0.16.0
+          URL="https://ziglang.org/download/${ZIG_VER}/zig-x86_64-linux-${ZIG_VER}.tar.xz"
+          curl -fsSL "$URL" -o /tmp/zig.tar.xz
+          tar -xf /tmp/zig.tar.xz -C /opt
+          echo "/opt/zig-x86_64-linux-${ZIG_VER}" >> "$GITHUB_PATH"
+
       - name: Gate
         run: bun run gate
 
