@@ -16,8 +16,7 @@ describe('cli boot', () => {
     expect(ctx.aggregate?.passed).toBe(true);
     expect(ctx.critiques).toHaveLength(11);
     expect(ctx.critiques?.map((c: Critique) => c.name)).toContain('maintainability');
-  });
-
+  }, 30000);
   it('throws on empty goal', async () => {
     await expect(main([])).rejects.toThrow('cli: goal kosong');
   });

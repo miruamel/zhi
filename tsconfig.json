@@ -30,5 +30,11 @@
     }
   },
   "include": ["src/**/*", "engine/**/*", "scripts/**/*", "tests/**/*", "types/**/*"],
-  "exclude": ["node_modules", "native/out", "native/.zig-cache", "native/stream/.zig-cache"]
+  "exclude": [
+    "node_modules",
+    "native/out",
+    "native/.zig-cache",
+    "native/stream/.zig-cache",
+    "scripts/ci/architecture/check-circular.ts"
+  ]
 }

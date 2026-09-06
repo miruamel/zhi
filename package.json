@@ -39,7 +39,7 @@
     "typecheck": "bun x tsc --noEmit -p tsconfig.json",
     "typecheck:node": "bun x tsc --noEmit -p tsconfig.node.json",
     "typecheck:lib": "bun x tsc --noEmit -p tsconfig.lib.json",
-    "arch:check": "bun run scripts/ci/architecture/check-circular.ts",
+    "arch:check": "npx dependency-cruiser --config dependency-cruiser.config.cjs --validate --exclude '\\.test\\.(ts|js|tsx|jsx)$|__tests__|\\.spec\\.(ts|js)$|dist|node_modules' src/ engine/ scripts/ native/",
     "arch:metrics": "bun run scripts/ci/architecture/metrics.ts",
     "native:build": "cd native/stream && bash build.sh",
     "build": "bun run scripts/build.ts",

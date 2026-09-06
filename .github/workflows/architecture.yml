@@ -37,6 +37,6 @@ jobs:
         with:
           bun-version: latest
       - name: dependency-cruiser (circular + layer separation)
-        run: npx dependency-cruiser --validate src/ engine/ scripts/
+        run: npx dependency-cruiser --config dependency-cruiser.config.cjs --validate --exclude '\.test\.(ts|js|tsx|jsx)$|__tests__|\.spec\.(ts|js)$|dist|node_modules' src/ engine/ scripts/ native/
       - name: bun test
         run: bun test
