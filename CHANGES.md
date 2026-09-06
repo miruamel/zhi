@@ -14,6 +14,16 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
+## [0.1.9] - 2026-09-06
+
+### Fixed
+
+- **LoopMetrics.reset() for multi-run drivers** — `LoopMetrics` records accumulated indefinitely across multiple loop runs in a long-lived `LoopDriver`, causing stale metrics. Added `reset()` that clears `records[]` and `recoverAttempts`. Closes #157.
+
+### Process
+
+- **Direct push to main violation documented** — Commit 7cfa28a was pushed directly to main bypassing PR workflow. Future changes must use feature branches + PR. Closes #158.
+
 ## [0.1.8] - 2026-09-06
 
 ### Security
