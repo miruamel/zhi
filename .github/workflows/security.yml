@@ -33,7 +33,7 @@ jobs:
           bun-version: 1.4.0
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
@@ -50,7 +50,7 @@ jobs:
           bun-version: 1.4.0
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: Audit npm dependencies
         run: npm audit --json > /tmp/audit.json || true
@@ -70,11 +70,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install gitleaks
+      - name: Install and run gitleaks
         run: |
-          curl -L https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_linux_x64.tar.gz -o /tmp/gitleaks.tar.gz
-          tar -xzf /tmp/gitleaks.tar.gz -C /tmp/
-          sudo cp /tmp/gitleaks /usr/local/bin/
-
-      - name: Run gitleaks
-        run: gitleaks detect --source . --config .gitleaks.toml --verbose --no-git
+          rm -rf /tmp/gitleaks
+          curl -LsSf https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_linux_x64.tar.gz | tar xz -C /tmp/
+          /tmp/gitleaks detect --source . --config .gitleaks.toml --verbose --no-git
