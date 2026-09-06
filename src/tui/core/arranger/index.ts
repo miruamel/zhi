@@ -3,4 +3,13 @@
  * @since 0.2.0
  */
 export * from './types';
-export { Arranger, findNode, findParent, cloneNode, applyEvent } from './engine';
+export { Arranger } from './engine';
+export {
+  findNode,
+  findParent,
+  cloneNode,
+  applyEvent,
+  splitNode,
+  totalSize,
+  replaceNode,
+} from './tree';

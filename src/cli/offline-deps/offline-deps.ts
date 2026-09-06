@@ -52,7 +52,8 @@ export function offlineDeps(threshold: number, architectureRunner?: CruiserRunne
         : `// verify: FAIL\n${report.violations.map((v) => `//   - ${v}`).join('\n')}`;
       return `${body}\n${verdict}`;
     },
-    critique: (code) => composeCritiques([{ path: 'generated.ts', content: code }], architectureRunner),
+    critique: (code) =>
+      composeCritiques([{ path: 'generated.ts', content: code }], architectureRunner),
     compress: (code) =>
       compress({ entries: [{ key: 'code', weight: 1, text: code }], budget: 20000 }).entries[0]
         ?.text ?? '',
