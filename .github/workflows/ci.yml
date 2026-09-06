@@ -16,13 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Install gitleaks
+      - name: Install and run gitleaks
         run: |
+          rm -rf /tmp/gitleaks
           curl -LsSf https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_linux_x64.tar.gz | tar xz -C /tmp/
-          echo "/tmp/gitleaks/gitleaks" >> $GITHUB_PATH
-
-      - name: Run gitleaks
-        run: gitleaks detect --source . --config .gitleaks.toml --no-git --verbose
+          /tmp/gitleaks detect --source . --config .gitleaks.toml --no-git --verbose
         env:
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
