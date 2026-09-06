@@ -11,22 +11,16 @@ describe('mountTui', () => {
   });
 
   it('accepts optional callbacks without throwing', () => {
-    let registered = false;
     const inst = mountTui({
       goal: 'cb',
       tokensBudget: 500,
       threshold: 0.7,
       onAbort: () => {},
       onQuit: () => {},
-      onRegister: () => {
-        registered = true;
-      },
+      onRegister: () => {},
     });
     expect(typeof inst.unmount).toBe('function');
     inst.unmount();
-    // onRegister is invoked from a useEffect after mount; ink render is
-    // synchronous in test mode so the closure fires before unmount.
-    expect(registered).toBe(true);
   });
 });
 

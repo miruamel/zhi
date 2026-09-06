@@ -1,6 +1,7 @@
 /**
  * @brief TUI application state shape (derived from LoopMetrics + LoopLogger).
  * @since 0.1.2
+ * @updated 0.2.0 — added file tree, terminal, network, agents, diff fields
  */
 
 /** @brief Single critic score line. @since 0.1.2 */
@@ -58,7 +59,39 @@ export interface PrCiState {
   ciDurationMs?: number;
 }
 
-/** @brief Top-level TUI app state. @since 0.1.2 */
+/** @brief File entry for tree view. @since 0.2.0 */
+export interface FileEntry {
+  path: string;
+  type: 'file' | 'dir';
+  size?: number;
+  modified?: number;
+}
+
+/** @brief Network request record. @since 0.2.0 */
+export interface NetworkRequest {
+  url: string;
+  status: number;
+  durationMs: number;
+  timestamp: number;
+}
+
+/** @brief Agent info for agents pane. @since 0.2.0 */
+export interface AgentInfo {
+  id: string;
+  name: string;
+  status: 'idle' | 'running' | 'done' | 'failed';
+  tasksCompleted: number;
+  currentTask?: string;
+}
+
+/** @brief Git state. @since 0.1.2 */
+export interface GitState {
+  branch?: string;
+  ahead?: number;
+  behind?: number;
+}
+
+/** @brief Top-level TUI app state. @since 0.1.2 @updated 0.2.0 */
 export interface AppState {
   loop: string;
   goal: string;
@@ -80,9 +113,22 @@ export interface AppState {
   finished: boolean;
   aborted: boolean;
   partial: boolean;
+  // 0.2.0 additions
+  files: FileEntry[];
+  selectedFile?: string;
+  fileContent?: string;
+  fileLanguage?: string;
+  diff?: string;
+  terminalLines: string[];
+  networkRequests: NetworkRequest[];
+  networkOnline: boolean;
+  agents: AgentInfo[];
+  tokenSparkline: number[];
+  git?: GitState;
+  prUrl?: string;
 }
 
-/** @brief Empty default state. @since 0.1.2 */
+/** @brief Empty default state. @since 0.1.2 @updated 0.2.0 */
 export function emptyState(goal: string, tokensBudget: number): AppState {
   return {
     loop: 'INTAKE',
@@ -106,5 +152,12 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     finished: false,
     aborted: false,
     partial: false,
+    // 0.2.0 defaults
+    files: [],
+    terminalLines: [],
+    networkRequests: [],
+    networkOnline: true,
+    agents: [],
+    tokenSparkline: [],
   };
 }
