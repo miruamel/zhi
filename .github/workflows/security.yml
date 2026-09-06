@@ -60,6 +60,8 @@ jobs:
           if [ -s /tmp/audit.json ]; then
             echo "=== npm audit summary ==="
             node -e 'const d=require("/tmp/audit.json");const v=d.vulnerabilities||{};for(const s of ["critical","high","moderate","low"]){const c=v[s]||0;if(c>0)console.log(s+": "+c)}'
+          fi
+
   gitleaks:
     name: Secret Detection (gitleaks)
     runs-on: ubuntu-latest
