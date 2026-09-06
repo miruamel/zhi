@@ -4,7 +4,7 @@ import { slocCritic, type FileRecord } from './sloc/critic';
 import { todoCritic } from './todo/critic';
 import { importsCritic } from './imports/critic';
 import { maintainabilityCritic } from './maintainability/critic';
-import { architectureCritic } from './architecture/critic';
+import { architectureCritic, type CruiserRunner } from './architecture/critic';
 import { privacyCritic } from './privacy/critic';
 import { docCritic } from './doc/critic';
 import { accessibilityCritic } from './accessibility/critic';
@@ -18,16 +18,20 @@ import { testingCritic } from './hygiene/testing/critic';
 
 /** @brief Jalankan semua critic plant pada kumpulan file.
  * @param {FileRecord[]} files - artefak yang diaudit.
+ * @param {CruiserRunner} [architectureRunner] - optional runner for architecture critic (testing).
  * @return {Critique[]} hasil tiap critic (siap di-aggregate).
  * @see docs/design/critic.md
  * @since 0.1.1 */
-export function composeCritiques(files: FileRecord[]): Critique[] {
+export function composeCritiques(
+  files: FileRecord[],
+  architectureRunner?: CruiserRunner,
+): Critique[] {
   return [
     slocCritic(files),
     todoCritic(files),
     importsCritic(files),
     maintainabilityCritic(files),
-    architectureCritic(files),
+    architectureCritic(files, architectureRunner),
     privacyCritic(files),
     docCritic(files),
     accessibilityCritic(files),

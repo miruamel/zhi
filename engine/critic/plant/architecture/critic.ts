@@ -1,82 +1,106 @@
-/** @brief Critic: arsitektural drift via CI guard (repo-wide holistic). @since 0.1.1 */
+/** @brief Critic: arsitektural drift via dependency-cruiser (repo-wide holistic). @since 0.1.1 */
 import { spawnSync } from 'child_process';
+import { fileURLToPath } from 'url';
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-/** @brief Path script CI architecture guard (sumber tunggal aturan layer). @since 0.1.1 */
-const GUARD = new URL('../../../../scripts/ci/architecture/check-circular.ts', import.meta.url);
-
-/** @brief Hasil parse stdout guard. @since 0.1.1 */
-export interface GuardReport {
-  infraError: string | null;
-  circular: number;
-  deep: number;
-  illegal: number;
-  detail: string;
+/** @brief Hasil parse JSON dependency-cruiser. @since 0.1.1 */
+export interface CruiserReport {
+  modules: Array<{
+    source: string;
+    dependencies: Array<{
+      module: string;
+      resolved: string;
+      circular: boolean;
+      valid: boolean;
+      dependencyTypes: string[];
+    }>;
+    orphan: boolean;
+    valid: boolean;
+  }>;
 }
 
-function countSection(stdout: string, header: string): number {
-  // Match `header:` then violation lines (indented 2 spaces) until next section header or EOF.
-  const re = new RegExp(`^${header}:\\n((?:  .+\\n?)*)`, 'm');
-  const m = stdout.match(re);
-  if (!m || !m[1]) return 0;
-  return m[1].split('\n').filter((l) => l.startsWith('  ') && l.length > 2).length;
+/** @brief Runner function type — injectable for tests. @since 0.1.8 */
+export type CruiserRunner = () => CruiserReport | null;
+
+/** @brief Exclude test files and artifacts so they don't pollute the graph.
+ * Matches patterns used in architecture-guard.sh. */
+const EXCLUDE_RE = '\\.test\\.(ts|js|tsx|jsx)$|__tests__|\\.spec\\.(ts|js)$|dist|node_modules';
+
+/** @brief Jalankan dependency-cruiser dan parse JSON output.
+ * @return {CruiserReport | null} null only on parse failure; status != 0 (violations) still yields valid JSON.
+ * @since 0.1.8 */
+function runCruiserDefault(): CruiserReport | null {
+  // Resolve dependency-cruiser binary via import.meta.url (portable across Node/Bun).
+  // Using process.execPath avoids npx/bunx bootstrap overhead — critical for test performance.
+  const scriptPath = `${fileURLToPath(import.meta.url).replace(
+    /[/\\][^/\\]+$/,
+    '',
+  )}/../../../../node_modules/dependency-cruiser/bin/dependency-cruise.mjs`;
+  const res = spawnSync(
+    process.execPath,
+    [
+      scriptPath,
+      '-T',
+      'json',
+      '--validate',
+      '--exclude',
+      EXCLUDE_RE,
+      'src/',
+      'engine/',
+      'scripts/',
+      'native/',
+    ],
+    { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 },
+  );
+  // Only bail on actual spawn failure (res.error); exit code != 0 means violations, not parse failure.
+  if (!res || res.error) return null;
+  try {
+    return JSON.parse(res.stdout ?? '{}') as CruiserReport;
+  } catch {
+    return null;
+  }
 }
 
-/** @brief Parse stdout guard: hitung pelanggaran per kategori. @param {string} stdout @param {string} stderr @return {GuardReport} @since 0.1.1 */
-export function parseGuard(stdout: string, stderr: string): GuardReport {
-  return {
-    infraError: stderr.trim() || null,
-    circular: countSection(stdout, 'CIRCULAR DEPENDENCY'),
-    deep: countSection(stdout, 'DEEP RELATIVE IMPORT \\(>3 naik\\)'),
-    illegal: countSection(stdout, 'SKIPPED/ILLEGAL LAYER EDGE'),
-    detail: stdout.trim(),
-  };
+/** @brief Hitung pelanggaran dari laporan cruiser. orphan tidak dihitung — check-circular.ts
+ * tidak pernah mempenalisasi orphan modules.
+ * @param {CruiserReport} report @return {{circular: number, illegal: number}} @since 0.1.1 */
+function countViolations(report: CruiserReport): { circular: number; illegal: number } {
+  let circular = 0;
+  let illegal = 0;
+  for (const mod of report.modules) {
+    for (const dep of mod.dependencies) {
+      if (dep.circular) circular++;
+      if (!dep.valid) illegal++;
+    }
+  }
+  return { circular, illegal };
 }
 
-/** @brief Jalankan guard terhadap repo. Holistic: menilai repo (bukan per-file slice)
- * karena beberapa aturan (circular dep, layer edge) butuh graf repo penuh. Param
- * `files` diterima untuk keseragaman antarmuka, diabaikan dengan sengaja.
- * @param {FileRecord[]} _files - diabaikan (holistic check, lihat JSDoc).
- * @return {Critique} graduated: 0 violations → 1; penalti 0.5 per circular, 0.25 per deep, 0.5 per illegal.
+/** @brief Critic arsitektur: jalankan dependency-cruiser, skor berdasarkan pelanggaran.
+ * @param {FileRecord[]} _files - diabaikan (holistic check butuh graf repo penuh).
+ * @param {CruiserRunner} [runner] - injectable for testing (defaults to real dependency-cruiser).
+ * @return {Critique} graduated: 0 violations → 1; penalti 0.5 per circular, 0.5 per illegal.
  * @since 0.1.1 */
-export function architectureCritic(_files: FileRecord[]): Critique {
-  const res = spawnSync('bun', ['run', GUARD.pathname], { encoding: 'utf8' });
-  if (res.error) {
+export function architectureCritic(_files: FileRecord[], runner?: CruiserRunner): Critique {
+  const runCruiser = runner ?? runCruiserDefault;
+  const report = runCruiser();
+  if (!report) {
     return {
       name: 'architecture',
       score: 0,
       weight: 1.5,
-      findings: [`infra error (skip CI guard): ${res.error.message}`],
+      findings: ['infra error: dependency-cruiser failed or invalid JSON'],
     };
   }
-  if (res.signal) {
-    return {
-      name: 'architecture',
-      score: 0,
-      weight: 1.5,
-      findings: [`infra error (signal ${res.signal}): guard killed`],
-    };
-  }
-  if (res.status === 0) {
+  const { circular, illegal } = countViolations(report);
+  if (circular === 0 && illegal === 0) {
     return { name: 'architecture', score: 1, weight: 1.5, findings: [] };
   }
-  const report = parseGuard(res.stdout ?? '', res.stderr ?? '');
-  if (report.infraError) {
-    return {
-      name: 'architecture',
-      score: 0,
-      weight: 1.5,
-      findings: [`infra error (guard stderr): ${report.infraError}`],
-    };
-  }
-  const penalty = 0.5 * report.circular + 0.25 * report.deep + 0.5 * report.illegal;
+  const penalty = 0.5 * circular + 0.5 * illegal;
   const score = Math.max(0, 1 - penalty);
   const findings: string[] = [];
-  if (report.circular) findings.push(`circular dependency: ${report.circular} cycle(s)`);
-  if (report.deep) findings.push(`deep relative import: ${report.deep} violation(s)`);
-  if (report.illegal) findings.push(`illegal layer edge: ${report.illegal} violation(s)`);
-  if (findings.length === 0)
-    findings.push('guard exited non-zero but no violations parsed (unknown drift)');
+  if (circular) findings.push(`circular dependency: ${circular} cycle(s)`);
+  if (illegal) findings.push(`illegal layer edge: ${illegal} violation(s)`);
   return { name: 'architecture', score, weight: 1.5, findings };
 }
