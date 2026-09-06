@@ -3,7 +3,6 @@ import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
 const IMG_NO_ALT_RE = /<img\b(?:(?!alt=)[^>])*>/i;
-const ONCLICK_RE = /\bonClick\b/i;
 const KEYBOARD_RE = /\b(?:onKeyDown|onKeyPress|onKeyUp)\b/i;
 const TEST_RE = /\.test\.(ts|tsx|js|jsx)$/;
 
@@ -23,7 +22,7 @@ export function accessibilityCritic(files: FileRecord[]): Critique {
       count++;
     }
     // Improved onClick check: only flag on div/span without keyboard handler and without role="button" or "link"
-    const ONCLICK_DIV_SPAN_RE = /<(div|span)(\s+[^>]*)?onClick\s*=\s*[^>]*>/ig;
+    const ONCLICK_DIV_SPAN_RE = /<(div|span)(\s+[^>]*)?onClick\s*=\s*[^>]*>/gi;
     const matches = f.content.matchAll(ONCLICK_DIV_SPAN_RE);
     for (const match of matches) {
       const attrs = match[2] || '';

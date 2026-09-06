@@ -36,6 +36,7 @@ coverage/
 # Local tooling / sync state (not project source)
 .ngodingpakeai/
 .claude/
+.qwen/
 
 # Test / coverage
 .nyc_output/

@@ -28,7 +28,8 @@ export function verify(files: ScaffoldFile[]): VerifyResult {
         const spec = match[1];
         if (spec.startsWith('.')) {
           const ups = (spec.match(/\.\.\//g) ?? []).length;
-          if (ups >= 2) { // 2 or more levels up is considered a violation
+          if (ups >= 2) {
+            // 2 or more levels up is considered a violation
             violations.push(`deep relative import (${ups} levels up): ${f.path}`);
             break;
           }

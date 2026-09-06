@@ -2,9 +2,6 @@
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-const EXPORT_RE =
-  /^\s*export\s+(?:async\s+)?(?:function|const|class|interface|type|let|var|enum)\b/m;
-const BRIEF_RE = /@brief\b/;
 const TEST_RE = /\.test\.(ts|js)$/;
 
 // ponytail: upgraded to per-symbol @brief check (exported function/const/class/interface/type/let/var/enum).
@@ -18,15 +15,19 @@ export function docCritic(files: FileRecord[]): Critique {
   let count = 0;
   for (const f of files) {
     if (TEST_RE.test(f.path)) continue;
-    
+
     // Split content into lines for processing
     const lines = f.content.split('\n');
-    
+
     // Find all export declarations and check if they have @brief in preceding comment
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       // Match export declarations: export (async)? function|const|class|interface|type|let|var|enum
-      if (/^\s*export\s+(?:async\s+)?(?:function|const|class|interface|type|let|var|enum)\b/.test(line)) {
+      if (
+        /^\s*export\s+(?:async\s+)?(?:function|const|class|interface|type|let|var|enum)\b/.test(
+          line,
+        )
+      ) {
         // Look backwards for JSDoc comment with @brief
         let hasBrief = false;
         let j = i - 1;
@@ -46,10 +47,12 @@ export function docCritic(files: FileRecord[]): Critique {
             k--;
           }
         }
-        
+
         if (!hasBrief) {
           // Extract symbol name for better reporting
-          const symbolMatch = line.match(/(?:function|const|class|interface|type|let|var|enum)\s+([^\s\(]+)/);
+          const symbolMatch = line.match(
+            /(?:function|const|class|interface|type|let|var|enum)\s+([^\s\(]+)/,
+          );
           const symbolName = symbolMatch ? symbolMatch[1] : 'unknown';
           findings.push(`${f.path}:${i + 1} missing-@brief for exported ${symbolName}`);
           count++;
