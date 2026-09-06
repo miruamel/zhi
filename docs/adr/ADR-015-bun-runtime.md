@@ -87,9 +87,45 @@ spawnSync(process.execPath, [...], {
 - **+** Test coverage for `architectureCritic` now reflects real behavior.
 - **−** Hardcodes project root as string — acceptable since this is project-specific infrastructure code.
 
+---
+
+## Decision: Branch Protection — enforce_admins
+
+**Status**: Accepted — 2026-09-06
+
+**Context**: Branch protection on `main` was configured but `enforce_admins: false` allowed repository administrators to bypass all rules (including `allow_force_pushes: false`, `required_linear_history: true`, and `required_pull_request_reviews`). This violated mandate §6.1 (DILARANG push langsung ke main).
+
+**Problem**: Direct push to `main` succeeded despite branch protection rules because admin users can bypass protection when `enforce_admins` is disabled.
+
+**Solution**: Enable `enforce_admins` via GitHub API:
+
+```bash
+gh api repos/{owner}/{repo}/branches/main/protection/enforce_admins --method POST
+```
+
+This makes all branch protection rules apply to administrators as well.
+
+**Resulting branch protection on `main`**:
+
+| Rule                              | Value                               |
+| --------------------------------- | ----------------------------------- |
+| `enforce_admins`                  | enabled — admins cannot bypass      |
+| `allow_force_pushes`              | disabled — no force push            |
+| `required_linear_history`         | enabled — rebase/squash merge only  |
+| `required_pull_request_reviews`   | 1 approval required                 |
+| `required_status_checks` (strict) | Gate + Build + invariants must pass |
+
+**Consequences**
+
+- **+** No direct push to `main` possible — all changes require PR
+- **+** CI status checks enforced before merge
+- **+** Mandate §6.1 fully complied
+- **−** Requires PR for all changes, including emergency fixes (mitigation: expedited PR review)
+
 ## References
 
 - `engine/critic/plant/architecture/critic.ts` — the fixed file
 - `scripts/ci/architecture/check-circular.ts` — companion CI-only architecture check
 - `dependency-cruiser.config.cjs` — the config file at project root
 - CI: `.github/workflows/ci.yml`
+- GitHub API: `POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins`
