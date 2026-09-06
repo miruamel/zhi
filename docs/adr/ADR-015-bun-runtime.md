@@ -16,15 +16,15 @@ Mandate §Aturan Pemilihan Tools (Tools Wajib) lists `npm, pnpm, yarn` for TS/JS
 
 **1. Mengapa tools yang ada tidak mencukupi?**
 
-| Kriteria | Bun | npm | pnpm | yarn |
-|---|---|---|---|---|
-| Native TypeScript execution | ✅ Bun.execute, Bun.serve | ❌ needs tsc | ❌ needs tsc | ❌ needs tsc |
-| Test runner built-in | ✅ `bun test` | ❌ jest/vitest | ❌ jest/vitest | ❌ jest/vitest |
-| Build speed (cold) | ~200ms | ~3s+ | ~2s+ | ~2s+ |
-| Lock file compatibility | bun.lockb (bombsaway) | package-lock.json | pnpm-lock.yaml | yarn.lock |
-| Ecosystem compatibility | 100%+ npm compat | baseline | baseline | baseline |
-| Hot reload (TUI dev) | ✅ `bun --watch` | ❌ | ❌ | ❌ |
-| Install speed | ~2s | ~15s | ~8s | ~10s |
+| Kriteria                    | Bun                       | npm               | pnpm           | yarn           |
+| --------------------------- | ------------------------- | ----------------- | -------------- | -------------- |
+| Native TypeScript execution | ✅ Bun.execute, Bun.serve | ❌ needs tsc      | ❌ needs tsc   | ❌ needs tsc   |
+| Test runner built-in        | ✅ `bun test`             | ❌ jest/vitest    | ❌ jest/vitest | ❌ jest/vitest |
+| Build speed (cold)          | ~200ms                    | ~3s+              | ~2s+           | ~2s+           |
+| Lock file compatibility     | bun.lockb (bombsaway)     | package-lock.json | pnpm-lock.yaml | yarn.lock      |
+| Ecosystem compatibility     | 100%+ npm compat          | baseline          | baseline       | baseline       |
+| Hot reload (TUI dev)        | ✅ `bun --watch`          | ❌                | ❌             | ❌             |
+| Install speed               | ~2s                       | ~15s              | ~8s            | ~10s           |
 
 The project is a **Bun-native CLI** (`bin: zhi` entry point uses Bun-specific APIs). Bun's native TypeScript execution eliminates the `tsc → JS → execute` pipeline, which is core to the architecture (TUI + CLI). npm/yarn/pnpm cannot replace this without a build step, which breaks the "interpreted with native speed" design goal.
 
@@ -41,10 +41,10 @@ Bun v1.4.0 (specified in `package.json` `engines.bun: ">=1.4.0"` and `oven-sh/se
 
 **4. Risks**
 
-| Risk | Mitigation |
-|---|---|
-| Bun runtime bugs | Pin to `>=1.4.0` (stable); CI catches regressions via `bun test` |
-| Ecosystem incompatibility | Bun's npm compat is 100%+; CI gate validates |
+| Risk                         | Mitigation                                                                       |
+| ---------------------------- | -------------------------------------------------------------------------------- |
+| Bun runtime bugs             | Pin to `>=1.4.0` (stable); CI catches regressions via `bun test`                 |
+| Ecosystem incompatibility    | Bun's npm compat is 100%+; CI gate validates                                     |
 | Security vulns in Bun itself | Use `oven-sh/setup-bun@v2` which pins to specific version; monitor Bun changelog |
 
 **5. Criteria sukses**
