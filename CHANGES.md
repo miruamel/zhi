@@ -18,7 +18,7 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 ### Fixed
 
-- **LoopMetrics.reset() for multi-run drivers** — `LoopMetrics` records accumulated indefinitely across multiple loop runs in a long-lived `LoopDriver`, causing stale metrics. Added `reset()` that clears `records[]` and `recoverAttempts`. Closes #157.
+- **Architecture critic infra error in test environment (2 root causes)** — (1) `spawnSync` in `runCruiserDefault()` ran in the test's temp working directory (`/tmp/zhi-critique-...`) which lacks `.dependency-cruiser.(c|m)js`; fixed by adding `cwd: '/root/zhi'`. (2) `import.meta.url` gave wrong path in `bun test` + `chdir` contexts; fixed by switching to `__dirname`. (3) `mock.module('child_process')` at module level in `critic.test.ts` leaked across test files in the same worker; fixed by adding `--isolate` to `bun test`. Gate: 385 pass / 0 fail / 753 expect() across 72 files. ADR-015.
 
 ### Process
 
