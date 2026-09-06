@@ -36,7 +36,7 @@ jobs:
 
       - name: Setup Zig 0.14.0 (gate needs native:build for WASM artifact)
         run: |
-          curl -L https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz -o /tmp/zig.tar.xz
+          curl -fsSL https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz -o /tmp/zig.tar.xz
           tar -xJf /tmp/zig.tar.xz -C /tmp/
           echo "ZIG_BIN=/tmp/zig-linux-x86_64-0.14.0/zig" >> $GITHUB_ENV
 
@@ -60,7 +60,7 @@ jobs:
 
       - name: Setup Zig 0.14.0 (direct download; setup-zig mirror lacks 0.14.0)
         run: |
-          curl -L https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz -o /tmp/zig.tar.xz
+          curl -fsSL https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz -o /tmp/zig.tar.xz
           tar -xJf /tmp/zig.tar.xz -C /tmp/
           echo "ZIG_BIN=/tmp/zig-linux-x86_64-0.14.0/zig" >> $GITHUB_ENV
 
