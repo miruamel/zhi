@@ -28,7 +28,7 @@
     "AGENTS.Style.md"
   ],
   "scripts": {
-    "test": "bun test",
+    "test": "bun test --isolate",
     "test:ci": "bun test --coverage --reporter=junit --reporter-outfile=coverage/coverage.xml",
     "gate": "bun run scripts/gate.ts --if-changed",
     "test:watch": "bun test --watch",

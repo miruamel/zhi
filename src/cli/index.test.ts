@@ -27,7 +27,10 @@ describe('cli boot', () => {
   });
 
   it('dispatches critique:repo subcommand', async () => {
-    const ctx = await main(['critique:repo']);
+    // Use fake handler — routing-only test; real command is tested in critique-repo-traversal.test.ts.
+    const ctx = await main(['critique:repo'], {
+      critique: () => Promise.resolve({ goal: 'critique:repo' }),
+    });
     expect(ctx.goal).toBe('critique:repo');
   });
 });

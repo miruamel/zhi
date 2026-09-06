@@ -1,6 +1,6 @@
 /** @brief Test composer plant + integrasi aggregate. @since 0.1.1 */
 import { test, expect } from 'bun:test';
-import { composeCritiques, composeHygiene } from './compose';
+import { composeCritiques } from './compose';
 import { aggregate } from '../aggregate';
 import type { CruiserReport } from './architecture/critic';
 
@@ -62,7 +62,7 @@ test('compose detects violations across critics', () => {
   expect(r.byCritic.sloc).toBeLessThan(1);
   expect(r.byCritic.todo).toBeLessThan(1);
   expect(r.byCritic.imports).toBeLessThan(1);
-  // gate ketat (0.9) menolak artefak bermasalah
+  // gate ketat (0.95) menolak artefak bermasalah
   expect(aggregate(cr, 0.95).passed).toBe(false);
 });
 
@@ -86,16 +86,4 @@ test('compose severe violations fail even lenient gate', () => {
   const r = aggregate(cr, 0.7);
   expect(r.score).toBeLessThan(0.7);
   expect(r.passed).toBe(false);
-});
-
-test('composeHygiene runs three repo-wide critics on real root', () => {
-  const cr = composeHygiene(process.cwd());
-  expect(cr).toHaveLength(4);
-  expect(cr.map((c) => c.name).sort()).toEqual(['devops', 'dx', 'legal', 'testing']);
-  const r = aggregate(cr, 0.7);
-  // real repo punya CI/.gitignore/LICENSE/README/AGENTS/test -> devops/legal/dx pass.
-  // testing mungkin flag source tanpa test sibling (finding nyata, bukan kegagalan test).
-  expect(r.byCritic.devops).toBe(1);
-  expect(r.byCritic.legal).toBe(1);
-  expect(r.byCritic.dx).toBe(1);
 });

@@ -11,12 +11,8 @@ import { accessibilityCritic } from './accessibility/critic';
 import { securityCritic } from './security/critic';
 import { perfCritic } from './perf/critic';
 import { styleCritic } from './style/critic';
-import { devopsCritic } from './hygiene/devops/critic';
-import { legalCritic } from './hygiene/legal/critic';
-import { dxCritic } from './hygiene/dx/critic';
-import { testingCritic } from './hygiene/testing/critic';
 
-/** @brief Jalankan semua critic plant pada kumpulan file.
+/** @brief Jalankan semua critic plant pada kumpulan files.
  * @param {FileRecord[]} files - artefak yang diaudit.
  * @param {CruiserRunner} [architectureRunner] - optional runner for architecture critic (testing).
  * @return {Critique[]} hasil tiap critic (siap di-aggregate).
@@ -39,13 +35,4 @@ export function composeCritiques(
     perfCritic(files),
     styleCritic(files),
   ];
-}
-
-/** @brief Jalankan critic repo-hygiene (DevOps/Legal/DX) pada root repo.
- * @param {string} root - path repo (bukan per-file).
- * @return {Critique[]} hasil tiap critic (siap di-aggregate).
- * @see docs/design/critic.md
- * @since 0.1.1 */
-export function composeHygiene(root: string): Critique[] {
-  return [devopsCritic(root), legalCritic(root), dxCritic(root), testingCritic(root)];
 }

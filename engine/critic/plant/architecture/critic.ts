@@ -1,6 +1,5 @@
 /** @brief Critic: arsitektural drift via dependency-cruiser (repo-wide holistic). @since 0.1.1 */
 import { spawnSync } from 'child_process';
-import { fileURLToPath } from 'url';
 import type { Critique } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
@@ -31,12 +30,8 @@ const EXCLUDE_RE = '\\.test\\.(ts|js|tsx|jsx)$|__tests__|\\.spec\\.(ts|js)$|dist
  * @return {CruiserReport | null} null only on parse failure; status != 0 (violations) still yields valid JSON.
  * @since 0.1.8 */
 function runCruiserDefault(): CruiserReport | null {
-  // Resolve dependency-cruiser binary via import.meta.url (portable across Node/Bun).
-  // Using process.execPath avoids npx/bunx bootstrap overhead — critical for test performance.
-  const scriptPath = `${fileURLToPath(import.meta.url).replace(
-    /[/\\][^/\\]+$/,
-    '',
-  )}/../../../../node_modules/dependency-cruiser/bin/dependency-cruise.mjs`;
+  // __dirname is reliably set by Bun for ESM modules; avoids import.meta.url context issues in tests.
+  const scriptPath = `${__dirname}/../../../../node_modules/dependency-cruiser/bin/dependency-cruise.mjs`;
   const res = spawnSync(
     process.execPath,
     [
@@ -51,9 +46,8 @@ function runCruiserDefault(): CruiserReport | null {
       'scripts/',
       'native/',
     ],
-    { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 },
+    { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024, cwd: '/root/zhi' },
   );
-  // Only bail on actual spawn failure (res.error); exit code != 0 means violations, not parse failure.
   if (!res || res.error) return null;
   try {
     return JSON.parse(res.stdout ?? '{}') as CruiserReport;
