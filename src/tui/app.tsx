@@ -26,6 +26,9 @@ import {
   Eval,
   Pr as PrPane,
   Log,
+  SessionsPane,
+  MemoryPane,
+  SettingsPane,
 } from './panes';
 import type { AppState } from './core/state';
 
@@ -37,7 +40,6 @@ export interface AppProps {
   /** @brief Dipanggil sekali setelah mount: beri tahu loop ts push patch ke setState. */
   onRegister?: (push: (p: Partial<AppState>) => void) => void;
 }
-
 /** @brief Root ink component. @since 0.1.2 */
 export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }: AppProps) {
   const { exit } = useApp();
@@ -257,6 +259,11 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
       </Box>
       <Box marginTop={1}>
         <Log log={state.log} expanded={logExpanded} offset={logOffset} maxLines={40} />
+      </Box>
+      <Box marginTop={1} gap={1}>
+        <SessionsPane sessions={state.sessions} activeId={state.activeSessionId} />
+        <MemoryPane facts={state.memoryFacts} />
+        <SettingsPane entries={state.configEntries} />
       </Box>
       <Box marginTop={1}>
         <HelpPane />

@@ -14,3 +14,6 @@ export { AgentsPane } from './middle/agents/agents';
 export { Pr } from './middle/pr/pr';
 export { Log } from './bottom/log/log';
 export { HelpPane, HelpPane as Help } from './bottom/help/help';
+export { SessionsPane } from './middle/sessions/sessions';
+export { MemoryPane } from './middle/memory/memory';
+export { SettingsPane } from './middle/settings/settings';

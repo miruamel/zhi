@@ -27,6 +27,25 @@ export interface AgentInfo {
   currentTask?: string;
 }
 
+/** @brief Session info for session pane. @since 0.2.0 */
+export interface SessionInfo {
+  id: string;
+  label: string;
+  createdAt: number;
+  lastActive: number;
+  steps: number;
+  tokensUsed: number;
+  finished: boolean;
+}
+
+/** @brief Config entry for settings pane. @since 0.2.0 */
+export interface ConfigEntry {
+  key: string;
+  value: string;
+  type: 'string' | 'number' | 'boolean';
+  description: string;
+}
+
 /** @brief Git state. @since 0.1.2 */
 export interface GitState {
   branch?: string;

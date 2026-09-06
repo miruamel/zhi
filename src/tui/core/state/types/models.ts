@@ -2,6 +2,12 @@
  * @fileoverview Model types for TUI state. @since 0.1.2
  * @package zhi
  */
+/** @brief Single fact from knowledge store. @since 0.2.1 */
+export interface Fact {
+  key: string;
+  value: string;
+  tags: string[];
+}
 /** @brief Single critic score line. @since 0.1.2 */
 export interface CriticLine {
   name: string;

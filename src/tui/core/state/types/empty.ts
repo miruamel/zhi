@@ -35,5 +35,9 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     networkOnline: true,
     agents: [],
     tokenSparkline: [],
+    // 0.2.1 defaults
+    sessions: [],
+    memoryFacts: [],
+    configEntries: [],
   };
 }

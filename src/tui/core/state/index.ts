@@ -9,6 +9,13 @@ export type {
   LogEntry,
   PrCiState,
 } from './types/models';
-export type { FileEntry, NetworkRequest, AgentInfo, GitState } from './types/extended';
+export type {
+  FileEntry,
+  NetworkRequest,
+  AgentInfo,
+  GitState,
+  SessionInfo,
+  ConfigEntry,
+} from './types/extended';
 export type { AppState } from './types/appstate';
 export { emptyState } from './types/empty';
