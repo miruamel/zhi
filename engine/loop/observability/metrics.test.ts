@@ -15,6 +15,18 @@ describe('LoopMetrics', () => {
     expect(s.totalMs).toBe(15);
     expect(m.stages[0].stage).toBe('INTAKE');
   });
+  it('reset clears records and recoverAttempts', () => {
+    const m = new LoopMetrics();
+    m.record({ stage: 'INTAKE', ms: 10, ok: true });
+    m.record({ stage: 'PLAN', ms: 5, ok: false, error: 'boom' });
+    m.recoverAttempts = 3;
+    expect(m.stages).toHaveLength(2);
+    expect(m.summary().recoverAttempts).toBe(3);
+    m.reset();
+    expect(m.stages).toHaveLength(0);
+    expect(m.summary().stages).toBe(0);
+    expect(m.summary().recoverAttempts).toBe(0);
+  });
 });
 
 describe('timedStage', () => {

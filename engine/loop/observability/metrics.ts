@@ -39,6 +39,12 @@ export class LoopMetrics {
     }
     return { totalMs, errors, stages: this.records.length, recoverAttempts: this.recoverAttempts };
   }
+  /** @brief Reset semua record dan recoverAttempts untuk loop run baru.
+   * @since 0.1.8 */
+  reset(): void {
+    this.records.length = 0;
+    this.recoverAttempts = 0;
+  }
 }
 
 /** @brief Bungkus handler dengan pengukuran latency + error. @since 0.1.1 */
