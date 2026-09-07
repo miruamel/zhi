@@ -1,12 +1,12 @@
 /**
  * @fileoverview Dashboard pane — DORA, quality trends, cost.
- * @since 0.2.5
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import { Gauge } from '../../../widgets/gauge/gauge';
 
-/** @brief DORA metrics. @since 0.2.5 */
+/** @brief DORA metrics. @since 0.1.11 */
 export interface DoraMetrics {
   deployFrequency: number;
   leadTime: number;
@@ -14,7 +14,7 @@ export interface DoraMetrics {
   mttr: number;
 }
 
-/** @brief Dashboard pane props. @since 0.2.5 */
+/** @brief Dashboard pane props. @since 0.1.11 */
 export interface DashboardPaneProps {
   dora: DoraMetrics;
   qualityScore: number;
@@ -26,7 +26,7 @@ export interface DashboardPaneProps {
   stepsTotal: number;
 }
 
-/** @brief Render the dashboard pane. @since 0.2.5 */
+/** @brief Render the dashboard pane. @since 0.1.11 */
 export function DashboardPane({
   dora,
   qualityScore,

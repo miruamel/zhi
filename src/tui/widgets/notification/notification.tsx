@@ -1,13 +1,13 @@
 /**
- * @fileoverview Notification widget — toast-style message display. @since 0.2.6
+ * @fileoverview Notification widget — toast-style message display. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Notification type. @since 0.2.6 */
+/** @brief Notification type. @since 0.1.11 */
 export type NotificationType = 'info' | 'success' | 'warn' | 'error';
 
-/** @brief Notification. @since 0.2.6 */
+/** @brief Notification. @since 0.1.11 */
 export interface Notification {
   id: string;
   type: NotificationType;
@@ -15,7 +15,7 @@ export interface Notification {
   timestamp: number;
 }
 
-/** @brief Notification widget props. @since 0.2.6 */
+/** @brief Notification widget props. @since 0.1.11 */
 export interface NotificationProps {
   notifications?: Notification[];
   message?: string;
@@ -37,7 +37,7 @@ const TYPE_ICON: Record<NotificationType, string> = {
   error: '✕',
 };
 
-/** @brief Notification component. @since 0.2.6 */
+/** @brief Notification component. @since 0.1.11 */
 export function Notification({
   notifications,
   message,

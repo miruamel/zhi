@@ -1,15 +1,15 @@
 /**
- * @fileoverview Run command — execute pipeline from config. @since 0.2.6
+ * @fileoverview Run command — execute pipeline from config. @since 0.1.11
  * @package zhi
  */
-/** @brief Run options. @since 0.2.6 */
+/** @brief Run options. @since 0.1.11 */
 export interface RunOpts {
   config?: string;
   dryRun?: boolean;
   verbose?: boolean;
 }
 
-/** @brief Run result. @since 0.2.6 */
+/** @brief Run result. @since 0.1.11 */
 export interface RunResult {
   ok: boolean;
   steps: number;
@@ -17,7 +17,7 @@ export interface RunResult {
   message: string;
 }
 
-/** @brief Run the pipeline. @since 0.2.6 */
+/** @brief Run the pipeline. @since 0.1.11 */
 export async function run(opts: RunOpts = {}): Promise<RunResult> {
   const start = Date.now();
   const steps = ['intake', 'generate', 'critique', 'eval', 'verify', 'commit', 'pr'];

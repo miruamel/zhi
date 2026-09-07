@@ -1,19 +1,19 @@
 /**
  * @fileoverview Table — tabular data display with ReactNode cells.
- * @since 0.2.0
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../core/colors';
 
-/** @brief A table cell can be a string/number or a ReactNode. @since 0.2.7 */
+/** @brief A table cell can be a string/number or a ReactNode. @since 0.1.11 */
 export type TableCell = string | number | React.ReactNode;
 
-/** @brief A table row is a record of named cells. @since 0.2.7 */
+/** @brief A table row is a record of named cells. @since 0.1.11 */
 export interface TableRow {
   [key: string]: TableCell;
 }
 
-/** @brief Table props. @since 0.2.0 */
+/** @brief Table props. @since 0.1.11 */
 export interface TableProps {
   headers: string[];
   rows: TableRow[];
@@ -21,7 +21,7 @@ export interface TableProps {
   highlight?: (row: TableRow) => boolean;
 }
 
-/** @brief Render a table with optional row click highlighting. @since 0.2.0 */
+/** @brief Render a table with optional row click highlighting. @since 0.1.11 */
 export function Table({ headers, rows, maxRows = 10, highlight }: TableProps) {
   const visible = rows.slice(0, maxRows);
 

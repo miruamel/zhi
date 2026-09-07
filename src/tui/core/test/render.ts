@@ -1,6 +1,6 @@
 /**
  * @brief Test render helper — render ink elements to string for assertions.
- * @since 0.2.0
+ * @since 0.1.11
  */
 import TestRenderer from 'react-test-renderer';
 import type { ReactNode } from 'react';

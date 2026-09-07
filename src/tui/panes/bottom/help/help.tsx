@@ -63,7 +63,7 @@ export function Help({ paused = false, showHelp = false }: HelpProps) {
   );
 }
 
-/** @brief Alias for HelpPane — keyboard shortcuts reference. @since 0.2.0 */
+/** @brief Alias for HelpPane — keyboard shortcuts reference. @since 0.1.11 */
 export function HelpPane() {
   return <Help showHelp={false} />;
 }

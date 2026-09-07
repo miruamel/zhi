@@ -1,11 +1,11 @@
 /**
  * @fileoverview Release pane — builds, tags, releases, SBOM.
- * @since 0.2.5
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 
-/** @brief A build entry. @since 0.2.5 */
+/** @brief A build entry. @since 0.1.11 */
 export interface BuildEntry {
   id: string;
   status: 'pending' | 'running' | 'success' | 'failed';
@@ -14,7 +14,7 @@ export interface BuildEntry {
   duration?: number;
 }
 
-/** @brief A release entry. @since 0.2.5 */
+/** @brief A release entry. @since 0.1.11 */
 export interface ReleaseEntry {
   version: string;
   tag: string;
@@ -23,7 +23,7 @@ export interface ReleaseEntry {
   sbom: boolean;
 }
 
-/** @brief Release pane props. @since 0.2.5 */
+/** @brief Release pane props. @since 0.1.11 */
 export interface ReleasePaneProps {
   builds: BuildEntry[];
   releases: ReleaseEntry[];
@@ -39,7 +39,7 @@ const BUILD_COLOR: Record<string, string> = {
   failed: colors.error,
 };
 
-/** @brief Render the release pane. @since 0.2.5 */
+/** @brief Render the release pane. @since 0.1.11 */
 export function ReleasePane({ builds, releases, selectedBuild, onRelease }: ReleasePaneProps) {
   const current = builds[selectedBuild ?? 0];
 

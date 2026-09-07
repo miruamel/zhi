@@ -1,5 +1,5 @@
 /**
- * @fileoverview DAG, log, critic, and git entity types. @since 0.2.0
+ * @fileoverview DAG, log, critic, and git entity types. @since 0.1.11
  * @package zhi
  */
 import type { LogLevel, StepStatus, StepType } from '../primitives';

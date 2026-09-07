@@ -1,6 +1,6 @@
 /**
  * @fileoverview Arranger barrel — re-exports layout engine and types.
- * @since 0.2.0
+ * @since 0.1.11
  */
 export * from './types';
 export { Arranger } from './engine';

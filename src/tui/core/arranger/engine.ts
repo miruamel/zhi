@@ -1,11 +1,11 @@
 /**
- * @fileoverview Arranger engine — manages layout state and notifies listeners. @since 0.2.0
+ * @fileoverview Arranger engine — manages layout state and notifies listeners. @since 0.1.11
  * @package zhi
  */
 import type { LayoutNode, LayoutSnapshot, LayoutConstraint, LayoutEvent } from './types';
 import { cloneNode, findNode, findParent, applyEvent } from './tree';
 
-/** @brief Arranger engine — manages layout state and notifies listeners. @since 0.2.0 */
+/** @brief Arranger engine — manages layout state and notifies listeners. @since 0.1.11 */
 export class Arranger {
   private root: LayoutNode;
   private listeners: ((snapshot: LayoutSnapshot) => void)[] = [];
@@ -20,7 +20,7 @@ export class Arranger {
     this.constraints = { ...DEFAULT_CONSTRAINTS, ...(options.constraints ?? {}) };
   }
 
-  /** @brief Get current layout snapshot. @since 0.2.0 */
+  /** @brief Get current layout snapshot. @since 0.1.11 */
   snapshot(): LayoutSnapshot {
     return {
       root: cloneNode(this.root),
@@ -28,30 +28,30 @@ export class Arranger {
       version: 1,
     };
   }
-  /** @brief Find a node by id in the current tree. @since 0.2.0 */
+  /** @brief Find a node by id in the current tree. @since 0.1.11 */
   findNode(id: string): LayoutNode | null {
     return findNode(this.root, id);
   }
 
-  /** @brief Find parent of a node. @since 0.2.0 */
+  /** @brief Find parent of a node. @since 0.1.11 */
   findParent(id: string): { parent: LayoutNode; index: number } | null {
     return findParent(this.root, id);
   }
 
-  /** @brief Subscribe to layout changes. @since 0.2.0 */
+  /** @brief Subscribe to layout changes. @since 0.1.11 */
   subscribe(listener: (snapshot: LayoutSnapshot) => void): () => void {
     this.listeners.push(listener);
     return () => {
       this.listeners = this.listeners.filter((l) => l !== listener);
     };
   }
-  /** @brief Apply a layout event and notify. @since 0.2.0 */
+  /** @brief Apply a layout event and notify. @since 0.1.11 */
   dispatch(event: LayoutEvent): void {
     this.root = applyEvent(this.root, event, this.constraints);
     const next = this.snapshot();
     for (const l of this.listeners) l(next);
   }
-  /** @brief Get visible pane ids in order. @since 0.2.0 */
+  /** @brief Get visible pane ids in order. @since 0.1.11 */
   visiblePanes(): string[] {
     const result: string[] = [];
     const walk = (node: LayoutNode) => {
@@ -62,7 +62,7 @@ export class Arranger {
     return result;
   }
 
-  /** @brief Reset to default layout. @since 0.2.0 */
+  /** @brief Reset to default layout. @since 0.1.11 */
   reset(): void {
     this.dispatch({ type: 'reset' });
   }

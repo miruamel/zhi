@@ -1,5 +1,5 @@
 /**
- * @fileoverview Notification, palette, agent, and network entity types. @since 0.2.0
+ * @fileoverview Notification, palette, agent, and network entity types. @since 0.1.11
  * @package zhi
  */
 import type { PaneId } from '../primitives';

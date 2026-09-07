@@ -6,7 +6,7 @@ import { offlineDeps } from './offline-deps';
 import { compress } from '../../../engine/build/context/compress';
 import type { CruiserReport } from '../../../engine/critic/plant/compose';
 
-/** @brief Mock cruiser runner: zero violations, no real dependency-cruiser spawn. @since 0.2.0 */
+/** @brief Mock cruiser runner: zero violations, no real dependency-cruiser spawn. @since 0.1.11 */
 const emptyCruiser: () => CruiserReport = () => ({ modules: [] });
 describe('offlineDeps generate', () => {
   let wt: string;

@@ -1,12 +1,12 @@
 /**
  * @fileoverview Sessions pane — list, inspect, create, switch sessions.
- * @since 0.2.1
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import { Badge } from '../../../widgets';
 
-/** @brief Session info. @since 0.2.1 */
+/** @brief Session info. @since 0.1.11 */
 export interface SessionInfo {
   id: string;
   label: string;
@@ -26,7 +26,7 @@ export interface SessionsPaneProps {
 
 const STATUS_COLOR = (finished: boolean) => (finished ? colors.done : colors.running);
 
-/** @brief Render the sessions pane. @since 0.2.1 */
+/** @brief Render the sessions pane. @since 0.1.11 */
 export function SessionsPane({ sessions, activeId, onSelect, onCreate }: SessionsPaneProps) {
   return (
     <Box

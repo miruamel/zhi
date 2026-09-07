@@ -1,6 +1,6 @@
 /**
  * @fileoverview Metrics pane — token usage, time, cost, success rate.
- * @since 0.2.0
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
@@ -17,7 +17,7 @@ export interface MetricsPaneProps {
   sparkline?: number[];
 }
 
-/** @brief Render the metrics pane. @since 0.2.0 */
+/** @brief Render the metrics pane. @since 0.1.11 */
 export function MetricsPane({
   tokensUsed,
   tokensBudget,

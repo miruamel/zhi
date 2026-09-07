@@ -1,6 +1,6 @@
 /**
  * @fileoverview Network pane — request latency, error rates.
- * @since 0.2.0
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
@@ -20,7 +20,7 @@ export interface NetworkPaneProps {
   errorRate?: number;
 }
 
-/** @brief Render the network pane. @since 0.2.0 */
+/** @brief Render the network pane. @since 0.1.11 */
 export function NetworkPane({
   requests,
   online = true,

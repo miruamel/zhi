@@ -1,8 +1,8 @@
 /**
- * @fileoverview File and network types for TUI state. @since 0.2.0
+ * @fileoverview File and network types for TUI state. @since 0.1.11
  * @package zhi
  */
-/** @brief File entry for tree view. @since 0.2.0 */
+/** @brief File entry for tree view. @since 0.1.11 */
 export interface FileEntry {
   path: string;
   type: 'file' | 'dir';
@@ -10,7 +10,7 @@ export interface FileEntry {
   modified?: number;
 }
 
-/** @brief Network request record. @since 0.2.0 */
+/** @brief Network request record. @since 0.1.11 */
 export interface NetworkRequest {
   url: string;
   status: number;
@@ -18,7 +18,7 @@ export interface NetworkRequest {
   timestamp: number;
 }
 
-/** @brief Agent info for agents pane. @since 0.2.0 */
+/** @brief Agent info for agents pane. @since 0.1.11 */
 export interface AgentInfo {
   id: string;
   name: string;
@@ -31,7 +31,7 @@ export interface AgentInfo {
   currentTask?: string;
 }
 
-/** @brief Session info for session pane. @since 0.2.0 */
+/** @brief Session info for session pane. @since 0.1.11 */
 export interface SessionInfo {
   id: string;
   label: string;
@@ -42,7 +42,7 @@ export interface SessionInfo {
   finished: boolean;
 }
 
-/** @brief Config entry for settings pane. @since 0.2.0 */
+/** @brief Config entry for settings pane. @since 0.1.11 */
 export interface ConfigEntry {
   key: string;
   value: string;

@@ -1,6 +1,6 @@
 /**
  * @fileoverview Agent pane — agent list, capabilities, dispatch, runtime control.
- * @since 0.2.7
+ * @since 0.1.11
  */
 import { Box, Text, useInput } from 'ink';
 import { useState } from 'react';
@@ -9,7 +9,7 @@ import { Badge } from '../../../widgets/badge/badge';
 import { Tabs, type Tab } from '../../../widgets/tabs/tabs';
 import { Table } from '../../../widgets/table/table';
 
-/** @brief Agent display entry. @since 0.2.7 */
+/** @brief Agent display entry. @since 0.1.11 */
 export interface AgentDisplay {
   id: string;
   name: string;
@@ -21,7 +21,7 @@ export interface AgentDisplay {
   lastActive?: number;
 }
 
-/** @brief Runtime event log entry. @since 0.2.7 */
+/** @brief Runtime event log entry. @since 0.1.11 */
 export interface RuntimeLogEntry {
   id: string;
   timestamp: number;
@@ -30,7 +30,7 @@ export interface RuntimeLogEntry {
   message: string;
 }
 
-/** @brief Agent pane props. @since 0.2.7 */
+/** @brief Agent pane props. @since 0.1.11 */
 export interface AgentPaneProps {
   agents: AgentDisplay[];
   runtimeLog: RuntimeLogEntry[];
@@ -46,7 +46,7 @@ const LEVEL_COLOR: Record<string, string> = {
   error: colors.error,
 };
 
-/** @brief Format a timestamp as relative string. @since 0.2.7 */
+/** @brief Format a timestamp as relative string. @since 0.1.11 */
 function formatRelative(ts?: number): string {
   if (!ts) return 'never';
   const diff = Date.now() - ts;
@@ -56,14 +56,14 @@ function formatRelative(ts?: number): string {
   return `${Math.floor(diff / 3600000)}h ago`;
 }
 
-/** @brief Format token count with K/M suffix. @since 0.2.7 */
+/** @brief Format token count with K/M suffix. @since 0.1.11 */
 function formatTokens(n: number): string {
   if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`;
   if (n >= 1000) return `${(n / 1000).toFixed(1)}K`;
   return String(n);
 }
 
-/** @brief Agent pane component. @since 0.2.7 */
+/** @brief Agent pane component. @since 0.1.11 */
 export function AgentPane({
   agents,
   runtimeLog,

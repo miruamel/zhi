@@ -1,12 +1,12 @@
 /**
  * @fileoverview Budget pane — token/cost tracking, budget burn.
- * @since 0.2.2
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import { Gauge } from '../../../widgets';
 
-/** @brief Budget pane props. @since 0.2.2 */
+/** @brief Budget pane props. @since 0.1.11 */
 export interface BudgetPaneProps {
   tokensUsed: number;
   tokensBudget: number;
@@ -23,7 +23,7 @@ const fmtCost = (n: number) => `$${n.toFixed(2)}`;
 const fmtTokens = (n: number) =>
   n >= 1_000_000 ? `${(n / 1_000_000).toFixed(2)}M` : `${(n / 1_000).toFixed(1)}k`;
 
-/** @brief Render the budget pane. @since 0.2.2 */
+/** @brief Render the budget pane. @since 0.1.11 */
 export function BudgetPane({
   tokensUsed,
   tokensBudget,

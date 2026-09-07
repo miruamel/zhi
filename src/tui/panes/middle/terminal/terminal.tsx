@@ -1,6 +1,6 @@
 /**
  * @fileoverview Terminal pane — embedded shell output.
- * @since 0.2.0
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
@@ -11,7 +11,7 @@ export interface TerminalPaneProps {
   maxLines?: number;
 }
 
-/** @brief Render the terminal pane. @since 0.2.0 */
+/** @brief Render the terminal pane. @since 0.1.11 */
 export function TerminalPane({ lines, maxLines = 20 }: TerminalPaneProps) {
   return (
     <Box

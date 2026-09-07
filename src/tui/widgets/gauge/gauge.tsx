@@ -1,10 +1,10 @@
 /**
- * @fileoverview Gauge widget — circular progress indicator. @since 0.2.6
+ * @fileoverview Gauge widget — circular progress indicator. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Gauge props. @since 0.2.6 */
+/** @brief Gauge props. @since 0.1.11 */
 export interface GaugeProps {
   value: number;
   max?: number;
@@ -13,7 +13,7 @@ export interface GaugeProps {
   width?: number;
 }
 
-/** @brief Gauge component. @since 0.2.6 */
+/** @brief Gauge component. @since 0.1.11 */
 export function Gauge({
   value,
   max = 100,

@@ -1,10 +1,10 @@
 /**
- * @fileoverview Metrics widget — key-value metric display. @since 0.2.6
+ * @fileoverview Metrics widget — key-value metric display. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Metric row. @since 0.2.6 */
+/** @brief Metric row. @since 0.1.11 */
 export interface Metric {
   label: string;
   value: string | number;
@@ -12,7 +12,7 @@ export interface Metric {
   trend?: 'up' | 'down' | 'flat';
 }
 
-/** @brief Metrics props. @since 0.2.6 */
+/** @brief Metrics props. @since 0.1.11 */
 export interface MetricsProps {
   metrics?: Metric[];
   columns?: number;
@@ -25,7 +25,7 @@ export interface MetricsProps {
   costEstimate?: number;
 }
 
-/** @brief Metrics component. @since 0.2.6 */
+/** @brief Metrics component. @since 0.1.11 */
 export function Metrics({
   metrics,
   columns = 2,

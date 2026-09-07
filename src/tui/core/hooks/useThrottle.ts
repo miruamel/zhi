@@ -1,9 +1,9 @@
 /**
- * @fileoverview Throttle hook — limits callback frequency. @since 0.2.0
+ * @fileoverview Throttle hook — limits callback frequency. @since 0.1.11
  */
 import { useCallback, useRef } from 'react';
 
-/** @brief Throttle a callback to at most once per interval. @since 0.2.0 */
+/** @brief Throttle a callback to at most once per interval. @since 0.1.11 */
 export function useThrottle<T extends (...args: any[]) => any>(fn: T, limit: number): T {
   const lastRun = useRef(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

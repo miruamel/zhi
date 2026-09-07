@@ -1,27 +1,27 @@
 /**
- * @fileoverview Code viewer widget — syntax-highlighted code block. @since 0.2.6
+ * @fileoverview Code viewer widget — syntax-highlighted code block. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief A single code line. @since 0.2.6 */
+/** @brief A single code line. @since 0.1.11 */
 export interface CodeLine {
   number: number;
   content: string;
 }
 
-/** @brief Code viewer props. @since 0.2.6 */
+/** @brief Code viewer props. @since 0.1.11 */
 export interface CodeViewerProps {
   code: string;
   maxLines?: number;
 }
 
-/** @brief Code block props. @since 0.2.6 */
+/** @brief Code block props. @since 0.1.11 */
 export interface CodeProps {
   lines: CodeLine[];
 }
 
-/** @brief Code block component — renders lines with line numbers. @since 0.2.6 */
+/** @brief Code block component — renders lines with line numbers. @since 0.1.11 */
 export function Code({ lines }: CodeProps): React.ReactElement {
   return (
     <Text>
@@ -36,7 +36,7 @@ export function Code({ lines }: CodeProps): React.ReactElement {
   );
 }
 
-/** @brief Code viewer component. @since 0.2.6 */
+/** @brief Code viewer component. @since 0.1.11 */
 export function CodeViewer({ code, maxLines = 50 }: CodeViewerProps): React.ReactElement {
   const lines: CodeLine[] = code
     .split('\n')

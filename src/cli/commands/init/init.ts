@@ -1,24 +1,24 @@
 /**
- * @fileoverview Init command — project scaffolding. @since 0.2.6
+ * @fileoverview Init command — project scaffolding. @since 0.1.11
  * @package zhi
  */
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-/** @brief Init options. @since 0.2.6 */
+/** @brief Init options. @since 0.1.11 */
 export interface InitOpts {
   name?: string;
   force?: boolean;
 }
 
-/** @brief Init result. @since 0.2.6 */
+/** @brief Init result. @since 0.1.11 */
 export interface InitResult {
   ok: boolean;
   created: string[];
   message: string;
 }
 
-/** @brief Scaffold a new Zhi project. @since 0.2.6 */
+/** @brief Scaffold a new Zhi project. @since 0.1.11 */
 export async function init(opts: InitOpts = {}): Promise<InitResult> {
   const name = opts.name ?? 'zhi-project';
   const created: string[] = [];

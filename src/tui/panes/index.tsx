@@ -1,11 +1,11 @@
 /**
  * @fileoverview TUI panes — reusable pane components for the Zhi terminal interface.
- * @since 0.2.6
+ * @since 0.1.11
  * @package zhi
  */
 import React, { useState } from 'react';
 import { Box, Text } from 'ink';
-/** @brief Pane props. @since 0.2.6 */
+/** @brief Pane props. @since 0.1.11 */
 export interface PaneProps {
   title?: string;
   focused?: boolean;
@@ -15,7 +15,7 @@ export interface PaneProps {
   onResize?: (width: number, height: number) => void;
 }
 
-/** @brief Pane component. @since 0.2.6 */
+/** @brief Pane component. @since 0.1.11 */
 export function Pane({ title, focused = false, width, height, children }: PaneProps) {
   return (
     <Box
@@ -39,7 +39,7 @@ export function Pane({ title, focused = false, width, height, children }: PanePr
   );
 }
 
-/** @brief Split pane — divides space horizontally or vertically. @since 0.2.6 */
+/** @brief Split pane — divides space horizontally or vertically. @since 0.1.11 */
 export function SplitPane({
   direction = 'horizontal',
   children,
@@ -56,7 +56,7 @@ export function SplitPane({
   );
 }
 
-/** @brief Scrollable pane. @since 0.2.6 */
+/** @brief Scrollable pane. @since 0.1.11 */
 export function ScrollablePane({
   children,
   height = 20,
@@ -73,7 +73,7 @@ export function ScrollablePane({
   );
 }
 
-/** @brief Status pane — shows status indicators. @since 0.2.6 */
+/** @brief Status pane — shows status indicators. @since 0.1.11 */
 export function StatusPane({
   items,
   focused = false,
@@ -108,7 +108,7 @@ export function StatusPane({
   );
 }
 
-/** @brief Log pane — displays log entries. @since 0.2.6 */
+/** @brief Log pane — displays log entries. @since 0.1.11 */
 export function LogPane({
   entries,
   maxEntries = 100,
@@ -146,7 +146,7 @@ export function LogPane({
   );
 }
 
-/** @brief Input pane — text input with submit. @since 0.2.6 */
+/** @brief Input pane — text input with submit. @since 0.1.11 */
 export function InputPane({
   value,
   placeholder = 'Type a command...',
@@ -166,7 +166,7 @@ export function InputPane({
   );
 }
 
-/** @brief Chart pane — simple bar chart. @since 0.2.6 */
+/** @brief Chart pane — simple bar chart. @since 0.1.11 */
 export function ChartPane({
   data,
   labels,
@@ -251,7 +251,7 @@ export function GridPane({
     </Pane>
   );
 }
-/** @brief Re-export all pane components from barrel. @since 0.2.6 */
+/** @brief Re-export all pane components from barrel. @since 0.1.11 */
 export { CodeViewer, type CodeViewerProps } from './top/code-viewer/code-viewer';
 export { Header } from './top/header/header';
 export { Dag } from './top/dag/dag';

@@ -1,17 +1,17 @@
 /**
- * @fileoverview Chart widget — simple bar/line chart with labels. @since 0.2.6
+ * @fileoverview Chart widget — simple bar/line chart with labels. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Chart data point. @since 0.2.6 */
+/** @brief Chart data point. @since 0.1.11 */
 export interface ChartDataPoint {
   label: string;
   value: number;
   color?: string;
 }
 
-/** @brief Chart props. @since 0.2.6 */
+/** @brief Chart props. @since 0.1.11 */
 export interface ChartProps {
   data: ChartDataPoint[];
   type?: 'bar' | 'line';
@@ -23,7 +23,7 @@ export interface ChartProps {
 
 const BLOCKS = '▁▂▃▄▅▆▇█';
 
-/** @brief Chart component. @since 0.2.6 */
+/** @brief Chart component. @since 0.1.11 */
 export function Chart({
   data,
   type = 'bar',

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Hooks barrel — re-exports all custom React hooks. @since 0.2.0
+ * @fileoverview Hooks barrel — re-exports all custom React hooks. @since 0.1.11
  */
 export { useDebounce } from './useDebounce';
 export { useThrottle } from './useThrottle';

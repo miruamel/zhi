@@ -1,11 +1,11 @@
 /**
  * @fileoverview MCP pane — MCP server status, tools listing.
- * @since 0.2.3
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 
-/** @brief MCP server info. @since 0.2.3 */
+/** @brief MCP server info. @since 0.1.11 */
 export interface McpServer {
   name: string;
   transport: 'stdio' | 'http' | 'sse';
@@ -15,12 +15,12 @@ export interface McpServer {
   error?: string;
 }
 
-/** @brief MCP pane props. @since 0.2.3 */
+/** @brief MCP pane props. @since 0.1.11 */
 export interface McpPaneProps {
   servers: McpServer[];
 }
 
-/** @brief Render the MCP pane. @since 0.2.3 */
+/** @brief Render the MCP pane. @since 0.1.11 */
 export function McpPane({ servers }: McpPaneProps) {
   const connectedCount = servers.filter((s) => s.connected).length;
   const totalTools = servers.reduce((sum, s) => sum + s.toolCount, 0);

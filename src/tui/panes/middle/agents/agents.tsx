@@ -1,6 +1,6 @@
 /**
  * @fileoverview Agents pane — agent status and metrics.
- * @since 0.2.0
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
@@ -25,7 +25,7 @@ const STATUS_COLOR = {
   failed: colors.error,
 };
 
-/** @brief Render the agents pane. @since 0.2.0 */
+/** @brief Render the agents pane. @since 0.1.11 */
 export function AgentsPane({ agents }: AgentsPaneProps) {
   return (
     <Box

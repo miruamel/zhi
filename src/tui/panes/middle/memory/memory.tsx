@@ -1,11 +1,11 @@
 /**
  * @fileoverview Memory pane — recall, reflect, add, delete facts.
- * @since 0.2.1
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 
-/** @brief One fact. @since 0.2.1 */
+/** @brief One fact. @since 0.1.11 */
 export interface Fact {
   key: string;
   value: string;
@@ -19,7 +19,7 @@ export interface MemoryPaneProps {
   onDelete?: (key: string) => void;
 }
 
-/** @brief Render the memory pane. @since 0.2.1 */
+/** @brief Render the memory pane. @since 0.1.11 */
 export function MemoryPane({ facts, query, onAdd, onDelete }: MemoryPaneProps) {
   const shown = query
     ? facts.filter(

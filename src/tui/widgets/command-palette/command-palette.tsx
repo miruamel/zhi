@@ -25,7 +25,7 @@ export interface CommandPaletteProps {
   placeholder?: string;
 }
 
-/** @brief Simple fuzzy match: check if all chars of query appear in order. @since 0.2.0 */
+/** @brief Simple fuzzy match: check if all chars of query appear in order. @since 0.1.11 */
 function fuzzyMatch(text: string, query: string): boolean {
   if (!query) return true;
   const t = text.toLowerCase();
@@ -37,7 +37,7 @@ function fuzzyMatch(text: string, query: string): boolean {
   return qi === q.length;
 }
 
-/** @brief Render the command palette modal. @since 0.2.0 */
+/** @brief Render the command palette modal. @since 0.1.11 */
 export function CommandPalette({
   open,
   commands,

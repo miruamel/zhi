@@ -1,5 +1,5 @@
 /**
- * @brief Widgets barrel — re-exports all TUI widgets. @since 0.2.0
+ * @brief Widgets barrel — re-exports all TUI widgets. @since 0.1.11
  */
 export { Badge, type BadgeProps } from './badge';
 export { Chart, type ChartProps, type ChartDataPoint } from './chart';
