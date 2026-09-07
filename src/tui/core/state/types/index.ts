@@ -1,5 +1,5 @@
 /**
- * @fileoverview State types barrel re-export. @since 0.1.2 @updated 0.2.0
+ * @fileoverview State types barrel re-export. @since 0.1.2 @updated 0.1.11
  * @package zhi
  */
 export type {
