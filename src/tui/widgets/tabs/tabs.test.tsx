@@ -15,7 +15,6 @@ describe('Tabs', () => {
           { id: 'b', label: 'Tab B' },
         ],
         active: 'a',
-        onChange: () => {},
       }),
     );
     expect(out).toContain('Tab A');
@@ -27,7 +26,6 @@ describe('Tabs', () => {
       Tabs({
         tabs: [{ id: 'a', label: 'Active' }],
         active: 'a',
-        onChange: () => {},
       }),
     );
     expect(out).toContain('Active');

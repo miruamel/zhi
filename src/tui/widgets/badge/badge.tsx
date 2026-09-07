@@ -1,24 +1,24 @@
 /**
- * @fileoverview Badge — small colored label.
- * @since 0.2.0
+ * @fileoverview Badge widget — status label. @since 0.2.6
+ * @package zhi
  */
 import { Text } from 'ink';
-import { colors } from '../../core/colors';
 
+/** @brief Badge props. @since 0.2.6 */
 export interface BadgeProps {
-  label: string;
+  label?: string;
+  children?: React.ReactNode;
   color?: string;
-  bg?: string;
+  variant?: 'solid' | 'outline';
 }
 
-/** @brief Render a small colored badge. @since 0.2.0 */
-export function Badge({ label, color = colors.fgDim, bg }: BadgeProps) {
-  return (
-    <Text>
-      <Text backgroundColor={bg} color={color}>
-        {' '}
-        {label}{' '}
-      </Text>
-    </Text>
-  );
+/** @brief Badge component. @since 0.2.6 */
+export function Badge({
+  label,
+  children,
+  color = 'cyan',
+  variant = 'solid',
+}: BadgeProps): React.ReactElement {
+  const content = label ?? children;
+  return <Text color={color}>{variant === 'outline' ? `(${content})` : `[${content}]`}</Text>;
 }

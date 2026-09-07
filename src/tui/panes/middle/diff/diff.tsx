@@ -27,13 +27,13 @@ export function parseDiff(diff: string): DiffLine[] {
       }
       result.push({ type: 'context', content: line });
     } else if (line.startsWith('+')) {
-      result.push({ type: 'added', newNum: newNum++, content: line.slice(1) });
+      result.push({ type: 'added', newLine: newNum++, content: line.slice(1) });
     } else if (line.startsWith('-')) {
-      result.push({ type: 'removed', oldNum: oldNum++, content: line.slice(1) });
+      result.push({ type: 'removed', oldLine: oldNum++, content: line.slice(1) });
     } else if (line.startsWith('+++') || line.startsWith('---')) {
       result.push({ type: 'context', content: line });
     } else {
-      result.push({ type: 'context', oldNum: oldNum++, newNum: newNum++, content: line });
+      result.push({ type: 'context', oldLine: oldNum++, newLine: newNum++, content: line });
     }
   }
   return result;

@@ -24,7 +24,14 @@ export interface EvalStage {
   durationMs: number;
 }
 
-/** @brief Full eval report. @since 0.1.2 */
+/** @brief DORA metrics. @since 0.2.5 */
+export interface DoraMetrics {
+  deployFrequency: number;
+  leadTime: number;
+  changeFailureRate: number;
+  mttr: number;
+}
+
 export interface EvalReport {
   build: EvalStage;
   test: EvalStage;
@@ -32,6 +39,7 @@ export interface EvalReport {
   gate: EvalStage;
   gatePass: boolean;
   weightedAvg: number;
+  dora?: DoraMetrics;
 }
 
 /** @brief One DAG step in the conductor plan. @since 0.1.2 */

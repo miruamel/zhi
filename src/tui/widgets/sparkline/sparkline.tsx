@@ -1,51 +1,46 @@
 /**
- * @fileoverview Sparkline — compact inline trend visualization.
- * @since 0.2.0
+ * @fileoverview Sparkline widget — mini line chart. @since 0.2.6
+ * @package zhi
  */
 import { Text } from 'ink';
-import { colors } from '../../core/colors';
 
+/** @brief Sparkline props. @since 0.2.6 */
 export interface SparklineProps {
   data: number[];
   width?: number;
   color?: string;
-  /** @brief Show min/max labels beside the sparkline. */
   showLabels?: boolean;
 }
 
-const BLOCKS = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'];
+const BLOCKS = '▁▂▃▄▅▆▇█';
 
-/** @brief Render a compact sparkline from numeric data. @since 0.2.0 */
+/** @brief Sparkline component. @since 0.2.6 */
 export function Sparkline({
   data,
   width = 20,
-  color = colors.accent,
+  color = 'cyan',
   showLabels = false,
-}: SparklineProps) {
-  if (data.length === 0) return <Text dimColor>—</Text>;
-
+}: SparklineProps): React.ReactElement {
+  if (data.length === 0) return <Text color="gray">—</Text>;
   const min = Math.min(...data);
   const max = Math.max(...data);
   const range = max - min || 1;
-
-  // Sample to fit width
-  const step = Math.max(1, Math.ceil(data.length / width));
-  const sampled: number[] = [];
-  for (let i = 0; i < data.length; i += step) sampled.push(data[i]);
-
-  const chars = sampled.map((v) => {
-    const idx = Math.floor(((v - min) / range) * (BLOCKS.length - 1));
-    return BLOCKS[Math.max(0, Math.min(BLOCKS.length - 1, idx))];
-  });
-
+  const step = Math.max(1, Math.floor(data.length / width));
+  let out = '';
+  let labels = '';
+  for (let i = 0; i < data.length; i += step) {
+    const idx = Math.min(7, Math.round(((data[i] - min) / range) * 7));
+    out += BLOCKS[idx];
+    if (showLabels) labels += `${data[i]}/${max}`;
+  }
   return (
-    <Text>
-      <Text color={color}>{chars.join('')}</Text>
+    <Text color={color}>
+      {out}
       {showLabels && (
-        <Text dimColor>
-          {' '}
-          {min}/{max}
-        </Text>
+        <>
+          {'\n'}
+          <Text color="gray">{labels}</Text>
+        </>
       )}
     </Text>
   );

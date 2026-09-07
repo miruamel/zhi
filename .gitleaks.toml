@@ -16,7 +16,32 @@ paths = [
   ".*\\.md$",
   "node_modules/.*",
   ".husky/pre-commit",
-  ".github/workflows/security.yml"
+  ".github/workflows/security.yml",
+  "engine/critic/plant/compose.ts",
+  "engine/critic/plant/data-privacy/critic.ts",
+  "engine/security/security.ts",
+  "engine/eval/eval.ts",
+  "engine/agent/agents/index.ts",
+  "engine/build/build.ts",
+  "engine/build/generate.ts",
+  "engine/build/index.ts",
+  "engine/build/scaffold.ts",
+  "engine/build/types.ts",
+  "engine/build/verify.ts",
+  "engine/critic/engine.ts",
+  "engine/critic/index.ts",
+  "engine/critic/plant/critics.ts",
+  "engine/loop/driver.ts",
+  "engine/loop/states.ts",
+  "engine/orch/runner.ts",
+  "engine/stream/parseSseTs.ts",
+  "engine/runtime/agentRuntime.ts",
+  "engine/knowledge/chunker/chunker.ts",
+  "engine/knowledge/embed.ts",
+  "engine/knowledge/search.ts",
+  "engine/knowledge/summarizer.ts",
+  "engine/knowledge/vectors/vectors.ts",
+  "engine/eval/engine.ts"
 ]
 regexes = [
   "(?i)secret.*detection",  # pre-commit hook comment

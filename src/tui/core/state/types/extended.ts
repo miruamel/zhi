@@ -24,6 +24,10 @@ export interface AgentInfo {
   name: string;
   status: 'idle' | 'running' | 'done' | 'failed';
   tasksCompleted: number;
+  tasksFailed?: number;
+  tokensUsed?: number;
+  capabilities?: string[];
+  lastActive?: number;
   currentTask?: string;
 }
 

@@ -1,10 +1,10 @@
 /**
- * @fileoverview Gauge — radial progress indicator.
- * @since 0.2.0
+ * @fileoverview Gauge widget — circular progress indicator. @since 0.2.6
+ * @package zhi
  */
 import { Text } from 'ink';
-import { colors } from '../../core/colors';
 
+/** @brief Gauge props. @since 0.2.6 */
 export interface GaugeProps {
   value: number;
   max?: number;
@@ -13,20 +13,24 @@ export interface GaugeProps {
   width?: number;
 }
 
-const ARC = ['░', '▒', '▓', '█'];
-
-/** @brief Render a text-based gauge showing value/max. @since 0.2.0 */
-export function Gauge({ value, max = 100, label, color = colors.accent, width = 12 }: GaugeProps) {
-  const pct = Math.max(0, Math.min(1, value / max));
+/** @brief Gauge component. @since 0.2.6 */
+export function Gauge({
+  value,
+  max = 100,
+  label,
+  color = 'cyan',
+  width = 10,
+}: GaugeProps): React.ReactElement {
+  const pct = Math.min(1, Math.max(0, value / max));
   const filled = Math.round(pct * width);
-  const bar = ARC[3].repeat(filled) + ARC[0].repeat(width - filled);
-  const display = label ? `${label} ` : '';
-
+  const empty = width - filled;
+  const bar = '█'.repeat(filled) + '░'.repeat(empty);
+  const pctStr = (pct * 100).toFixed(0).padStart(3);
   return (
     <Text>
-      <Text>{display}</Text>
-      <Text color={pct > 0.9 ? colors.error : color}>{bar}</Text>
-      <Text dimColor> {Math.round(pct * 100)}%</Text>
+      {label && <Text color="gray">{label}: </Text>}
+      <Text color={color}>{bar} </Text>
+      <Text color={color}>{pctStr}%</Text>
     </Text>
   );
 }

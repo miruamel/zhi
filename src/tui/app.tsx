@@ -1,6 +1,7 @@
 /**
  * @fileoverview App root — the main ink <App> for Zhi TUI. @since 0.1.2
  * @updated 0.2.0 — integrated Arranger, StatusBar, CommandPalette, useFocus
+ * @updated 0.2.2 — OrchPane, BudgetPane, LoopPane
  */
 import { Box, useApp, useInput } from 'ink';
 import { useState } from 'react';
@@ -10,6 +11,7 @@ import { Arranger } from './core/arranger';
 import { StatusBar } from './widgets/status-bar';
 import { CommandPalette, type CommandItem } from './widgets/command-palette';
 import { useFocus } from './core/hooks';
+import { AppState, DagStep } from './core/state';
 import {
   CodeViewer,
   FileTree,
@@ -17,7 +19,6 @@ import {
   DiffViewer,
   TerminalPane,
   NetworkPane,
-  AgentsPane,
   HelpPane,
   Header,
   Dag,
@@ -29,11 +30,22 @@ import {
   SessionsPane,
   MemoryPane,
   SettingsPane,
+  OrchPane,
+  BudgetPane,
+  LoopPane,
+  AgentRosterPane,
+  SkillBrowserPane,
+  McpPane,
+  ReviewPane,
+  TracePane,
+  DashboardPane,
+  AgentPane,
+  ReleasePane,
 } from './panes';
-import type { AppState } from './core/state';
-
+/** @brief Props for ZhiApp root component. @since 0.1.2 */
 export interface AppProps {
   initialState: AppState;
+
   threshold: number;
   onAbort?: () => void;
   onQuit?: () => void;
@@ -137,7 +149,6 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
       action: () => nav.move(-1),
     },
   ];
-
   useInput(
     (
       input: string,
@@ -196,9 +207,10 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
       }
     },
   );
-
-  const currentStep = state.steps.find((s) => s.id === state.currentStepId);
+  const currentStep = state.steps.find((s: DagStep) => s.id === state.currentStepId);
   const hints = ['Ctrl+K palette', 'Tab cycle', 'q quit', 'Space pause', 'h help'];
+
+  const doneCount = state.steps.filter((s: DagStep) => s.status === 'done').length;
 
   return (
     <Box key={redrawKey} flexDirection="column" paddingX={1}>
@@ -215,16 +227,12 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
       />
       <Box marginTop={1} gap={1}>
         <FileTree files={state.files} selected={state.selectedFile} />
-        <CodeViewer
-          path={state.selectedFile}
-          content={state.fileContent}
-          language={state.fileLanguage}
-        />
+        <CodeViewer path={state.selectedFile} content={state.fileContent} />
         <MetricsPane
           tokensUsed={state.tokensUsed}
           tokensBudget={state.tokensBudget}
           elapsedMs={Date.now() - state.startedAt}
-          stepsCompleted={state.steps.filter((s) => s.status === 'done').length}
+          stepsCompleted={doneCount}
           stepsTotal={state.steps.length}
           successRate={state.eval?.gatePass ? 1 : 0}
           sparkline={state.tokenSparkline}
@@ -255,10 +263,89 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
       <Box marginTop={1} gap={1}>
         <TerminalPane lines={state.terminalLines} />
         <NetworkPane requests={state.networkRequests} online={state.networkOnline} />
-        <AgentsPane agents={state.agents} />
+        <AgentRosterPane
+          agents={state.agents.map((a) => ({
+            id: a.id,
+            name: a.name,
+            status: a.status,
+            tasksCompleted: a.tasksCompleted,
+            currentTask: a.currentTask,
+          }))}
+        />
+        <AgentPane
+          agents={state.agents.map((a) => ({
+            id: a.id,
+            name: a.name,
+            status: a.status === 'done' ? 'terminated' : a.status,
+            capabilities: a.capabilities ?? [],
+            tasksCompleted: a.tasksCompleted,
+            tasksFailed: a.tasksFailed ?? 0,
+            tokensUsed: a.tokensUsed ?? 0,
+            lastActive: a.lastActive,
+          }))}
+          runtimeLog={state.runtimeLog ?? []}
+          selectedAgent={state.selectedAgent}
+          onDispatch={(agentId, task) => {
+            if (task.trim()) pushState({ dispatch: { agentId, task } } as any);
+          }}
+          onRefresh={() => pushState({ refresh: true } as any)}
+        />
+      </Box>
+      <Box marginTop={1} gap={1}>
+        <SkillBrowserPane skills={[]} />
+        <McpPane servers={[]} />
+      </Box>
+      <Box marginTop={1} gap={1}>
+        <ReviewPane hunks={[]} comments={[]} />
+        <TracePane entries={state.log} />
       </Box>
       <Box marginTop={1}>
         <Log log={state.log} expanded={logExpanded} offset={logOffset} maxLines={40} />
+      </Box>
+      <Box marginTop={1} gap={1}>
+        <DashboardPane
+          dora={
+            state.eval.dora ?? { deployFrequency: 0, leadTime: 0, changeFailureRate: 0, mttr: 0 }
+          }
+          qualityScore={state.eval.weightedAvg}
+          testCoverage={0.85}
+          costTrend={0}
+          tokensUsed={state.tokensUsed}
+          tokensBudget={state.tokensBudget}
+          stepsCompleted={doneCount}
+          stepsTotal={state.steps.length}
+        />
+        <ReleasePane builds={[]} releases={[]} />
+      </Box>
+      <Box marginTop={1} gap={1}>
+        <OrchPane
+          steps={state.steps.map((s) => ({
+            id: s.id,
+            kind: s.kind,
+            title: s.detail ?? s.id,
+            status: s.status,
+            tokens: s.tokensUsed,
+          }))}
+          currentStepId={state.currentStepId}
+        />
+        <BudgetPane
+          tokensUsed={state.tokensUsed}
+          tokensBudget={state.tokensBudget}
+          costEstimate={state.costEstimate}
+          costBudget={state.costBudget}
+          stepsCompleted={doneCount}
+          stepsTotal={state.steps.length}
+          elapsedMs={Date.now() - state.startedAt}
+        />
+        <LoopPane
+          loop={state.loop}
+          paused={false}
+          aborted={state.aborted}
+          finished={state.finished}
+          partial={state.partial}
+          stepsCompleted={doneCount}
+          stepsTotal={state.steps.length}
+        />
       </Box>
       <Box marginTop={1} gap={1}>
         <SessionsPane sessions={state.sessions} activeId={state.activeSessionId} />
@@ -273,7 +360,7 @@ export function ZhiApp({ initialState, threshold, onAbort, onQuit, onRegister }:
         tokensBudget={state.tokensBudget}
         elapsedMs={Date.now() - state.startedAt}
         step={currentStep?.kind}
-        stepCount={state.steps.filter((s) => s.status === 'done').length}
+        stepCount={doneCount}
         stepTotal={state.steps.length}
         gitBranch={state.git?.branch}
         gitAhead={state.git?.ahead}

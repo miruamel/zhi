@@ -1,35 +1,43 @@
 /**
- * @fileoverview Modal — overlay container.
- * @since 0.2.0
+ * @fileoverview Modal widget — overlay dialog with backdrop and footer. @since 0.2.6
+ * @package zhi
  */
 import { Box, Text } from 'ink';
-import { colors } from '../../core/colors';
 
+/** @brief Modal props. @since 0.2.6 */
 export interface ModalProps {
   open: boolean;
   title?: string;
-  onClose?: () => void;
+  footer?: React.ReactNode;
+  onClose: () => void;
   children: React.ReactNode;
 }
 
-/** @brief Render a centered modal overlay. @since 0.2.0 */
-export function Modal({ open, title, onClose, children }: ModalProps) {
+/** @brief Modal component — pure presentational, no hooks for testability. @since 0.2.6 */
+export function Modal({
+  open,
+  title,
+  footer,
+  onClose,
+  children,
+}: ModalProps): React.ReactElement | null {
   if (!open) return null;
+  void onClose;
   return (
-    <Box
-      flexDirection="column"
-      borderStyle="round"
-      borderColor={colors.accentBlue}
-      paddingX={2}
-      paddingY={1}
-    >
-      {title && (
-        <Text bold color={colors.accent}>
-          {title}
-          {onClose && <Text dimColor> [esc]</Text>}
-        </Text>
-      )}
-      {children}
+    <Box flexDirection="column" paddingX={2} paddingY={1}>
+      <Box borderStyle="round" borderColor="cyan" flexDirection="column" paddingX={2} paddingY={1}>
+        {title && (
+          <Text color="cyan" bold>
+            {title}
+          </Text>
+        )}
+        <Box marginTop={1}>{children}</Box>
+        {footer && (
+          <Box marginTop={1}>
+            <Text color="gray">{footer}</Text>
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 }

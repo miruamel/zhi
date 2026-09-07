@@ -1,49 +1,142 @@
-/** @brief Agregator multi-critic untuk gate kualitas. @since 0.1.1 */
+/**
+ * @fileoverview Critic aggregation — weighted scoring, pass/fail, findings collection.
+ * @since 0.2.6
+ * @package zhi
+ */
+import type { Critique, CritiqueSeverity, CritiqueCategory } from './types';
 
-/** @brief Hasil satu critic. @since 0.1.1 */
-export interface Critique {
-  /** @brief Nama critic (security/perf/style/...). */
+export type { Critique };
+
+/** @brief A critic result entry. @since 0.2.6 */
+export interface CriticResult {
   name: string;
-  /** @brief Skor 0..1. */
   score: number;
-  /** @brief Bobot relatif. */
   weight: number;
-  /** @brief Temuan human-readable. */
   findings: string[];
 }
 
-/** @brief Hasil agregasi. @since 0.1.1 */
+/** @brief Aggregated result. @since 0.2.6 */
 export interface AggregateResult {
-  /** @brief Skor tertimbang 0..1. */
   score: number;
-  /** @brief Lulus threshold. */
-  passed: boolean;
-  /** @brief Skor per critic. */
   byCritic: Record<string, number>;
-  /** @brief Gabungan semua findings. */
+  passed: boolean;
   findings: string[];
+  total: number;
+  bySeverity: Record<CritiqueSeverity, number>;
+  byCategory: Record<CritiqueCategory, number>;
+  blockers: string[];
 }
 
-/** @brief Agregasi multi-critic → skor tertimbang + gate.
- * @param {Critique[]} critiques - hasil tiap critic.
- * @param {number} threshold - ambang lulus (default 0.7).
- * @return {AggregateResult} hasil agregasi.
- * @see docs/design/critic.md
- * @since 0.1.1 */
-export function aggregate(critiques: Critique[], threshold = 0.7): AggregateResult {
-  if (critiques.length === 0) {
-    return { score: 0, passed: false, byCritic: {}, findings: [] };
-  }
-  let wsum = 0;
-  let swsum = 0;
+/** @brief Aggregate critic results into a single score. @since 0.2.6 */
+export function aggregate(critiques: CriticResult[], threshold = 0.7): AggregateResult {
+  let totalWeight = 0;
+  let weightedSum = 0;
   const byCritic: Record<string, number> = {};
   const findings: string[] = [];
+
   for (const c of critiques) {
+    totalWeight += c.weight;
+    weightedSum += c.score * c.weight;
     byCritic[c.name] = c.score;
-    wsum += c.weight;
-    swsum += c.weight * c.score;
-    findings.push(...c.findings);
+    for (const f of c.findings) findings.push(f);
   }
-  const score = wsum > 0 ? swsum / wsum : 0;
-  return { score, passed: score >= threshold, byCritic, findings };
+
+  const score = totalWeight > 0 ? weightedSum / totalWeight : 0;
+  const passed = score >= threshold;
+
+  return {
+    score,
+    byCritic,
+    passed,
+    findings,
+    total: critiques.length,
+    bySeverity: { critical: 0, high: 0, medium: 0, low: 0, info: 0 },
+    byCategory: {
+      security: 0,
+      performance: 0,
+      architecture: 0,
+      consistency: 0,
+      maintainability: 0,
+      correctness: 0,
+    },
+    blockers: [],
+  };
+}
+
+/** @brief Aggregate critiques by severity. @since 0.2.6 */
+export function aggregateBySeverity(critiques: Critique[]): Record<CritiqueSeverity, number> {
+  const result: Record<CritiqueSeverity, number> = {
+    critical: 0,
+    high: 0,
+    medium: 0,
+    low: 0,
+    info: 0,
+  };
+  for (const c of critiques) result[c.severity]++;
+  return result;
+}
+
+/** @brief Aggregate critiques by category. @since 0.2.6 */
+export function aggregateByCategory(critiques: Critique[]): Record<CritiqueCategory, number> {
+  const result: Record<CritiqueCategory, number> = {
+    security: 0,
+    performance: 0,
+    architecture: 0,
+    consistency: 0,
+    maintainability: 0,
+    correctness: 0,
+  };
+  for (const c of critiques) result[c.category]++;
+  return result;
+}
+
+/** @brief Filter critiques by minimum severity. @since 0.2.6 */
+export function filterBySeverity(critiques: Critique[], minSeverity: CritiqueSeverity): Critique[] {
+  const order: CritiqueSeverity[] = ['critical', 'high', 'medium', 'low', 'info'];
+  const minIndex = order.indexOf(minSeverity);
+  return critiques.filter((c) => order.indexOf(c.severity) <= minIndex);
+}
+
+/** @brief Group critiques by file. @since 0.2.6 */
+export function groupByFile(critiques: Critique[]): Map<string, Critique[]> {
+  const map = new Map<string, Critique[]>();
+  for (const c of critiques) {
+    const arr = map.get(c.file) ?? [];
+    arr.push(c);
+    map.set(c.file, arr);
+  }
+  return map;
+}
+
+/** @brief Group critiques by category. @since 0.2.6 */
+export function groupByCategory(critiques: Critique[]): Map<CritiqueCategory, Critique[]> {
+  const map = new Map<CritiqueCategory, Critique[]>();
+  for (const c of critiques) {
+    const arr = map.get(c.category) ?? [];
+    arr.push(c);
+    map.set(c.category, arr);
+  }
+  return map;
+}
+
+/** @brief Sort critiques by severity (critical first). @since 0.2.6 */
+export function sortBySeverity(critiques: Critique[]): Critique[] {
+  const order: CritiqueSeverity[] = ['critical', 'high', 'medium', 'low', 'info'];
+  return [...critiques].sort((a, b) => order.indexOf(a.severity) - order.indexOf(b.severity));
+}
+
+/** @brief Get blockers (critical + high). @since 0.2.6 */
+export function getBlockers(critiques: Critique[]): Critique[] {
+  return critiques.filter((c) => c.severity === 'critical' || c.severity === 'high');
+}
+
+/** @brief Check if any blocker exists. @since 0.2.6 */
+export function hasBlocker(critiques: Critique[]): boolean {
+  return critiques.some((c) => c.severity === 'critical' || c.severity === 'high');
+}
+
+/** @brief Summarize critiques. @since 0.2.6 */
+export function summarize(critiques: Critique[]): string {
+  const bySeverity = aggregateBySeverity(critiques);
+  return `${critiques.length} findings: ${bySeverity.critical} critical, ${bySeverity.high} high, ${bySeverity.medium} medium, ${bySeverity.low} low, ${bySeverity.info} info`;
 }

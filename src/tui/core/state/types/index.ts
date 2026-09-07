@@ -10,6 +10,7 @@ export type {
   LogEntry,
   PrCiState,
   Fact,
+  DoraMetrics,
 } from './models';
 export type {
   FileEntry,

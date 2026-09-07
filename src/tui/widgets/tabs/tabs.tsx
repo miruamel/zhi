@@ -1,39 +1,32 @@
 /**
- * @fileoverview Tabs — horizontal tab bar.
- * @since 0.2.0
+ * @fileoverview Tabs widget — tab bar with active indicator. @since 0.2.6
+ * @package zhi
  */
 import { Text } from 'ink';
-import { colors } from '../../core/colors';
 
-export interface TabItem {
+/** @brief Tab definition. @since 0.2.6 */
+export interface Tab {
   id: string;
   label: string;
-  badge?: string;
+  count?: number;
 }
 
+/** @brief Tabs props. @since 0.2.6 */
 export interface TabsProps {
-  tabs: TabItem[];
+  tabs: Tab[];
   active: string;
-  onChange: (id: string) => void;
 }
 
-/** @brief Render a horizontal tab bar. @since 0.2.0 */
-export function Tabs({ tabs, active }: TabsProps) {
+/** @brief Tabs component. @since 0.2.6 */
+export function Tabs({ tabs, active }: TabsProps): React.ReactElement {
   return (
     <Text>
-      {tabs.map((t, i) => {
-        const isActive = t.id === active;
+      {tabs.map((tab) => {
+        const isActive = tab.id === active;
+        const label = tab.count !== undefined ? `${tab.label} (${tab.count})` : tab.label;
         return (
-          <Text key={t.id}>
-            {i > 0 && <Text> </Text>}
-            <Text
-              color={isActive ? colors.accent : colors.fgDim}
-              backgroundColor={isActive ? colors.bg : undefined}
-            >
-              {isActive ? '▸ ' : '  '}
-              {t.label}
-              {t.badge && <Text color={colors.warn}> ({t.badge})</Text>}
-            </Text>
+          <Text key={tab.id} color={isActive ? 'cyan' : 'gray'}>
+            {isActive ? `▶ ${label}` : `  ${label}`}
           </Text>
         );
       })}

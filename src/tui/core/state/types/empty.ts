@@ -24,11 +24,12 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     metrics: { stages: 0, errors: 0, totalMs: 0, recoverAttempts: 0 },
     tokensUsed: 0,
     tokensBudget,
+    costEstimate: 0,
+    costBudget: 0,
     startedAt: Date.now(),
     finished: false,
     aborted: false,
     partial: false,
-    // 0.2.0 defaults
     files: [],
     terminalLines: [],
     networkRequests: [],
@@ -39,5 +40,6 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     sessions: [],
     memoryFacts: [],
     configEntries: [],
+    runtimeLog: [],
   };
 }

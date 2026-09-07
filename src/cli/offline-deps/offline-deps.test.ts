@@ -4,10 +4,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { offlineDeps } from './offline-deps';
 import { compress } from '../../../engine/build/context/compress';
-import type { CruiserReport } from '../../../engine/critic/plant/architecture/critic';
+import type { CruiserReport } from '../../../engine/critic/plant/compose';
 
 /** @brief Mock cruiser runner: zero violations, no real dependency-cruiser spawn. @since 0.2.0 */
-const emptyCruiser: () => CruiserReport | null = () => ({ modules: [], dependencies: [] });
+const emptyCruiser: () => CruiserReport = () => ({ modules: [] });
 describe('offlineDeps generate', () => {
   let wt: string;
   let cleanup: () => void;

@@ -28,6 +28,8 @@ export interface AppState {
   };
   tokensUsed: number;
   tokensBudget: number;
+  costEstimate: number;
+  costBudget: number;
   startedAt: number;
   finished: boolean;
   aborted: boolean;
@@ -49,5 +51,13 @@ export interface AppState {
   sessions: SessionInfo[];
   activeSessionId?: string;
   memoryFacts: Fact[];
+  runtimeLog: Array<{
+    id: string;
+    timestamp: number;
+    level: 'info' | 'warn' | 'error';
+    agentId?: string;
+    message: string;
+  }>;
+  selectedAgent?: string;
   configEntries: ConfigEntry[];
 }

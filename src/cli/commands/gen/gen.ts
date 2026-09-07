@@ -5,10 +5,10 @@
  * @throw {Error} bila domain kosong.
  * @since 0.1.2
  */
-import type { LoopContext } from '@engine/loop/wiring/context';
-import { generate as scaffold, generateStream } from '@engine/build/generate';
-import { verify } from '@engine/build/verify';
-import { selectInvoker } from '@engine/model/invoker';
+import type { LoopContext } from '../../../../engine/loop/wiring/context';
+import { generate as scaffold, generateStream } from '../../../../engine/build';
+import { verify } from '../../../../engine/build';
+import { selectInvoker } from '../../../../engine/model/invoker';
 
 /** @brief Jalankan gen subcommand. @param {string[]} args @return {Promise<LoopContext>} */
 export async function genCommand(args: string[]): Promise<LoopContext> {

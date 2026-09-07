@@ -1,25 +1,37 @@
 /**
- * @fileoverview Terminal — embedded shell output pane.
- * @since 0.2.0
+ * @fileoverview Terminal widget — scrollable terminal output pane. @since 0.2.6
+ * @package zhi
  */
-import { Box, Text } from 'ink';
+import { Text } from 'ink';
 
+/** @brief Terminal props. @since 0.2.6 */
 export interface TerminalProps {
   lines: string[];
   maxLines?: number;
-  follow?: boolean;
+  scrollOffset?: number;
+  onScroll?: (offset: number) => void;
 }
 
-/** @brief Render a scrollable terminal output pane. @since 0.2.0 */
-export function Terminal({ lines, maxLines = 20 }: TerminalProps) {
-  const visible = lines.slice(-maxLines);
+/** @brief Terminal component. @since 0.2.6 */
+export function Terminal({
+  lines,
+  maxLines = 50,
+  scrollOffset = 0,
+}: TerminalProps): React.ReactElement {
+  const start =
+    scrollOffset > 0
+      ? Math.max(0, Math.min(lines.length - maxLines, scrollOffset))
+      : Math.max(0, lines.length - maxLines);
+  const visible = lines.slice(start, start + maxLines);
   return (
-    <Box flexDirection="column">
+    <Text>
       {visible.map((line, i) => (
-        <Text key={i} dimColor={line.startsWith('$') || line.startsWith('')}>
+        <Text key={i}>
+          <Text color="gray">{String(start + i + 1).padStart(4)} │ </Text>
           {line}
+          {'\n'}
         </Text>
       ))}
-    </Box>
+    </Text>
   );
 }

@@ -1,32 +1,38 @@
 /**
- * @fileoverview Config — settings panel widget.
- * @since 0.2.0
+ * @fileoverview Config widget — key-value configuration display. @since 0.2.6
+ * @package zhi
  */
-import { Box, Text } from 'ink';
-import { colors } from '../../core/colors';
+import { Text } from 'ink';
 
+/** @brief Config entry. @since 0.2.6 */
 export interface ConfigEntry {
   key: string;
   value: string;
-  description?: string;
+  source?: string;
 }
 
+/** @brief Config props. @since 0.2.6 */
 export interface ConfigProps {
   entries: ConfigEntry[];
+  filter?: string;
 }
 
-/** @brief Render a configuration key-value panel. @since 0.2.0 */
-export function Config({ entries }: ConfigProps) {
+/** @brief Config component. @since 0.2.6 */
+export function Config({ entries, filter }: ConfigProps): React.ReactElement {
+  const filtered = filter
+    ? entries.filter((e) => e.key.toLowerCase().includes(filter.toLowerCase()))
+    : entries;
   return (
-    <Box flexDirection="column">
-      {entries.map((e) => (
+    <Text>
+      {filtered.map((e) => (
         <Text key={e.key}>
-          <Text color={colors.accentBlue}>{e.key}:</Text>
-          {'  '}
+          <Text color="cyan">{e.key}</Text>
+          <Text color="gray"> = </Text>
           <Text>{e.value}</Text>
-          {e.description && <Text dimColor> — {e.description}</Text>}
+          {e.source && <Text color="gray"> ({e.source})</Text>}
+          {'\n'}
         </Text>
       ))}
-    </Box>
+    </Text>
   );
 }

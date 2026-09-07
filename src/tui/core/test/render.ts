@@ -2,49 +2,25 @@
  * @brief Test render helper — render ink elements to string for assertions.
  * @since 0.2.0
  */
-import { render } from 'ink';
+import TestRenderer from 'react-test-renderer';
 import type { ReactNode } from 'react';
 
-/** @brief Render ink element to string, capture stdout via process.stdout.write override. */
+/** @brief Render a component tree to string via react-test-renderer. */
 export function renderToString(el: ReactNode): string {
-  const chunks: string[] = [];
-  const originalWrite = process.stdout.write.bind(process.stdout);
-  process.stdout.write = ((chunk: string | Buffer) => {
-    chunks.push(typeof chunk === 'string' ? chunk : chunk.toString());
-    return true;
-  }) as any;
-  try {
-    // Fake stdin with isTTY=true so useInput's setRawMode doesn't throw
-    const fakeStdin = {
-      isTTY: true,
-      setRawMode: () => {},
-      on: () => {},
-      removeListener: () => {},
-      removeEventListener: () => {},
-      emit: () => {},
-      once: () => {},
-      off: () => {},
-      addListener: () => {},
-      write: () => {},
-      pause: () => {},
-      resume: () => {},
-      isPaused: () => false,
-      pipe: () => ({}),
-      unpipe: () => {},
-      destroy: () => {},
-      destroyed: false,
-      readable: true,
-      flow: () => {},
-      read: () => null,
-      setEncoding: () => {},
-      wrap: () => ({}),
-      getStdin: () => null,
-      ref: () => {},
-      unref: () => {},
-    } as any;
-    render(el as any, { stdin: fakeStdin, debug: true });
-  } finally {
-    process.stdout.write = originalWrite;
+  const renderer = TestRenderer.create(el as any);
+  const json = renderer.toJSON();
+  return extractText(json);
+}
+
+/** @brief Recursively extract text from test renderer JSON. */
+function extractText(node: any): string {
+  if (node == null) return '';
+  if (typeof node === 'string') return node;
+  if (typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(extractText).join('');
+  if (typeof node === 'object') {
+    if (node.children) return extractText(node.children);
+    return '';
   }
-  return chunks.join('');
+  return '';
 }

@@ -9,19 +9,12 @@ import { Code, type CodeLine } from '../../../widgets/code';
 export interface CodeViewerProps {
   path?: string;
   content?: string;
-  language?: string;
   scroll?: number;
   maxLines?: number;
 }
 
 /** @brief Render a code viewer pane with line numbers and syntax highlighting. @since 0.2.0 */
-export function CodeViewer({
-  path,
-  content,
-  language,
-  scroll = 0,
-  maxLines = 30,
-}: CodeViewerProps) {
+export function CodeViewer({ path, content, scroll = 0, maxLines = 30 }: CodeViewerProps) {
   if (!content) {
     return (
       <Box
@@ -56,7 +49,7 @@ export function CodeViewer({
       <Text color={colors.forward} bold>
         _CODE {path ? `· ${path}` : ''}
       </Text>
-      <Code lines={lines} language={language} />
+      <Code lines={lines} />
     </Box>
   );
 }

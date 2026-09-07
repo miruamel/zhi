@@ -1,33 +1,30 @@
-/** @brief Test scanSecrets. @since 0.1.1 */
+/**
+ * @fileoverview Security scanner tests. @since 0.2.6
+ */
 import { describe, it, expect } from 'bun:test';
-import { mkdtempSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { scanSecrets } from '../security';
+import { scanSecurity } from '../eval';
 
-function tmp(): string {
-  return mkdtempSync(join(tmpdir(), 'zhi-sec-'));
-}
-
-describe('scanSecrets', () => {
-  it('detects api key assignment', () => {
-    const d = tmp();
-    writeFileSync(join(d, 'cfg.ts'), `const apiKey = "sk-abcdefghijklmnopqrstuvwx";\n`);
-    const r = scanSecrets(d);
-    expect(r.leaked).toBe(true);
+describe('scanSecurity', () => {
+  it('detects API keys', () => {
+    const r = scanSecurity([
+      { path: 'a.ts', content: 'const apiKey = "sk-abcdefghijklmnopqrstuvwxyz";' },
+    ]);
     expect(r.findings.length).toBeGreaterThan(0);
   });
-  it('clean file passes', () => {
-    const d = tmp();
-    writeFileSync(join(d, 'ok.ts'), `export const n = 1;\n`);
-    expect(scanSecrets(d).leaked).toBe(false);
-  });
-});
 
-describe('scanSecrets (extra)', () => {
-  it('nonexistent worktree -> fail-closed (leaked)', () => {
-    const r = scanSecrets('/nonexistent/path/zhi-xyz');
-    expect(r.leaked).toBe(true);
-    expect(r.findings[0]).toContain('scan error');
+  it('returns clean report for safe code', () => {
+    const r = scanSecurity([{ path: 'a.ts', content: 'const x = 1;' }]);
+    expect(r.findings.length).toBe(0);
+    expect(r.score).toBe(100);
+  });
+
+  it('detects private keys', () => {
+    const r = scanSecurity([
+      {
+        path: 'a.ts',
+        content: '-----BEGIN RSA PRIVATE KEY-----\nkey\n-----END RSA PRIVATE KEY-----',
+      },
+    ]);
+    expect(r.findings.some((f) => f.rule === 'private-key')).toBe(true);
   });
 });

@@ -1,90 +1,49 @@
 /**
- * @fileoverview Code — syntax-highlighted code display.
- * @since 0.2.0
+ * @fileoverview Code viewer widget — syntax-highlighted code block. @since 0.2.6
+ * @package zhi
  */
-import { Box, Text } from 'ink';
-import { colors } from '../../core/colors';
+import { Text } from 'ink';
 
+/** @brief A single code line. @since 0.2.6 */
 export interface CodeLine {
   number: number;
   content: string;
-  highlight?: boolean;
 }
 
+/** @brief Code viewer props. @since 0.2.6 */
+export interface CodeViewerProps {
+  code: string;
+  maxLines?: number;
+}
+
+/** @brief Code block props. @since 0.2.6 */
 export interface CodeProps {
   lines: CodeLine[];
-  language?: string;
-  maxWidth?: number;
 }
 
-const KEYWORDS = new Set([
-  'const',
-  'let',
-  'var',
-  'function',
-  'return',
-  'if',
-  'else',
-  'for',
-  'while',
-  'class',
-  'interface',
-  'type',
-  'import',
-  'export',
-  'from',
-  'async',
-  'await',
-  'new',
-  'this',
-  'super',
-  'extends',
-  'implements',
-  'public',
-  'private',
-  'protected',
-  'static',
-  'abstract',
-  'true',
-  'false',
-  'null',
-  'undefined',
-  'void',
-  'number',
-  'string',
-  'boolean',
-  'object',
-  'array',
-  'typeof',
-  'instanceof',
-  'in',
-]);
-
-/** @brief Render code with basic syntax highlighting. @since 0.2.0 */
-export function Code({ lines }: CodeProps) {
-  const highlightToken = (token: string): React.ReactNode => {
-    const t = token.trim();
-    if (!t) return token;
-    if (KEYWORDS.has(t)) return <Text color={colors.accentBlue}>{token}</Text>;
-    if (t.startsWith('//') || t.startsWith('#') || t.startsWith('/*'))
-      return <Text dimColor>{token}</Text>;
-    if (/^["'`]/.test(t)) return <Text color={colors.warn}>{token}</Text>;
-    if (/^\d/.test(t)) return <Text color={colors.complete}>{token}</Text>;
-    return <Text>{token}</Text>;
-  };
-
+/** @brief Code block component — renders lines with line numbers. @since 0.2.6 */
+export function Code({ lines }: CodeProps): React.ReactElement {
   return (
-    <Box flexDirection="column">
-      {lines.map((line) => (
-        <Text key={line.number}>
-          <Text dimColor>{String(line.number).padStart(4)} │ </Text>
-          <Text color={line.highlight ? colors.warn : colors.fg}>
-            {line.content.split(/(\s+|\W)/).map((part, i) => (
-              <Text key={i}>{highlightToken(part)}</Text>
-            ))}
-          </Text>
+    <Text>
+      {lines.map((line, i) => (
+        <Text key={i}>
+          <Text color="gray">{String(line.number).padStart(4)} │ </Text>
+          {line.content}
+          {'\n'}
         </Text>
       ))}
-    </Box>
+    </Text>
   );
+}
+
+/** @brief Code viewer component. @since 0.2.6 */
+export function CodeViewer({ code, maxLines = 50 }: CodeViewerProps): React.ReactElement {
+  const lines: CodeLine[] = code
+    .split('\n')
+    .slice(0, maxLines)
+    .map((content, i) => ({
+      number: i + 1,
+      content,
+    }));
+  return <Code lines={lines} />;
 }

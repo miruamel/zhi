@@ -38,6 +38,8 @@ export interface Edge {
   from: string;
   /** @brief Step tujuan. */
   to: string;
+  /** @brief Kondisi eksekusi (opsional). */
+  condition?: string;
 }
 
 /** @brief DAG rencana bebas-siklus, terurut topologis. @since 0.1.1 */
@@ -59,4 +61,57 @@ export class CycleError extends Error {
     this.name = 'CycleError';
     this.cycle = cycle;
   }
+}
+/** @brief DAG construction options. @since 0.2.6 */
+export interface DagOptions {
+  /** @brief Max steps allowed. */
+  maxSteps?: number;
+  /** @brief Allow cycles (default false). */
+  allowCycles?: boolean;
+}
+
+/** @brief Topological sort result. @since 0.2.6 */
+export interface TopoResult {
+  /** @brief Ordered step IDs. */
+  order: string[];
+  /** @brief Detected cycles. */
+  cycles: string[][];
+  /** @brief True if any cycle found. */
+  hasCycles: boolean;
+}
+/** @brief Orchestrator configuration. @since 0.2.6 */
+/** @brief Orchestrator configuration. @since 0.2.6 */
+export interface OrchConfig {
+  /** @brief Available agent IDs. */
+  agents: string[];
+  /** @brief Max concurrent steps. */
+  maxConcurrency: number;
+  /** @brief Token budget. */
+  budgetTokens: number;
+  /** @brief Cost budget. */
+  budgetCost: number;
+}
+
+/** @brief DAG step with execution state (used by runner classes). @since 0.2.6 */
+export interface DagStep {
+  id: string;
+  kind: string;
+  title: string;
+  status: 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
+  tokens?: number;
+  cost?: number;
+  detail?: string;
+  error?: string;
+  startedAt?: number;
+  completedAt?: number;
+  dependsOn?: string[];
+  retryCount?: number;
+  /** @brief Alias used by allocator; optional in plan steps. */
+  startTime?: number;
+  endTime?: number;
+  duration?: number;
+  priority?: number;
+  estimate?: number;
+  label?: string;
+  deps?: string[];
 }

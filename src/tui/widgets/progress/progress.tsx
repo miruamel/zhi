@@ -1,36 +1,36 @@
 /**
- * @fileoverview Progress bar — horizontal fill indicator.
- * @since 0.2.0
+ * @fileoverview Progress widget — horizontal progress bar. @since 0.2.6
+ * @package zhi
  */
 import { Text } from 'ink';
-import { colors } from '../../core/colors';
 
+/** @brief Progress props. @since 0.2.6 */
 export interface ProgressProps {
   value: number;
   max?: number;
-  width?: number;
   label?: string;
   color?: string;
-  showPct?: boolean;
+  width?: number;
 }
 
-/** @brief Render a horizontal progress bar. @since 0.2.0 */
+/** @brief Progress component. @since 0.2.6 */
 export function Progress({
   value,
   max = 100,
-  width = 20,
   label,
-  color = colors.accent,
-  showPct = true,
-}: ProgressProps) {
-  const pct = Math.max(0, Math.min(1, value / max));
+  color = 'green',
+  width = 30,
+}: ProgressProps): React.ReactElement {
+  const pct = Math.min(1, Math.max(0, value / max));
   const filled = Math.round(pct * width);
-  const bar = '█'.repeat(filled) + '░'.repeat(width - filled);
+  const empty = width - filled;
+  const bar = '█'.repeat(filled) + '░'.repeat(empty);
+  const pctStr = (pct * 100).toFixed(0).padStart(3);
   return (
     <Text>
-      {label && <Text>{label} </Text>}
-      <Text color={pct > 0.9 ? colors.error : color}>{bar}</Text>
-      {showPct && <Text dimColor> {Math.round(pct * 100)}%</Text>}
+      {label && <Text color="gray">{label}: </Text>}
+      <Text color={color}>{bar} </Text>
+      <Text color={color}>{pctStr}%</Text>
     </Text>
   );
 }

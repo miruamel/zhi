@@ -1,5 +1,5 @@
 /** @brief Critic: batas SLOC per file (mandate §6.3, hard ≤200). @since 0.1.1 */
-import type { Critique } from '../../aggregate';
+import type { CriticResult } from '../../aggregate';
 
 /** @brief Rekor satu file yang diaudit plant. @since 0.1.1 */
 export interface FileRecord {
@@ -31,7 +31,7 @@ export function countSloc(src: string): number {
  * @param {number} [limit=200] - batas SLOC per file.
  * @return {Critique} hasil critic.
  * @since 0.1.1 */
-export function slocCritic(files: FileRecord[], limit = 200): Critique {
+export function slocCritic(files: FileRecord[], limit = 200): CriticResult {
   const findings: string[] = [];
   let worst = 0;
   for (const f of files) {
