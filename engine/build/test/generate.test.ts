@@ -17,6 +17,19 @@ function sseResponse(chunks: string[]): Response {
   return new Response(stream, { status: 200, headers: { 'content-type': 'text/event-stream' } });
 }
 
+/** @brief Buat Response yang merekam pembatalan body. @param {number} status - status HTTP. @param {string} body - isi respons yang tidak boleh dibaca. @param {() => void} onCancel - callback saat body dibatalkan. @return {Response} respons berisi body yang tetap terbuka. */
+function trackedErrorResponse(status: number, body: string, onCancel: () => void): Response {
+  const stream = new ReadableStream<Uint8Array>({
+    start(controller) {
+      controller.enqueue(new TextEncoder().encode(body));
+    },
+    cancel() {
+      onCancel();
+    },
+  });
+  return new Response(stream, { status });
+}
+
 describe('build generate', () => {
   it('scaffolds fractal domain module (handlers/services/utils/constants + barrel)', async () => {
     const paths = (await generate({ domain: 'auth' })).map((f) => f.path);
@@ -63,13 +76,17 @@ describe('build generate', () => {
   it('CloudModelInvoker throws on non-2xx', async () => {
     const saved = globalThis.fetch;
     const marker = 'fake-upstream-secret-marker';
+    let cancelled = false;
     globalThis.fetch = (async () =>
-      new Response(marker, { status: 500 })) as unknown as typeof fetch;
+      trackedErrorResponse(500, marker, () => {
+        cancelled = true;
+      })) as unknown as typeof fetch;
     try {
       const error = await new CloudModelInvoker({ apiKey: 'k' }).invoke('p').catch((err) => err);
       expect(error).toBeInstanceOf(Error);
       expect((error as Error).message).toBe('CloudModelInvoker: HTTP 500');
       expect((error as Error).message).not.toContain(marker);
+      expect(cancelled).toBe(true);
     } finally {
       globalThis.fetch = saved;
     }
@@ -110,14 +127,17 @@ describe('build generate', () => {
   it('CloudModelInvoker.stream does not expose non-2xx response bodies', async () => {
     const saved = globalThis.fetch;
     const marker = 'fake-stream-secret-marker';
+    let cancelled = false;
     globalThis.fetch = (async () =>
-      new Response(marker, { status: 429 })) as unknown as typeof fetch;
+      trackedErrorResponse(429, marker, () => {
+        cancelled = true;
+      })) as unknown as typeof fetch;
     try {
       const inv = new CloudModelInvoker({ apiKey: 'k' });
       let error: unknown;
       try {
         for await (const _token of inv.stream('p')) {
-          // The request should fail before the stream can yield a token.
+          // Permintaan harus gagal sebelum stream menghasilkan token.
         }
       } catch (err) {
         error = err;
@@ -125,6 +145,7 @@ describe('build generate', () => {
       expect(error).toBeInstanceOf(Error);
       expect((error as Error).message).toBe('CloudModelInvoker: HTTP 429');
       expect((error as Error).message).not.toContain(marker);
+      expect(cancelled).toBe(true);
     } finally {
       globalThis.fetch = saved;
     }
