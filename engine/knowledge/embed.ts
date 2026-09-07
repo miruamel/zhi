@@ -1,8 +1,8 @@
 /**
- * @fileoverview Text embedding — deterministic hash-based vectors. @since 0.2.6
+ * @fileoverview Text embedding — deterministic hash-based vectors. @since 0.1.10
  * @package zhi
  */
-/** @brief Embed text into a vector. @since 0.2.6 */
+/** @brief Embed text into a vector. @since 0.1.10 */
 export function embed(text: string, dims: number = 64): number[] {
   const vec = new Array<number>(dims).fill(0);
   for (let i = 0; i < text.length; i++) {
@@ -13,7 +13,7 @@ export function embed(text: string, dims: number = 64): number[] {
   return mag > 0 ? vec.map((v) => v / mag) : vec;
 }
 
-/** @brief Cosine similarity between two vectors. @since 0.2.6 */
+/** @brief Cosine similarity between two vectors. @since 0.1.10 */
 export function cosineSimilarity(a: number[], b: number[]): number {
   let dot = 0;
   let magA = 0;

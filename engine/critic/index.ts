@@ -1,12 +1,12 @@
 /**
  * @fileoverview Critic engine — public API surface.
- * @since 0.2.6
+ * @since 0.1.10
  * @package zhi
  */
 import { CriticEngine, type CriticOptions, type AggregatedCritique } from './engine';
 import type { Critique, CritiqueSeverity, CritiqueCategory } from './types';
 
-/** @brief Create and run a critic. @since 0.2.6 */
+/** @brief Create and run a critic. @since 0.1.10 */
 export function runCritic(
   input: { files: Array<{ path: string; content: string }> },
   options?: CriticOptions,
@@ -15,8 +15,8 @@ export function runCritic(
   return engine.run(input, options);
 }
 
-/** @brief Create a critic engine. @since 0.2.6 */
+/** @brief Create a critic engine. @since 0.1.10 */
 export { CriticEngine, type CriticOptions, type AggregatedCritique };
 
-/** @brief Critic types. @since 0.2.6 */
+/** @brief Critic types. @since 0.1.10 */
 export type { Critique, CritiqueSeverity, CritiqueCategory };

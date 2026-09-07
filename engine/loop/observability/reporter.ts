@@ -1,10 +1,10 @@
 /**
- * @fileoverview Loop reporter — produces structured execution reports. @since 0.2.6
+ * @fileoverview Loop reporter — produces structured execution reports. @since 0.1.10
  * @package zhi
  */
 import { type Span } from './tracer';
 
-/** @brief Loop report. @since 0.2.6 */
+/** @brief Loop report. @since 0.1.10 */
 export interface LoopReport {
   phase: string;
   steps: number;
@@ -14,7 +14,7 @@ export interface LoopReport {
   summary: string;
 }
 
-/** @brief Generate a loop report. @since 0.2.6 */
+/** @brief Generate a loop report. @since 0.1.10 */
 export function report(phase: string, steps: number, tokens: number, spans: Span[]): LoopReport {
   const durationMs =
     spans.length > 0 ? Math.max(...spans.map((s) => (s.endedAt ?? s.startedAt) - s.startedAt)) : 0;

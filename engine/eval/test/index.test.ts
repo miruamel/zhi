@@ -6,46 +6,46 @@ import { join } from 'node:path';
 import { evaluate } from '../index';
 
 describe('evaluate', () => {
-  it('passes on clean worktree', () => {
+  it('passes on clean worktree', async () => {
     const d = mkdtempSync(join(tmpdir(), 'zhi-e-'));
     writeFileSync(
       join(d, 'ok.test.ts'),
       `import { expect, test } from 'bun:test';\ntest('p', () => { expect(1).toBe(1); });\n`,
     );
     writeFileSync(join(d, 'ok.ts'), `export const n = 1;\n`);
-    expect(evaluate(d).passed).toBe(true);
+    expect((await evaluate(d)).passed).toBe(true);
   });
-  it('blocks on leaked secret', () => {
+  it('blocks on leaked secret', async () => {
     const d = mkdtempSync(join(tmpdir(), 'zhi-e-'));
     writeFileSync(
       join(d, 'ok.test.ts'),
       `import { expect, test } from 'bun:test';\ntest('p', () => { expect(1).toBe(1); });\n`,
     );
     writeFileSync(join(d, 'cfg.ts'), `const token = "sk-abcdefghijklmnopqrstuvwx";\n`);
-    const r = evaluate(d);
+    const r = await evaluate(d);
     expect(r.passed).toBe(false);
     expect(r.reasons.join(' ')).toContain('secret bocor');
   });
 });
 
 describe('evaluate (extra)', () => {
-  it('failing test -> blocker', () => {
+  it('failing test -> blocker', async () => {
     const d = mkdtempSync(join(tmpdir(), 'zhi-e-'));
     writeFileSync(
       join(d, 'bad.test.ts'),
       `import { expect, test } from 'bun:test';\ntest('f', () => { expect(1).toBe(2); });\n`,
     );
-    const r = evaluate(d);
+    const r = await evaluate(d);
     expect(r.passed).toBe(false);
     expect(r.reasons.join(' ')).toContain('test gagal');
   });
-  it('passed run reports criteria met', () => {
+  it('passed run reports criteria met', async () => {
     const d = mkdtempSync(join(tmpdir(), 'zhi-e-'));
     writeFileSync(
       join(d, 'ok.test.ts'),
       `import { expect, test } from 'bun:test';\ntest('p', () => { expect(1).toBe(1); });\n`,
     );
-    const r = evaluate(d);
+    const r = await evaluate(d);
     expect(r.passed).toBe(true);
     expect(r.reasons.join(' ')).toContain('criteria met');
   });

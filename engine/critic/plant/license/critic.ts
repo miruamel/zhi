@@ -1,11 +1,11 @@
-/** @brief Critic: license — detect license compatibility issues. @since 0.2.6 */
+/** @brief Critic: license — detect license compatibility issues. @since 0.1.10 */
 import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-/** @brief Penalty per license issue. @since 0.2.6 */
+/** @brief Penalty per license issue. @since 0.1.10 */
 const PENALTY = 0.03;
 
-/** @brief Compatible licenses. @since 0.2.6 */
+/** @brief Compatible licenses. @since 0.1.10 */
 const COMPATIBLE = new Set([
   'MIT',
   'Apache-2.0',
@@ -20,7 +20,7 @@ const COMPATIBLE = new Set([
 /** @brief License critic: penalize files with incompatible licenses.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.6 */
+ * @since 0.1.10 */
 export function licenseCritic(files: FileRecord[]): CriticResult {
   const findings: string[] = [];
   let score = 1;

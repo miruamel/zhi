@@ -1,11 +1,11 @@
-/** @brief Critic: API safety — detect unvalidated input, missing error handling. @since 0.2.6 */
+/** @brief Critic: API safety — detect unvalidated input, missing error handling. @since 0.1.10 */
 import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-/** @brief Penalty per unsafe pattern. @since 0.2.6 */
+/** @brief Penalty per unsafe pattern. @since 0.1.10 */
 const PENALTY = 0.04;
 
-/** @brief Patterns that indicate missing input validation. @since 0.2.6 */
+/** @brief Patterns that indicate missing input validation. @since 0.1.10 */
 const UNSAFE: RegExp[] = [
   /\breq\.body\b(?![^;]*\.validate)/,
   /\breq\.query\b(?![^;]*\.validate)/,
@@ -24,7 +24,7 @@ const UNSAFE: RegExp[] = [
 /** @brief API safety critic: penalize files with unsafe API patterns.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.6 */
+ * @since 0.1.10 */
 export function apiSafetyCritic(files: FileRecord[]): CriticResult {
   const findings: string[] = [];
   let score = 1;

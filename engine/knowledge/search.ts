@@ -1,10 +1,10 @@
 /**
- * @fileoverview Semantic search over embedded chunks. @since 0.2.6
+ * @fileoverview Semantic search over embedded chunks. @since 0.1.10
  * @package zhi
  */
 import { embed, cosineSimilarity } from './embed';
 
-/** @brief A chunk in the vector index. @since 0.2.6 */
+/** @brief A chunk in the vector index. @since 0.1.10 */
 export interface IndexedChunk {
   id: string;
   text: string;
@@ -12,13 +12,13 @@ export interface IndexedChunk {
   metadata: { path: string; tags: string[] };
 }
 
-/** @brief Search result. @since 0.2.6 */
+/** @brief Search result. @since 0.1.10 */
 export interface SearchResult {
   chunk: IndexedChunk;
   score: number;
 }
 
-/** @brief Search engine interface. @since 0.2.6 */
+/** @brief Search engine interface. @since 0.1.10 */
 export interface SearchEngine {
   add(chunk: Omit<IndexedChunk, 'vector'>): void;
   search(query: string, k?: number, filter?: { tags?: string[]; path?: string }): SearchResult[];
@@ -26,7 +26,7 @@ export interface SearchEngine {
   size(): number;
 }
 
-/** @brief Create a search engine. @since 0.2.6 */
+/** @brief Create a search engine. @since 0.1.10 */
 export function createSearch(dims: number = 64): SearchEngine {
   const chunks = new Map<string, IndexedChunk>();
 

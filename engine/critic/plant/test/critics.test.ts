@@ -1,8 +1,8 @@
 /**
- * @fileoverview Critic registry tests. @since 0.2.6
+ * @fileoverview Critic registry tests. @since 0.1.10
  */
 import { describe, it, expect } from 'bun:test';
-import { CRITIC_REGISTRY, getCriticDescriptor } from '../critics';
+import { CRITIC_REGISTRY, getCriticDescriptor } from '../index';
 
 describe('critic registry', () => {
   it('has at least 20 critics', () => {

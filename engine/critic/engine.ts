@@ -1,18 +1,18 @@
 /**
  * @fileoverview Critic engine — aggregates, composes, and routes critiques.
- * @since 0.2.6
+ * @since 0.1.10
  * @package zhi
  */
 import type { Critique, CritiqueSeverity, CritiqueCategory } from './types';
 
-/** @brief Critic options. @since 0.2.6 */
+/** @brief Critic options. @since 0.1.10 */
 export interface CriticOptions {
   minSeverity?: CritiqueSeverity;
   categories?: CritiqueCategory[];
   maxFindings?: number;
 }
 
-/** @brief Aggregated critique result. @since 0.2.6 */
+/** @brief Aggregated critique result. @since 0.1.10 */
 export interface AggregatedCritique {
   critiques: Critique[];
   total: number;
@@ -23,7 +23,7 @@ export interface AggregatedCritique {
   summary: string;
 }
 
-/** @brief Critic engine — runs all registered critics. @since 0.2.6 */
+/** @brief Critic engine — runs all registered critics. @since 0.1.10 */
 export class CriticEngine {
   private readonly critics: Array<{
     name: string;
@@ -34,7 +34,7 @@ export class CriticEngine {
     this.critics = [];
   }
 
-  /** @brief Register a critic. @since 0.2.6 */
+  /** @brief Register a critic. @since 0.1.10 */
   register(
     name: string,
     run: (input: { files: Array<{ path: string; content: string }> }) => Critique[],
@@ -42,7 +42,7 @@ export class CriticEngine {
     this.critics.push({ name, run });
   }
 
-  /** @brief Run all critics and aggregate results. @since 0.2.6 */
+  /** @brief Run all critics and aggregate results. @since 0.1.10 */
   run(
     input: { files: Array<{ path: string; content: string }> },
     options?: CriticOptions,
@@ -104,7 +104,7 @@ export class CriticEngine {
   }
 }
 
-/** @brief Create a critic engine. @since 0.2.6 */
+/** @brief Create a critic engine. @since 0.1.10 */
 export function createCriticEngine(): CriticEngine {
   return new CriticEngine();
 }

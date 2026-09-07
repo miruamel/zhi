@@ -1,13 +1,13 @@
-/** @brief Critic: code duplication — detect repeated blocks. @since 0.2.6 */
+/** @brief Critic: code duplication — detect repeated blocks. @since 0.1.10 */
 import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-/** @brief Min block length to flag. @since 0.2.6 */
+/** @brief Min block length to flag. @since 0.1.10 */
 const MIN_BLOCK = 5;
-/** @brief Max duplicate ratio before penalty. @since 0.2.6 */
+/** @brief Max duplicate ratio before penalty. @since 0.1.10 */
 const MAX_RATIO = 0.15;
 
-/** @brief Hash a normalized line. @since 0.2.6 */
+/** @brief Hash a normalized line. @since 0.1.10 */
 function norm(line: string): string {
   return line.trim().replace(/\s+/g, ' ');
 }
@@ -15,7 +15,7 @@ function norm(line: string): string {
 /** @brief Duplication critic: penalize repeated code blocks across files.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.6 */
+ * @since 0.1.10 */
 export function duplicationCritic(files: FileRecord[]): CriticResult {
   const findings: string[] = [];
   const blocks = new Map<string, string[]>();

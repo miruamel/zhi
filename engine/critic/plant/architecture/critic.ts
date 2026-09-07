@@ -1,16 +1,16 @@
-/** @brief Critic: architecture — layering rules, fractal depth, barrel checks. @since 0.2.6 */
+/** @brief Critic: architecture — layering rules, fractal depth, barrel checks. @since 0.1.10 */
 import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-/** @brief Cruiser runner — produces an architecture dependency report. @since 0.2.6 */
+/** @brief Cruiser runner — produces an architecture dependency report. @since 0.1.10 */
 export type CruiserRunner = () => {
   modules: Array<{ source: string; dependencies: string[]; orphan: boolean; valid: boolean }>;
   errors?: string[];
 };
 
-/** @brief Max nesting depth before penalty. @since 0.2.6 */
+/** @brief Max nesting depth before penalty. @since 0.1.10 */
 const MAX_DEPTH = 10;
-/** @brief Max files per folder. @since 0.2.6 */
+/** @brief Max files per folder. @since 0.1.10 */
 const MAX_FILES_PER_FOLDER = 4;
 
 interface PathInfo {
@@ -32,7 +32,7 @@ function depth(dir: string): number {
 /** @brief Architecture critic: penalize deep nesting, folder bloat, missing barrels.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.6 */
+ * @since 0.1.10 */
 export function architectureCritic(files: FileRecord[]): CriticResult {
   const findings: string[] = [];
   const dirCounts = new Map<string, number>();

@@ -1,6 +1,6 @@
 /**
  * @fileoverview Eval engine — public API surface.
- * @since 0.2.6
+ * @since 0.1.10
  * @package zhi
  */
 export { EvalEngine, createEvalEngine } from './engine';

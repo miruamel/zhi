@@ -1,18 +1,18 @@
 /**
- * @fileoverview Model router — selects invoker based on task type. @since 0.2.6
+ * @fileoverview Model router — selects invoker based on task type. @since 0.1.10
  * @package zhi
  */
 import type { ModelRequest, ModelResponse, ModelInvoker } from './invoker/types';
 import type { TaskKind } from './pricing';
 
-/** @brief Router options. @since 0.2.6 */
+/** @brief Router options. @since 0.1.10 */
 export interface RouterOptions {
   defaultInvoker?: string;
   fallbackInvoker?: string;
   maxRetries?: number;
 }
 
-/** @brief Model router. @since 0.2.6 */
+/** @brief Model router. @since 0.1.10 */
 export class ModelRouter {
   private invokers: Map<string, ModelInvoker> = new Map();
   private readonly defaultInvoker: string;
@@ -28,17 +28,17 @@ export class ModelRouter {
     this.maxRetries = options.maxRetries ?? 2;
   }
 
-  /** @brief Register an invoker. @since 0.2.6 */
+  /** @brief Register an invoker. @since 0.1.10 */
   register(invoker: ModelInvoker): void {
     this.invokers.set(invoker.name, invoker);
   }
 
-  /** @brief Get invoker by name. @since 0.2.6 */
+  /** @brief Get invoker by name. @since 0.1.10 */
   getInvoker(name: string): ModelInvoker | undefined {
     return this.invokers.get(name);
   }
 
-  /** @brief Classify task into kind. @since 0.2.6 */
+  /** @brief Classify task into kind. @since 0.1.10 */
   classifyTask(prompt: string, _context?: string): TaskKind {
     const lower = prompt.toLowerCase();
     if (/(review|audit|critique|check)/i.test(lower)) return 'review';
@@ -49,7 +49,7 @@ export class ModelRouter {
     return 'chat';
   }
 
-  /** @brief Route a request to the best invoker. @since 0.2.6 */
+  /** @brief Route a request to the best invoker. @since 0.1.10 */
   async route(request: ModelRequest): Promise<ModelResponse> {
     const kind = request.taskKind ?? this.classifyTask(request.prompt);
     const invoker = this.selectInvoker(kind);
@@ -76,7 +76,7 @@ export class ModelRouter {
     throw lastError ?? new Error('router: no invoker available');
   }
 
-  /** @brief Select invoker for task kind. @since 0.2.6 */
+  /** @brief Select invoker for task kind. @since 0.1.10 */
   private selectInvoker(kind: TaskKind): ModelInvoker {
     const preferred = this.invokers.get(kind) ?? this.invokers.get(this.defaultInvoker);
     if (preferred) return preferred;
@@ -89,7 +89,7 @@ export class ModelRouter {
     throw new Error('router: no invoker registered');
   }
 
-  /** @brief List available invokers. @since 0.2.6 */
+  /** @brief List available invokers. @since 0.1.10 */
   listInvokers(): string[] {
     return [...this.invokers.keys()];
   }

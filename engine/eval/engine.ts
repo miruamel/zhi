@@ -1,10 +1,10 @@
 /**
  * @fileoverview Eval engine — evaluation, scoring, and metrics collection.
- * @since 0.2.6
+ * @since 0.1.10
  * @package zhi
  */
 
-/** @brief Security finding. @since 0.2.6 */
+/** @brief Security finding. @since 0.1.10 */
 export interface SecurityFinding {
   file: string;
   line: number;
@@ -13,7 +13,7 @@ export interface SecurityFinding {
   severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
 }
 
-/** @brief Security report. @since 0.2.6 */
+/** @brief Security report. @since 0.1.10 */
 export interface SecurityReport {
   findings: SecurityFinding[];
   score: number;
@@ -21,7 +21,7 @@ export interface SecurityReport {
   leaked: boolean;
 }
 
-/** @brief Eval input. @since 0.2.6 */
+/** @brief Eval input. @since 0.1.10 */
 export interface EvalInput {
   critiques: Array<{ name: string; score: number; weight: number; findings: string[] }>;
   score: number;
@@ -30,7 +30,7 @@ export interface EvalInput {
   securityReport: SecurityReport;
 }
 
-/** @brief Eval result. @since 0.2.6 */
+/** @brief Eval result. @since 0.1.10 */
 export interface EvalResult {
   passed: boolean;
   score: number;
@@ -40,9 +40,9 @@ export interface EvalResult {
   durationMs: number;
 }
 
-/** @brief Eval engine — runs full evaluation pipeline. @since 0.2.6 */
+/** @brief Eval engine — runs full evaluation pipeline. @since 0.1.10 */
 export class EvalEngine {
-  /** @brief Evaluate an input against criteria. @since 0.2.6 */
+  /** @brief Evaluate an input against criteria. @since 0.1.10 */
   async evaluate(input: EvalInput): Promise<EvalResult> {
     const startedAt = Date.now();
     const { score, criteria, blockers, securityReport } = input;
@@ -84,7 +84,7 @@ export class EvalEngine {
   }
 }
 
-/** @brief Create an eval engine. @since 0.2.6 */
+/** @brief Create an eval engine. @since 0.1.10 */
 export function createEvalEngine(): EvalEngine {
   return new EvalEngine();
 }

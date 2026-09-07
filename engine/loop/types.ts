@@ -1,5 +1,5 @@
 /**
- * @fileoverview Loop types. @since 0.2.6
+ * @fileoverview Loop types. @since 0.1.10
  * @package zhi
  */
 export type LoopPhase =

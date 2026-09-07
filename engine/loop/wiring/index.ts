@@ -1,5 +1,5 @@
 /**
- * @fileoverview Loop wiring — composes handlers, context, and DLQ into a runnable loop. @since 0.2.6
+ * @fileoverview Loop wiring — composes handlers, context, and DLQ into a runnable loop. @since 0.1.10
  * @package zhi
  */
 import type { LoopState, LoopEvent } from '../states';
@@ -14,14 +14,14 @@ import {
 } from './context';
 import { isDlq, classifyError } from './handlers/is-dlq';
 
-/** @brief Wiring result. @since 0.2.6 */
+/** @brief Wiring result. @since 0.1.10 */
 export interface WiringResult {
   event: LoopEvent;
   ok: boolean;
   reason?: string;
 }
 
-/** @brief Wire a step through the loop. @since 0.2.6 */
+/** @brief Wire a step through the loop. @since 0.1.10 */
 export function wireStep(step: LoopStep, result: StepResult, maxRetries = 3): WiringResult {
   const dlq = isDlq(step, result, maxRetries);
   if (dlq.action === 'retry') {
@@ -34,7 +34,7 @@ export function wireStep(step: LoopStep, result: StepResult, maxRetries = 3): Wi
   return { event: 'complete' as LoopEvent, ok: true, reason: dlq.reason };
 }
 
-/** @brief Evaluate loop health. @since 0.2.6 */
+/** @brief Evaluate loop health. @since 0.1.10 */
 export function evaluateHealth(
   steps: LoopStep[],
   results: StepResult[],
@@ -69,10 +69,10 @@ export function evaluateHealth(
   };
 }
 
-/** @brief Classify error for recovery routing. @since 0.2.6 */
+/** @brief Classify error for recovery routing. @since 0.1.10 */
 export { classifyError };
 
-/** @brief Create a wiring helper. @since 0.2.6 */
+/** @brief Create a wiring helper. @since 0.1.10 */
 export function createWiring(maxRetries?: number) {
   return {
     wire: (step: LoopStep, result: StepResult) => wireStep(step, result, maxRetries),

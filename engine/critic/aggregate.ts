@@ -1,13 +1,13 @@
 /**
  * @fileoverview Critic aggregation — weighted scoring, pass/fail, findings collection.
- * @since 0.2.6
+ * @since 0.1.10
  * @package zhi
  */
 import type { Critique, CritiqueSeverity, CritiqueCategory } from './types';
 
 export type { Critique };
 
-/** @brief A critic result entry. @since 0.2.6 */
+/** @brief A critic result entry. @since 0.1.10 */
 export interface CriticResult {
   name: string;
   score: number;
@@ -15,7 +15,7 @@ export interface CriticResult {
   findings: string[];
 }
 
-/** @brief Aggregated result. @since 0.2.6 */
+/** @brief Aggregated result. @since 0.1.10 */
 export interface AggregateResult {
   score: number;
   byCritic: Record<string, number>;
@@ -27,7 +27,7 @@ export interface AggregateResult {
   blockers: string[];
 }
 
-/** @brief Aggregate critic results into a single score. @since 0.2.6 */
+/** @brief Aggregate critic results into a single score. @since 0.1.10 */
 export function aggregate(critiques: CriticResult[], threshold = 0.7): AggregateResult {
   let totalWeight = 0;
   let weightedSum = 0;
@@ -63,7 +63,7 @@ export function aggregate(critiques: CriticResult[], threshold = 0.7): Aggregate
   };
 }
 
-/** @brief Aggregate critiques by severity. @since 0.2.6 */
+/** @brief Aggregate critiques by severity. @since 0.1.10 */
 export function aggregateBySeverity(critiques: Critique[]): Record<CritiqueSeverity, number> {
   const result: Record<CritiqueSeverity, number> = {
     critical: 0,
@@ -76,7 +76,7 @@ export function aggregateBySeverity(critiques: Critique[]): Record<CritiqueSever
   return result;
 }
 
-/** @brief Aggregate critiques by category. @since 0.2.6 */
+/** @brief Aggregate critiques by category. @since 0.1.10 */
 export function aggregateByCategory(critiques: Critique[]): Record<CritiqueCategory, number> {
   const result: Record<CritiqueCategory, number> = {
     security: 0,
@@ -90,14 +90,14 @@ export function aggregateByCategory(critiques: Critique[]): Record<CritiqueCateg
   return result;
 }
 
-/** @brief Filter critiques by minimum severity. @since 0.2.6 */
+/** @brief Filter critiques by minimum severity. @since 0.1.10 */
 export function filterBySeverity(critiques: Critique[], minSeverity: CritiqueSeverity): Critique[] {
   const order: CritiqueSeverity[] = ['critical', 'high', 'medium', 'low', 'info'];
   const minIndex = order.indexOf(minSeverity);
   return critiques.filter((c) => order.indexOf(c.severity) <= minIndex);
 }
 
-/** @brief Group critiques by file. @since 0.2.6 */
+/** @brief Group critiques by file. @since 0.1.10 */
 export function groupByFile(critiques: Critique[]): Map<string, Critique[]> {
   const map = new Map<string, Critique[]>();
   for (const c of critiques) {
@@ -108,7 +108,7 @@ export function groupByFile(critiques: Critique[]): Map<string, Critique[]> {
   return map;
 }
 
-/** @brief Group critiques by category. @since 0.2.6 */
+/** @brief Group critiques by category. @since 0.1.10 */
 export function groupByCategory(critiques: Critique[]): Map<CritiqueCategory, Critique[]> {
   const map = new Map<CritiqueCategory, Critique[]>();
   for (const c of critiques) {
@@ -119,23 +119,23 @@ export function groupByCategory(critiques: Critique[]): Map<CritiqueCategory, Cr
   return map;
 }
 
-/** @brief Sort critiques by severity (critical first). @since 0.2.6 */
+/** @brief Sort critiques by severity (critical first). @since 0.1.10 */
 export function sortBySeverity(critiques: Critique[]): Critique[] {
   const order: CritiqueSeverity[] = ['critical', 'high', 'medium', 'low', 'info'];
   return [...critiques].sort((a, b) => order.indexOf(a.severity) - order.indexOf(b.severity));
 }
 
-/** @brief Get blockers (critical + high). @since 0.2.6 */
+/** @brief Get blockers (critical + high). @since 0.1.10 */
 export function getBlockers(critiques: Critique[]): Critique[] {
   return critiques.filter((c) => c.severity === 'critical' || c.severity === 'high');
 }
 
-/** @brief Check if any blocker exists. @since 0.2.6 */
+/** @brief Check if any blocker exists. @since 0.1.10 */
 export function hasBlocker(critiques: Critique[]): boolean {
   return critiques.some((c) => c.severity === 'critical' || c.severity === 'high');
 }
 
-/** @brief Summarize critiques. @since 0.2.6 */
+/** @brief Summarize critiques. @since 0.1.10 */
 export function summarize(critiques: Critique[]): string {
   const bySeverity = aggregateBySeverity(critiques);
   return `${critiques.length} findings: ${bySeverity.critical} critical, ${bySeverity.high} high, ${bySeverity.medium} medium, ${bySeverity.low} low, ${bySeverity.info} info`;

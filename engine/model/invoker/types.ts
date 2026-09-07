@@ -1,10 +1,10 @@
 /**
  * @fileoverview Model invoker types — request/response contracts.
- * @since 0.2.6
+ * @since 0.1.10
  * @package zhi
  */
 
-/** @brief Model request. @since 0.2.6 */
+/** @brief Model request. @since 0.1.10 */
 export interface ModelRequest {
   prompt: string;
   context?: string;
@@ -14,7 +14,7 @@ export interface ModelRequest {
   systemPrompt?: string;
 }
 
-/** @brief Model response. @since 0.2.6 */
+/** @brief Model response. @since 0.1.10 */
 export interface ModelResponse {
   text: string;
   tokens: number;
@@ -31,7 +31,7 @@ export interface ModelInvoker {
   stream?(prompt: string): AsyncGenerator<string>;
 }
 
-/** @brief Cloud invoker options. @since 0.2.6 */
+/** @brief Cloud invoker options. @since 0.1.10 */
 export interface CloudInvokerOptions {
   apiKey?: string;
   model?: string;
@@ -39,7 +39,7 @@ export interface CloudInvokerOptions {
   timeoutMs?: number;
 }
 
-/** @brief Create a model invoker. @since 0.2.6 */
+/** @brief Create a model invoker. @since 0.1.10 */
 export function createModelInvoker(options?: CloudInvokerOptions): ModelInvoker {
   return {
     name: options?.model ? `cloud:${options.model}` : 'cloud',

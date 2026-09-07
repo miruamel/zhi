@@ -1,11 +1,9 @@
-/**
- * @fileoverview Critic plant shared types. @since 0.2.6
- * @package zhi
- */
-/** @brief Severity levels for critic findings. @since 0.2.6 */
+/** @fileoverview Critic plant — shared types. @since 0.1.10 @package zhi */
+
+/** @brief Severity levels for critic findings. @since 0.1.10 */
 export type CriticSeverity = 'info' | 'warn' | 'error';
 
-/** @brief A single critic finding. @since 0.2.6 */
+/** @brief A single critic finding. @since 0.1.10 */
 export interface CriticFinding {
   file: string;
   line: number;
@@ -14,20 +12,21 @@ export interface CriticFinding {
   rule?: string;
 }
 
-/** @brief Input to a critic. @since 0.2.6 */
+/** @brief Input to a critic. @since 0.1.10 */
 export interface CriticInput {
-  files: Array<{ path: string; content: string }>;
+  path: string;
+  content: string;
   config?: Record<string, unknown>;
 }
 
-/** @brief Output from a critic. @since 0.2.6 */
+/** @brief Output from a critic. @since 0.1.10 */
 export interface CriticOutput {
   findings: CriticFinding[];
   score: number;
   durationMs: number;
 }
 
-/** @brief A registered critic descriptor. @since 0.2.6 */
+/** @brief A registered critic descriptor. @since 0.1.10 */
 export interface CriticDescriptor {
   id: string;
   name: string;

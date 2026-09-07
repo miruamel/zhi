@@ -1,5 +1,5 @@
 /**
- * @fileoverview Model pricing + task routing. @since 0.2.6
+ * @fileoverview Model pricing + task routing. @since 0.1.10
  * @package zhi
  */
 import type { ModelPricing } from './types';

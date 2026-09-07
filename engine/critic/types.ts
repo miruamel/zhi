@@ -1,17 +1,17 @@
 /**
  * @fileoverview Critic types and interfaces.
- * @since 0.2.6
+ * @since 0.1.10
  * @package zhi
  */
 
-/** @brief Critique severity levels. @since 0.2.6 */
+/** @brief Critique severity levels. @since 0.1.10 */
 export type CritiqueSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 
-/** @brief Critique categories. @since 0.2.6 */
+/** @brief Critique categories. @since 0.1.10 */
 export type CritiqueCategory =
   'security' | 'performance' | 'architecture' | 'consistency' | 'maintainability' | 'correctness';
 
-/** @brief A single critique finding. @since 0.2.6 */
+/** @brief A single critique finding. @since 0.1.10 */
 export interface Critique {
   id: string;
   severity: CritiqueSeverity;
@@ -23,7 +23,7 @@ export interface Critique {
   rule?: string;
 }
 
-/** @brief Critic configuration. @since 0.2.6 */
+/** @brief Critic configuration. @since 0.1.10 */
 export interface CriticConfig {
   enabled: boolean;
   severityThreshold: CritiqueSeverity;
@@ -32,7 +32,7 @@ export interface CriticConfig {
   ignorePatterns: string[];
 }
 
-/** @brief Default critic configuration. @since 0.2.6 */
+/** @brief Default critic configuration. @since 0.1.10 */
 export const DEFAULT_CRITIC_CONFIG: CriticConfig = {
   enabled: true,
   severityThreshold: 'info',
@@ -48,7 +48,7 @@ export const DEFAULT_CRITIC_CONFIG: CriticConfig = {
   ignorePatterns: ['node_modules', '.git', 'dist', 'out'],
 };
 
-/** @brief Create a critique finding. @since 0.2.6 */
+/** @brief Create a critique finding. @since 0.1.10 */
 export function createCritique(
   severity: CritiqueSeverity,
   category: CritiqueCategory,
@@ -70,13 +70,13 @@ export function createCritique(
   };
 }
 
-/** @brief Check if severity is at or above threshold. @since 0.2.6 */
+/** @brief Check if severity is at or above threshold. @since 0.1.10 */
 export function severityAtLeast(severity: CritiqueSeverity, threshold: CritiqueSeverity): boolean {
   const order: CritiqueSeverity[] = ['critical', 'high', 'medium', 'low', 'info'];
   return order.indexOf(severity) <= order.indexOf(threshold);
 }
 
-/** @brief Get severity weight for scoring. @since 0.2.6 */
+/** @brief Get severity weight for scoring. @since 0.1.10 */
 export function severityWeight(severity: CritiqueSeverity): number {
   switch (severity) {
     case 'critical':
@@ -92,12 +92,12 @@ export function severityWeight(severity: CritiqueSeverity): number {
   }
 }
 
-/** @brief Get category label. @since 0.2.6 */
+/** @brief Get category label. @since 0.1.10 */
 export function categoryLabel(category: CritiqueCategory): string {
   return category;
 }
 
-/** @brief Get severity label. @since 0.2.6 */
+/** @brief Get severity label. @since 0.1.10 */
 export function severityLabel(severity: CritiqueSeverity): string {
   return severity;
 }

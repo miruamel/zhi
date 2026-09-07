@@ -1,5 +1,5 @@
 /**
- * @fileoverview Loop tracer for span tracking. @since 0.2.6
+ * @fileoverview Loop tracer for span tracking. @since 0.1.10
  * @package zhi
  */
 export interface SpanEvent {

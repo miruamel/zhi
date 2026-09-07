@@ -1,12 +1,12 @@
 /**
- * @fileoverview Loop observability — structured logging, metrics, and tracing. @since 0.2.6
+ * @fileoverview Loop observability — structured logging, metrics, and tracing. @since 0.1.10
  * @package zhi
  */
 
-/** @brief Log level. @since 0.2.6 */
+/** @brief Log level. @since 0.1.10 */
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
-/** @brief Log entry. @since 0.2.6 */
+/** @brief Log entry. @since 0.1.10 */
 export interface LogEntry {
   ts: number;
   level: LogLevel;
@@ -14,7 +14,7 @@ export interface LogEntry {
   context?: Record<string, unknown>;
 }
 
-/** @brief Metric sample. @since 0.2.6 */
+/** @brief Metric sample. @since 0.1.10 */
 export interface MetricSample {
   ts: number;
   name: string;
@@ -22,7 +22,7 @@ export interface MetricSample {
   tags?: Record<string, string>;
 }
 
-/** @brief Trace span. @since 0.2.6 */
+/** @brief Trace span. @since 0.1.10 */
 export interface TraceSpan {
   id: string;
   parent?: string;
@@ -32,14 +32,14 @@ export interface TraceSpan {
   status: 'running' | 'completed' | 'failed';
 }
 
-/** @brief Observability options. @since 0.2.6 */
+/** @brief Observability options. @since 0.1.10 */
 export interface ObservabilityOptions {
   maxLogEntries?: number;
   maxMetrics?: number;
   onLog?: (entry: LogEntry) => void;
 }
 
-/** @brief Loop observability hub. @since 0.2.6 */
+/** @brief Loop observability hub. @since 0.1.10 */
 export class Observability {
   private logs: LogEntry[] = [];
   private metrics: MetricSample[] = [];
@@ -54,7 +54,7 @@ export class Observability {
     this.onLog = options.onLog;
   }
 
-  /** @brief Log a message. @since 0.2.6 */
+  /** @brief Log a message. @since 0.1.10 */
   log(level: LogLevel, message: string, context?: Record<string, unknown>): void {
     const entry: LogEntry = { ts: Date.now(), level, message, context };
     this.logs.push(entry);
@@ -62,7 +62,7 @@ export class Observability {
     this.onLog?.(entry);
   }
 
-  /** @brief Convenience log methods. @since 0.2.6 */
+  /** @brief Convenience log methods. @since 0.1.10 */
   debug(msg: string, ctx?: Record<string, unknown>): void {
     this.log('debug', msg, ctx);
   }
@@ -76,20 +76,20 @@ export class Observability {
     this.log('error', msg, ctx);
   }
 
-  /** @brief Record a metric. @since 0.2.6 */
+  /** @brief Record a metric. @since 0.1.10 */
   metric(name: string, value: number, tags?: Record<string, string>): void {
     this.metrics.push({ ts: Date.now(), name, value, tags });
     if (this.metrics.length > this.maxMetrics) this.metrics.shift();
   }
 
-  /** @brief Start a trace span. @since 0.2.6 */
+  /** @brief Start a trace span. @since 0.1.10 */
   startSpan(name: string, parent?: string): string {
     const id = `span-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     this.spans.set(id, { id, parent, name, start: Date.now(), status: 'running' });
     return id;
   }
 
-  /** @brief End a trace span. @since 0.2.6 */
+  /** @brief End a trace span. @since 0.1.10 */
   endSpan(id: string, status: 'completed' | 'failed' = 'completed'): void {
     const span = this.spans.get(id);
     if (span) {
@@ -98,24 +98,24 @@ export class Observability {
     }
   }
 
-  /** @brief Get recent logs. @since 0.2.6 */
+  /** @brief Get recent logs. @since 0.1.10 */
   getLogs(level?: LogLevel, limit = 100): LogEntry[] {
     let result = this.logs;
     if (level) result = result.filter((l) => l.level === level);
     return result.slice(-limit);
   }
 
-  /** @brief Get metrics by name. @since 0.2.6 */
+  /** @brief Get metrics by name. @since 0.1.10 */
   getMetrics(name: string): MetricSample[] {
     return this.metrics.filter((m) => m.name === name);
   }
 
-  /** @brief Get active spans. @since 0.2.6 */
+  /** @brief Get active spans. @since 0.1.10 */
   getActiveSpans(): TraceSpan[] {
     return [...this.spans.values()].filter((s) => s.status === 'running');
   }
 
-  /** @brief Clear all data. @since 0.2.6 */
+  /** @brief Clear all data. @since 0.1.10 */
   clear(): void {
     this.logs = [];
     this.metrics = [];
@@ -123,7 +123,7 @@ export class Observability {
   }
 }
 
-/** @brief Create observability instance. @since 0.2.6 */
+/** @brief Create observability instance. @since 0.1.10 */
 export function createObservability(options?: ObservabilityOptions): Observability {
   return new Observability(options);
 }

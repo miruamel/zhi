@@ -1,5 +1,5 @@
 /**
- * @fileoverview Model stream — token streaming for LLM responses. @since 0.2.6
+ * @fileoverview Model stream — token streaming for LLM responses. @since 0.1.10
  * @package zhi
  */
 export type Token = { value: string; index?: number };
@@ -12,20 +12,20 @@ export type StreamChunk =
   | { type: 'done' }
   | { type: 'raw'; data: string };
 
-/** @brief Stream accumulator. @since 0.2.6 */
+/** @brief Stream accumulator. @since 0.1.10 */
 export interface StreamAccumulator {
   text: string;
   tokens: Token[];
   toolCalls: Array<{ id: string; name: string; args: string }>;
 }
 
-/** @brief Accumulate stream chunks into final response. @since 0.2.6 */
+/** @brief Accumulate stream chunks into final response. @since 0.1.10 */
 export class StreamAccumulatorImpl implements StreamAccumulator {
   text = '';
   tokens: Token[] = [];
   toolCalls: Array<{ id: string; name: string; args: string }> = [];
 
-  /** @brief Add a chunk. @since 0.2.6 */
+  /** @brief Add a chunk. @since 0.1.10 */
   add(chunk: StreamChunk): void {
     switch (chunk.type) {
       case 'text':
@@ -50,12 +50,12 @@ export class StreamAccumulatorImpl implements StreamAccumulator {
     }
   }
 
-  /** @brief Final accumulated text. @since 0.2.6 */
+  /** @brief Final accumulated text. @since 0.1.10 */
   getText(): string {
     return this.text;
   }
 
-  /** @brief Reset accumulator. @since 0.2.6 */
+  /** @brief Reset accumulator. @since 0.1.10 */
   reset(): void {
     this.text = '';
     this.tokens = [];
@@ -63,7 +63,7 @@ export class StreamAccumulatorImpl implements StreamAccumulator {
   }
 }
 
-/** @brief Create a stream accumulator. @since 0.2.6 */
+/** @brief Create a stream accumulator. @since 0.1.10 */
 export function createAccumulator(): StreamAccumulatorImpl {
   return new StreamAccumulatorImpl();
 }

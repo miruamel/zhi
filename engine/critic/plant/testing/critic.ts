@@ -1,11 +1,11 @@
-/** @brief Critic: testing — detect missing tests for exported functions. @since 0.2.6 */
+/** @brief Critic: testing — detect missing tests for exported functions. @since 0.1.10 */
 import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-/** @brief Penalty per untested export. @since 0.2.6 */
+/** @brief Penalty per untested export. @since 0.1.10 */
 const PENALTY = 0.05;
 
-/** @brief Extract exported function names from source. @since 0.2.6 */
+/** @brief Extract exported function names from source. @since 0.1.10 */
 function extractExports(src: string): string[] {
   const names: string[] = [];
   const re = /export\s+(?:async\s+)?function\s+(\w+)/g;
@@ -20,7 +20,7 @@ function extractExports(src: string): string[] {
  * @param {FileRecord[]} srcFiles - source files.
  * @param {FileRecord[]} testFiles - test files.
  * @return {Critique} hasil critic.
- * @since 0.2.6 */
+ * @since 0.1.10 */
 export function testingCritic(srcFiles: FileRecord[], testFiles: FileRecord[]): CriticResult {
   const findings: string[] = [];
   let untested = 0;

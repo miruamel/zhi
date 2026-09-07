@@ -1,21 +1,21 @@
 /**
- * @fileoverview Build scaffold — domain module generator + stream. @since 0.2.6
+ * @fileoverview Build scaffold — domain module generator + stream. @since 0.1.10
  * @package zhi
  */
-import type { ModelInvoker } from '../model/invoker';
+import type { ModelInvoker } from '../../model/invoker';
 
-/** @brief Scaffold file. @since 0.2.6 */
+/** @brief Scaffold file. @since 0.1.10 */
 export interface ScaffoldFile {
   path: string;
   content: string;
 }
 
-/** @brief Generate input. @since 0.2.6 */
+/** @brief Generate input. @since 0.1.10 */
 export interface GenerateInput {
   domain: string;
 }
 
-/** @brief Generate output. @since 0.2.6 */
+/** @brief Generate output. @since 0.1.10 */
 export type GenerateOutput = ScaffoldFile[];
 
 /**
@@ -23,7 +23,7 @@ export type GenerateOutput = ScaffoldFile[];
  * @param {GenerateInput} input - domain name.
  * @param {ModelInvoker} [invoker] - optional model invoker for content generation.
  * @return {ScaffoldFile[]} generated files.
- * @since 0.2.6
+ * @since 0.1.10
  */
 export async function generate(
   input: GenerateInput,
@@ -33,23 +33,23 @@ export async function generate(
   const files: ScaffoldFile[] = [
     {
       path: `engine/${domain}/index.ts`,
-      content: `/**\n * @brief ${domain} domain barrel. @since 0.2.6\n * @package zhi\n */\nexport * from './handlers';\nexport * from './services';\nexport * from './utils';\nexport * from './constants';\n`,
+      content: `/**\n * @brief ${domain} domain barrel. @since 0.1.10\n * @package zhi\n */\nexport * from './handlers';\nexport * from './services';\nexport * from './utils';\nexport * from './constants';\n`,
     },
     {
       path: `engine/${domain}/handlers/index.ts`,
-      content: `/**\n * @brief ${domain} handlers barrel. @since 0.2.6\n * @package zhi\n */\n`,
+      content: `/**\n * @brief ${domain} handlers barrel. @since 0.1.10\n * @package zhi\n */\n`,
     },
     {
       path: `engine/${domain}/services/index.ts`,
-      content: `/**\n * @brief ${domain} services barrel. @since 0.2.6\n * @package zhi\n */\n`,
+      content: `/**\n * @brief ${domain} services barrel. @since 0.1.10\n * @package zhi\n */\n`,
     },
     {
       path: `engine/${domain}/utils/index.ts`,
-      content: `/**\n * @brief ${domain} utils barrel. @since 0.2.6\n * @package zhi\n */\n`,
+      content: `/**\n * @brief ${domain} utils barrel. @since 0.1.10\n * @package zhi\n */\n`,
     },
     {
       path: `engine/${domain}/constants/index.ts`,
-      content: `/**\n * @brief ${domain} constants barrel. @since 0.2.6\n * @package zhi\n */\n`,
+      content: `/**\n * @brief ${domain} constants barrel. @since 0.1.10\n * @package zhi\n */\n`,
     },
   ];
   if (invoker) {
@@ -66,7 +66,7 @@ export async function generate(
  * @param {GenerateInput} input - domain name.
  * @param {ModelInvoker} invoker - model invoker.
  * @return {AsyncGenerator<string>} stream of generated content.
- * @since 0.2.6
+ * @since 0.1.10
  */
 export async function* generateStream(
   input: GenerateInput,

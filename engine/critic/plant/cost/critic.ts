@@ -1,11 +1,11 @@
-/** @brief Critic: cost — detect expensive operations, wasteful patterns. @since 0.2.6 */
+/** @brief Critic: cost — detect expensive operations, wasteful patterns. @since 0.1.10 */
 import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-/** @brief Penalty per expensive pattern. @since 0.2.6 */
+/** @brief Penalty per expensive pattern. @since 0.1.10 */
 const PENALTY = 0.02;
 
-/** @brief Expensive operation patterns. @since 0.2.6 */
+/** @brief Expensive operation patterns. @since 0.1.10 */
 const EXPENSIVE: RegExp[] = [
   /\bJSON\.parse\s*\([^)]*\)/,
   /\bJSON\.stringify\s*\([^)]*\)/,
@@ -31,7 +31,7 @@ const EXPENSIVE: RegExp[] = [
 /** @brief Cost critic: penalize files with expensive operations in hot paths.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.6 */
+ * @since 0.1.10 */
 export function costCritic(files: FileRecord[]): CriticResult {
   const findings: string[] = [];
   let score = 1;

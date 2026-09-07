@@ -1,15 +1,15 @@
 /**
- * @fileoverview Stream types — token, tool call, stream chunk. @since 0.2.6
+ * @fileoverview Stream types — token, tool call, stream chunk. @since 0.1.10
  * @package zhi
  */
 
-/** @brief Token. @since 0.2.6 */
+/** @brief Token. @since 0.1.10 */
 export interface Token {
   value: string;
   index?: number;
 }
 
-/** @brief Tool call. @since 0.2.6 */
+/** @brief Tool call. @since 0.1.10 */
 export interface ToolCall {
   id: string;
   name: string;
@@ -17,7 +17,7 @@ export interface ToolCall {
   raw: string;
 }
 
-/** @brief Stream chunk. @since 0.2.6 */
+/** @brief Stream chunk. @since 0.1.10 */
 export type StreamChunk =
   | { type: 'text'; text: string }
   | { type: 'token'; token: Token }

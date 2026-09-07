@@ -1,5 +1,5 @@
 /**
- * @fileoverview Model types — provider, pricing, capability. @since 0.2.6
+ * @fileoverview Model types — provider, pricing, capability. @since 0.1.10
  * @package zhi
  */
 export type ModelProvider =

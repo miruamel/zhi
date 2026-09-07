@@ -1,10 +1,13 @@
 /**
- * @fileoverview Evaluation coordinator — ties security, test, gate together. @since 0.2.6
+ * @fileoverview Evaluation coordinator — ties security, test, gate together. @since 0.1.9
  * @package zhi
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
+
+import { scanSecurity } from './scan';
+export { scanSecurity };
 
 export interface EvalOpts {
   files: Array<{ path: string; content: string }>;
@@ -26,10 +29,10 @@ export interface EvalRunResult {
   reasons: string[];
 }
 
-export function evaluate(worktree: string): EvalRunResult {
+export async function evaluate(worktree: string): Promise<EvalRunResult> {
   const reasons: string[] = [];
   const files = collectFiles(worktree);
-  const security = scanSecurity(files);
+  const security = await scanSecurity(files);
   if (!security.ok) {
     reasons.push('secret bocor');
     return { passed: false, score: 0, reasons };
@@ -65,7 +68,7 @@ function collectFiles(dir: string): Array<{ path: string; content: string }> {
         try {
           out.push({ path: full, content: readFileSync(full, 'utf-8') });
         } catch {
-          // skip unreadable
+          /* skip unreadable */
         }
       }
     }
@@ -91,61 +94,13 @@ function runTests(worktree: string): { allPassed: boolean } {
   }
 }
 
-export interface SecurityFinding {
-  rule: string;
-  severity: 'critical' | 'high' | 'medium' | 'low';
-  path: string;
-  line: number;
-  message: string;
-}
-
-export interface SecurityReport {
-  ok: boolean;
-  findings: SecurityFinding[];
-  scanned: number;
-  score: number;
-}
-
-const SECRET_PATTERNS: Array<{
-  regex: RegExp;
-  rule: string;
-  severity: SecurityFinding['severity'];
-}> = [
-  { regex: /api[_-]?key\s*[:=]\s*['"][^'"]+['"]/i, rule: 'api-key', severity: 'high' },
-  { regex: /secret\s*[:=]\s*['"][^'"]+['"]/i, rule: 'secret', severity: 'high' },
-  { regex: /password\s*[:=]\s*['"][^'"]+['"]/i, rule: 'password', severity: 'high' },
-  { regex: /token\s*[:=]\s*['"][^'"]+['"]/i, rule: 'token', severity: 'medium' },
-  { regex: /-----BEGIN [A-Z ]*PRIVATE KEY-----/, rule: 'private-key', severity: 'critical' },
-];
-
-export function scanSecurity(files: Array<{ path: string; content: string }>): SecurityReport {
-  const findings: SecurityFinding[] = [];
-  for (const f of files) {
-    const lines = f.content.split('\n');
-    for (let i = 0; i < lines.length; i++) {
-      for (const p of SECRET_PATTERNS) {
-        const m = p.regex.exec(lines[i]);
-        if (m) {
-          findings.push({
-            rule: p.rule,
-            severity: p.severity,
-            path: f.path,
-            line: i + 1,
-            message: `Matched ${p.rule}`,
-          });
-        }
-      }
-    }
-  }
-  const score = findings.length === 0 ? 100 : Math.max(0, 100 - findings.length * 25);
-  return { ok: findings.length === 0, findings, scanned: files.length, score };
-}
-
-export function scanSecrets(worktree: string): { leaked: boolean; findings: string[] } {
+export async function scanSecrets(
+  worktree: string,
+): Promise<{ leaked: boolean; findings: string[] }> {
   const files = collectFiles(worktree);
-  const report = scanSecurity(files);
+  const report = await scanSecurity(files);
   return {
     leaked: !report.ok,
-    findings: report.findings.map((f) => `${f.path}:${f.line} ${f.rule}`),
+    findings: report.findings.map((f) => `${f.file}:${f.line} ${f.rule}`),
   };
 }

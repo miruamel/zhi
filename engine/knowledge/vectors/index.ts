@@ -1,2 +1,2 @@
-/** @brief Vectors barrel. @since 0.2.6 */
+/** @brief Vectors barrel. @since 0.1.10 */
 export * from './vectors';

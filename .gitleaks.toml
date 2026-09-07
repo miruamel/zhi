@@ -40,8 +40,9 @@ paths = [
   "engine/knowledge/embed.ts",
   "engine/knowledge/search.ts",
   "engine/knowledge/summarizer.ts",
-  "engine/knowledge/vectors/vectors.ts",
-  "engine/eval/engine.ts"
+  "engine/eval/engine.ts",
+  "engine/critic/plant/run-critic.ts",
+  "engine/security/patterns.ts",
 ]
 regexes = [
   "(?i)secret.*detection",  # pre-commit hook comment

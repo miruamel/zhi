@@ -1,16 +1,16 @@
 /**
- * @fileoverview Eval test — test runner for evaluation criteria. @since 0.2.6
+ * @fileoverview Eval test — test runner for evaluation criteria. @since 0.1.10
  * @package zhi
  */
 
-/** @brief Test case. @since 0.2.6 */
+/** @brief Test case. @since 0.1.10 */
 export interface TestCase {
   name: string;
   run: () => boolean | Promise<boolean>;
   timeout?: number;
 }
 
-/** @brief Test result. @since 0.2.6 */
+/** @brief Test result. @since 0.1.10 */
 export interface TestResult {
   name: string;
   passed: boolean;
@@ -18,14 +18,14 @@ export interface TestResult {
   error?: string;
 }
 
-/** @brief Test runner options. @since 0.2.6 */
+/** @brief Test runner options. @since 0.1.10 */
 export interface TestRunnerOptions {
   timeout?: number;
   parallel?: boolean;
   onResult?: (result: TestResult) => void;
 }
 
-/** @brief Test runner. @since 0.2.6 */
+/** @brief Test runner. @since 0.1.10 */
 export class TestRunner {
   private readonly defaultTimeout: number;
   private readonly parallel: boolean;
@@ -37,7 +37,7 @@ export class TestRunner {
     this.onResult = options.onResult;
   }
 
-  /** @brief Run test cases. @since 0.2.6 */
+  /** @brief Run test cases. @since 0.1.10 */
   async run(cases: TestCase[]): Promise<TestResult[]> {
     const results: TestResult[] = [];
     if (this.parallel) {
@@ -59,7 +59,7 @@ export class TestRunner {
     return results;
   }
 
-  /** @brief Run a single test case. @since 0.2.6 */
+  /** @brief Run a single test case. @since 0.1.10 */
   private async runCase(c: TestCase): Promise<TestResult> {
     const start = performance.now();
     const timeout = c.timeout ?? this.defaultTimeout;
@@ -85,13 +85,13 @@ export class TestRunner {
     }
   }
 
-  /** @brief Check if all tests passed. @since 0.2.6 */
+  /** @brief Check if all tests passed. @since 0.1.10 */
   allPassed(results: TestResult[]): boolean {
     return results.every((r) => r.passed);
   }
 }
 
-/** @brief Create a test runner. @since 0.2.6 */
+/** @brief Create a test runner. @since 0.1.10 */
 export function createTestRunner(options?: TestRunnerOptions): TestRunner {
   return new TestRunner(options);
 }

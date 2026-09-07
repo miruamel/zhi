@@ -1,15 +1,15 @@
 /**
- * @fileoverview Text chunker — splits text into overlapping chunks. @since 0.2.6
+ * @fileoverview Text chunker — splits text into overlapping chunks. @since 0.1.10
  * @package zhi
  */
-/** @brief Chunk options. @since 0.2.6 */
+/** @brief Chunk options. @since 0.1.10 */
 export interface ChunkOpts {
   maxTokens?: number;
   overlap?: number;
   preserveCode?: boolean;
 }
 
-/** @brief A text chunk. @since 0.2.6 */
+/** @brief A text chunk. @since 0.1.10 */
 export interface Chunk {
   id: string;
   text: string;
@@ -18,12 +18,12 @@ export interface Chunk {
   tokens: number;
 }
 
-/** @brief Estimate token count. @since 0.2.6 */
+/** @brief Estimate token count. @since 0.1.10 */
 export function estimateTokens(text: string): number {
   return Math.ceil(text.length / 4);
 }
 
-/** @brief Split text into chunks. @since 0.2.6 */
+/** @brief Split text into chunks. @since 0.1.10 */
 export function chunk(text: string, opts: ChunkOpts = {}): Chunk[] {
   const maxTokens = opts.maxTokens ?? 500;
   const overlap = opts.overlap ?? 50;

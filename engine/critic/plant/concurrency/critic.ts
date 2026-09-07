@@ -1,11 +1,11 @@
-/** @brief Critic: concurrency — detect unsafe async patterns. @since 0.2.6 */
+/** @brief Critic: concurrency — detect unsafe async patterns. @since 0.1.10 */
 import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-/** @brief Penalty per unsafe pattern. @since 0.2.6 */
+/** @brief Penalty per unsafe pattern. @since 0.1.10 */
 const PENALTY = 0.03;
 
-/** @brief Unsafe patterns that can cause race conditions. @since 0.2.6 */
+/** @brief Unsafe patterns that can cause race conditions. @since 0.1.10 */
 const UNSAFE_PATTERNS: RegExp[] = [
   /\basync\s+function\s+\w+\s*\([^)]*\)\s*\{[^}]*\bawait\s+\w+\s*=[^;]*\n[^}]*\b\w+\s*=/,
   /\bnew\s+Promise\s*\([^)]*\)/,
@@ -19,7 +19,7 @@ const UNSAFE_PATTERNS: RegExp[] = [
 /** @brief Concurrency critic: penalize files with many async hazards.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.6 */
+ * @since 0.1.10 */
 export function concurrencyCritic(files: FileRecord[]): CriticResult {
   const findings: string[] = [];
   let score = 1;

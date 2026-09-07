@@ -1,19 +1,19 @@
 /**
- * @fileoverview Circuit breaker — sliding-window error-rate breaker. @since 0.2.6
+ * @fileoverview Circuit breaker — sliding-window error-rate breaker. @since 0.1.10
  * @package zhi
  */
 
-/** @brief Circuit state. @since 0.2.6 */
+/** @brief Circuit state. @since 0.1.10 */
 export type CircuitState = 'closed' | 'open' | 'half-open';
 
-/** @brief Circuit breaker options. @since 0.2.6 */
+/** @brief Circuit breaker options. @since 0.1.10 */
 export interface BreakerOptions {
   windowSize?: number;
   openThreshold?: number;
   onStateChange?: (from: CircuitState, to: CircuitState) => void;
 }
 
-/** @brief Circuit breaker — pure sliding-window failure-rate breaker. @since 0.2.6 */
+/** @brief Circuit breaker — pure sliding-window failure-rate breaker. @since 0.1.10 */
 export class CircuitBreaker {
   private window: boolean[] = [];
   private state: CircuitState = 'closed';
@@ -27,17 +27,17 @@ export class CircuitBreaker {
     this.onStateChange = options.onStateChange;
   }
 
-  /** @brief Current state. @since 0.2.6 */
+  /** @brief Current state. @since 0.1.10 */
   get currentState(): CircuitState {
     return this.state;
   }
 
-  /** @brief Check if circuit is open. @since 0.2.6 */
+  /** @brief Check if circuit is open. @since 0.1.10 */
   isOpen(): boolean {
     return this.state === 'open';
   }
 
-  /** @brief Record a result (true = success, false = failure). @since 0.2.6 */
+  /** @brief Record a result (true = success, false = failure). @since 0.1.10 */
   record(success: boolean): void {
     this.window.push(success);
     if (this.window.length > this.windowSize) {
@@ -55,12 +55,12 @@ export class CircuitBreaker {
     }
   }
 
-  /** @brief Check if request allowed. @since 0.2.6 */
+  /** @brief Check if request allowed. @since 0.1.10 */
   allow(): boolean {
     return this.state !== 'open';
   }
 
-  /** @brief Wrap a function with circuit breaker. @since 0.2.6 */
+  /** @brief Wrap a function with circuit breaker. @since 0.1.10 */
   async wrap<T>(fn: () => Promise<T>): Promise<T> {
     if (!this.allow()) throw new Error('circuit open');
     try {
@@ -73,7 +73,7 @@ export class CircuitBreaker {
     }
   }
 
-  /** @brief Reset breaker to closed. @since 0.2.6 */
+  /** @brief Reset breaker to closed. @since 0.1.10 */
   reset(): void {
     this.window = [];
     this.setState('closed');
@@ -87,7 +87,7 @@ export class CircuitBreaker {
   }
 }
 
-/** @brief Create a circuit breaker. @since 0.2.6 */
+/** @brief Create a circuit breaker. @since 0.1.10 */
 export function createBreaker(options?: BreakerOptions): CircuitBreaker {
   return new CircuitBreaker(options);
 }

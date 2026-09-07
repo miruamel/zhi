@@ -1,22 +1,22 @@
 /**
- * @fileoverview Code summarizer — produces structured summaries from source files. @since 0.2.6
+ * @fileoverview Code summarizer — produces structured summaries from source files. @since 0.1.10
  * @package zhi
  */
-/** @brief Source file input. @since 0.2.6 */
+/** @brief Source file input. @since 0.1.10 */
 export interface SourceFile {
   path: string;
   content: string;
   language?: string;
 }
 
-/** @brief Project context. @since 0.2.6 */
+/** @brief Project context. @since 0.1.10 */
 export interface ProjectContext {
   name?: string;
   description?: string;
   dependencies?: string[];
 }
 
-/** @brief Summary section. @since 0.2.6 */
+/** @brief Summary section. @since 0.1.10 */
 export interface SummarySection {
   symbol: string;
   startLine: number;
@@ -24,7 +24,7 @@ export interface SummarySection {
   summary: string;
 }
 
-/** @brief File summary. @since 0.2.6 */
+/** @brief File summary. @since 0.1.10 */
 export interface FileSummary {
   path: string;
   language: string;
@@ -34,7 +34,7 @@ export interface FileSummary {
   lineCount: number;
 }
 
-/** @brief Summarize a source file. @since 0.2.6 */
+/** @brief Summarize a source file. @since 0.1.10 */
 export function summarize(file: SourceFile, _context?: ProjectContext): FileSummary {
   const lines = file.content.split('\n');
   const language = file.language ?? detectLanguage(file.path);
@@ -71,7 +71,7 @@ export function summarize(file: SourceFile, _context?: ProjectContext): FileSumm
   };
 }
 
-/** @brief Detect language from file path. @since 0.2.6 */
+/** @brief Detect language from file path. @since 0.1.10 */
 function detectLanguage(path: string): string {
   if (path.endsWith('.ts') || path.endsWith('.tsx')) return 'typescript';
   if (path.endsWith('.js') || path.endsWith('.jsx')) return 'javascript';

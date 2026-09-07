@@ -1,11 +1,11 @@
 /**
- * @fileoverview Build types. @since 0.2.6
+ * @fileoverview Build types. @since 0.1.10
  * @package zhi
  */
 
-/** @brief Build format. @since 0.2.6 */
+/** @brief Build format. @since 0.1.10 */
 export type BuildFormat = 'esm' | 'cjs' | 'iife';
-/** @brief Build target. @since 0.2.6 */
+/** @brief Build target. @since 0.1.10 */
 export type BuildTarget =
   | 'esnext'
   | 'es2022'
@@ -17,12 +17,12 @@ export type BuildTarget =
   | 'es2016'
   | 'es2015'
   | 'es5';
-/** @brief Build platform. @since 0.2.6 */
+/** @brief Build platform. @since 0.1.10 */
 export type BuildPlatform = 'browser' | 'node' | 'neutral';
-/** @brief Build status. @since 0.2.6 */
+/** @brief Build status. @since 0.1.10 */
 export type BuildStatus = 'pending' | 'running' | 'success' | 'failed' | 'cancelled';
 
-/** @brief Artifact metadata. @since 0.2.6 */
+/** @brief Artifact metadata. @since 0.1.10 */
 export interface ArtifactMeta {
   path: string;
   hash: string;
@@ -34,7 +34,7 @@ export interface ArtifactMeta {
   timestamp: number;
 }
 
-/** @brief Build config. @since 0.2.6 */
+/** @brief Build config. @since 0.1.10 */
 export interface BuildConfig {
   format: BuildFormat;
   target: BuildTarget;
@@ -47,7 +47,7 @@ export interface BuildConfig {
   platformLabel?: string;
 }
 
-/** @brief Default build config. @since 0.2.6 */
+/** @brief Default build config. @since 0.1.10 */
 export const DEFAULT_BUILD_CONFIG: BuildConfig = {
   format: 'esm',
   target: 'es2022',
@@ -59,12 +59,12 @@ export const DEFAULT_BUILD_CONFIG: BuildConfig = {
   entry: 'src/index.ts',
 };
 
-/** @brief Create build config with overrides. @since 0.2.6 */
+/** @brief Create build config with overrides. @since 0.1.10 */
 export function createBuildConfig(overrides: Partial<BuildConfig> = {}): BuildConfig {
   return { ...DEFAULT_BUILD_CONFIG, ...overrides };
 }
 
-/** @brief Validate build config. @since 0.2.6 */
+/** @brief Validate build config. @since 0.1.10 */
 export function validateBuildConfig(config: BuildConfig): string[] {
   const errors: string[] = [];
   if (!config.entry) errors.push('entry is required');
@@ -72,17 +72,17 @@ export function validateBuildConfig(config: BuildConfig): string[] {
   return errors;
 }
 
-/** @brief Format extension. @since 0.2.6 */
+/** @brief Format extension. @since 0.1.10 */
 export function formatExtension(format: BuildFormat): string {
   return format === 'esm' ? '.mjs' : format === 'cjs' ? '.cjs' : '.js';
 }
 
-/** @brief Platform label. @since 0.2.6 */
+/** @brief Platform label. @since 0.1.10 */
 export function platformLabel(platform: BuildPlatform): string {
   return platform;
 }
 
-/** @brief Status label. @since 0.2.6 */
+/** @brief Status label. @since 0.1.10 */
 export function statusLabel(status: BuildStatus): string {
   return status;
 }

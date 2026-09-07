@@ -1,15 +1,15 @@
 /**
- * @fileoverview Orchestrator budget tracker. @since 0.2.6
+ * @fileoverview Orchestrator budget tracker. @since 0.1.10
  * @package zhi
  */
-/** @brief Budget limits. @since 0.2.6 */
+/** @brief Budget limits. @since 0.1.10 */
 export interface BudgetLimits {
   tokens: number;
   steps: number;
   cost: number;
 }
 
-/** @brief Budget alert. @since 0.2.6 */
+/** @brief Budget alert. @since 0.1.10 */
 export interface BudgetAlert {
   type: 'tokens' | 'steps' | 'cost';
   threshold: number;
@@ -17,7 +17,7 @@ export interface BudgetAlert {
   message: string;
 }
 
-/** @brief Budget tracker. @since 0.2.6 */
+/** @brief Budget tracker. @since 0.1.10 */
 export interface BudgetTracker {
   consume(tokens: number, cost?: number): void;
   check(): BudgetAlert[];
@@ -31,7 +31,7 @@ export interface BudgetTracker {
   };
 }
 
-/** @brief Create a budget tracker. @since 0.2.6 */
+/** @brief Create a budget tracker. @since 0.1.10 */
 export function createBudgetTracker(limits: BudgetLimits): BudgetTracker {
   let tokensUsed = 0;
   let stepsUsed = 0;

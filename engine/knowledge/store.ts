@@ -1,16 +1,16 @@
 /**
- * @fileoverview Knowledge store — key-value semantic memory with tag queries. @since 0.2.6
+ * @fileoverview Knowledge store — key-value semantic memory with tag queries. @since 0.1.10
  * @package zhi
  */
 
-/** @brief Knowledge fact. @since 0.2.6 */
+/** @brief Knowledge fact. @since 0.1.10 */
 export interface KnowledgeFact {
   key: string;
   value: string;
   tags: string[];
 }
 
-/** @brief Knowledge entry. @since 0.2.6 */
+/** @brief Knowledge entry. @since 0.1.10 */
 export interface KnowledgeEntry {
   id: string;
   content: string;
@@ -21,52 +21,52 @@ export interface KnowledgeEntry {
   score?: number;
 }
 
-/** @brief Search result. @since 0.2.6 */
+/** @brief Search result. @since 0.1.10 */
 export interface SearchResult {
   entry: KnowledgeEntry;
   score: number;
 }
 
-/** @brief Store options. @since 0.2.6 */
+/** @brief Store options. @since 0.1.10 */
 export interface StoreOptions {
   maxEntries?: number;
   similarityThreshold?: number;
 }
 
-/** @brief In-memory knowledge store with key-value facts and tag queries. @since 0.2.6 */
+/** @brief In-memory knowledge store with key-value facts and tag queries. @since 0.1.10 */
 export class KnowledgeStore {
   private facts: Map<string, KnowledgeFact> = new Map();
   private entries: Map<string, KnowledgeEntry> = new Map();
 
   constructor(_options: StoreOptions = {}) {}
 
-  /** @brief Add or update a fact by key. @since 0.2.6 */
+  /** @brief Add or update a fact by key. @since 0.1.10 */
   add(fact: KnowledgeFact): KnowledgeFact {
     this.facts.set(fact.key, fact);
     return fact;
   }
 
-  /** @brief Get fact by key. @since 0.2.6 */
+  /** @brief Get fact by key. @since 0.1.10 */
   get(key: string): KnowledgeFact | undefined {
     return this.facts.get(key);
   }
 
-  /** @brief Remove fact by key. @since 0.2.6 */
+  /** @brief Remove fact by key. @since 0.1.10 */
   remove(key: string): boolean {
     return this.facts.delete(key);
   }
 
-  /** @brief Count facts. @since 0.2.6 */
+  /** @brief Count facts. @since 0.1.10 */
   get size(): number {
     return this.facts.size;
   }
 
-  /** @brief Query facts by tag. @since 0.2.6 */
+  /** @brief Query facts by tag. @since 0.1.10 */
   byTag(tag: string): KnowledgeFact[] {
     return [...this.facts.values()].filter((f) => f.tags.includes(tag));
   }
 
-  /** @brief Search by keyword. @since 0.2.6 */
+  /** @brief Search by keyword. @since 0.1.10 */
   search(query: string, limit = 10): SearchResult[] {
     const results: SearchResult[] = [];
     for (const [key, fact] of this.facts) {
@@ -87,7 +87,7 @@ export class KnowledgeStore {
     return results.slice(0, limit);
   }
 
-  /** @brief Cosine similarity between two vectors. @since 0.2.6 */
+  /** @brief Cosine similarity between two vectors. @since 0.1.10 */
   cosineSimilarity(a: number[], b: number[]): number {
     if (a.length !== b.length || a.length === 0) return 0;
     let dot = 0;
@@ -102,19 +102,19 @@ export class KnowledgeStore {
     return denom === 0 ? 0 : dot / denom;
   }
 
-  /** @brief Clear all entries. @since 0.2.6 */
+  /** @brief Clear all entries. @since 0.1.10 */
   clear(): void {
     this.facts.clear();
     this.entries.clear();
   }
 
-  /** @brief Export all facts. @since 0.2.6 */
+  /** @brief Export all facts. @since 0.1.10 */
   export(): KnowledgeFact[] {
     return [...this.facts.values()];
   }
 }
 
-/** @brief Create a knowledge store. @since 0.2.6 */
+/** @brief Create a knowledge store. @since 0.1.10 */
 export function createStore(options?: StoreOptions): KnowledgeStore {
   return new KnowledgeStore(options);
 }

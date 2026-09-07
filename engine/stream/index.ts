@@ -1,18 +1,18 @@
 /**
  * @fileoverview Stream engine — SSE/token stream parsing.
- * @since 0.2.6
+ * @since 0.1.10
  * @package zhi
  */
 import type { Token, ToolCall, StreamChunk } from './types';
 
-/** @brief Stream parser options. @since 0.2.6 */
+/** @brief Stream parser options. @since 0.1.10 */
 export interface StreamParserOptions {
   maxTokens?: number;
   onToken?: (token: Token) => void;
   onToolCall?: (call: ToolCall) => void;
 }
 
-/** @brief Stream parser — converts raw SSE text into structured chunks. @since 0.2.6 */
+/** @brief Stream parser — converts raw SSE text into structured chunks. @since 0.1.10 */
 export class StreamParser {
   private buffer = '';
   private tokenCount = 0;
@@ -26,7 +26,7 @@ export class StreamParser {
     this.onToolCall = options.onToolCall;
   }
 
-  /** @brief Feed raw text into the parser. @since 0.2.6 */
+  /** @brief Feed raw text into the parser. @since 0.1.10 */
   feed(text: string): StreamChunk[] {
     this.buffer += text;
     const chunks: StreamChunk[] = [];
@@ -40,7 +40,7 @@ export class StreamParser {
     return chunks;
   }
 
-  /** @brief Parse a single SSE line. @since 0.2.6 */
+  /** @brief Parse a single SSE line. @since 0.1.10 */
   private parseLine(line: string): StreamChunk | null {
     if (line.startsWith('data: ')) {
       const data = line.slice(6);
@@ -59,7 +59,7 @@ export class StreamParser {
     return null;
   }
 
-  /** @brief Parse parsed SSE JSON data. @since 0.2.6 */
+  /** @brief Parse parsed SSE JSON data. @since 0.1.10 */
   private parseSSEData(data: Record<string, unknown>): StreamChunk {
     if (data.type === 'token' && typeof data.value === 'string') {
       this.tokenCount++;
@@ -77,19 +77,19 @@ export class StreamParser {
     return { type: 'raw', data };
   }
 
-  /** @brief Current token count. @since 0.2.6 */
+  /** @brief Current token count. @since 0.1.10 */
   get tokens(): number {
     return this.tokenCount;
   }
 
-  /** @brief Reset parser state. @since 0.2.6 */
+  /** @brief Reset parser state. @since 0.1.10 */
   reset(): void {
     this.buffer = '';
     this.tokenCount = 0;
   }
 }
 
-/** @brief Create a stream parser. @since 0.2.6 */
+/** @brief Create a stream parser. @since 0.1.10 */
 export function createParser(options?: StreamParserOptions): StreamParser {
   return new StreamParser(options);
 }
@@ -103,7 +103,7 @@ export {
   type TokenChunk,
   type ToolCall,
   type ParseOptions,
-} from './parseSseTs';
+} from './sse-parser';
 
 import { isWasmAvailable } from './zigBridge';
 export { isWasmAvailable };

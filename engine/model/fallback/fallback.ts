@@ -1,5 +1,5 @@
 /**
- * @fileoverview Model fallback chain — retries with alternate providers. @since 0.2.6
+ * @fileoverview Model fallback chain — retries with alternate providers. @since 0.1.10
  * @package zhi
  */
 import type { ModelDescriptor } from '../types';

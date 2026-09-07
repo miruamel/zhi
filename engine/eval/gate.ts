@@ -1,6 +1,6 @@
 /**
  * @fileoverview Eval gate — quality gates that block or allow operations based on eval results.
- * @since 0.2.6
+ * @since 0.1.10
  * @package zhi
  */
 import type { EvalResult } from './engine';
@@ -38,7 +38,7 @@ export function gate(input: EvalInput, threshold = 0.7): EvalOutput {
   return { passed, score: input.score, reasons };
 }
 
-/** @brief Gate result. @since 0.2.6 */
+/** @brief Gate result. @since 0.1.10 */
 export interface GateResult {
   name: string;
   passed: boolean;
@@ -48,7 +48,7 @@ export interface GateResult {
   details?: Record<string, unknown>;
 }
 
-/** @brief Gate options. @since 0.2.6 */
+/** @brief Gate options. @since 0.1.10 */
 export interface GateOptions {
   threshold?: number;
   strict?: boolean;
@@ -74,28 +74,28 @@ export class Gate {
     };
   }
 
-  /** @brief Check multiple results. @since 0.2.6 */
+  /** @brief Check multiple results. @since 0.1.10 */
   checkAll(results: EvalResult[], options: GateOptions = {}): GateResult[] {
     return results.map((r) => this.check(r, options));
   }
 
-  /** @brief All gates must pass. @since 0.2.6 */
+  /** @brief All gates must pass. @since 0.1.10 */
   allPass(results: EvalResult[], options: GateOptions = {}): boolean {
     return this.checkAll(results, options).every((g) => g.passed);
   }
 
-  /** @brief Any gate must pass. @since 0.2.6 */
+  /** @brief Any gate must pass. @since 0.1.10 */
   anyPass(results: EvalResult[], options: GateOptions = {}): boolean {
     return this.checkAll(results, options).some((g) => g.passed);
   }
 }
 
-/** @brief Create a gate. @since 0.2.6 */
+/** @brief Create a gate. @since 0.1.10 */
 export function createGate(options?: GateOptions): Gate {
   return new Gate(options);
 }
 
-/** @brief Run gates and return summary. @since 0.2.6 */
+/** @brief Run gates and return summary. @since 0.1.10 */
 export function runGates(
   results: EvalResult[],
   threshold = 0.7,
@@ -111,19 +111,19 @@ export function runGates(
   return { passed, gates, summary };
 }
 
-/** @brief Run gate options. @since 0.2.6 */
+/** @brief Run gate options. @since 0.1.10 */
 export interface RunGateOptions {
   checks: string[];
 }
 
-/** @brief Run gate result. @since 0.2.6 */
+/** @brief Run gate result. @since 0.1.10 */
 export interface RunGateResult {
   checks: string[];
   pass: boolean;
   durationMs: number;
 }
 
-/** @brief Run a gate with the given checks. @since 0.2.6 */
+/** @brief Run a gate with the given checks. @since 0.1.10 */
 export function runGate(options: RunGateOptions): RunGateResult {
   const start = Date.now();
   const checks = options.checks;

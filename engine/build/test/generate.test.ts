@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test';
-import { generate, generateStream } from '../scaffold';
+import { generate, generateStream } from '../core/scaffold';
 import {
   LocalStubInvoker,
   CloudModelInvoker,

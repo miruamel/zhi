@@ -1,11 +1,11 @@
-/** @brief Critic: data-privacy — detect PII leakage, secrets, sensitive data. @since 0.2.6 */
+/** @brief Critic: data-privacy — detect PII leakage, secrets, sensitive data. @since 0.1.10 */
 import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-/** @brief Penalty per privacy violation. @since 0.2.6 */
+/** @brief Penalty per privacy violation. @since 0.1.10 */
 const PENALTY = 0.05;
 
-/** @brief PII patterns to flag. @since 0.2.6 */
+/** @brief PII patterns to flag. @since 0.1.10 */
 const PII_PATTERNS: RegExp[] = [
   /\b(?:email|e-mail|password|passwd|token|api[_-]?key|secret|private[_-]?key|access[_-]?key)\b/i,
   /\b(?:\d{3}-\d{2}-\d{4}|\d{4}-\d{4}-\d{4}-\d{4})\b/,
@@ -20,7 +20,7 @@ const PII_PATTERNS: RegExp[] = [
 /** @brief Data privacy critic: penalize files with PII or secret exposure.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.6 */
+ * @since 0.1.10 */
 export function dataPrivacyCritic(files: FileRecord[]): CriticResult {
   const findings: string[] = [];
   let score = 1;

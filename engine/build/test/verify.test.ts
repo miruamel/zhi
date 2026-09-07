@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'bun:test';
-import { verify } from '../build';
-import type { ScaffoldFile } from '../scaffold';
+import { verify } from '../verify';
+import type { ScaffoldFile } from '../core/scaffold';
 
 /** @brief Scaffold valid: 2 file, masing-masing punya @brief. @since 0.1.1 */
 function good(): ScaffoldFile[] {

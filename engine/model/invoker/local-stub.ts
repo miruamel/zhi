@@ -1,10 +1,10 @@
 /**
- * @fileoverview Local stub invoker — deterministic mock for testing and offline use. @since 0.2.6
+ * @fileoverview Local stub invoker — deterministic mock for testing and offline use. @since 0.1.10
  * @package zhi
  */
 import type { ModelInvoker } from './types';
 
-/** @brief Local stub options. @since 0.2.6 */
+/** @brief Local stub options. @since 0.1.10 */
 export interface LocalStubOptions {
   defaultResponse?: string;
   latencyMs?: number;
@@ -35,18 +35,18 @@ export class LocalStubInvoker implements ModelInvoker {
     return `// [local-stub] OK\n/** @brief Generated stub for: ${prompt} */\n`;
   }
 
-  /** @brief Call count. @since 0.2.6 */
+  /** @brief Call count. @since 0.1.10 */
   get calls(): number {
     return this.callCount;
   }
 
-  /** @brief Reset call count. @since 0.2.6 */
+  /** @brief Reset call count. @since 0.1.10 */
   reset(): void {
     this.callCount = 0;
   }
 }
 
-/** @brief Create a local stub invoker. @since 0.2.6 */
+/** @brief Create a local stub invoker. @since 0.1.10 */
 export function createLocalStub(options?: LocalStubOptions): LocalStubInvoker {
   return new LocalStubInvoker(options);
 }

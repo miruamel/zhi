@@ -7,10 +7,10 @@ import { CloudModelInvoker } from './cloud';
 import { LocalStubInvoker } from './local-stub';
 import type { ModelInvoker } from './types';
 
-/** @brief Task kind for invoker selection. @since 0.2.6 */
+/** @brief Task kind for invoker selection. @since 0.1.10 */
 export type TaskKind = 'generate' | 'critique' | 'review' | 'embed' | 'classify' | 'tag';
 
-/** @brief Micro task kinds that always use local stub. @since 0.2.6 */
+/** @brief Micro task kinds that always use local stub. @since 0.1.10 */
 const MICRO_TASKS: TaskKind[] = ['classify', 'tag'];
 
 /**

@@ -1,16 +1,16 @@
 /**
- * @fileoverview Resilience — retry with backoff and DLQ. @since 0.2.6
+ * @fileoverview Resilience — retry with backoff and DLQ. @since 0.1.10
  * @package zhi
  */
 
-/** @brief DLQ entry. @since 0.2.6 */
+/** @brief DLQ entry. @since 0.1.10 */
 export interface DLQEntry {
   error: string;
   attempts: number;
   at: number;
 }
 
-/** @brief Retry result. @since 0.2.6 */
+/** @brief Retry result. @since 0.1.10 */
 export interface RetryResult<T> {
   ok: boolean;
   value?: T;
@@ -18,7 +18,7 @@ export interface RetryResult<T> {
   dlq?: DLQEntry;
 }
 
-/** @brief Retry options. @since 0.2.6 */
+/** @brief Retry options. @since 0.1.10 */
 export interface RetryOptions {
   maxAttempts?: number;
   baseDelayMs?: number;
@@ -27,7 +27,7 @@ export interface RetryOptions {
   retryOn?: (error: Error) => boolean;
 }
 
-/** @brief Default retry options. @since 0.2.6 */
+/** @brief Default retry options. @since 0.1.10 */
 export const DEFAULT_RETRY_OPTIONS: Required<RetryOptions> = {
   maxAttempts: 3,
   baseDelayMs: 100,
@@ -36,20 +36,20 @@ export const DEFAULT_RETRY_OPTIONS: Required<RetryOptions> = {
   retryOn: () => true,
 };
 
-/** @brief Classify error as fatal (no retry) or transient. @since 0.2.6 */
+/** @brief Classify error as fatal (no retry) or transient. @since 0.1.10 */
 function isFatal(error: Error): boolean {
   const msg = error.message.toLowerCase();
   return msg.includes('fatal') || msg.includes('budget exhausted');
 }
 
-/** @brief Sleep helper using Promise.withResolvers. @since 0.2.6 */
+/** @brief Sleep helper using Promise.withResolvers. @since 0.1.10 */
 function sleep(ms: number): Promise<void> {
   const { promise, resolve } = Promise.withResolvers<void>();
   setTimeout(resolve, ms);
   return promise;
 }
 
-/** @brief Retry with backoff. @since 0.2.6 */
+/** @brief Retry with backoff. @since 0.1.10 */
 export async function retry<T>(
   fn: () => Promise<T>,
   options: RetryOptions = {},
@@ -89,7 +89,7 @@ export async function retry<T>(
   };
 }
 
-/** @brief Retry with budget — caps attempts by maxAttempts argument. @since 0.2.6 */
+/** @brief Retry with budget — caps attempts by maxAttempts argument. @since 0.1.10 */
 export async function retryWithBudget<T>(
   fn: () => Promise<T>,
   maxAttempts: number = 3,
@@ -97,7 +97,7 @@ export async function retryWithBudget<T>(
   return retry(fn, { maxAttempts });
 }
 
-/** @brief Create retry options with overrides. @since 0.2.6 */
+/** @brief Create retry options with overrides. @since 0.1.10 */
 export function createRetryOptions(overrides: Partial<RetryOptions> = {}): RetryOptions {
   return { ...DEFAULT_RETRY_OPTIONS, ...overrides };
 }

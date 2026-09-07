@@ -62,7 +62,7 @@ export class CycleError extends Error {
     this.cycle = cycle;
   }
 }
-/** @brief DAG construction options. @since 0.2.6 */
+/** @brief DAG construction options. @since 0.1.10 */
 export interface DagOptions {
   /** @brief Max steps allowed. */
   maxSteps?: number;
@@ -70,7 +70,7 @@ export interface DagOptions {
   allowCycles?: boolean;
 }
 
-/** @brief Topological sort result. @since 0.2.6 */
+/** @brief Topological sort result. @since 0.1.10 */
 export interface TopoResult {
   /** @brief Ordered step IDs. */
   order: string[];
@@ -79,8 +79,8 @@ export interface TopoResult {
   /** @brief True if any cycle found. */
   hasCycles: boolean;
 }
-/** @brief Orchestrator configuration. @since 0.2.6 */
-/** @brief Orchestrator configuration. @since 0.2.6 */
+/** @brief Orchestrator configuration. @since 0.1.10 */
+/** @brief Orchestrator configuration. @since 0.1.10 */
 export interface OrchConfig {
   /** @brief Available agent IDs. */
   agents: string[];
@@ -92,7 +92,7 @@ export interface OrchConfig {
   budgetCost: number;
 }
 
-/** @brief DAG step with execution state (used by runner classes). @since 0.2.6 */
+/** @brief DAG step with execution state (used by runner classes). @since 0.1.10 */
 export interface DagStep {
   id: string;
   kind: string;

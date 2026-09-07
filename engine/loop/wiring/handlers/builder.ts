@@ -124,7 +124,7 @@ export function buildHandlers(
 /** @brief Check if a step result is dead-letter quarantined (boolean).
  * @param {unknown} res - step result to check.
  * @return {boolean} true when quarantined.
- * @since 0.2.6 */
+ * @since 0.1.10 */
 function isDLQ(res: unknown): boolean {
   if (res === null || res === undefined) return false;
   if (typeof res === 'string') return false;

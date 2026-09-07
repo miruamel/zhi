@@ -1,16 +1,17 @@
 /**
- * @fileoverview Orchestrator barrel. @since 0.2.6
+ * @fileoverview Orchestrator barrel. @since 0.1.10
  * @package zhi
  */
 export {
-  allocate,
-  schedule,
-  type Allocation,
-  type Allocator,
-  createAllocator,
   type OrchState,
   type StateMachine,
   createOrchState,
+  type Allocation,
+  type Allocator,
+  DefaultAllocator,
+  createAllocator,
+  allocate,
+  schedule,
   type RunResult,
   type OrchestratorRunner,
   DefaultOrchestratorRunner,

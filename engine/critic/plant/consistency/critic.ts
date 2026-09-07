@@ -1,14 +1,14 @@
-/** @brief Critic: consistency — detect naming/style inconsistencies. @since 0.2.6 */
+/** @brief Critic: consistency — detect naming/style inconsistencies. @since 0.1.10 */
 import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
-/** @brief Penalty per inconsistency. @since 0.2.6 */
+/** @brief Penalty per inconsistency. @since 0.1.10 */
 const PENALTY = 0.02;
 
 /** @brief Consistency critic: penalize mixed naming conventions.
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
- * @since 0.2.6 */
+ * @since 0.1.10 */
 export function consistencyCritic(files: FileRecord[]): CriticResult {
   const findings: string[] = [];
   let score = 1;

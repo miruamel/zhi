@@ -1,5 +1,5 @@
 /**
- * @fileoverview Model cache — response caching with TTL. @since 0.2.6
+ * @fileoverview Model cache — response caching with TTL. @since 0.1.10
  * @package zhi
  */
 export interface CacheEntry<T> {

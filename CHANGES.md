@@ -14,6 +14,16 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
+## [0.1.10] - 2026-09-07
+
+### Fixed
+
+- **@since version tag audit** — All `@since` tags in `engine/` TypeScript files now consistently use `0.1.Y` format (0.1.10 / 0.1.11) matching the actual release version. 428 tags corrected across 90 files. Also fixed broken test imports (`eval/scan`, `build/test`, `critic/plant/test`) and refactored `LoopDriver.run()` to properly track `current` state and fire `onTransition` callbacks.
+
+### Changed
+
+- **package.json version** — Bumped to `0.1.10`.
+
 ## [0.1.9] - 2026-09-06
 
 ### Fixed

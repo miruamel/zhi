@@ -1,43 +1,23 @@
 /**
- * @fileoverview Build engine barrel. @since 0.2.6
+ * @fileoverview Build engine barrel. @since 0.1.10
  * @package zhi
  */
-export {
-  Pipeline,
-  createPipeline,
-  quickPipeline,
-  BuildRegistry,
-  createBuildRegistry,
-  Signer,
-  createSigner,
-  KeyManager,
-  createKeyManager,
-  signFile,
-  verifyFile,
-  VerifyEngine,
-  createVerifyEngine,
-  verify,
-} from './build';
+export { Pipeline, createPipeline, quickPipeline } from './pipeline';
+export type { PipelineStage, StageResult, FullPipelineResult } from './pipeline';
+export { BuildRegistry, createBuildRegistry } from './registry';
 export type {
-  PipelineStage,
-  StageResult,
-  FullPipelineResult,
   PluginType,
   BuildPlugin,
   BuildContext,
   RegistryEntry,
   DependencyNode,
-  SignerAlgorithm,
-  KeyType,
-  Signature,
-  KeyPair,
-  SignerOptions,
-  VerifyResult,
-  ArtifactVerifyResult,
-  VerifyOptions,
-} from './build';
-export { generate, generateStream } from './scaffold';
-export type { GenerateInput, GenerateOutput, ScaffoldFile } from './scaffold';
+} from './registry';
+export { Signer, createSigner, KeyManager, createKeyManager, signFile, verifyFile } from './signer';
+export type { SignerAlgorithm, KeyType, Signature, KeyPair, SignerOptions } from './signer';
+export { VerifyEngine, createVerifyEngine, verify } from './verify';
+export type { VerifyResult, ArtifactVerifyResult, VerifyOptions } from './verify';
+export { generate, generateStream } from './core/scaffold';
+export type { GenerateInput, GenerateOutput, ScaffoldFile } from './core/scaffold';
 export {
   DEFAULT_BUILD_CONFIG,
   createBuildConfig,
@@ -45,7 +25,7 @@ export {
   formatExtension,
   platformLabel,
   statusLabel,
-} from './types';
+} from './core/types';
 export type {
   BuildConfig,
   BuildFormat,
@@ -53,4 +33,4 @@ export type {
   BuildPlatform,
   BuildStatus,
   ArtifactMeta,
-} from './types';
+} from './core/types';
