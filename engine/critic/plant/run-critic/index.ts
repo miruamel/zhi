@@ -1,4 +1,4 @@
-import type { CruiserReport } from './compose';
+import type { CruiserReport } from '../compose';
 
 /** @fileoverview Critic plant — single-critic runner. @since 0.1.9 @package zhi */
 /** @brief Run a single critic by name. @since 0.1.10 */

@@ -3,37 +3,7 @@
  * @package zhi
  */
 import { LoopState, LoopEvent, transitions, isTerminal, validEvents } from './states';
-
-/** @brief Driver constructor options. @since 0.1.10 */
-export interface LoopDriverOptions {
-  start?: LoopState;
-  onTransition?: (from: LoopState, event: LoopEvent, to: LoopState) => void;
-  stepTimeoutMs?: number;
-  maxRetries?: number;
-  onLog?: (msg: string) => void;
-}
-
-/** @brief Handler map for run(). @since 0.1.10 */
-export type LoopHandlers = Partial<Record<LoopState, () => LoopEvent | Promise<LoopEvent>>>;
-
-/** @brief Step result. @since 0.1.10 */
-export interface StepResult {
-  event: LoopEvent;
-  ok: boolean;
-  error?: string;
-  durationMs: number;
-  state: LoopState;
-}
-
-/** @brief Run result. @since 0.1.10 */
-export interface RunResult {
-  steps: StepResult[];
-  finalState: LoopState;
-  ok: boolean;
-  error?: string;
-  durationMs: number;
-  budgetUsed: number;
-}
+import type { LoopDriverOptions, LoopHandlers } from './driver-types';
 
 /** @brief State-machine loop driver. @since 0.1.10 */
 export class LoopDriver {
@@ -74,16 +44,13 @@ export class LoopDriver {
   /** @brief Run loop through handler map until DONE or error. @since 0.1.10 */
   async run(handlers: LoopHandlers, stepTimeoutMs?: number, budget?: number): Promise<void> {
     let current = this.current;
-    const { stepTimeoutMs: timeout = 0, budget: bgt } = {
-      stepTimeoutMs: stepTimeoutMs ?? this.defaultTimeoutMs,
-      budget,
-    };
-    let stepsRemaining = bgt;
+    const timeout = stepTimeoutMs ?? this.defaultTimeoutMs;
+    let stepsRemaining = budget;
     let stepCount = 0;
     let budgetUsed = 0;
 
     while (!isTerminal(current)) {
-      if (bgt !== undefined) {
+      if (budget !== undefined) {
         if (stepsRemaining !== undefined && stepsRemaining <= 0) throw new Error('budget exceeded');
         if (stepsRemaining !== undefined) stepsRemaining--;
       }
@@ -149,13 +116,4 @@ export class LoopDriver {
 /** @brief Create a driver instance. @since 0.1.10 */
 export function createDriver(options?: LoopDriverOptions): LoopDriver {
   return new LoopDriver(options);
-}
-
-/** @brief Run a one-shot loop with inline handlers. @since 0.1.10 */
-export async function runLoopOneShot(
-  handlers: LoopHandlers,
-  options?: LoopDriverOptions & { stepTimeoutMs?: number; budget?: number },
-): Promise<void> {
-  const driver = createDriver(options);
-  return driver.run(handlers, options?.stepTimeoutMs, options?.budget);
 }
