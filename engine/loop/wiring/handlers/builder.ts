@@ -59,8 +59,7 @@ export function buildHandlers(
       // Detect stub output — LocalStubInvoker fallback without MODEL_API_KEY.
       const codeOut = res as string;
       if (codeOut.includes('[local-stub]')) {
-        ctx.error =
-          'generate stub output — MODEL_API_KEY not set. Set it to enable LLM code generation.';
+        ctx.error = 'generate stub output — MODEL_API_KEY not set. Set it to enable LLM code generation.';
         return LoopEvent.BUDGET_OUT;
       }
       ctx.code = deps.compress ? deps.compress(codeOut) : codeOut;

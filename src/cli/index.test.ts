@@ -25,7 +25,9 @@ describe('cli boot', () => {
       // Return valid TypeScript barrel — no [local-stub] marker, passes critics.
       deps.generate = async () =>
         `// auth/handlers/index.ts\n/** @brief Auth handlers barrel. @since 0.1.10 */\nexport { authenticate } from './authenticate';\nexport { authorize } from './authorize';\n// verify: ok`;
-      const driver = new LoopDriver({ onTransition: (f, e, t) => logger.transition(f, e, t) });
+      const driver = new LoopDriver({
+        onTransition: (f, e, t) => logger.transition(f, e, t),
+      });
       metrics.reset();
       await driver.run(buildHandlers(ctx, autonomousDeps(deps, goal), metrics));
       const s = metrics.summary();
