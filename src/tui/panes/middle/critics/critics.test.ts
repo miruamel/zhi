@@ -1,24 +1,7 @@
 import { describe, it, expect } from 'bun:test';
-import { render } from 'ink';
-import type { ReactNode } from 'react';
+import { renderToString } from '../../../core/test/render';
 import { Critics } from './critics';
 import type { CriticLine } from '../../../core/state';
-
-/** @brief Render ink element to string by overriding stdout. */
-function renderToString(el: ReactNode): string {
-  const chunks: string[] = [];
-  const stdout = {
-    write: (chunk: string) => {
-      chunks.push(chunk);
-      return true;
-    },
-    on: () => {},
-    off: () => {},
-  } as any;
-  const inst = render(el as any, { stdout });
-  inst.unmount();
-  return chunks.join('');
-}
 
 describe('Critics', () => {
   it('handles empty critics', () => {

@@ -1,100 +1,119 @@
-/** @brief Driver state-machine loop Zhi. Murni, 0 dependensi eksternal. @since 0.1.1 */
-import { LoopState, LoopEvent, transition } from './states';
+/**
+ * @fileoverview Loop driver — state machine conductor with event-driven transitions, budget guards, and timeout enforcement. @since 0.1.10
+ * @package zhi
+ */
+import { LoopState, LoopEvent, transitions, isTerminal, validEvents } from './states';
+import type { LoopDriverOptions, LoopHandlers } from './driver-types';
 
-/** @brief Handler tiap state: kerjakan state, kembalikan event pemicu. @since 0.1.1 */
-export type StateHandler = (state: LoopState) => LoopEvent | Promise<LoopEvent>;
-
-/** @brief Opsi driver. @since 0.1.1 */
-export interface LoopDriverOptions {
-  /** @brief State awal. Default INTAKE. */
-  start?: LoopState;
-  /** @brief Callback tiap transisi sukses (from, event, to). */
-  onTransition?: (from: LoopState, ev: LoopEvent, to: LoopState) => void;
-  /** @brief Per-step timeout dalam ms (default 30000). 0 = dinonaktifkan. */
-  stepTimeoutMs?: number;
-}
-
-/** @brief Driver loop otonom: pegang state, validasi transisi, jalankan siklus. @since 0.1.1 */
+/** @brief State-machine loop driver. @since 0.1.10 */
 export class LoopDriver {
-  private state: LoopState;
-  private readonly onTransition?: LoopDriverOptions['onTransition'];
+  current: LoopState;
+  private readonly onTransition?: (from: LoopState, event: LoopEvent, to: LoopState) => void;
+  private readonly defaultTimeoutMs: number;
+  private readonly onLog?: (msg: string) => void;
+  private stepCount = 0;
+  private budgetUsed = 0;
 
-  constructor(opts: LoopDriverOptions = {}) {
-    this.state = opts.start ?? LoopState.INTAKE;
-    this.onTransition = opts.onTransition;
+  constructor(options: LoopDriverOptions = {}) {
+    this.current = options.start ?? LoopState.INTAKE;
+    this.onTransition = options.onTransition;
+    this.defaultTimeoutMs = options.stepTimeoutMs ?? 0;
+    this.onLog = options.onLog;
   }
 
-  /** @brief State saat ini. */
-  get current(): LoopState {
-    return this.state;
-  }
-
-  /** @brief True bila di DONE. */
+  /** @brief True when loop reached DONE. @since 0.1.10 */
   get finished(): boolean {
-    return this.state === LoopState.DONE;
+    return isTerminal(this.current);
   }
 
-  /** @brief Kirim event; transisi bila valid.
-   * @param {LoopEvent} ev - event pemicu.
-   * @return {boolean} true bila berpindah state.
-   */
-  send(ev: LoopEvent): boolean {
-    const next = transition(this.state, ev);
-    if (next === null) return false;
-    const from = this.state;
-    this.state = next;
-    this.onTransition?.(from, ev, next);
+  /** @brief Send event, return true if transition applied. @since 0.1.10 */
+  send(event: LoopEvent): boolean {
+    const next = transitions[this.current]?.[event];
+    if (!next) return false;
+    const from = this.current;
+    this.current = next;
+    this.onTransition?.(from, event, next);
     return true;
   }
-  /** @brief Force-stop: set state DONE tanpa transisi. @since 0.1.2 */
-  abort(): void {
-    this.state = LoopState.DONE;
+
+  /** @brief Abort the loop by sending ABORT event. @since 0.1.2 */
+  abort(): boolean {
+    return this.send(LoopEvent.ABORT);
   }
 
-  /**
-   * @brief Jalankan siklus hingga DONE dengan per-step timeout.
-   * @param {Partial<Record<LoopState, StateHandler>>} handlers - handler per state aktif.
-   * @param {number} maxSteps - batas iterasi (cegah loop tak berhingga). Default 64.
-   * @param {number} stepTimeoutMs - batas waktu per step dalam ms. Default 30000. 0 = dinonaktifkan.
-   * @throws {Error} bila state tak punya handler, transisi ilegal, budget habis, atau step timeout.
-   * @since 0.1.1 */
-  async run(
-    handlers: Partial<Record<LoopState, StateHandler>>,
-    maxSteps = 64,
-    stepTimeoutMs = 30000,
-  ): Promise<void> {
-    let steps = 0;
-    while (!this.finished) {
-      if (++steps > maxSteps) throw new Error('loop: budget exceeded');
-      const h = handlers[this.state];
-      if (!h) throw new Error(`loop: no handler for state ${this.state}`);
-      const ev = await this.withTimeout(Promise.resolve(h(this.state)), stepTimeoutMs, this.state);
-      if (!this.send(ev)) throw new Error(`loop: illegal transition ${this.state} --${ev}`);
+  /** @brief Run loop through handler map until DONE or error. @since 0.1.10 */
+  async run(handlers: LoopHandlers, stepTimeoutMs?: number, budget?: number): Promise<void> {
+    let current = this.current;
+    const timeout = stepTimeoutMs ?? this.defaultTimeoutMs;
+    let stepsRemaining = budget;
+    let stepCount = 0;
+    let budgetUsed = 0;
+
+    while (!isTerminal(current)) {
+      if (budget !== undefined) {
+        if (stepsRemaining !== undefined && stepsRemaining <= 0) throw new Error('budget exceeded');
+        if (stepsRemaining !== undefined) stepsRemaining--;
+      }
+      const handler = handlers[current];
+      if (!handler) throw new Error(`no handler for state ${current}`);
+
+      let event: LoopEvent;
+      if (timeout > 0) {
+        event = await Promise.race([
+          Promise.resolve(handler()),
+          new Promise<LoopEvent>((_, reject) =>
+            setTimeout(() => reject(new Error('step timeout')), timeout),
+          ),
+        ]);
+      } else {
+        event = await Promise.resolve(handler());
+      }
+
+      const next = transitions[current]?.[event];
+      if (!next) throw new Error(`illegal transition from ${current} via ${event}`);
+
+      const from = current;
+      current = next;
+      this.onTransition?.(from, event, next);
+      stepCount++;
+      budgetUsed++;
+      this.onLog?.(`step ${stepCount}: ${from} -> ${event}`);
     }
+
+    this.current = current;
+    this.stepCount = stepCount;
+    this.budgetUsed = budgetUsed;
   }
 
-  /**
-   * @brief Wrap promise dengan timeout. Losing promise rejection ditahan agar tidak jadi unhandled.
-   * @param {Promise<T>} p - promise yang di-race.
-   * @param {number} ms - timeout dalam ms (0 = dinonaktifkan).
-   * @param {LoopState} state - nama state untuk pesan error.
-   * @return {Promise<T>} hasil atau reject dengan timeout error.
-   * @since 0.1.2 */
-  private async withTimeout<T>(p: Promise<T>, ms: number, state: LoopState): Promise<T> {
-    if (ms <= 0) return p;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    const timeout = new Promise<never>((_, reject) => {
-      timer = setTimeout(
-        () => reject(new Error(`loop: step timeout (${ms}ms) in state ${state}`)),
-        ms,
-      );
-    });
-    try {
-      return await Promise.race([p, timeout]);
-    } finally {
-      clearTimeout(timer);
-      // Hambat unhandled rejection dari losing promise (bila timeout menang).
-      p.catch(() => {});
-    }
+  /** @brief Get step count. @since 0.1.10 */
+  get steps(): number {
+    return this.stepCount;
   }
+
+  /** @brief Get budget used. @since 0.1.10 */
+  get budget(): number {
+    return this.budgetUsed;
+  }
+
+  /** @brief Reset driver to initial state. @since 0.1.10 */
+  reset(start?: LoopState): void {
+    this.current = start ?? LoopState.INTAKE;
+    this.stepCount = 0;
+    this.budgetUsed = 0;
+  }
+
+  /** @brief Get valid events from current state. @since 0.1.10 */
+  availableEvents(): LoopEvent[] {
+    return validEvents(this.current);
+  }
+
+  /** @brief Check if state is terminal. @since 0.1.10 */
+  isTerminal(): boolean {
+    return isTerminal(this.current);
+  }
+}
+
+/** @brief Create a driver instance. @since 0.1.10 */
+export function createDriver(options?: LoopDriverOptions): LoopDriver {
+  return new LoopDriver(options);
 }

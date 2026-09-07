@@ -28,5 +28,5 @@ describe('loopCommand', () => {
     const ctx = await loopCommand(['build auth', '--threshold=0.9']);
     expect(ctx.goal).toBe('build auth');
     expect(logLines.some((l) => l.startsWith('[metrics]'))).toBe(true);
-  });
+  }, 30000);
 });

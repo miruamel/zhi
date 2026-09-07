@@ -2,7 +2,25 @@
  * @brief Kontrak LoopDeps + konstanta retry handler.
  * @since 0.1.2 */
 import type { EvalOutput } from '../../../eval/gate';
-import type { Critique } from '../../../critic/aggregate';
+import type { CriticResult } from '../../../critic/aggregate';
+import type { LoopState, LoopEvent } from '../../states';
+export type StateHandler = (state?: LoopState) => LoopEvent | Promise<LoopEvent>;
+
+/** @brief Loop context — mutable accumulator shared across state handlers. @since 0.1.2 */
+export interface LoopContext {
+  goal: string;
+  plan?: string;
+  worktree?: string;
+  branch?: string;
+  code?: string;
+  critiques?: CriticResult[];
+  aggregate?: { score: number; passed: boolean };
+  eval?: EvalOutput;
+  attempts?: number;
+  error?: string;
+  prUrl?: string;
+  aborted?: boolean;
+}
 
 /** @brief Batas retry recovery sebelum abort (selaras resil maxAttempts=3, ADR-003). @since 0.1.2 */
 export const MAX_RECOVER = 3;
@@ -19,7 +37,7 @@ export interface LoopDeps {
   /** @brief Generate kode dari rencana (EXECUTE). Bila worktree diberi, tulis file ke sana. */
   generate: (plan: string, worktree?: string) => Promise<string>;
   /** @brief Jalankan critique plant ke kode (CRITIQUE). */
-  critique: (code: string) => Critique[];
+  critique: (code: string) => CriticResult[];
   /** @brief Kompres kode hasil EXECUTE agar muat context window (opsional). */
   compress?: (code: string) => string;
   /** @brief Isolasi kerja ke git worktree terpisah (ISOLATE, opsional). @return {string} path worktree absolut. */

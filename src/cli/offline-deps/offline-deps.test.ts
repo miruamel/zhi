@@ -4,7 +4,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { offlineDeps } from './offline-deps';
 import { compress } from '../../../engine/build/context/compress';
+import type { CruiserReport } from '../../../engine/critic/plant/compose';
 
+/** @brief Mock cruiser runner: zero violations, no real dependency-cruiser spawn. @since 0.2.0 */
+const emptyCruiser: () => CruiserReport = () => ({ modules: [] });
 describe('offlineDeps generate', () => {
   let wt: string;
   let cleanup: () => void;
@@ -63,7 +66,7 @@ describe('offlineDeps generate', () => {
   });
 
   it('critique() returns composed critiques', () => {
-    const deps = offlineDeps(0.7);
+    const deps = offlineDeps(0.7, emptyCruiser);
     const result = deps.critique('const x = 1;');
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBeGreaterThan(0);

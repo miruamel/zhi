@@ -6,10 +6,9 @@
  */
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import type { LoopContext } from '@engine/loop/wiring/context';
-import { composeCritiques } from '@engine/critic/plant/compose';
-import { aggregate } from '@engine/critic/aggregate';
-import type { FileRecord } from '@engine/critic/plant/sloc/critic';
+import type { LoopContext } from '../../../../engine/loop/wiring/context';
+import { composeCritiques } from '../../../../engine/critic/plant/compose';
+import { aggregate } from '../../../../engine/critic/aggregate';
 
 /** @brief Entry dari `readdirSync({ withFileTypes: true })`. @since 0.1.2 */
 interface DirentLike {
@@ -54,11 +53,11 @@ export async function critiqueRepoCommand(): Promise<LoopContext> {
     if (parent === dir) break;
     dir = parent;
   }
-  const files: FileRecord[] = [];
+  const files: Array<{ path: string; content: string }> = [];
   walkDir(root, (file, content) => {
     files.push({ path: file, content });
   });
-  const critiques = composeCritiques(files);
+  const critiques = composeCritiques(files, { modules: [] });
   const res = aggregate(critiques, 0.7);
   console.log(
     JSON.stringify(

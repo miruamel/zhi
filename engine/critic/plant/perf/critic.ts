@@ -1,5 +1,5 @@
 /** @brief Critic: deteksi debug noise (debugger, console.*) di generated code. @since 0.1.1 */
-import type { Critique } from '../../aggregate';
+import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
 const PERF_RES: RegExp[] = [/\bdebugger\s*;/, /\bconsole\.(log|debug|warn|error|info)\s*\(/];
@@ -8,7 +8,7 @@ const PERF_RES: RegExp[] = [/\bdebugger\s*;/, /\bconsole\.(log|debug|warn|error|
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
  * @since 0.1.1 */
-export function perfCritic(files: FileRecord[]): Critique {
+export function perfCritic(files: FileRecord[]): CriticResult {
   const findings: string[] = [];
   let count = 0;
   for (const f of files) {

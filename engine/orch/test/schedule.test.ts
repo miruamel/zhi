@@ -2,8 +2,8 @@
  * @brief Unit: schedule() — execution order from DAG + allocation. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
-import { allocate, schedule } from '../schedule';
-import { buildDag } from '../dag';
+import { allocate, schedule } from '../runner';
+import { buildDag } from '../runner';
 import { parseGoal } from '../parse';
 
 describe('orch schedule', () => {

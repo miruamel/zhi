@@ -36,5 +36,5 @@ export async function withResilience<T>(
 export { CircuitBreaker } from './breaker';
 export { retryWithBudget } from './retry';
 export type { RetryResult, DLQEntry } from './retry';
-export { classifyError } from './recover';
-export type { RecoveryStrategy, ClassifiedError } from './recover';
+export { classifyError } from './retry';
+export type { RecoveryStrategy, ClassifiedError } from './retry';

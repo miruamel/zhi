@@ -1,5 +1,5 @@
 /** @brief Critic: deteksi kebocoran secret (mandate §7.1). @since 0.1.1 */
-import type { Critique } from '../../aggregate';
+import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
 interface SecretPattern {
@@ -31,7 +31,7 @@ const SECRET_RES: SecretPattern[] = [
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
  * @since 0.1.1 */
-export function privacyCritic(files: FileRecord[]): Critique {
+export function privacyCritic(files: FileRecord[]): CriticResult {
   const findings: string[] = [];
   let count = 0;
   for (const f of files) {

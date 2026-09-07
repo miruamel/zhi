@@ -1,23 +1,34 @@
 /**
- * @brief Parser chunk SSE → array payload `data:` (TypeScript murni).
- * Implementasi fallback saat WASM write barrier gagal di proot env.
- * Logika identik dengan `native/stream/parse.zig`.
- * @param {string} chunk - chunk SSE (UTF-8).
- * @return {Promise<string[]>} payload data per event (tanpa prefix `data:`).
- * @see native/stream/parse.zig
- * @since 0.1.2
+ * @fileoverview Stream parser — SSE text parser (TS fallback). @since 0.1.1
+ * @package zhi
  */
-export async function parseSseTs(chunk: string): Promise<string[]> {
-  const out: string[] = [];
-  // Regex ^data: (multiline) — match only lines starting with data:,
-  // avoiding the char-by-char comparison loop.
-  const re = /^data:(.*)$/gm;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(chunk)) !== null) {
-    let payload = m[1];
-    // Strip semua leading space (Zig strip satu; OpenAI spec strip semua).
-    while (payload.startsWith(' ')) payload = payload.slice(1);
-    if (payload.length > 0) out.push(payload);
+
+/**
+ * @brief Parse SSE text into data payloads (TS fallback).
+ * @param {string} sse - raw SSE text.
+ * @return {Promise<string[]>} data payloads.
+ * @since 0.1.1
+ */
+export async function parseSseTs(sse: string): Promise<string[]> {
+  const results: string[] = [];
+  const lines = sse.split('\n');
+  let currentData: string[] = [];
+
+  for (const line of lines) {
+    if (line === '' || line === '\r') {
+      if (currentData.length > 0) {
+        results.push(...currentData);
+      }
+      currentData = [];
+    }
+    if (line.startsWith('data:')) {
+      let data = line.slice(5);
+      data = data.replace(/^ +/, '');
+      currentData.push(data);
+    }
   }
-  return out;
+  if (currentData.length > 0) {
+    results.push(...currentData);
+  }
+  return results;
 }

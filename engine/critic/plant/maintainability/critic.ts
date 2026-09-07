@@ -1,5 +1,5 @@
 /** @brief Critic: deteksi duplikasi baris kode (mandate §6, DRY). @since 0.1.1 */
-import type { Critique } from '../../aggregate';
+import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
 /** @brief Panjang minimum baris agar layak diaudit duplikasi. @since 0.1.1 */
@@ -27,7 +27,7 @@ export function codeLines(src: string): string[] {
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
  * @since 0.1.1 */
-export function maintainabilityCritic(files: FileRecord[]): Critique {
+export function maintainabilityCritic(files: FileRecord[]): CriticResult {
   const counts = new Map<string, number>();
   let total = 0;
   for (const f of files) {

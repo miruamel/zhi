@@ -6,19 +6,18 @@
  * @throw {Error} bila goal kosong.
  * @since 0.1.2
  */
-import type { LoopContext } from '@engine/loop/wiring/context';
-import type { Critique } from '@engine/critic/aggregate';
-import { buildHandlers } from '@engine/loop/wiring/handlers';
-import { LoopDriver } from '@engine/loop/driver';
-import { LoopState } from '@engine/loop/states';
-import { LoopLogger } from '@engine/loop/observability/logger';
-import { LoopMetrics } from '@engine/loop/observability/metrics';
+import type { LoopContext } from '../../../../engine/loop/wiring/handlers/types';
+import type { CriticResult } from '../../../../engine/critic/aggregate';
+import { LoopDriver } from '../../../../engine/loop/driver';
+import { LoopState } from '../../../../engine/loop/states';
+import { LoopLogger } from '../../../../engine/loop/observability/logger';
+import { LoopMetrics } from '../../../../engine/loop/observability/metrics';
 import { autonomousDeps } from '../../autonomous-deps/autonomous-deps';
 import { offlineDeps } from '../../offline-deps/offline-deps';
 import { parseArgs } from '../../parse-args/parse-args';
 import { mountTui } from '../../../tui/render';
+import { buildHandlers } from '../../../../engine/loop/wiring/handlers';
 import type { AppState } from '../../../tui/core/state';
-
 /** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.4 */
 export function toPatch(
   ctx: LoopContext,
@@ -28,7 +27,7 @@ export function toPatch(
   return {
     loop,
     metrics: { ...metrics.summary(), recoverAttempts: metrics.recoverAttempts },
-    critics: (ctx.critiques ?? []).map((c: Critique) => ({
+    critics: (ctx.critiques ?? []).map((c: CriticResult) => ({
       name: c.name,
       score: c.score,
       abstain: false,
