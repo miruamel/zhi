@@ -3,7 +3,7 @@
  * @since 0.1.4
  */
 import { describe, expect, it } from 'bun:test';
-import type { Critique } from '@engine/critic/aggregate';
+import type { CriticResult } from '@engine/critic/aggregate';
 import { LoopState } from '@engine/loop/states';
 import { LoopMetrics } from '@engine/loop/observability/metrics';
 import type { LoopContext } from '@engine/loop/wiring/context';
@@ -16,7 +16,7 @@ function ctx(over: Partial<LoopContext> = {}): LoopContext {
 
 describe('toPatch', () => {
   it('maps critics: name, score, abstain=false, reason=first finding', () => {
-    const critiques: Critique[] = [
+    const critiques: CriticResult[] = [
       { name: 'security', score: 0.9, weight: 1, findings: ['no leak', 'ok'] },
       { name: 'style', score: 0.5, weight: 1, findings: [] },
     ];
@@ -65,7 +65,7 @@ describe('toPatch', () => {
 
   it('maps weightedAvg from ctx.aggregate.score (fallback 0)', () => {
     const r = toPatch(
-      ctx({ aggregate: { score: 0.75, passed: true, byCritic: {}, findings: [] } }),
+      ctx({ aggregate: { score: 0.75, passed: true } }),
       new LoopMetrics(),
       LoopState.PLAN,
     );

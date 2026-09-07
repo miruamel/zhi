@@ -2,7 +2,7 @@
  * @brief Unit: classifyError() — recovery strategy classification. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
-import { classifyError } from '../recover';
+import { classifyError } from '../index';
 
 describe('classifyError', () => {
   it('classifies budget/timeout/fatal/quota as abort+fatal', () => {

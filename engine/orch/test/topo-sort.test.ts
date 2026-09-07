@@ -2,7 +2,7 @@
  * @brief Unit: topoSort() — topological order + cycle detection. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
-import { topoSort } from '../dag';
+import { topoSort } from '../runner';
 import { CycleError, type Step } from '../types';
 
 const mk = (id: string, deps: string[]): Step => ({

@@ -1,4 +1,4 @@
-import type { StateHandler } from '../driver';
+import type { StateHandler } from '../wiring/handlers/types';
 import { LoopState } from '../states';
 
 /** @brief Satu catatan eksekusi stage loop. @since 0.1.1 */
@@ -49,7 +49,7 @@ export class LoopMetrics {
 
 /** @brief Bungkus handler dengan pengukuran latency + error. @since 0.1.1 */
 export function timedStage(stage: string, fn: StateHandler, metrics: LoopMetrics): StateHandler {
-  return async (state: LoopState) => {
+  return async (state?: LoopState) => {
     const t0 = performance.now();
     try {
       const ev = await fn(state);

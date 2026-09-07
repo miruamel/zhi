@@ -4,14 +4,14 @@ import { LoopDriver } from '../../driver';
 import { LoopState } from '../../states';
 import { buildHandlers, type LoopDeps } from '../handlers';
 import type { LoopContext } from '../context';
-import type { Critique } from '../../../critic/aggregate';
+import type { CriticResult } from '../../../critic/aggregate';
 import { LoopMetrics } from '../../observability/metrics';
 
-const high: Critique[] = [{ name: 'security', score: 1, weight: 1, findings: [] }];
-const low: Critique[] = [{ name: 'security', score: 0, weight: 1, findings: ['fail'] }];
+const high: CriticResult[] = [{ name: 'security', score: 1, weight: 1, findings: [] }];
+const low: CriticResult[] = [{ name: 'security', score: 0, weight: 1, findings: ['fail'] }];
 
 function deps(opts: {
-  critique: () => Critique[];
+  critique: () => CriticResult[];
   ciWatch?: () => 'green' | 'red' | 'pending';
 }): LoopDeps {
   return {

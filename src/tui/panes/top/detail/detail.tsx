@@ -25,7 +25,7 @@ export function Detail({
   const pct = tokensBudget > 0 ? tokensUsed / tokensBudget : 0;
   const detailText = step?.detail ?? '';
   const hasDetail = detailText.length > 0;
-  const lines = hasDetail ? detailText.split('\n') : [];
+  const lines: string[] = hasDetail ? detailText.split('\n') : [];
   const visible = expanded ? lines : lines.slice(0, 4);
   const hidden = expanded ? 0 : Math.max(0, lines.length - 4);
 

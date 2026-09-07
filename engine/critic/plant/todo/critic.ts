@@ -1,5 +1,5 @@
 /** @brief Critic: deteksi TODO/FIXME/XXX (mandate §6 cleanliness). @since 0.1.1 */
-import type { Critique } from '../../aggregate';
+import type { CriticResult } from '../../aggregate';
 import type { FileRecord } from '../sloc/critic';
 
 const RE = /\b(TODO|FIXME|XXX)\b/;
@@ -8,7 +8,7 @@ const RE = /\b(TODO|FIXME|XXX)\b/;
  * @param {FileRecord[]} files - kumpulan file.
  * @return {Critique} hasil critic.
  * @since 0.1.1 */
-export function todoCritic(files: FileRecord[]): Critique {
+export function todoCritic(files: FileRecord[]): CriticResult {
   const findings: string[] = [];
   let count = 0;
   for (const f of files) {

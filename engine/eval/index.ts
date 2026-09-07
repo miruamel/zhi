@@ -1,21 +1,17 @@
-/** @brief Orkestrasi evaluasi: test + secret-scan -> gate. @since 0.1.1 */
-import { gate, type EvalOutput } from './gate';
-import { runTests } from './test';
-import { scanSecrets } from './security';
+/**
+ * @fileoverview Eval engine — public API surface.
+ * @since 0.2.6
+ * @package zhi
+ */
+export { EvalEngine, createEvalEngine } from './engine';
+export {
+  type EvalInput,
+  type EvalResult,
+  type SecurityReport,
+  type SecurityFinding,
+} from './engine';
+export { Gate, createGate, runGates } from './gate';
+export { type GateResult, type GateOptions } from './gate';
 
-/** @brief Evaluasi worktree: jalankan test + secret-scan, bangun criteria/blockers, gate.
- * @param {string} worktree - path worktree absolut.
- * @return {EvalOutput} keputusan gate (passed bila tanpa blocker).
- * @see docs/design/eval.md
- * @since 0.1.1 */
-export function evaluate(worktree: string): EvalOutput {
-  const t = runTests(worktree);
-  const s = scanSecrets(worktree);
-  const criteria: string[] = [];
-  const blockers: string[] = [];
-  if (t.passed) criteria.push('bun test hijau');
-  else blockers.push(`test gagal: ${t.output.slice(0, 200)}`);
-  if (!s.leaked) criteria.push('tanpa secret bocor');
-  else blockers.push(...s.findings.map((f) => `secret bocor: ${f}`));
-  return gate({ score: 1, criteria, blockers });
-}
+/** @brief Evaluate function. @since 0.1.1 */
+export { evaluate, scanSecurity, scanSecrets, type EvalRunResult } from './eval';

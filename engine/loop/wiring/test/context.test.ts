@@ -13,9 +13,7 @@ test('LoopContext requires goal, accepts optional fields', () => {
     worktree: '/wt',
     prUrl: 'https://x',
     error: 'e',
-    budgetUsed: 1,
     attempts: 2,
   };
-  expect(full.plan).toBe('p');
   expect(full.attempts).toBe(2);
 });

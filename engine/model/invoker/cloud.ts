@@ -47,6 +47,7 @@ function signalOrUndefined(ms: number): AbortSignal | undefined {
 
 /** @brief Invoker OpenAI-compatible (chat completions). @since 0.1.1 */
 export class CloudModelInvoker implements ModelInvoker {
+  readonly name = 'cloud';
   private readonly url: string;
   private readonly model: string;
   private readonly apiKey: string;
@@ -117,13 +118,13 @@ export class CloudModelInvoker implements ModelInvoker {
       while ((cut = buf.indexOf('\n\n')) !== -1) {
         const event = buf.slice(0, cut);
         buf = buf.slice(cut + 2);
-        for (const payload of await parseStream(event)) {
+        for (const payload of parseStream(event)) {
           if (payload === '[DONE]') return;
           yield* extractTokens(payload);
         }
       }
     }
-    for (const payload of await parseStream(buf)) {
+    for (const payload of parseStream(buf)) {
       if (payload === '[DONE]') return;
       yield* extractTokens(payload);
     }

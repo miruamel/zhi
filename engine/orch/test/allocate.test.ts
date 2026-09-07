@@ -2,8 +2,8 @@
  * @brief Unit: allocate() — proportional budget allocator. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
-import { allocate } from '../schedule';
-import { buildDag } from '../dag';
+import { allocate } from '../runner';
+import { buildDag } from '../runner';
 import { parseGoal } from '../parse';
 
 describe('orch allocate', () => {

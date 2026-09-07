@@ -9,13 +9,12 @@
 import { aggregate } from '../../../critic/aggregate';
 import { gate } from '../../../eval/gate';
 import { classifyError, CircuitBreaker, withResilience } from '../../../resil';
-import { LoopDriver, type StateHandler } from '../../driver';
+import type { LoopDriver } from '../../driver';
 import { LoopEvent, LoopState, gatePass } from '../../states';
-import type { LoopContext } from '../context';
+import type { LoopContext } from './types';
 import { branchSlug } from '../git';
 import { LoopMetrics, timedStage } from '../../observability/metrics';
-import { GENERATE_RETRY, MAX_RECOVER, type LoopDeps } from './types';
-import { isDLQ } from './is-dlq';
+import { GENERATE_RETRY, MAX_RECOVER, type LoopDeps, type StateHandler } from './types';
 
 /**
  * @brief Build per-state handlers (INTAKE → DONE) with optional metrics wrapping.
@@ -53,10 +52,11 @@ export function buildHandlers(
         maxAttempts: GENERATE_RETRY,
       });
       if (isDLQ(res)) {
-        ctx.error = `generate failed after ${GENERATE_RETRY} retry: ${res.error}`;
+        const r = res as { error?: string; attempts?: number };
+        ctx.error = `generate failed after ${GENERATE_RETRY} retry: ${r.error ?? 'unknown'}`;
         return LoopEvent.BUDGET_OUT;
       }
-      ctx.code = deps.compress ? deps.compress(res) : res;
+      ctx.code = deps.compress ? deps.compress(res as string) : (res as string);
       return LoopEvent.EXECUTED;
     },
     [LoopState.CRITIQUE]: () => {
@@ -119,6 +119,20 @@ export function buildHandlers(
     if (h) wrapped[k] = timedStage(k, h, metrics);
   }
   return wrapped;
+}
+
+/** @brief Check if a step result is dead-letter quarantined (boolean).
+ * @param {unknown} res - step result to check.
+ * @return {boolean} true when quarantined.
+ * @since 0.2.6 */
+function isDLQ(res: unknown): boolean {
+  if (res === null || res === undefined) return false;
+  if (typeof res === 'string') return false;
+  if (typeof res !== 'object') return false;
+  const r = res as Record<string, unknown>;
+  if (r.error === undefined) return false;
+  const attempts = typeof r.attempts === 'number' ? r.attempts : 0;
+  return attempts >= 3;
 }
 
 // Re-export types untuk konsumer.

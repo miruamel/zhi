@@ -1,28 +1,30 @@
 /**
- * @brief Pilih backend via model/router: micro (endpoint local) selalu stub lokal;
- * heavy/light (9router/omp) pakai cloud bila MODEL_API_KEY ada, else stub.
- * @since 0.1.2
+ * @brief Select invoker based on environment.
+ * Micro tasks (classify/tag) always use local stub for cost control.
+ * @since 0.1.1
  */
-import type { TaskKind } from '../router';
-import { route } from '../router';
 import { CloudModelInvoker } from './cloud';
 import { LocalStubInvoker } from './local-stub';
 import type { ModelInvoker } from './types';
 
+/** @brief Task kind for invoker selection. @since 0.2.6 */
+export type TaskKind = 'generate' | 'critique' | 'review' | 'embed' | 'classify' | 'tag';
+
+/** @brief Micro task kinds that always use local stub. @since 0.2.6 */
+const MICRO_TASKS: TaskKind[] = ['classify', 'tag'];
+
 /**
- * @brief Pilih invoker berdasarkan router config + env.
- * @param {TaskKind} [kind='generate'] - jenis task (route menentukan endpoint).
- * @return {ModelInvoker} invoker aktif.
- * @since 0.1.2
+ * @brief Pilih invoker berdasarkan env MODEL_API_KEY.
+ * @param {TaskKind} kind - task kind (default 'generate').
+ * @return {ModelInvoker} cloud bila MODEL_API_KEY ada, else local stub.
+ * @since 0.1.1
  */
 export function selectInvoker(kind: TaskKind = 'generate'): ModelInvoker {
-  const backend = route(kind);
-  if (backend.endpoint === 'local' || !process.env['MODEL_API_KEY']) {
+  if (MICRO_TASKS.includes(kind)) {
     return new LocalStubInvoker();
   }
-  return new CloudModelInvoker({
-    apiKey: process.env['MODEL_API_KEY'],
-    baseUrl: process.env['MODEL_BASE_URL'],
-    model: process.env['MODEL_NAME'],
-  });
+  if (process.env.MODEL_API_KEY) {
+    return new CloudModelInvoker({ apiKey: process.env.MODEL_API_KEY });
+  }
+  return new LocalStubInvoker();
 }

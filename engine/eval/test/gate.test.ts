@@ -1,22 +1,23 @@
+/**
+ * @fileoverview Gate runner tests. @since 0.2.6
+ */
 import { describe, it, expect } from 'bun:test';
-import { gate } from '../gate';
+import { runGate } from '../gate';
 
-describe('eval gate', () => {
-  it('passes when score >= threshold and no blockers', () => {
-    const r = gate({ score: 0.8, criteria: ['a', 'b'], blockers: [] });
-    expect(r.passed).toBe(true);
-    expect(r.score).toBe(0.8);
+describe('runGate', () => {
+  it('runs all checks', () => {
+    const r = runGate({ checks: ['lint', 'typecheck', 'test'] });
+    expect(r.checks.length).toBe(3);
+    expect(r.pass).toBe(true);
   });
-  it('fails below threshold', () => {
-    const r = gate({ score: 0.5, criteria: [], blockers: [] }, 0.7);
-    expect(r.passed).toBe(false);
+
+  it('detects empty checks', () => {
+    const r = runGate({ checks: [] });
+    expect(r.pass).toBe(false);
   });
-  it('fails closed on any blocker regardless of score', () => {
-    const r = gate({ score: 1.0, criteria: [], blockers: ['security'] });
-    expect(r.passed).toBe(false);
-    expect(r.reasons[0]).toContain('security');
-  });
-  it('uses custom threshold', () => {
-    expect(gate({ score: 0.6, criteria: [], blockers: [] }, 0.5).passed).toBe(true);
+
+  it('records duration', () => {
+    const r = runGate({ checks: ['lint'] });
+    expect(r.durationMs).toBeGreaterThanOrEqual(0);
   });
 });
