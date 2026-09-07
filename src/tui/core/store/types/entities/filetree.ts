@@ -1,5 +1,5 @@
 /**
- * @fileoverview File tree entity types. @since 0.2.0
+ * @fileoverview File tree entity types. @since 0.1.11
  * @package zhi
  */
 /** File node for tree */

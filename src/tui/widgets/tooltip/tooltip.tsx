@@ -1,10 +1,10 @@
 /**
- * @fileoverview Tooltip widget — hover/focus hint overlay. @since 0.2.6
+ * @fileoverview Tooltip widget — hover/focus hint overlay. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Tooltip props. @since 0.2.6 */
+/** @brief Tooltip props. @since 0.1.11 */
 export interface TooltipProps {
   text?: string;
   content?: React.ReactNode;
@@ -13,7 +13,7 @@ export interface TooltipProps {
   children?: React.ReactNode;
 }
 
-/** @brief Tooltip component. @since 0.2.6 */
+/** @brief Tooltip component. @since 0.1.11 */
 export function Tooltip({
   text,
   content,

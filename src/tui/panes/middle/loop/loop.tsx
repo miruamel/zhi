@@ -1,11 +1,11 @@
 /**
  * @fileoverview Loop pane — loop control, pause/resume/abort.
- * @since 0.2.2
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 
-/** @brief Loop pane props. @since 0.2.2 */
+/** @brief Loop pane props. @since 0.1.11 */
 export interface LoopPaneProps {
   loop: string;
   paused: boolean;
@@ -27,7 +27,7 @@ const STATUS_TEXT: Record<string, string> = {
   partial: 'PARTIAL',
 };
 
-/** @brief Render the loop pane. @since 0.2.2 */
+/** @brief Render the loop pane. @since 0.1.11 */
 export function LoopPane({
   loop,
   paused,

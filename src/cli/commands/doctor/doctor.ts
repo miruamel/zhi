@@ -1,26 +1,26 @@
 /**
- * @fileoverview Doctor command — system health check. @since 0.2.6
+ * @fileoverview Doctor command — system health check. @since 0.1.11
  * @package zhi
  */
-/** @brief Doctor options. @since 0.2.6 */
+/** @brief Doctor options. @since 0.1.11 */
 export interface DoctorOpts {
   verbose?: boolean;
 }
 
-/** @brief Doctor check result. @since 0.2.6 */
+/** @brief Doctor check result. @since 0.1.11 */
 export interface DoctorCheck {
   name: string;
   ok: boolean;
   detail: string;
 }
 
-/** @brief Doctor report. @since 0.2.6 */
+/** @brief Doctor report. @since 0.1.11 */
 export interface DoctorReport {
   checks: DoctorCheck[];
   allOk: boolean;
 }
 
-/** @brief Run doctor checks. @since 0.2.6 */
+/** @brief Run doctor checks. @since 0.1.11 */
 export function doctor(_opts: DoctorOpts = {}): DoctorReport {
   const checks: DoctorCheck[] = [];
   const nodeOk = typeof process !== 'undefined' && process.versions?.node != null;

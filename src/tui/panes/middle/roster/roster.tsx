@@ -1,11 +1,11 @@
 /**
  * @fileoverview Agent roster pane — agent list, capabilities, dispatch.
- * @since 0.2.3
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 
-/** @brief Agent roster props. @since 0.2.3 */
+/** @brief Agent roster props. @since 0.1.11 */
 export interface AgentRosterPaneProps {
   agents: Array<{
     id: string;
@@ -31,7 +31,7 @@ const STATUS_ICON: Record<string, string> = {
   failed: '✗',
 };
 
-/** @brief Render the agent roster pane. @since 0.2.3 */
+/** @brief Render the agent roster pane. @since 0.1.11 */
 export function AgentRosterPane({ agents }: AgentRosterPaneProps) {
   const activeCount = agents.filter((a) => a.status === 'running').length;
   const doneCount = agents.filter((a) => a.status === 'done').length;

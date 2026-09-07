@@ -1,11 +1,11 @@
 /**
  * @fileoverview TUI render — rendering engine for the Zhi terminal interface.
- * @since 0.2.6
+ * @since 0.1.11
  * @package zhi
  */
 import React from 'react';
 import { Box, Text } from 'ink';
-/** @brief Render options. @since 0.2.6 */
+/** @brief Render options. @since 0.1.11 */
 export interface RenderOptions {
   padding?: number;
   margin?: number;
@@ -23,7 +23,7 @@ export interface RenderOptions {
   wrap?: 'wrap' | 'nowrap';
 }
 
-/** @brief Render context. @since 0.2.6 */
+/** @brief Render context. @since 0.1.11 */
 export interface RenderContext {
   width: number;
   height: number;
@@ -31,12 +31,12 @@ export interface RenderContext {
   scrollOffset: number;
 }
 
-/** @brief Renderable component. @since 0.2.6 */
+/** @brief Renderable component. @since 0.1.11 */
 export interface Renderable {
   render(ctx: RenderContext): React.ReactNode;
 }
 
-/** @brief Renderer — manages layout and rendering. @since 0.2.6 */
+/** @brief Renderer — manages layout and rendering. @since 0.1.11 */
 export class Renderer {
   private width: number;
   private height: number;
@@ -50,13 +50,13 @@ export class Renderer {
     this.scrollOffset = 0;
   }
 
-  /** @brief Set dimensions. @since 0.2.6 */
+  /** @brief Set dimensions. @since 0.1.11 */
   setDimensions(width: number, height: number): void {
     this.width = width;
     this.height = height;
   }
 
-  /** @brief Get context. @since 0.2.6 */
+  /** @brief Get context. @since 0.1.11 */
   getContext(): RenderContext {
     return {
       width: this.width,
@@ -66,23 +66,23 @@ export class Renderer {
     };
   }
 
-  /** @brief Render a component. @since 0.2.6 */
+  /** @brief Render a component. @since 0.1.11 */
   render(component: Renderable): React.ReactNode {
     return component.render(this.getContext());
   }
 
-  /** @brief Scroll. @since 0.2.6 */
+  /** @brief Scroll. @since 0.1.11 */
   scroll(delta: number): void {
     this.scrollOffset = Math.max(0, this.scrollOffset + delta);
   }
 }
 
-/** @brief Create a renderer. @since 0.2.6 */
+/** @brief Create a renderer. @since 0.1.11 */
 export function createRenderer(): Renderer {
   return new Renderer();
 }
 
-/** @brief Render a box with options. @since 0.2.6 */
+/** @brief Render a box with options. @since 0.1.11 */
 export function renderBox(options: RenderOptions, children: React.ReactNode): React.ReactNode {
   const {
     padding = 0,
@@ -122,7 +122,7 @@ export function renderBox(options: RenderOptions, children: React.ReactNode): Re
   );
 }
 
-/** @brief Render text with style. @since 0.2.6 */
+/** @brief Render text with style. @since 0.1.11 */
 export function renderText(content: string, options: RenderOptions = {}): React.ReactNode {
   const { color, bold, italic, underline, strikethrough, dimColor } = options as any;
   return React.createElement(
@@ -139,7 +139,7 @@ export function renderText(content: string, options: RenderOptions = {}): React.
   );
 }
 
-/** @brief Render a list. @since 0.2.6 */
+/** @brief Render a list. @since 0.1.11 */
 export function renderList(items: string[], options: RenderOptions = {}): React.ReactNode {
   return React.createElement(
     Box,
@@ -161,7 +161,7 @@ export function renderTable(
   );
 }
 
-/** @brief Render a progress bar. @since 0.2.6 */
+/** @brief Render a progress bar. @since 0.1.11 */
 export function renderProgress(value: number, max = 100, width = 20): React.ReactNode {
   const filled = Math.round((value / max) * width);
   const empty = width - filled;
@@ -169,23 +169,23 @@ export function renderProgress(value: number, max = 100, width = 20): React.Reac
   return React.createElement(Text, { color: 'cyan' }, `[${bar}] ${value}/${max}`);
 }
 
-/** @brief Render a spinner. @since 0.2.6 */
+/** @brief Render a spinner. @since 0.1.11 */
 export function renderSpinner(frame: number): React.ReactNode {
   const frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
   return React.createElement(Text, { color: 'yellow' }, frames[frame % frames.length]);
 }
 
-/** @brief Render a badge. @since 0.2.6 */
+/** @brief Render a badge. @since 0.1.11 */
 export function renderBadge(text: string, color: string): React.ReactNode {
   return React.createElement(Text, { color: color as any, bold: true }, ` ${text} `);
 }
 
-/** @brief Render a divider. @since 0.2.6 */
+/** @brief Render a divider. @since 0.1.11 */
 export function renderDivider(char = '─', length?: number): React.ReactNode {
   return React.createElement(Text, { dimColor: true }, char.repeat(length ?? 40));
 }
 
-/** @brief Render key binding help. @since 0.2.6 */
+/** @brief Render key binding help. @since 0.1.11 */
 export function renderHelp(bindings: Array<{ key: string; description: string }>): React.ReactNode {
   return React.createElement(
     Box,

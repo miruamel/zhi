@@ -1,10 +1,10 @@
 /**
- * @fileoverview Diff widget — unified diff display with line numbers. @since 0.2.6
+ * @fileoverview Diff widget — unified diff display with line numbers. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Diff line. @since 0.2.6 */
+/** @brief Diff line. @since 0.1.11 */
 export interface DiffLine {
   type: 'context' | 'added' | 'removed';
   oldLine?: number;
@@ -12,14 +12,14 @@ export interface DiffLine {
   content: string;
 }
 
-/** @brief Diff props. @since 0.2.6 */
+/** @brief Diff props. @since 0.1.11 */
 export interface DiffProps {
   lines?: DiffLine[];
   diff?: string;
   maxLines?: number;
 }
 
-/** @brief Parse unified diff into structured lines. @since 0.2.6 */
+/** @brief Parse unified diff into structured lines. @since 0.1.11 */
 export function parseDiff(diff: string = ''): DiffLine[] {
   const raw = diff.split('\n');
   const lines = raw.length > 0 && raw[raw.length - 1] === '' ? raw.slice(0, -1) : raw;
@@ -52,7 +52,7 @@ export function parseDiff(diff: string = ''): DiffLine[] {
   return result;
 }
 
-/** @brief Diff component. @since 0.2.6 */
+/** @brief Diff component. @since 0.1.11 */
 export function Diff({ lines, diff, maxLines = 100 }: DiffProps): React.ReactElement {
   const resolved = lines ?? parseDiff(diff ?? '');
   const visible = resolved.slice(0, maxLines);

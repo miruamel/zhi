@@ -1,5 +1,5 @@
 /**
- * @fileoverview App state interface. @since 0.2.0
+ * @fileoverview App state interface. @since 0.1.11
  * @package zhi
  */
 import type {

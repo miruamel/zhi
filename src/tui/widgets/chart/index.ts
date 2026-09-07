@@ -1,2 +1,2 @@
-/** @brief Chart widget barrel. @since 0.2.0 */
+/** @brief Chart widget barrel. @since 0.1.11 */
 export { Chart, type ChartDataPoint, type ChartProps } from './chart';

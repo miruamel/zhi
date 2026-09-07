@@ -12,7 +12,7 @@ export interface NavigationState {
   historyIndex: number;
 }
 
-/** @brief Hook for managing pane focus index. @since 0.2.0 */
+/** @brief Hook for managing pane focus index. @since 0.1.11 */
 export function useFocus(paneOrder: string[], initial = 0) {
   const [focusIndex, setFocusIndex] = useState(initial);
   const [history, setHistory] = useState<string[]>([]);

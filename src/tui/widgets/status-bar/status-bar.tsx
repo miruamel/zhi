@@ -25,7 +25,7 @@ export interface StatusBarProps {
   hints?: string[];
 }
 
-/** @brief Render a single status cell. @since 0.2.0 */
+/** @brief Render a single status cell. @since 0.1.11 */
 function Cell({ label, value, color }: { label: string; value: string; color?: string }) {
   return (
     <Box gap={1}>
@@ -35,7 +35,7 @@ function Cell({ label, value, color }: { label: string; value: string; color?: s
   );
 }
 
-/** @brief Render the global status bar. @since 0.2.0 */
+/** @brief Render the global status bar. @since 0.1.11 */
 export function StatusBar({
   tokensUsed,
   tokensBudget,

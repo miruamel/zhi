@@ -1,10 +1,10 @@
 /**
- * @fileoverview Progress widget — horizontal progress bar. @since 0.2.6
+ * @fileoverview Progress widget — horizontal progress bar. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Progress props. @since 0.2.6 */
+/** @brief Progress props. @since 0.1.11 */
 export interface ProgressProps {
   value: number;
   max?: number;
@@ -13,7 +13,7 @@ export interface ProgressProps {
   width?: number;
 }
 
-/** @brief Progress component. @since 0.2.6 */
+/** @brief Progress component. @since 0.1.11 */
 export function Progress({
   value,
   max = 100,

@@ -1,6 +1,6 @@
 /**
  * @fileoverview Code Viewer pane — displays file content with syntax highlighting.
- * @since 0.2.0
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
@@ -13,7 +13,7 @@ export interface CodeViewerProps {
   maxLines?: number;
 }
 
-/** @brief Render a code viewer pane with line numbers and syntax highlighting. @since 0.2.0 */
+/** @brief Render a code viewer pane with line numbers and syntax highlighting. @since 0.1.11 */
 export function CodeViewer({ path, content, scroll = 0, maxLines = 30 }: CodeViewerProps) {
   if (!content) {
     return (

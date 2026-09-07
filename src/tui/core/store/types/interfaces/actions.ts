@@ -1,5 +1,5 @@
 /**
- * @fileoverview Store actions interface. @since 0.2.0
+ * @fileoverview Store actions interface. @since 0.1.11
  * @package zhi
  */
 import type { KeyboardMode, PaneId, ThemeName, StreamStatus, LogLevel } from '../primitives';

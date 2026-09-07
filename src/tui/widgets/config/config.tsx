@@ -1,23 +1,23 @@
 /**
- * @fileoverview Config widget — key-value configuration display. @since 0.2.6
+ * @fileoverview Config widget — key-value configuration display. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Config entry. @since 0.2.6 */
+/** @brief Config entry. @since 0.1.11 */
 export interface ConfigEntry {
   key: string;
   value: string;
   source?: string;
 }
 
-/** @brief Config props. @since 0.2.6 */
+/** @brief Config props. @since 0.1.11 */
 export interface ConfigProps {
   entries: ConfigEntry[];
   filter?: string;
 }
 
-/** @brief Config component. @since 0.2.6 */
+/** @brief Config component. @since 0.1.11 */
 export function Config({ entries, filter }: ConfigProps): React.ReactElement {
   const filtered = filter
     ? entries.filter((e) => e.key.toLowerCase().includes(filter.toLowerCase()))

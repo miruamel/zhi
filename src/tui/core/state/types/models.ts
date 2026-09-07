@@ -2,7 +2,7 @@
  * @fileoverview Model types for TUI state. @since 0.1.2
  * @package zhi
  */
-/** @brief Single fact from knowledge store. @since 0.2.1 */
+/** @brief Single fact from knowledge store. @since 0.1.11 */
 export interface Fact {
   key: string;
   value: string;
@@ -24,7 +24,7 @@ export interface EvalStage {
   durationMs: number;
 }
 
-/** @brief DORA metrics. @since 0.2.5 */
+/** @brief DORA metrics. @since 0.1.11 */
 export interface DoraMetrics {
   deployFrequency: number;
   leadTime: number;

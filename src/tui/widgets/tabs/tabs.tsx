@@ -1,23 +1,23 @@
 /**
- * @fileoverview Tabs widget — tab bar with active indicator. @since 0.2.6
+ * @fileoverview Tabs widget — tab bar with active indicator. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Tab definition. @since 0.2.6 */
+/** @brief Tab definition. @since 0.1.11 */
 export interface Tab {
   id: string;
   label: string;
   count?: number;
 }
 
-/** @brief Tabs props. @since 0.2.6 */
+/** @brief Tabs props. @since 0.1.11 */
 export interface TabsProps {
   tabs: Tab[];
   active: string;
 }
 
-/** @brief Tabs component. @since 0.2.6 */
+/** @brief Tabs component. @since 0.1.11 */
 export function Tabs({ tabs, active }: TabsProps): React.ReactElement {
   return (
     <Text>

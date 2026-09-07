@@ -1,13 +1,13 @@
 /**
  * @fileoverview TUI app — main application component for the Zhi terminal interface.
- * @since 0.2.6
+ * @since 0.1.11
  * @package zhi
  */
 import React, { useState, useCallback } from 'react';
 import { useInput } from 'ink';
 import { Box, Text } from 'ink';
 
-/** @brief App props. @since 0.2.6 */
+/** @brief App props. @since 0.1.11 */
 export interface AppProps {
   title?: string;
   version?: string;
@@ -15,7 +15,7 @@ export interface AppProps {
   children?: React.ReactNode;
 }
 
-/** @brief Menu item. @since 0.2.6 */
+/** @brief Menu item. @since 0.1.11 */
 export interface MenuItem {
   id: string;
   label: string;
@@ -24,7 +24,7 @@ export interface MenuItem {
   onSelect?: () => void;
 }
 
-/** @brief App state. @since 0.2.6 */
+/** @brief App state. @since 0.1.11 */
 export interface AppState {
   activeMenu: string;
   focused: boolean;
@@ -32,7 +32,7 @@ export interface AppState {
   exitRequested: boolean;
 }
 
-/** @brief Default app state. @since 0.2.6 */
+/** @brief Default app state. @since 0.1.11 */
 export const DEFAULT_APP_STATE: AppState = {
   activeMenu: 'home',
   focused: true,
@@ -40,7 +40,7 @@ export const DEFAULT_APP_STATE: AppState = {
   exitRequested: false,
 };
 
-/** @brief TUI app component. @since 0.2.6 */
+/** @brief TUI app component. @since 0.1.11 */
 export function App({ title = 'Zhi', version = '0.2.6', onExit, children }: AppProps) {
   const [state, setState] = useState<AppState>(DEFAULT_APP_STATE);
   const handleInput = useCallback(
@@ -74,7 +74,7 @@ export function App({ title = 'Zhi', version = '0.2.6', onExit, children }: AppP
   );
 }
 
-/** @brief App context. @since 0.2.6 */
+/** @brief App context. @since 0.1.11 */
 export const AppContext = React.createContext<{
   state: AppState;
   pushHistory: (entry: string) => void;
@@ -85,17 +85,17 @@ export const AppContext = React.createContext<{
   setActiveMenu: () => {},
 });
 
-/** @brief Use app context. @since 0.2.6 */
+/** @brief Use app context. @since 0.1.11 */
 export function useApp() {
   return React.useContext(AppContext);
 }
 
-/** @brief Create app state. @since 0.2.6 */
+/** @brief Create app state. @since 0.1.11 */
 export function createAppState(overrides: Partial<AppState> = {}): AppState {
   return { ...DEFAULT_APP_STATE, ...overrides };
 }
 
-/** @brief Menu bar component. @since 0.2.6 */
+/** @brief Menu bar component. @since 0.1.11 */
 export function MenuBar({ items, active }: { items: MenuItem[]; active: string }) {
   return (
     <Box>
@@ -115,7 +115,7 @@ export function MenuBar({ items, active }: { items: MenuItem[]; active: string }
   );
 }
 
-/** @brief Status bar component. @since 0.2.6 */
+/** @brief Status bar component. @since 0.1.11 */
 export function StatusBar({ message, color = 'green' }: { message: string; color?: string }) {
   return (
     <Box borderStyle="single" paddingX={1}>
@@ -124,7 +124,7 @@ export function StatusBar({ message, color = 'green' }: { message: string; color
   );
 }
 
-/** @brief Dialog component. @since 0.2.6 */
+/** @brief Dialog component. @since 0.1.11 */
 export function Dialog({
   visible,
   title,
@@ -146,7 +146,7 @@ export function Dialog({
   );
 }
 
-/** @brief Tab component. @since 0.2.6 */
+/** @brief Tab component. @since 0.1.11 */
 export function Tab({
   label,
   active,
@@ -167,7 +167,7 @@ export function Tab({
   );
 }
 
-/** @brief Tabs container. @since 0.2.6 */
+/** @brief Tabs container. @since 0.1.11 */
 export function Tabs({
   tabs,
   activeTab,

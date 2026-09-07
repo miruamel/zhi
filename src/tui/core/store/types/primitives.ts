@@ -1,5 +1,5 @@
 /**
- * @fileoverview Store primitive types — enums, base types. @since 0.2.0
+ * @fileoverview Store primitive types — enums, base types. @since 0.1.11
  * @package zhi
  */
 

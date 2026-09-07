@@ -1,5 +1,5 @@
 /**
- * @fileoverview Store entity types — barrel re-export. @since 0.2.0
+ * @fileoverview Store entity types — barrel re-export. @since 0.1.11
  * @package zhi
  */
 import type { DagStep } from './dag';

@@ -1,17 +1,17 @@
 /**
  * @fileoverview Review pane — side-by-side diff, comments, approve/reject.
- * @since 0.2.4
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 
-/** @brief A single diff hunk. @since 0.2.4 */
+/** @brief A single diff hunk. @since 0.1.11 */
 export interface DiffHunk {
   file: string;
   lines: Array<{ prefix: '+' | '-' | ' '; content: string }>;
 }
 
-/** @brief A review comment. @since 0.2.4 */
+/** @brief A review comment. @since 0.1.11 */
 export interface ReviewComment {
   id: string;
   file: string;
@@ -21,7 +21,7 @@ export interface ReviewComment {
   resolved: boolean;
 }
 
-/** @brief Review pane props. @since 0.2.4 */
+/** @brief Review pane props. @since 0.1.11 */
 export interface ReviewPaneProps {
   hunks: DiffHunk[];
   comments: ReviewComment[];
@@ -37,7 +37,7 @@ const PREFIX_COLOR: Record<string, string> = {
   ' ': colors.fgDim,
 };
 
-/** @brief Render the review pane. @since 0.2.4 */
+/** @brief Render the review pane. @since 0.1.11 */
 export function ReviewPane({
   hunks,
   comments,

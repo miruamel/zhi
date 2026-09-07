@@ -1,6 +1,6 @@
 /**
  * @fileoverview Settings pane tests.
- * @since 0.2.1
+ * @since 0.1.11
  */
 import { describe, it, expect } from 'bun:test';
 import { SettingsPane } from './settings';

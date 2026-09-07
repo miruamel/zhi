@@ -1,5 +1,5 @@
 /**
- * @fileoverview Stream hook — manages streaming text accumulation. @since 0.2.0
+ * @fileoverview Stream hook — manages streaming text accumulation. @since 0.1.11
  */
 import { useState, useCallback } from 'react';
 
@@ -9,7 +9,7 @@ export interface StreamState {
   status: 'idle' | 'streaming' | 'done' | 'error';
 }
 
-/** @brief Hook for accumulating streaming text chunks. @since 0.2.0 */
+/** @brief Hook for accumulating streaming text chunks. @since 0.1.11 */
 export function useStream(initial = '') {
   const [text, setText] = useState(initial);
   const [status, setStatus] = useState<StreamState['status']>('idle');

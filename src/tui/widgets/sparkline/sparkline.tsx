@@ -1,10 +1,10 @@
 /**
- * @fileoverview Sparkline widget — mini line chart. @since 0.2.6
+ * @fileoverview Sparkline widget — mini line chart. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Sparkline props. @since 0.2.6 */
+/** @brief Sparkline props. @since 0.1.11 */
 export interface SparklineProps {
   data: number[];
   width?: number;
@@ -14,7 +14,7 @@ export interface SparklineProps {
 
 const BLOCKS = '▁▂▃▄▅▆▇█';
 
-/** @brief Sparkline component. @since 0.2.6 */
+/** @brief Sparkline component. @since 0.1.11 */
 export function Sparkline({
   data,
   width = 20,

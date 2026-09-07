@@ -1,6 +1,6 @@
 /**
  * @fileoverview Diff Viewer pane — unified diff display.
- * @since 0.2.0
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
@@ -11,7 +11,7 @@ export interface DiffViewerProps {
   maxLines?: number;
 }
 
-/** @brief Parse a unified diff string into lines. @since 0.2.0 */
+/** @brief Parse a unified diff string into lines. @since 0.1.11 */
 export function parseDiff(diff: string): DiffLine[] {
   const lines = diff.split('\n');
   const result: DiffLine[] = [];
@@ -39,7 +39,7 @@ export function parseDiff(diff: string): DiffLine[] {
   return result;
 }
 
-/** @brief Render a diff viewer pane. @since 0.2.0 */
+/** @brief Render a diff viewer pane. @since 0.1.11 */
 export function DiffViewer({ diff, maxLines = 30 }: DiffViewerProps) {
   if (!diff) {
     return (

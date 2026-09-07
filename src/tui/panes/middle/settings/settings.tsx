@@ -1,11 +1,11 @@
 /**
  * @fileoverview Settings pane — config entries, toggle, edit.
- * @since 0.2.1
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 
-/** @brief One config entry. @since 0.2.1 */
+/** @brief One config entry. @since 0.1.11 */
 export interface ConfigEntry {
   key: string;
   value: string;
@@ -24,7 +24,7 @@ const TYPE_COLOR: Record<ConfigEntry['type'], string> = {
   boolean: colors.complete,
 };
 
-/** @brief Render the settings pane. @since 0.2.1 */
+/** @brief Render the settings pane. @since 0.1.11 */
 export function SettingsPane({ entries, onChange }: SettingsPaneProps) {
   return (
     <Box

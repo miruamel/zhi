@@ -1,11 +1,11 @@
 /**
- * @fileoverview Arranger tree ops — pure functions on LayoutNode tree. @since 0.2.0
+ * @fileoverview Arranger tree ops — pure functions on LayoutNode tree. @since 0.1.11
  * @package zhi
  */
 import type { LayoutNode, LayoutConstraint, LayoutEvent, SplitDirection } from './types';
 import { DEFAULT_LAYOUT } from './types';
 
-/** @brief Find a node by id in the tree. @since 0.2.0 */
+/** @brief Find a node by id in the tree. @since 0.1.11 */
 export function findNode(node: LayoutNode, id: string): LayoutNode | null {
   if (node.id === id) return node;
   if (node.children) {
@@ -17,7 +17,7 @@ export function findNode(node: LayoutNode, id: string): LayoutNode | null {
   return null;
 }
 
-/** @brief Find parent of a node. @since 0.2.0 */
+/** @brief Find parent of a node. @since 0.1.11 */
 export function findParent(
   node: LayoutNode,
   id: string,
@@ -32,13 +32,13 @@ export function findParent(
   return null;
 }
 
-/** @brief Compute total size of a node's children. @since 0.2.0 */
+/** @brief Compute total size of a node's children. @since 0.1.11 */
 export function totalSize(node: LayoutNode): number {
   if (!node.children) return node.size ?? 0;
   return node.children.reduce((sum, c) => sum + (c.size ?? 0), 0);
 }
 
-/** @brief Clone a layout node tree (deep copy). @since 0.2.0 */
+/** @brief Clone a layout node tree (deep copy). @since 0.1.11 */
 export function cloneNode(node: LayoutNode): LayoutNode {
   return {
     ...node,
@@ -46,7 +46,7 @@ export function cloneNode(node: LayoutNode): LayoutNode {
   };
 }
 
-/** @brief Split a leaf node into two children. @since 0.2.0 */
+/** @brief Split a leaf node into two children. @since 0.1.11 */
 export function splitNode(
   root: LayoutNode,
   paneId: string,
@@ -67,7 +67,7 @@ export function splitNode(
   });
 }
 
-/** @brief Replace a node by id with a new node. @since 0.2.0 */
+/** @brief Replace a node by id with a new node. @since 0.1.11 */
 export function replaceNode(root: LayoutNode, id: string, replacement: LayoutNode): LayoutNode {
   if (root.id === id) return replacement;
   if (!root.children) return root;
@@ -79,7 +79,7 @@ export function replaceNode(root: LayoutNode, id: string, replacement: LayoutNod
   };
 }
 
-/** @brief Apply a layout event to the tree. @since 0.2.0 */
+/** @brief Apply a layout event to the tree. @since 0.1.11 */
 export function applyEvent(
   root: LayoutNode,
   event: LayoutEvent,

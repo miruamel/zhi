@@ -1,10 +1,10 @@
 /**
- * @fileoverview Terminal widget — scrollable terminal output pane. @since 0.2.6
+ * @fileoverview Terminal widget — scrollable terminal output pane. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Terminal props. @since 0.2.6 */
+/** @brief Terminal props. @since 0.1.11 */
 export interface TerminalProps {
   lines: string[];
   maxLines?: number;
@@ -12,7 +12,7 @@ export interface TerminalProps {
   onScroll?: (offset: number) => void;
 }
 
-/** @brief Terminal component. @since 0.2.6 */
+/** @brief Terminal component. @since 0.1.11 */
 export function Terminal({
   lines,
   maxLines = 50,

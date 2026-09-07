@@ -1,9 +1,9 @@
 /**
- * @fileoverview Debounce hook — delays value updates. @since 0.2.0
+ * @fileoverview Debounce hook — delays value updates. @since 0.1.11
  */
 import { useState, useEffect } from 'react';
 
-/** @brief Debounce a value by delay ms. @since 0.2.0 */
+/** @brief Debounce a value by delay ms. @since 0.1.11 */
 export function useDebounce<T>(value: T, delay: number): T {
   const [debounced, setDebounced] = useState(value);
   useEffect(() => {

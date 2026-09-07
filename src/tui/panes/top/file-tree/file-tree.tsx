@@ -1,6 +1,6 @@
 /**
  * @fileoverview File Tree pane — directory listing with expand/collapse.
- * @since 0.2.0
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
@@ -20,7 +20,7 @@ export interface FileTreeProps {
   onSelect?: (path: string) => void;
 }
 
-/** @brief Build a tree from flat file list. @since 0.2.0 */
+/** @brief Build a tree from flat file list. @since 0.1.11 */
 export function buildTree(files: FileTreeEntry[]): TreeNode[] {
   const roots: Map<string, TreeNode> = new Map();
   const sorted = [...files].sort((a, b) => a.path.localeCompare(b.path));
@@ -58,7 +58,7 @@ export function buildTree(files: FileTreeEntry[]): TreeNode[] {
   return Array.from(roots.values());
 }
 
-/** @brief Render a file tree pane. @since 0.2.0 */
+/** @brief Render a file tree pane. @since 0.1.11 */
 export function FileTree({ files, root, selected, onSelect }: FileTreeProps) {
   const nodes = buildTree(files);
   return (

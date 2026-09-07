@@ -1,10 +1,10 @@
 /**
- * @fileoverview Modal widget — overlay dialog with backdrop and footer. @since 0.2.6
+ * @fileoverview Modal widget — overlay dialog with backdrop and footer. @since 0.1.11
  * @package zhi
  */
 import { Box, Text } from 'ink';
 
-/** @brief Modal props. @since 0.2.6 */
+/** @brief Modal props. @since 0.1.11 */
 export interface ModalProps {
   open: boolean;
   title?: string;
@@ -13,7 +13,7 @@ export interface ModalProps {
   children: React.ReactNode;
 }
 
-/** @brief Modal component — pure presentational, no hooks for testability. @since 0.2.6 */
+/** @brief Modal component — pure presentational, no hooks for testability. @since 0.1.11 */
 export function Modal({
   open,
   title,

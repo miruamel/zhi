@@ -1,12 +1,12 @@
 /**
  * @fileoverview Orchestrator pane — DAG visualizer, step scheduling.
- * @since 0.2.2
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import type { DagStep } from '../../../core/state';
 
-/** @brief One step summary row. @since 0.2.2 */
+/** @brief One step summary row. @since 0.1.11 */
 export interface OrchStep {
   id: string;
   kind: string;
@@ -37,7 +37,7 @@ const STATUS_ICON: Record<string, string> = {
   skipped: '⊘',
 };
 
-/** @brief Render the orchestrator pane. @since 0.2.2 */
+/** @brief Render the orchestrator pane. @since 0.1.11 */
 export function OrchPane({ steps, currentStepId, onStepAbort }: OrchPaneProps) {
   const doneCount = steps.filter((s) => s.status === 'done').length;
   const failedCount = steps.filter((s) => s.status === 'failed').length;
@@ -82,7 +82,7 @@ export function OrchPane({ steps, currentStepId, onStepAbort }: OrchPaneProps) {
   );
 }
 
-/** @brief Convert DagStep to OrchStep. @since 0.2.2 */
+/** @brief Convert DagStep to OrchStep. @since 0.1.11 */
 export function toOrchStep(s: DagStep): OrchStep {
   return {
     id: s.id,

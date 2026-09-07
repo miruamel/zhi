@@ -1,6 +1,6 @@
 /**
  * @fileoverview Tree tests.
- * @since 0.2.0
+ * @since 0.1.11
  */
 import { describe, it, expect } from 'bun:test';
 import { Tree } from './tree';

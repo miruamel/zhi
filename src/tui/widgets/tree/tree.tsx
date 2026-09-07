@@ -1,10 +1,10 @@
 /**
- * @fileoverview Tree widget — file-system style tree view. @since 0.2.6
+ * @fileoverview Tree widget — file-system style tree view. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Tree node. @since 0.2.6 */
+/** @brief Tree node. @since 0.1.11 */
 export interface TreeNode {
   id?: string;
   label: string;
@@ -15,7 +15,7 @@ export interface TreeNode {
   icon?: string;
 }
 
-/** @brief Tree props. @since 0.2.6 */
+/** @brief Tree props. @since 0.1.11 */
 export interface TreeProps {
   nodes?: TreeNode[];
   data?: TreeNode[];
@@ -24,7 +24,7 @@ export interface TreeProps {
   maxDepth?: number;
 }
 
-/** @brief Tree component — pure presentational, no hooks. @since 0.2.6 */
+/** @brief Tree component — pure presentational, no hooks. @since 0.1.11 */
 export function Tree({
   nodes,
   data,

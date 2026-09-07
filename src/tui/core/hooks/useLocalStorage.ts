@@ -1,9 +1,9 @@
 /**
- * @fileoverview LocalStorage hook — persists small values across sessions. @since 0.2.0
+ * @fileoverview LocalStorage hook — persists small values across sessions. @since 0.1.11
  */
 import { useState, useEffect } from 'react';
 
-/** @brief Persist a value in localStorage with JSON serialization. @since 0.2.0 */
+/** @brief Persist a value in localStorage with JSON serialization. @since 0.1.11 */
 export function useLocalStorage<T>(key: string, initial: T): [T, (v: T) => void] {
   const [value, setValue] = useState<T>(initial);
   useEffect(() => {

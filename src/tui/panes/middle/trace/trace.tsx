@@ -1,11 +1,11 @@
 /**
  * @fileoverview Trace pane — structured log search, filter, replay.
- * @since 0.2.4
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 
-/** @brief A single trace entry. @since 0.2.4 */
+/** @brief A single trace entry. @since 0.1.11 */
 export interface TraceEntry {
   ts: number;
   from?: string;
@@ -15,7 +15,7 @@ export interface TraceEntry {
   msg: string;
 }
 
-/** @brief Trace pane props. @since 0.2.4 */
+/** @brief Trace pane props. @since 0.1.11 */
 export interface TracePaneProps {
   entries: TraceEntry[];
   filter?: string;
@@ -39,7 +39,7 @@ const KIND_ICON: Record<string, string> = {
   gate: '✓',
 };
 
-/** @brief Render the trace pane. @since 0.2.4 */
+/** @brief Render the trace pane. @since 0.1.11 */
 export function TracePane({ entries, filter, selectedIdx, onReplay }: TracePaneProps) {
   const q = (filter ?? '').toLowerCase();
   const filtered = q

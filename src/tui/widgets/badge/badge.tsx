@@ -1,10 +1,10 @@
 /**
- * @fileoverview Badge widget — status label. @since 0.2.6
+ * @fileoverview Badge widget — status label. @since 0.1.11
  * @package zhi
  */
 import { Text } from 'ink';
 
-/** @brief Badge props. @since 0.2.6 */
+/** @brief Badge props. @since 0.1.11 */
 export interface BadgeProps {
   label?: string;
   children?: React.ReactNode;
@@ -12,7 +12,7 @@ export interface BadgeProps {
   variant?: 'solid' | 'outline';
 }
 
-/** @brief Badge component. @since 0.2.6 */
+/** @brief Badge component. @since 0.1.11 */
 export function Badge({
   label,
   children,

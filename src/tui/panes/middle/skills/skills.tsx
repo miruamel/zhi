@@ -1,11 +1,11 @@
 /**
  * @fileoverview Skill browser pane — search, inspect, toggle skills.
- * @since 0.2.3
+ * @since 0.1.11
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 
-/** @brief Skill browser props. @since 0.2.3 */
+/** @brief Skill browser props. @since 0.1.11 */
 export interface SkillBrowserPaneProps {
   skills: Array<{
     name: string;
@@ -26,7 +26,7 @@ const CATEGORY_COLOR: Record<string, string> = {
   ops: colors.fgDim,
 };
 
-/** @brief Render the skill browser pane. @since 0.2.3 */
+/** @brief Render the skill browser pane. @since 0.1.11 */
 export function SkillBrowserPane({ skills, searchQuery }: SkillBrowserPaneProps) {
   const q = (searchQuery ?? '').toLowerCase();
   const filtered = q
