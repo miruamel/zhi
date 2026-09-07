@@ -45,6 +45,11 @@ function signalOrUndefined(ms: number): AbortSignal | undefined {
   return AbortSignal.timeout(ms);
 }
 
+/** @brief Build a non-disclosing HTTP error for failed cloud requests. @param {number} status - HTTP status code. @return {Error} status-only error. */
+function httpError(status: number): Error {
+  return new Error(`CloudModelInvoker: HTTP ${status}`);
+}
+
 /** @brief Invoker OpenAI-compatible (chat completions). @since 0.1.1 */
 export class CloudModelInvoker implements ModelInvoker {
   readonly name = 'cloud';
@@ -77,7 +82,7 @@ export class CloudModelInvoker implements ModelInvoker {
       }),
       signal: signalOrUndefined(this.timeoutMs),
     });
-    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status} ${await res.text()}`);
+    if (!res.ok) throw httpError(res.status);
     const data = (await res.json()) as {
       choices?: Array<{ message?: { content?: string } }>;
     };
@@ -104,7 +109,7 @@ export class CloudModelInvoker implements ModelInvoker {
       }),
       signal: signalOrUndefined(this.timeoutMs),
     });
-    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status} ${await res.text()}`);
+    if (!res.ok) throw httpError(res.status);
     const body = res.body;
     if (!body) throw new Error('CloudModelInvoker: respons tanpa stream body');
     const reader = body.getReader();

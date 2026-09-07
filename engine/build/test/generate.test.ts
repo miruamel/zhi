@@ -62,10 +62,14 @@ describe('build generate', () => {
 
   it('CloudModelInvoker throws on non-2xx', async () => {
     const saved = globalThis.fetch;
+    const marker = 'fake-upstream-secret-marker';
     globalThis.fetch = (async () =>
-      new Response('boom', { status: 500 })) as unknown as typeof fetch;
+      new Response(marker, { status: 500 })) as unknown as typeof fetch;
     try {
-      await expect(new CloudModelInvoker({ apiKey: 'k' }).invoke('p')).rejects.toThrow('HTTP 500');
+      const error = await new CloudModelInvoker({ apiKey: 'k' }).invoke('p').catch((err) => err);
+      expect(error).toBeInstanceOf(Error);
+      expect((error as Error).message).toBe('CloudModelInvoker: HTTP 500');
+      expect((error as Error).message).not.toContain(marker);
     } finally {
       globalThis.fetch = saved;
     }
@@ -98,6 +102,29 @@ describe('build generate', () => {
       const toks: string[] = [];
       for await (const t of inv.stream('p')) toks.push(t);
       expect(toks).toEqual(['he', 'llo']);
+    } finally {
+      globalThis.fetch = saved;
+    }
+  });
+
+  it('CloudModelInvoker.stream does not expose non-2xx response bodies', async () => {
+    const saved = globalThis.fetch;
+    const marker = 'fake-stream-secret-marker';
+    globalThis.fetch = (async () =>
+      new Response(marker, { status: 429 })) as unknown as typeof fetch;
+    try {
+      const inv = new CloudModelInvoker({ apiKey: 'k' });
+      let error: unknown;
+      try {
+        for await (const _token of inv.stream('p')) {
+          // The request should fail before the stream can yield a token.
+        }
+      } catch (err) {
+        error = err;
+      }
+      expect(error).toBeInstanceOf(Error);
+      expect((error as Error).message).toBe('CloudModelInvoker: HTTP 429');
+      expect((error as Error).message).not.toContain(marker);
     } finally {
       globalThis.fetch = saved;
     }
