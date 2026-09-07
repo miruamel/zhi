@@ -32,6 +32,7 @@ paths = [
   "engine/critic/index.ts",
   "engine/critic/plant/critics.ts",
   "engine/loop/driver.ts",
+  "engine/loop/driver-types.ts",
   "engine/loop/states.ts",
   "engine/orch/runner.ts",
   "engine/stream/parseSseTs.ts",
@@ -41,7 +42,7 @@ paths = [
   "engine/knowledge/search.ts",
   "engine/knowledge/summarizer.ts",
   "engine/eval/engine.ts",
-  "engine/critic/plant/run-critic.ts",
+  "engine/critic/plant/run-critic/index.ts",
   "engine/security/patterns.ts",
 ]
 regexes = [
