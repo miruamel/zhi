@@ -26,10 +26,8 @@ export async function withResilience<T>(
   const res: RetryResult<T> = await retryWithBudget(fn, max);
   if (ctx.breaker) ctx.breaker.record(res.ok);
   if (res.ok) return res.value as T;
-  // ponytail: classifyError result is used in retryWithBudget to determine fatal errors and retry behavior.
-  // The withResilience function returns a DLQEntry for both fatal errors (after immediate return) and
-  // non-fatal errors (after maxAttempts). The classification is also used in loop/wiring/handlers/builder.ts:87
-  // for recovery strategy.
+  // ponytail: classifyError result is used in builder.ts RECOVER handler to decide BUDGET_OUT vs RECOVERED.
+  // Dead `strategy` field removed — only `fatal` is read.
   return res.dlq as DLQEntry;
 }
 
@@ -37,4 +35,4 @@ export { CircuitBreaker } from './breaker';
 export { retryWithBudget } from './retry';
 export type { RetryResult, DLQEntry } from './retry';
 export { classifyError } from './retry';
-export type { RecoveryStrategy, ClassifiedError } from './retry';
+export type { ClassifiedError } from './retry';
