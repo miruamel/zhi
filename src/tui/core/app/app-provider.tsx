@@ -5,12 +5,12 @@
  * @package zhi
  */
 import { useInput } from 'ink';
-import { resolveKey } from './handlers/keymap';
-import { applyKeyAction } from './handlers/keyhandler';
-import { AppState } from './state';
+import { resolveKey } from '../handlers/keymap';
+import { applyKeyAction } from '../handlers/keyhandler';
+import { AppState } from '../state';
 import type { AppControllerResult } from './app-controller';
-import type { CommandItem } from '../widgets/command-palette';
-import { CommandPalette } from '../widgets/command-palette';
+import type { CommandItem } from '../../widgets/command-palette';
+import { CommandPalette } from '../../widgets/command-palette';
 
 export interface AppProviderProps {
   controller: AppControllerResult;

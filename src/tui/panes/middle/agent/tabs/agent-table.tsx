@@ -5,11 +5,11 @@
  * @package zhi
  */
 import { Box, Text } from 'ink';
-import { colors } from '../../../core/colors';
-import { Badge } from '../../../widgets/badge/badge';
-import { Table } from '../../../widgets/table/table';
-import type { AgentDisplay } from './agent-types';
-import { formatRelative, formatTokens } from './agent-utils';
+import { colors } from '../../../../core/colors';
+import { Badge } from '../../../../widgets/badge/badge';
+import { Table } from '../../../../widgets/table/table';
+import type { AgentDisplay } from '../agent-types';
+import { formatRelative, formatTokens } from '../agent-utils';
 
 /** @brief Render agent list table + selected detail. @since 0.1.11 */
 export function AgentTable({

@@ -9,7 +9,7 @@ import {
   renderSpinner,
   renderBadge,
   renderDivider,
-} from './core/render';
+} from './core/render/render';
 
 describe('render', () => {
   it('renders text', () => {

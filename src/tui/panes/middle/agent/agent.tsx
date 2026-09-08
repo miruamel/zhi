@@ -8,10 +8,10 @@ import { Box, Text, useInput } from 'ink';
 import { useState } from 'react';
 import { colors } from '../../../core/colors';
 import { Tabs, type Tab } from '../../../widgets/tabs/tabs';
-import type { AgentPaneProps } from './agent-types';
-import { AgentTable } from './agent-table';
-import { RuntimeLogTab } from './runtime-log-tab';
-import { DispatchTab } from './dispatch-tab';
+import type { AgentDisplay, AgentPaneProps } from './agent-types';
+import { AgentTable } from './tabs/agent-table';
+import { RuntimeLogTab } from './tabs/runtime-log-tab';
+import { DispatchTab } from './tabs/dispatch-tab';
 
 /** @brief Agent pane component. @since 0.1.11 */
 export function AgentPane({
@@ -58,7 +58,7 @@ export function AgentPane({
       {tab === 'dispatch' && (
         <DispatchTab
           dispatchInput={dispatchInput}
-          selectedAgent={agents.find((a) => a.id === selectedAgent)}
+          selectedAgent={agents.find((a: AgentDisplay) => a.id === selectedAgent)}
         />
       )}
     </Box>

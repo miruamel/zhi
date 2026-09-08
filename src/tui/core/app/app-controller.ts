@@ -6,9 +6,9 @@
  */
 import { useState } from 'react';
 import { useApp } from 'ink';
-import { Arranger } from './arranger';
-import { useFocus } from './hooks';
-import { AppState } from './state';
+import { Arranger } from '../arranger';
+import { useFocus } from '../hooks';
+import { AppState } from '../state';
 
 export interface FocusNav {
   current: string;

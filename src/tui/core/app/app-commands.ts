@@ -4,7 +4,7 @@
  * @updated 0.2.6 — extracted from app.tsx to enforce 150-SLOC guard
  * @package zhi
  */
-import type { CommandItem } from '../widgets/command-palette';
+import type { CommandItem } from '../../widgets/command-palette';
 import type { FocusNav } from './app-controller';
 
 export interface CommandDeps {

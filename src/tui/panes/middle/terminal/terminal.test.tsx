@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'bun:test';
 import { TerminalPane } from './terminal';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 
 describe('TerminalPane', () => {
   it('renders terminal lines', () => {

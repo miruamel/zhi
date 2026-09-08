@@ -5,9 +5,9 @@
  * @package zhi
  */
 import { Box, Text } from 'ink';
-import { colors } from '../../../core/colors';
-import type { RuntimeLogEntry } from './agent-types';
-import { formatRelative, levelColor } from './agent-utils';
+import { colors } from '../../../../core/colors';
+import type { RuntimeLogEntry } from '../agent-types';
+import { formatRelative, levelColor } from '../agent-utils';
 
 /** @brief Render runtime log entries. @since 0.1.11 */
 export function RuntimeLogTab({ runtimeLog }: { runtimeLog: RuntimeLogEntry[] }): React.ReactNode {

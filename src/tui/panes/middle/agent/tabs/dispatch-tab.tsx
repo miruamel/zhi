@@ -5,9 +5,9 @@
  * @package zhi
  */
 import { Box, Text } from 'ink';
-import { colors } from '../../../core/colors';
-import { Badge } from '../../../widgets/badge/badge';
-import type { AgentDisplay } from './agent-types';
+import { colors } from '../../../../core/colors';
+import { Badge } from '../../../../widgets/badge/badge';
+import type { AgentDisplay } from '../agent-types';
 
 /** @brief Render dispatch input + target info. @since 0.1.11 */
 export function DispatchTab({
