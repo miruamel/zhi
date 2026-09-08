@@ -33,19 +33,22 @@ export function toPatch(
       abstain: false,
       reason: c.findings[0] ?? 'passes without issues',
     })),
-    eval: {
-      build: { name: 'build', ok: false, detail: '', durationMs: 0 },
-      test: { name: 'test', ok: false, detail: '', durationMs: 0 },
-      security: { name: 'security', ok: false, detail: '', durationMs: 0 },
-      gate: {
-        name: 'gate',
-        ok: !!ctx.eval?.passed,
-        detail: ctx.eval?.reasons?.join(' ') ?? '',
-        durationMs: 0,
-      },
-      gatePass: !!ctx.eval?.passed,
-      weightedAvg: ctx.aggregate?.score ?? 0,
-    },
+    eval: (() => {
+      const st = ctx.eval?.stages;
+      return {
+        build: st?.build ?? { name: 'build', ok: false, detail: '', durationMs: 0 },
+        test: st?.test ?? { name: 'test', ok: false, detail: '', durationMs: 0 },
+        security: st?.security ?? { name: 'security', ok: false, detail: '', durationMs: 0 },
+        gate: {
+          name: 'gate',
+          ok: !!ctx.eval?.passed,
+          detail: ctx.eval?.reasons?.join(' ') ?? '',
+          durationMs: 0,
+        },
+        gatePass: !!ctx.eval?.passed,
+        weightedAvg: ctx.aggregate?.score ?? 0,
+      };
+    })(),
     prCi: {
       prUrl: ctx.prUrl,
       ciStatus:

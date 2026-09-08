@@ -13,10 +13,21 @@ export interface EvalInput {
 }
 
 /** @brief Eval output. @since 0.1.1 */
+export interface EvalStageResult {
+  ok: boolean;
+  detail: string;
+  durationMs: number;
+}
+
 export interface EvalOutput {
   passed: boolean;
   score: number;
   reasons: string[];
+  stages?: {
+    build?: EvalStageResult;
+    test?: EvalStageResult;
+    security?: EvalStageResult;
+  };
 }
 
 /** @brief Gate evaluasi: lulus bila tidak ada blocker DAN score >= threshold.
@@ -24,18 +35,22 @@ export interface EvalOutput {
  * @param {number} threshold - ambang lulus (default 0.7).
  * @return {EvalOutput} keputusan gate.
  * @since 0.1.1 */
-export function gate(input: EvalInput, threshold = 0.7): EvalOutput {
+export function gate(
+  input: EvalInput,
+  threshold = 0.7,
+  stages?: EvalOutput['stages'],
+): EvalOutput {
   const reasons: string[] = [];
   if (input.blockers.length > 0) {
     reasons.push(`blocked: ${input.blockers.join(', ')}`);
-    return { passed: false, score: input.score, reasons };
+    return { passed: false, score: input.score, reasons, stages };
   }
   const passed = input.score >= threshold;
   reasons.push(
     passed ? `score ${input.score} >= ${threshold}` : `score ${input.score} < ${threshold}`,
   );
   if (input.criteria.length > 0) reasons.push(`criteria met: ${input.criteria.length}`);
-  return { passed, score: input.score, reasons };
+  return { passed, score: input.score, reasons, stages };
 }
 
 /** @brief Gate result. @since 0.1.10 */
