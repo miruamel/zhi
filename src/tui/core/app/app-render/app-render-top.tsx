@@ -5,11 +5,11 @@
  * @package zhi
  */
 import { Box } from 'ink';
-import { Header } from '../../panes/top/header/header';
-import { FileTree } from '../../panes/top/file-tree/file-tree';
-import { CodeViewer } from '../../panes/top/code-viewer/code-viewer';
-import { MetricsPane } from '../../panes/top/metrics/metrics';
-import { AppState } from '../state';
+import { Header } from '../../../panes/top/header/header';
+import { FileTree } from '../../../panes/top/file-tree/file-tree';
+import { CodeViewer } from '../../../panes/top/code-viewer/code-viewer';
+import { MetricsPane } from '../../../panes/top/metrics/metrics';
+import { AppState } from '../../state';
 
 export interface TopProps {
   state: AppState;

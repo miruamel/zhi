@@ -2,7 +2,7 @@
  * @fileoverview Model pricing + task routing. @since 0.1.10
  * @package zhi
  */
-import type { ModelPricing } from './types';
+import type { ModelPricing } from '../types';
 
 export type TaskKind =
   | 'generate'

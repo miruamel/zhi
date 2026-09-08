@@ -5,7 +5,7 @@
  * @since 0.1.2
  */
 import { describe, expect, it, beforeEach } from 'bun:test';
-import { parseSseWasm, disableWasm, isWasmAvailable, resetWasm } from '../zigBridge';
+import { parseSseWasm, disableWasm, isWasmAvailable, resetWasm } from '../native/zigBridge';
 
 describe('zigBridge helpers', () => {
   beforeEach(() => {

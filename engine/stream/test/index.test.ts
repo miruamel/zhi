@@ -6,7 +6,13 @@
  */
 import { describe, expect, it, beforeEach } from 'bun:test';
 import { parseStream } from '../index';
-import { disableWasm, isWasmAvailable, parseSseWasm, resetCache, resetWasm } from '../zigBridge';
+import {
+  disableWasm,
+  isWasmAvailable,
+  parseSseWasm,
+  resetCache,
+  resetWasm,
+} from '../native/zigBridge';
 
 describe('parseStream write-barrier detection', () => {
   beforeEach(() => {

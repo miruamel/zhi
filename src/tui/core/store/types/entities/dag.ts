@@ -3,7 +3,7 @@
  * @package zhi
  */
 import type { LogLevel, StepStatus, StepType } from '../primitives';
-import type { FileChange } from './filetree';
+import type { FileChange } from './filetree/filetree';
 
 /** DAG step */
 export interface DagStep {

@@ -102,9 +102,14 @@ export function ghPrOpen(
 
 /** @brief Pantau status CI PR aktif (CI_WATCH). @return {'green'|'red'|'pending'}. @since 0.1.1 */
 export function ghCiWatch(spawn: typeof spawnSync = spawnSync): 'green' | 'red' | 'pending' {
-  const out = run(['gh', 'pr', 'checks'], process.cwd(), DEFAULT_TIMEOUT_MS, spawn).toLowerCase();
-  if (out.includes('fail')) return 'red';
-  if (out.includes('pending') || out.includes('in progress') || out.trim() === '') return 'pending';
-  if (out.includes('pass') || out.includes('success')) return 'green';
-  return 'pending';
+  try {
+    const out = run(['gh', 'pr', 'checks'], process.cwd(), DEFAULT_TIMEOUT_MS, spawn).toLowerCase();
+    if (out.includes('fail')) return 'red';
+    if (out.includes('pending') || out.includes('in progress') || out.trim() === '')
+      return 'pending';
+    if (out.includes('pass') || out.includes('success')) return 'green';
+    return 'pending';
+  } catch {
+    return 'pending';
+  }
 }

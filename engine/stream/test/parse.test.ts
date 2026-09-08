@@ -31,7 +31,7 @@ describe('parseStream dispatcher', () => {
     // CI env where WASM works. This test covers the same fallback
     // path deterministically: WASM disabled → dispatcher routes
     // straight to parseSseTs.
-    const { disableWasm, resetWasm } = await import('../zigBridge');
+    const { disableWasm, resetWasm } = await import('../native/zigBridge');
     disableWasm();
     const out = await parseStream('data: hello\n\n');
     expect(out).toEqual(['hello']);

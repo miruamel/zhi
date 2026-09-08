@@ -2,7 +2,7 @@
  * @fileoverview Top-level TUI app state. @since 0.1.2 @updated 0.2.6
  * @package zhi
  */
-import type { DagStep, CriticLine, EvalReport, PrCiState, LogEntry, Fact } from './models';
+import type { DagStep, CriticLine, EvalReport, PrCiState, LogEntry, Fact } from './models/models';
 import type {
   FileEntry,
   NetworkRequest,
@@ -60,4 +60,7 @@ export interface AppState {
   }>;
   selectedAgent?: string;
   configEntries: ConfigEntry[];
+  // 0.2.6 additions — dispatch/refresh patches from UI
+  dispatch?: { agentId: string; task: string };
+  refresh?: boolean;
 }

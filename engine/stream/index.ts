@@ -105,12 +105,12 @@ export {
   type ParseOptions,
 } from './sse-parser';
 
-import { isWasmAvailable } from './zigBridge';
+import { isWasmAvailable } from './native/zigBridge';
 export { isWasmAvailable };
 
 /** @brief Parse SSE text into data payloads with WASM/TS fallback. @since 0.1.2 */
 export async function parseStream(chunk: string): Promise<string[]> {
-  const { isWasmAvailable, parseSseWasm, disableWasm } = await import('./zigBridge');
+  const { isWasmAvailable, parseSseWasm, disableWasm } = await import('./native/zigBridge');
   if (!isWasmAvailable()) {
     return parseSseTs(chunk);
   }
