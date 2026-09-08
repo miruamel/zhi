@@ -10,8 +10,8 @@ export type CruiserRunner = () => {
 
 /** @brief Max nesting depth before penalty. @since 0.1.10 */
 const MAX_DEPTH = 10;
-/** @brief Max files per folder. @since 0.1.10 */
-const MAX_FILES_PER_FOLDER = 4;
+/** @brief Max files per folder. @since 0.1.10 @updated 0.2.6 */
+const MAX_FILES_PER_FOLDER = 5; // aligned with architecture-guard.sh (<=5 files per dir)
 
 interface PathInfo {
   dir: string;
