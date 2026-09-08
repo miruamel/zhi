@@ -2,7 +2,7 @@
  * @fileoverview ReleasePane tests. @since 0.1.11
  */
 import { describe, it, expect } from 'bun:test';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 import { ReleasePane } from './release';
 
 const builds = [

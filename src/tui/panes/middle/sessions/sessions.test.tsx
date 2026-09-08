@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'bun:test';
 import { SessionsPane } from './sessions';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 
 describe('SessionsPane', () => {
   it('renders empty state', () => {
