@@ -55,6 +55,10 @@ export class CloudModelInvoker implements ModelInvoker {
 
   /** @brief Bind endpoint + kredensial. @param {CloudInvokerOpts} opts - baseUrl/model/apiKey. */
   constructor(opts: CloudInvokerOpts) {
+    const base = (opts.baseUrl ?? 'https://api.openai.com/v1').split('/v1')[0];
+    if (!['https://api.openai.com', 'https://api.anthropic.com'].includes(base)) {
+      throw new Error(`CloudModelInvoker: baseUrl not allowed: ${base}`);
+    }
     this.url = `${opts.baseUrl ?? 'https://api.openai.com/v1'}/chat/completions`;
     this.model = opts.model ?? 'gpt-4o-mini';
     this.apiKey = opts.apiKey;
