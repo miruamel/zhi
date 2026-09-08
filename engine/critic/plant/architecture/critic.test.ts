@@ -27,4 +27,15 @@ describe('architectureCritic', () => {
     const r = architectureCritic([]);
     expect(r.score).toBe(1);
   });
+
+  it('reports folder with >4 files', () => {
+    const r = architectureCritic([
+      { path: 'src/a.ts', content: '' },
+      { path: 'src/b.ts', content: '' },
+      { path: 'src/c.ts', content: '' },
+      { path: 'src/d.ts', content: '' },
+      { path: 'src/e.ts', content: '' },
+    ]);
+    expect(r.findings.some((f) => f.includes('has 5 files'))).toBe(true);
+  });
 });

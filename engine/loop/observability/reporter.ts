@@ -2,7 +2,7 @@
  * @fileoverview Loop reporter — produces structured execution reports. @since 0.1.10
  * @package zhi
  */
-import { type Span } from './tracer';
+import { type Span } from './tracer/tracer';
 
 /** @brief Loop report. @since 0.1.10 */
 export interface LoopReport {

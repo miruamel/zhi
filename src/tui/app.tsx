@@ -8,7 +8,7 @@ import { AppState } from './core/state';
 import { useAppController } from './core/app/app-controller';
 import { buildCommands } from './core/app/app-commands';
 import { AppProvider } from './core/app/app-provider';
-import { AppRender } from './core/app/app-render';
+import { AppRender } from './core/app/app-render/app-render';
 
 /** @brief Props for ZhiApp root component. @since 0.1.2 */
 export interface AppProps {

@@ -10,13 +10,13 @@
 
 Business-facing content for Zhi. Source-of-truth for landing-page copy, social bios, use cases, and the repo metadata checklist.
 
-| File               | Purpose                                                               | Audience                     |
-| ------------------ | --------------------------------------------------------------------- | ---------------------------- |
-| `landing-copy.md`  | Hero, problem, how-it-works, features, FAQ, footer                    | Marketing site (zhi.dev)     |
-| `social-bio.md`    | One-liners for GitHub / X / LinkedIn / npm / dev.to                   | Social media                 |
-| `use-cases.md`     | 8 concrete user stories (Sarah, Alex, Mei, Jordan, …)                 | Sales, blog posts, README    |
-| `repo-metadata.md` | Checklist of "small forgotten details": description, topics, releases | Maintainer / release manager |
-| `../BUSINESS.md`   | Positioning, ICP, pricing, competitive landscape, value prop canvas   | Strategy / GTM               |
+| File                       | Purpose                                                               | Audience                     |
+| -------------------------- | --------------------------------------------------------------------- | ---------------------------- |
+| `landing-copy.md`          | Hero, problem, how-it-works, features, FAQ, footer                    | Marketing site (zhi.dev)     |
+| `social-bio/social-bio.md` | One-liners for GitHub / X / LinkedIn / npm / dev.to                   | Social media                 |
+| `use-cases.md`             | 8 concrete user stories (Sarah, Alex, Mei, Jordan, …)                 | Sales, blog posts, README    |
+| `repo-metadata.md`         | Checklist of "small forgotten details": description, topics, releases | Maintainer / release manager |
+| `../BUSINESS.md`           | Positioning, ICP, pricing, competitive landscape, value prop canvas   | Strategy / GTM               |
 
 ## Style
 

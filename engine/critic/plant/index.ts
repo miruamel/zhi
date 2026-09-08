@@ -4,7 +4,7 @@
  */
 import { CRITIC_REGISTRY_A } from './critics-registry-a';
 import { CRITIC_REGISTRY_B } from './critics-registry-b';
-import type { CriticDescriptor } from './types';
+import type { CriticDescriptor } from './types/types';
 
 export {
   plantCritics,
@@ -17,7 +17,7 @@ export {
   type CriticSeverity,
 } from './compose';
 
-export type { CriticDescriptor } from './types';
+export type { CriticDescriptor } from './types/types';
 
 /** @brief Combined critic registry. @since 0.1.10 */
 export const CRITIC_REGISTRY: CriticDescriptor[] = [...CRITIC_REGISTRY_A, ...CRITIC_REGISTRY_B];

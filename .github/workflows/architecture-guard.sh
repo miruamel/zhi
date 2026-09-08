@@ -16,7 +16,7 @@ if [ "$#" -gt 0 ] && [ "$1" = "--sloc-only" ]; then
   SLOC_ONLY=true
 fi
 
-echo "[guard] files-per-directory (<=5; root + docs/design + docs/adr + audit-log/entries exempt)"
+echo "[guard] files-per-directory (<=4; root + docs/design + docs/adr + audit-log/entries exempt)"
 
 violations=0
 while IFS= read -r d || break; do
@@ -30,8 +30,8 @@ while IFS= read -r d || break; do
       ;;
     esac
   c=$(find "$d" -maxdepth 1 -type f 2>/dev/null | wc -l)
-  if [ "$c" -gt 5 ]; then
-    echo "[guard] VIOLATION files-per-dir: $d ($c files > 5)"
+  if [ "$c" -gt 4 ]; then
+    echo "[guard] VIOLATION files-per-dir: $d ($c files > 4)"
     violations=$((violations + 1))
   fi
 done < <(find "$ROOT" -type d \( -name .git -o -name node_modules \) -prune -o -type d -print 2>/dev/null)

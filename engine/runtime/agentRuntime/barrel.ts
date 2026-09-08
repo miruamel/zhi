@@ -9,15 +9,15 @@ export {
   type AgentTask,
   type RuntimeEvent,
   type RuntimeListener,
-} from './types';
-export { type AgentRuntime } from './types';
+} from './types/types';
+export { type AgentRuntime } from './types/types';
 import { DefaultAgentRuntime } from './runtime';
 export { DefaultAgentRuntime } from './runtime';
-export function createRuntime(): import('./types').AgentRuntime {
+export function createRuntime(): import('./types/types').AgentRuntime {
   return new DefaultAgentRuntime();
 }
 export function defineAgent(
-  definition: import('./types').AgentDefinition,
-): import('./types').AgentDefinition {
+  definition: import('./types/types').AgentDefinition,
+): import('./types/types').AgentDefinition {
   return { ...definition };
 }

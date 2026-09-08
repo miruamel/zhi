@@ -11,7 +11,7 @@ export type {
   PrCiState,
   Fact,
   DoraMetrics,
-} from './models';
+} from './models/models';
 export type {
   FileEntry,
   NetworkRequest,
