@@ -3,8 +3,8 @@
  * Backend nyata di balik ModelInvoker seam; butuh MODEL_API_KEY.
  * @since 0.1.1
  */
-import { parseStream } from '../stream';
-import type { ModelInvoker } from './types/types';
+import { parseStream } from '../../stream';
+import type { ModelInvoker } from '../types';
 
 /** @brief Batas waktu default per HTTP request (ms). @since 0.1.2 */
 const DEFAULT_TIMEOUT_MS = 30000;
@@ -55,10 +55,6 @@ export class CloudModelInvoker implements ModelInvoker {
 
   /** @brief Bind endpoint + kredensial. @param {CloudInvokerOpts} opts - baseUrl/model/apiKey. */
   constructor(opts: CloudInvokerOpts) {
-    const base = (opts.baseUrl ?? 'https://api.openai.com/v1').split('/v1')[0];
-    if (!['https://api.openai.com', 'https://api.anthropic.com'].includes(base)) {
-      throw new Error(`CloudModelInvoker: baseUrl not allowed: ${base}`);
-    }
     this.url = `${opts.baseUrl ?? 'https://api.openai.com/v1'}/chat/completions`;
     this.model = opts.model ?? 'gpt-4o-mini';
     this.apiKey = opts.apiKey;
@@ -81,7 +77,7 @@ export class CloudModelInvoker implements ModelInvoker {
       }),
       signal: signalOrUndefined(this.timeoutMs),
     });
-    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status} ${await res.text()}`);
     const data = (await res.json()) as {
       choices?: Array<{ message?: { content?: string } }>;
     };
@@ -108,7 +104,7 @@ export class CloudModelInvoker implements ModelInvoker {
       }),
       signal: signalOrUndefined(this.timeoutMs),
     });
-    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status} ${await res.text()}`);
     const body = res.body;
     if (!body) throw new Error('CloudModelInvoker: respons tanpa stream body');
     const reader = body.getReader();

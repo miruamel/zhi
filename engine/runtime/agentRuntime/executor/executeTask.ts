@@ -2,7 +2,7 @@
  * @fileoverview Task execution stub for DefaultAgentRuntime. @since 0.1.9
  * @package zhi
  */
-import type { AgentDefinition, AgentTask } from './types/types';
+import type { AgentDefinition, AgentTask } from '../types';
 
 /** @brief Execute a single agent task — returns stub result. @since 0.1.9 */
 export async function executeTask(

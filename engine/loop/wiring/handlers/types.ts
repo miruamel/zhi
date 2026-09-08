@@ -19,14 +19,18 @@ export interface LoopContext {
   attempts?: number;
   error?: string;
   prUrl?: string;
+  /** @brief Jumlah poll CI_WATCH 'pending' sebelum abort (selaras resilient polling). @since 0.2.6 */
+  ciPending?: number;
+  /** @brief Loop aborted (BUDGET_OUT / ABORT). @since 0.2.6 */
   aborted?: boolean;
 }
 
 /** @brief Batas retry recovery sebelum abort (selaras resil maxAttempts=3, ADR-003). @since 0.1.2 */
 export const MAX_RECOVER = 3;
-
 /** @brief Batas retry generate per EXECUTE (selaras resil default). @since 0.1.2 */
 export const GENERATE_RETRY = 3;
+/** @brief Batas poll CI_WATCH 'pending' sebelum abort (selaras resilient polling). @since 0.2.6 */
+export const MAX_CI_POLL = 5;
 
 /** @brief Dependensi injeksi untuk state LLM-dependent + ambang. @since 0.1.2 */
 export interface LoopDeps {

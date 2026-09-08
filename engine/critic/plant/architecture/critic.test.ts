@@ -27,15 +27,15 @@ describe('architectureCritic', () => {
     const r = architectureCritic([]);
     expect(r.score).toBe(1);
   });
-
-  it('reports folder with >4 files', () => {
-    const r = architectureCritic([
-      { path: 'src/a.ts', content: '' },
-      { path: 'src/b.ts', content: '' },
-      { path: 'src/c.ts', content: '' },
-      { path: 'src/d.ts', content: '' },
-      { path: 'src/e.ts', content: '' },
-    ]);
-    expect(r.findings.some((f) => f.includes('has 5 files'))).toBe(true);
+  it('reports files-per-directory violation at 5 (boundary, guard is <=4)', () => {
+    const five = [
+      { path: 'd/a.ts', content: 'a' },
+      { path: 'd/b.ts', content: 'b' },
+      { path: 'd/c.ts', content: 'c' },
+      { path: 'd/e.ts', content: 'e' },
+      { path: 'd/f.ts', content: 'f' },
+    ];
+    const r = architectureCritic(five);
+    expect(r.findings.some((f: string) => f.includes('has 5 files'))).toBe(true);
   });
 });

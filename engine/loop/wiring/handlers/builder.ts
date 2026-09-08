@@ -16,7 +16,13 @@ import { LoopEvent, LoopState, gatePass } from '../../states';
 import type { LoopContext } from './types';
 import { branchSlug } from '../git';
 import { LoopMetrics, timedStage } from '../../observability/metrics';
-import { GENERATE_RETRY, MAX_RECOVER, type LoopDeps, type StateHandler } from './types';
+import {
+  GENERATE_RETRY,
+  MAX_CI_POLL,
+  MAX_RECOVER,
+  type LoopDeps,
+  type StateHandler,
+} from './types';
 
 /**
  * @brief Build per-state handlers (INTAKE → DONE) with optional metrics wrapping.
@@ -118,7 +124,15 @@ export function buildHandlers(
     },
     [LoopState.CI_WATCH]: () => {
       const st = deps.ciWatch ? deps.ciWatch() : 'green';
-      return st === 'green' ? LoopEvent.CI_GREEN : LoopEvent.CI_RED;
+      if (st === 'green') return LoopEvent.CI_GREEN;
+      if (st === 'red') return LoopEvent.CI_RED;
+      // pending: active checks still running. Re-poll instead of regenerating code.
+      ctx.ciPending = (ctx.ciPending ?? 0) + 1;
+      if (ctx.ciPending >= MAX_CI_POLL) {
+        ctx.error = `CI still pending after ${MAX_CI_POLL} polls`;
+        return LoopEvent.BUDGET_OUT;
+      }
+      return LoopEvent.CI_PENDING;
     },
   };
   if (!metrics) return raw;

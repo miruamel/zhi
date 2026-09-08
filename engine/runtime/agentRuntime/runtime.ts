@@ -8,8 +8,8 @@ import type {
   AgentTask,
   RuntimeEvent,
   RuntimeListener,
-} from './types/types';
-import { executeTask } from './executeTask';
+} from './types';
+import { executeTask } from './executor/executeTask';
 
 /** @brief Default runtime. @since 0.1.9 */
 export class DefaultAgentRuntime implements AgentRuntime {

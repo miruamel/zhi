@@ -2,7 +2,7 @@
  * @fileoverview emptyState factory for TUI state. @since 0.1.2 @updated 0.1.11
  * @package zhi
  */
-import type { AppState } from './appstate';
+import type { AppState } from '../appstate';
 
 /** @brief Empty default state. @since 0.1.2 @updated 0.1.11 */
 export function emptyState(goal: string, tokensBudget: number): AppState {

@@ -32,6 +32,7 @@ export enum LoopEvent {
   COMMITTED = 'COMMITTED',
   PR_OPENED = 'PR_OPENED',
   CI_GREEN = 'CI_GREEN',
+  CI_PENDING = 'CI_PENDING',
   CI_RED = 'CI_RED',
   COMPLETE = 'COMPLETE',
   FAIL = 'FAIL',
@@ -98,6 +99,7 @@ export const transitions: Record<LoopState, Partial<Record<LoopEvent, LoopState>
     [LoopEvent.FAIL]: LoopState.ERROR,
   },
   [LoopState.CI_WATCH]: {
+    [LoopEvent.CI_PENDING]: LoopState.CI_WATCH,
     [LoopEvent.CI_GREEN]: LoopState.DONE,
     [LoopEvent.CI_RED]: LoopState.RECOVER,
     [LoopEvent.COMPLETE]: LoopState.DONE,

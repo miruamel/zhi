@@ -10,7 +10,7 @@ export {
   createAllocator,
   allocate,
   schedule,
-} from './allocator';
+} from './allocator/allocator';
 export {
   type RunResult,
   type OrchestratorRunner,

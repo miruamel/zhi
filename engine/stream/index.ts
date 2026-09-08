@@ -94,7 +94,7 @@ export function createParser(options?: StreamParserOptions): StreamParser {
   return new StreamParser(options);
 }
 
-import { parseSseTs } from './parseSseTs';
+import { parseSseTs } from './native/parseSseTs';
 export {
   SseParser,
   createSseParser,

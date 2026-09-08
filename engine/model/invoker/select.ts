@@ -3,9 +3,9 @@
  * Micro tasks (classify/tag) always use local stub for cost control.
  * @since 0.1.1
  */
-import { CloudModelInvoker } from './cloud';
-import { LocalStubInvoker } from './local-stub';
-import type { ModelInvoker } from './types/types';
+import { CloudModelInvoker } from './provider/cloud';
+import { LocalStubInvoker } from './provider/local-stub';
+import type { ModelInvoker } from './types';
 
 /** @brief Task kind for invoker selection. @since 0.1.10 */
 export type TaskKind = 'generate' | 'critique' | 'review' | 'embed' | 'classify' | 'tag';

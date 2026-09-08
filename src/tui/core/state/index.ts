@@ -18,4 +18,4 @@ export type {
   ConfigEntry,
 } from './types/extended';
 export type { AppState } from './types/appstate';
-export { emptyState } from './types/empty';
+export { emptyState } from './types/empty/empty';
