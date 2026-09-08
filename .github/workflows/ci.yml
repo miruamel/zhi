@@ -12,7 +12,7 @@ permissions:
   gate:
     name: Gate (lint + format + typecheck + test + arch)
     runs-on: ubuntu-latest
-    if: ${{ !github.event.pull_request || !github.event.pull_request.head.repo.fork }}
+    if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork) }}
     steps:
       - uses: actions/checkout@v6
 
@@ -46,7 +46,7 @@ permissions:
   gate-fork:
     name: Gate (fork PR approval)
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request && github.event.pull_request.head.repo.fork }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork }}
     environment: approval
     steps:
       - run: "Fork PR requires manual approval via environment: approval"

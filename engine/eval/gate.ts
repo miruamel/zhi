@@ -14,6 +14,7 @@ export interface EvalInput {
 
 /** @brief Eval output. @since 0.1.1 */
 export interface EvalStageResult {
+  name: string;
   ok: boolean;
   detail: string;
   durationMs: number;

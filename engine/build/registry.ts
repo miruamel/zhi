@@ -50,6 +50,10 @@ export class BuildRegistry {
     return this.plugins.get(name);
   }
 
+  list(): BuildPlugin[] {
+    return Array.from(this.plugins.values());
+  }
+
   resolve(): DependencyNode[] {
     const nodes: DependencyNode[] = [];
     for (const [name, deps] of this.deps) {

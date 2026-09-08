@@ -30,6 +30,7 @@ export async function evaluate(worktree: string): Promise<EvalOutput> {
   const securityStart = Date.now();
   const security = await scanSecurity(files);
   const securityStage: EvalStageResult = {
+    name: 'security',
     ok: security.ok,
     detail: security.ok ? 'no secrets' : `${security.findings.length} findings`,
     durationMs: Date.now() - securityStart,
@@ -45,6 +46,7 @@ export async function evaluate(worktree: string): Promise<EvalOutput> {
   const testStart = Date.now();
   const testResult = runTests(worktree);
   const testStage: EvalStageResult = {
+    name: 'test',
     ok: testResult.allPassed,
     detail: testResult.allPassed ? 'all passed' : 'tests failed',
     durationMs: Date.now() - testStart,

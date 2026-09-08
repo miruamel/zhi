@@ -3,7 +3,7 @@
  * @package zhi
  */
 import { createPipeline } from '../../../../engine/build/pipeline';
-import type { BuildConfig } from '../../../../engine/build/core/types';
+import { createBuildConfig, type BuildConfig } from '../../../../engine/build/core/types';
 
 /** @brief Run options. @since 0.1.11 */
 export interface RunOpts {
@@ -31,7 +31,7 @@ export async function run(opts: RunOpts = {}): Promise<RunResult> {
       message: 'Dry run: 5 stages planned',
     };
   }
-  const config: BuildConfig = { ...(opts.config ? {} : {}) };
+  const config: BuildConfig = createBuildConfig();
   const pipeline = createPipeline();
   const result = await pipeline.run(config);
   return {
