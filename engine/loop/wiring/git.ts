@@ -105,8 +105,7 @@ export function ghCiWatch(spawn: typeof spawnSync = spawnSync): 'green' | 'red' 
   try {
     const out = run(['gh', 'pr', 'checks'], process.cwd(), DEFAULT_TIMEOUT_MS, spawn).toLowerCase();
     if (out.includes('fail')) return 'red';
-    if (out.includes('pending') || out.includes('in progress') || out.trim() === '')
-      return 'pending';
+    if (out.includes('pending') || out.includes('in progress') || out.trim() === '') return 'pending';
     if (out.includes('pass') || out.includes('success')) return 'green';
     return 'pending';
   } catch {

@@ -20,7 +20,10 @@ export function autonomousDeps(base: LoopDeps, goal: string): LoopDeps {
     isolate: () => gitIsolate(goal),
     commit: (wt) => gitCommit(wt, 'chore: autoloop generated changes'),
     prOpen: (wt, t, b) => ghPrOpen(wt, t, b),
-    eval: (wt) => evaluate(wt),
+    eval: async (wt) => {
+      const r = await evaluate(wt);
+      return { passed: r.passed, score: r.score, reasons: r.reasons };
+    },
     ciWatch: () => ghCiWatch(),
   };
 }
