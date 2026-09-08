@@ -18,29 +18,32 @@ interface DirentLike {
 }
 
 /** @brief Walk directory tree, skip .git + node_modules + dist. @since 0.1.2 */
-function walkDir(dir: string, onFile: (file: string, content: string) => void): void {
+function walkDir(dir: string, onFile: (file: string, content: string) => void): { skipped: number } {
   let entries: DirentLike[];
+  let skipped = 0;
   try {
     entries = readdirSync(dir, { withFileTypes: true }) as unknown as DirentLike[];
   } catch {
     console.warn(`critique:repo: cannot read dir ${dir}`);
-    return;
+    return { skipped: 1 };
   }
   for (const e of entries) {
     if (e.name === '.git' || e.name === 'node_modules' || e.name === 'dist') continue;
     const p = join(dir, e.name);
     if (e.isDirectory()) {
-      walkDir(p, onFile);
+      const sub = walkDir(p, onFile);
+      skipped += sub.skipped;
     } else if (e.isFile()) {
       try {
         onFile(p, readFileSync(p, 'utf8'));
       } catch {
         console.warn(`critique:repo: cannot read file ${p}`);
+        skipped += 1;
       }
     }
   }
+  return { skipped };
 }
-
 /** @brief Resolve repo root dari cwd dengan marker AGENTS.md/package.json. @return {Promise<LoopContext>} */
 export async function critiqueRepoCommand(): Promise<LoopContext> {
   let root = process.cwd();
@@ -55,9 +58,10 @@ export async function critiqueRepoCommand(): Promise<LoopContext> {
     dir = parent;
   }
   const files: Array<{ path: string; content: string }> = [];
-  walkDir(root, (file, content) => {
+  const { skipped } = walkDir(root, (file, content) => {
     files.push({ path: file, content });
   });
+  if (skipped > 0) console.warn(`critique:repo: skipped ${skipped} unreadable path(s)`);
   const critiques = composeCritiques(files, { modules: [] });
   const res = aggregate(critiques, 0.7);
   console.log(

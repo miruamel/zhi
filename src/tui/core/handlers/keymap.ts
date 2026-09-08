@@ -63,9 +63,17 @@ export function resolveKey(
   if (key.ctrl && input === 'x') return 'collapsePane';
   if (key.ctrl && input === 'e') return 'expandPane';
   if (key.ctrl && input === 'j') return 'nextPane';
+<<<<<<< HEAD
   if (input in map) return map[input]!;
   if (key.tab && key.shift) return 'prevPane';
   if (key.tab) return 'cycle';
   if (key.escape) return 'closePalette';
   return 'unknown';
 }
+=======
+    if (key.ctrl && input === 'k') return 'prevPane';
+    if (input in map) return map[input]!;
+    if (key.escape) return 'closePalette';
+    return 'unknown';
+}
+>>>>>>> 209ce9c (fix: resolve #196 escape keymap, #197 empty file, #207 dead KeyActions)
