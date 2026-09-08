@@ -4,7 +4,7 @@
  */
 import { STOPWORDS } from '../parse';
 import { CycleError } from '../types';
-import type { Step, Edge, Dag, TopoResult } from '../types';
+import type { Edge, Dag, TopoResult, DagStep, Step } from '../types';
 
 /** @brief Topological sort over a DAG (interface shape). @since 0.1.10 */
 export function topologicalSort(dag: Dag): TopoResult {
@@ -48,31 +48,30 @@ export function buildDag(intent: { raw: string; tokens: string[]; constraints: u
     .split(/[,;]/)
     .map((c) => c.trim())
     .filter((c) => c.length > 0);
-  const nodes: Step[] = [];
+  const nodes: DagStep[] = [];
   const edges: Edge[] = [];
   let prevId: string | undefined;
   for (let i = 0; i < clauses.length; i++) {
-    const clause = clauses[i]!;
     const id = `s${i}`;
-    const tokens = clause
-      .toLowerCase()
-      .split(/[^a-z0-9+#.]+/i)
-      .filter((t) => t.length > 0 && !STOPWORDS.has(t));
-    const estimate = tokens.length;
-    const isFirst = i === 0;
-    const isLast = i === clauses.length - 1;
-    const priority = isFirst || isLast ? 0.75 : 0.5;
+    const clause = clauses[i]!;
+    const words = clause.split(/\s+/).filter((w) => !STOPWORDS.has(w.toLowerCase()));
+    const estimate = Math.max(1, words.length);
+    const priority = i === 0 || i === clauses.length - 1 ? 0.8 : 0.5;
     nodes.push({
       id,
+      kind: 'task',
+      title: clause,
       label: clause,
+      status: 'pending',
       deps: prevId ? [prevId] : [],
-      estimate: Math.max(1, estimate),
+      estimate,
       priority,
     });
     if (prevId) edges.push({ from: prevId, to: id });
     prevId = id;
   }
-  const order = nodes.map((n) => n.id);
+  const topo = topologicalSort({ nodes, edges, order: [] });
+  const order = topo.hasCycles ? nodes.map((n) => n.id) : topo.order;
   return { nodes, edges, order };
 }
 

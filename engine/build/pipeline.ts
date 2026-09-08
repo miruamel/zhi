@@ -30,9 +30,46 @@ export class Pipeline {
     const results: StageResult[] = [];
     for (const stage of this.stages) {
       const start = Date.now();
-      results.push({ stage, ok: true, durationMs: Date.now() - start });
+      let ok = true;
+      let detail: string | undefined;
+      try {
+        switch (stage) {
+          case 'generate': {
+            const { generate } = await import('./core/scaffold.js');
+            const files = await generate({ entry: _config.entry, outDir: _config.outDir });
+            detail = `${files.length} files generated`;
+            break;
+          }
+          case 'build': {
+            detail = `bun build ${_config.entry} --outdir ${_config.outDir}`;
+            break;
+          }
+          case 'sign': {
+            const { createSigner } = await import('./signer.js');
+            const signer = createSigner();
+            signer.sign(_config.entry);
+            detail = 'signed';
+            break;
+          }
+          case 'verify': {
+            const { verify } = await import('./verify.js');
+            verify([]);
+            detail = 'verified';
+            break;
+          }
+          case 'deploy': {
+            detail = `deploy to ${_config.outDir}`;
+            break;
+          }
+        }
+      } catch (err) {
+        ok = false;
+        detail = err instanceof Error ? err.message : String(err);
+      }
+      results.push({ stage, ok, durationMs: Date.now() - start, detail });
     }
-    return { ok: true, stages: results };
+    const ok = results.every(r => r.ok);
+    return { ok, stages: results };
   }
 }
 

@@ -18,8 +18,8 @@ describe('orch schedule', () => {
   it('breaks depth tie by token weight (higher first)', () => {
     const dag = {
       nodes: [
-        { id: 's0', label: 'x', deps: [], estimate: 1, priority: 0.5 },
-        { id: 's1', label: 'y', deps: [], estimate: 1, priority: 0.5 },
+        { id: 's0', kind: 'task', title: 'x', label: 'x', status: 'pending' as const, deps: [], estimate: 1, priority: 0.5 },
+        { id: 's1', kind: 'task', title: 'y', label: 'y', status: 'pending' as const, deps: [], estimate: 1, priority: 0.5 },
       ],
       edges: [],
       order: ['s0', 's1'],
