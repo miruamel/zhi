@@ -10,7 +10,7 @@ How to run and configure Zhi. All config lives in `zhi.config.ts` plus env vars;
 ```json
 {
   "name": "zhi",
-  "version": "0.1.10",
+  "version": "0.2.6",
   "maturity": "experimental",
   "type": "module",
   "scripts": {

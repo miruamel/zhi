@@ -1,7 +1,7 @@
 /**
  * @fileoverview App root — the main ink <App> for Zhi TUI. @since 0.1.2
- * @updated 0.1.11 — integrated Arranger, StatusBar, CommandPalette, useFocus
- * @updated 0.1.11 — OrchPane, BudgetPane, LoopPane
+ * @updated 0.2.6 — integrated Arranger, StatusBar, CommandPalette, useFocus
+ * @updated 0.2.6 — OrchPane, BudgetPane, LoopPane
  */
 import { Box, useApp, useInput } from 'ink';
 import { useState } from 'react';
