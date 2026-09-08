@@ -61,7 +61,7 @@ export function buildHandlers(
       if (codeOut.includes('[local-stub]')) {
         ctx.error =
           'generate stub output — MODEL_API_KEY not set. Set it to enable LLM code generation.';
-        return LoopEvent.BUDGET_OUT;
+        return LoopEvent.FAIL;
       }
       ctx.code = deps.compress ? deps.compress(codeOut) : codeOut;
       return LoopEvent.EXECUTED;
