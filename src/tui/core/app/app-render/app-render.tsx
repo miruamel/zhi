@@ -105,9 +105,9 @@ export function AppRender({
           runtimeLog={state.runtimeLog ?? []}
           selectedAgent={state.selectedAgent}
           onDispatch={(agentId: string, task: string) => {
-            if (task.trim()) controller.pushState({ dispatch: { agentId, task } } as any);
+            if (task.trim()) controller.pushState({ dispatch: { agentId, task } });
           }}
-          onRefresh={() => controller.pushState({ refresh: true } as any)}
+          onRefresh={() => controller.pushState({ refresh: true })}
         />
       </Box>
       <Box marginTop={1} gap={1}>
