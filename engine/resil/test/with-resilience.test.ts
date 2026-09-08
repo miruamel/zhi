@@ -56,4 +56,12 @@ describe('withResilience', () => {
     });
     expect((r as DLQEntry).error).toContain('fatal');
   });
+  it('forwards retryOn to retryWithBudget', async () => {
+    let calls = 0;
+    const r = await withResilience(async () => {
+      calls++;
+      throw new Error('HTTP 401');
+    }, { maxAttempts: 3, retryOn: () => false });
+    expect((r as DLQEntry).attempts).toBe(1);
+  });
 });
