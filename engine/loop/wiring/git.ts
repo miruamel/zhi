@@ -95,7 +95,7 @@ export function ghPrOpen(
     DEFAULT_TIMEOUT_MS,
     spawn,
   );
-  const url = out.match(/https?:\/\/\S+/)?.[0];
+  const url = out.match(/https?:\/\/\S+/g)?.pop();
   if (!url) throw new Error(`gh pr create: no URL in output: ${out.trim()}`);
   return url;
 }
