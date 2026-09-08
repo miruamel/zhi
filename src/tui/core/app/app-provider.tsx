@@ -1,13 +1,13 @@
 /**
  * @fileoverview App input handler — key bindings, useInput wiring, and command palette.
  * @since 0.1.2
- * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
+ * @updated 0.2.6 — extracted from app.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 import { useInput } from 'ink';
-import { useRef } from 'react';
 import { resolveKey } from '../handlers/keymap';
 import { applyKeyAction } from '../handlers/keyhandler';
+import { AppState } from '../state';
 import type { AppControllerResult } from './app-controller';
 import type { CommandItem } from '../../widgets/command-palette';
 import { CommandPalette } from '../../widgets/command-palette';
@@ -17,6 +17,7 @@ export interface AppProviderProps {
   commands: CommandItem[];
   onAbort?: () => void;
   onQuit?: () => void;
+  onRegister?: (push: (p: Partial<AppState>) => void) => void;
   children: React.ReactNode;
 }
 
@@ -26,6 +27,7 @@ export interface AppProviderProps {
  * @param commands command palette items
  * @param onAbort abort callback
  * @param onQuit quit callback
+ * @param onRegister state push registration
  * @param children render tree
  * @since 0.1.2
  */
@@ -34,6 +36,7 @@ export function AppProvider({
   commands,
   onAbort,
   onQuit,
+  onRegister,
   children,
 }: AppProviderProps): React.ReactNode {
   const {
@@ -52,24 +55,17 @@ export function AppProvider({
     setFocusIdx,
     setRedrawKey,
     nav,
-    arranger,
     exit,
   } = controller;
-  const paletteOpenRef = useRef(paletteOpen);
-  paletteOpenRef.current = paletteOpen;
+
+  onRegister?.((p: Partial<AppState>) => pushState(p));
 
   useInput(
     (
       input: string,
       key: { ctrl?: boolean; meta?: boolean; shift?: boolean; return?: boolean; escape?: boolean },
     ) => {
-      if (paletteOpenRef.current) {
-        if (key.escape) {
-          setPaletteOpen(false);
-          setMode('normal');
-        }
-        return;
-      }
+      if (paletteOpen) return;
       const action = resolveKey(input, key);
       switch (action) {
         case 'quit':
@@ -103,10 +99,10 @@ export function AppProvider({
           setMode('command');
           break;
         case 'splitH':
-          arranger.dispatch({ type: 'split', id: nav.current, direction: 'vertical' });
+          arranger.dispatch({ type: 'split', id: nav.current, direction: 'horizontal' });
           break;
         case 'splitV':
-          arranger.dispatch({ type: 'split', id: nav.current, direction: 'horizontal' });
+          arranger.dispatch({ type: 'split', id: nav.current, direction: 'vertical' });
           break;
         case 'closePane':
           arranger.dispatch({ type: 'close', id: nav.current });
@@ -133,10 +129,6 @@ export function AppProvider({
             onQuit,
             exit,
             log: state.log,
-            arranger,
-            nav,
-            setMode,
-            setPaletteOpen,
           });
       }
     },
