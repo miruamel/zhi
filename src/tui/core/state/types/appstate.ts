@@ -60,7 +60,11 @@ export interface AppState {
   }>;
   selectedAgent?: string;
   configEntries: ConfigEntry[];
+<<<<<<< HEAD
   // 0.1.11 additions — dispatch/refresh patches from UI
+=======
+  // 0.2.6 additions — dispatch/refresh patches from UI
+>>>>>>> b4c1dda (merge: resolve conflicts with origin/main)
   dispatch?: { agentId: string; task: string };
   refresh?: boolean;
 }

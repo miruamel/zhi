@@ -74,17 +74,14 @@ export class DefaultOrchestratorRunner implements OrchestratorRunner {
     if (!step) throw new Error(`orch: step ${stepId} not found`);
     step.status = 'running';
     step.startTime = Date.now();
-<<<<<<< HEAD
     const delay = Math.min(config.maxConcurrency, 1) * 10;
     const { promise, resolve } = Promise.withResolvers<void>();
     setTimeout(resolve, delay);
     await promise;
-=======
->>>>>>> f2fe610 (fix: batch 1 — #210 delay, #209 tokens, #208 Signer.verify, #207 pane actions, #204 route model, #196/#206 escape keymap)
     step.status = 'completed';
     step.endTime = Date.now();
     step.duration = step.endTime - step.startTime;
-    step.tokens = Math.max(1, step.estimate ?? 1) * 10;
+    step.tokens = Math.floor(Math.random() * 1000);
     step.cost = step.tokens * 0.00002;
   }
 
