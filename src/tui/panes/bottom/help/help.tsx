@@ -1,7 +1,7 @@
 /**
  * @fileoverview Help pane — keyboard shortcuts reference.
  * @since 0.1.2
- * @updated 0.1.11 — integrated with new pane system
+ * @updated 0.2.6 — integrated with new pane system
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';

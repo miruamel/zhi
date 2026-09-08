@@ -1,5 +1,5 @@
 /**
- * @fileoverview Top-level TUI app state. @since 0.1.2 @updated 0.1.11
+ * @fileoverview Top-level TUI app state. @since 0.1.2 @updated 0.2.6
  * @package zhi
  */
 import type { DagStep, CriticLine, EvalReport, PrCiState, LogEntry, Fact } from './models';

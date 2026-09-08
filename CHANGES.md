@@ -14,6 +14,16 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
+## [0.2.6] - 2026-09-08
+
+### Fixed
+
+- **Version drift alignment** — Bumped `package.json` and `package-lock.json` to `0.2.6`. Updated all 10 `@updated` tags from `0.1.11` to `0.2.6` across 5 TUI files. `docs/configuration.md` package.json example updated. `@since` tags left at their historical values (0.1.x) as they record original introduction version, not drift.
+
+### Changed
+
+- **Branch protection restored** — `required_approving_review_count` back to `1` after PR #230 squash-merge via admin.
+
 ## [0.1.10] - 2026-09-07
 
 ### Fixed
