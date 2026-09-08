@@ -67,7 +67,10 @@ export function AppProvider({
       input: string,
       key: { ctrl?: boolean; meta?: boolean; shift?: boolean; return?: boolean; escape?: boolean },
     ) => {
-      if (paletteOpenRef.current) return;
+      if (paletteOpenRef.current) {
+        if (key.escape) { setPaletteOpen(false); setMode('normal'); }
+        return;
+      }
       const action = resolveKey(input, key);
       switch (action) {
         case 'quit':

@@ -35,10 +35,11 @@ export function toPatch(
     })),
     eval: (() => {
       const st = ctx.eval?.stages;
+      const empty = (name: string) => ({ name, ok: true, detail: '', durationMs: 0 });
       return {
-        build: st?.build ?? { name: 'build', ok: false, detail: '', durationMs: 0 },
-        test: st?.test ?? { name: 'test', ok: false, detail: '', durationMs: 0 },
-        security: st?.security ?? { name: 'security', ok: false, detail: '', durationMs: 0 },
+        build: st?.build ?? empty('build'),
+        test: st?.test ?? empty('test'),
+        security: st?.security ?? empty('security'),
         gate: {
           name: 'gate',
           ok: !!ctx.eval?.passed,

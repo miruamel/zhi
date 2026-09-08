@@ -73,7 +73,7 @@ export function resolveKey(
 =======
     if (key.ctrl && input === 'k') return 'prevPane';
     if (input in map) return map[input]!;
-    if (key.escape) return 'closePalette';
+    if (key.escape) return map['escape']!;
     return 'unknown';
 }
 >>>>>>> 209ce9c (fix: resolve #196 escape keymap, #197 empty file, #207 dead KeyActions)
