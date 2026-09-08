@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Build pipeline orchestration. @since 0.1.10
+ * @package zhi
+ */
 import type { BuildConfig } from './core/types';
 
 /** @brief Pipeline stage. @since 0.1.10 */

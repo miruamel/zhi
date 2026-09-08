@@ -3,7 +3,7 @@
 /** @brief Constraint hasil parse goal. @since 0.1.1 */
 export interface Constraint {
   /** @brief Jenis constraint (language|budget|file|other). */
-  kind: string;
+  kind?: string;
   /** @brief Nilai constraint. */
   value: string;
 }
@@ -80,7 +80,6 @@ export interface TopoResult {
   hasCycles: boolean;
 }
 /** @brief Orchestrator configuration. @since 0.1.10 */
-/** @brief Orchestrator configuration. @since 0.1.10 */
 export interface OrchConfig {
   /** @brief Available agent IDs. */
   agents: string[];
@@ -95,9 +94,9 @@ export interface OrchConfig {
 /** @brief DAG step with execution state (used by runner classes). @since 0.1.10 */
 export interface DagStep {
   id: string;
-  kind: string;
-  title: string;
-  status: 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
+  kind?: string;
+  title?: string;
+  status?: 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
   tokens?: number;
   cost?: number;
   detail?: string;
@@ -113,5 +112,5 @@ export interface DagStep {
   priority?: number;
   estimate?: number;
   label?: string;
-  deps?: string[];
+  deps: string[];
 }

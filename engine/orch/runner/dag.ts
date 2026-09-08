@@ -4,7 +4,7 @@
  */
 import { STOPWORDS } from '../parse';
 import { CycleError } from '../types';
-import type { Edge, Dag, TopoResult, DagStep, Step } from '../types';
+import type { Edge, Dag, TopoResult, DagStep } from '../types';
 
 /** @brief Topological sort over a DAG (interface shape). @since 0.1.10 */
 export function topologicalSort(dag: Dag): TopoResult {
@@ -52,8 +52,8 @@ export function buildDag(intent: { raw: string; tokens: string[]; constraints: u
   const edges: Edge[] = [];
   let prevId: string | undefined;
   for (let i = 0; i < clauses.length; i++) {
-    const id = `s${i}`;
     const clause = clauses[i]!;
+    const id = `s${i}`;
     const words = clause.split(/\s+/).filter((w) => !STOPWORDS.has(w.toLowerCase()));
     const estimate = Math.max(1, words.length);
     const priority = i === 0 || i === clauses.length - 1 ? 0.8 : 0.5;
@@ -76,7 +76,7 @@ export function buildDag(intent: { raw: string; tokens: string[]; constraints: u
 }
 
 /** @brief Topological sort of steps. @since 0.1.2 */
-export function topoSort(nodes: Step[], edges: Edge[]): string[] {
+export function topoSort(nodes: DagStep[], edges: Edge[]): string[] {
   const nodeIds = new Set(nodes.map((n) => n.id));
   const deps = new Map<string, string[]>();
   for (const n of nodes) deps.set(n.id, []);
