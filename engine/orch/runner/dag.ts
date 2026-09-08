@@ -70,8 +70,12 @@ export function buildDag(intent: { raw: string; tokens: string[]; constraints: u
     if (prevId) edges.push({ from: prevId, to: id });
     prevId = id;
   }
+<<<<<<< HEAD
   const topo = topologicalSort({ nodes, edges, order: [] });
   const order = topo.hasCycles ? nodes.map((n) => n.id) : topo.order;
+=======
+  const order = topologicalSort({ nodes, edges, order: [] }).order;
+>>>>>>> 1243d08 (fix(orch): resolve #217 — buildDag.order uses topologicalSort instead of sequential input)
   return { nodes, edges, order };
 }
 
