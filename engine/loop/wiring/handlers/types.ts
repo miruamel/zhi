@@ -49,7 +49,7 @@ export interface LoopDeps {
   /** @brief Watch CI status (CI_WATCH, opsional). @return {'green'|'red'|'pending'} */
   ciWatch?: () => 'green' | 'red' | 'pending';
   /** @brief Evaluasi worktree (test + secret-scan) di EVALUATE (opsional). @return {EvalOutput} hasil gate. */
-  eval?: (worktree: string) => EvalOutput;
+  eval?: (worktree: string) => Promise<EvalOutput>;
   /** @brief Ambang Pareto layak-commit (EVALUATE). */
   paretoThreshold: number;
 }

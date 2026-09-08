@@ -20,7 +20,7 @@ export function autonomousDeps(base: LoopDeps, goal: string): LoopDeps {
     isolate: () => gitIsolate(goal),
     commit: (wt) => gitCommit(wt, 'chore: autoloop generated changes'),
     prOpen: (wt, t, b) => ghPrOpen(wt, t, b),
-    eval: (wt) => evaluate(wt) as unknown as import('../../../engine/eval/gate').EvalOutput,
+    eval: (wt) => evaluate(wt),
     ciWatch: () => ghCiWatch(),
   };
 }

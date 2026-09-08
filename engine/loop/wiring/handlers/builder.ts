@@ -71,10 +71,10 @@ export function buildHandlers(
       ctx.aggregate = aggregate(ctx.critiques, deps.paretoThreshold);
       return LoopEvent.CRITIQUED;
     },
-    [LoopState.EVALUATE]: () => {
+    [LoopState.EVALUATE]: async () => {
       ctx.eval =
         deps.eval && ctx.worktree
-          ? deps.eval(ctx.worktree)
+          ? await deps.eval(ctx.worktree)
           : gate(
               { score: ctx.aggregate?.score ?? 0, criteria: [], blockers: [] },
               deps.paretoThreshold,
