@@ -9,10 +9,10 @@ on:
 permissions:
   contents: read
 
-jobs:
   gate:
     name: Gate (lint + format + typecheck + test + arch)
     runs-on: ubuntu-latest
+    environment: approval
     steps:
       - uses: actions/checkout@v6
 
