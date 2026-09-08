@@ -5,6 +5,7 @@
  * @package zhi
  */
 import { useInput } from 'ink';
+import { useRef } from 'react';
 import { resolveKey } from '../handlers/keymap';
 import { applyKeyAction } from '../handlers/keyhandler';
 import { AppState } from '../state';
@@ -55,6 +56,7 @@ export function AppProvider({
     setFocusIdx,
     setRedrawKey,
     nav,
+    arranger,
     exit,
   } = controller;
   const paletteOpenRef = useRef(paletteOpen);
