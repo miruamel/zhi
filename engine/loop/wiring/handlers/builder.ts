@@ -15,6 +15,7 @@ import type { LoopDriver } from '../../driver';
 import { LoopEvent, LoopState, gatePass } from '../../states';
 import type { LoopContext } from './types';
 import { branchSlug } from '../git';
+import { isDLQ } from './is-dlq';
 import { LoopMetrics, timedStage } from '../../observability/metrics';
 import {
   GENERATE_RETRY,
@@ -147,5 +148,4 @@ export function buildHandlers(
 // Re-export types untuk konsumer.
 export type { LoopDeps } from './types';
 export { MAX_RECOVER, GENERATE_RETRY } from './types';
-// Silence unused import lint warning (LoopDriver imported via StateHandler type above).
 export type { LoopDriver };
