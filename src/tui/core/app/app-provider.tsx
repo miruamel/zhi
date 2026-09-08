@@ -57,6 +57,8 @@ export function AppProvider({
     nav,
     exit,
   } = controller;
+  const paletteOpenRef = useRef(paletteOpen);
+  paletteOpenRef.current = paletteOpen;
 
   onRegister?.((p: Partial<AppState>) => pushState(p));
 
@@ -65,7 +67,7 @@ export function AppProvider({
       input: string,
       key: { ctrl?: boolean; meta?: boolean; shift?: boolean; return?: boolean; escape?: boolean },
     ) => {
-      if (paletteOpen) return;
+      if (paletteOpenRef.current) return;
       const action = resolveKey(input, key);
       switch (action) {
         case 'quit':

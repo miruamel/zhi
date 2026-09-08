@@ -48,6 +48,8 @@ export function createModelInvoker(options?: CloudInvokerOptions): ModelInvoker 
       const res = await fetch(
         `${options.baseUrl ?? 'https://api.openai.com/v1'}/chat/completions`,
         {
+          signal: AbortSignal.timeout(options?.timeoutMs ?? 30000),
+
           method: 'POST',
           headers: {
             'content-type': 'application/json',

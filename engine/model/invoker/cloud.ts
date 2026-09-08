@@ -77,7 +77,7 @@ export class CloudModelInvoker implements ModelInvoker {
       }),
       signal: signalOrUndefined(this.timeoutMs),
     });
-    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status} ${await res.text()}`);
+    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status}`);
     const data = (await res.json()) as {
       choices?: Array<{ message?: { content?: string } }>;
     };
@@ -104,7 +104,7 @@ export class CloudModelInvoker implements ModelInvoker {
       }),
       signal: signalOrUndefined(this.timeoutMs),
     });
-    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status} ${await res.text()}`);
+    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status}`);
     const body = res.body;
     if (!body) throw new Error('CloudModelInvoker: respons tanpa stream body');
     const reader = body.getReader();

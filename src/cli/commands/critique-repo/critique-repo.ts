@@ -23,6 +23,7 @@ function walkDir(dir: string, onFile: (file: string, content: string) => void): 
   try {
     entries = readdirSync(dir, { withFileTypes: true }) as unknown as DirentLike[];
   } catch {
+    console.warn(`critique:repo: cannot read dir ${dir}`);
     return;
   }
   for (const e of entries) {
@@ -34,7 +35,7 @@ function walkDir(dir: string, onFile: (file: string, content: string) => void): 
       try {
         onFile(p, readFileSync(p, 'utf8'));
       } catch {
-        /* skip unreadable */
+        console.warn(`critique:repo: cannot read file ${p}`);
       }
     }
   }
