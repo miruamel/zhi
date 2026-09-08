@@ -7,6 +7,8 @@
  * @see docs/design/loop.md
  * @since 0.1.2 */
 import { aggregate } from '../../../critic/aggregate';
+import { isDLQ } from './is-dlq';
+
 import { gate } from '../../../eval/gate';
 import { classifyError, CircuitBreaker, withResilience } from '../../../resil';
 import type { LoopDriver } from '../../driver';
@@ -128,19 +130,6 @@ export function buildHandlers(
   return wrapped;
 }
 
-/** @brief Check if a step result is dead-letter quarantined (boolean).
- * @param {unknown} res - step result to check.
- * @return {boolean} true when quarantined.
- * @since 0.1.10 */
-function isDLQ(res: unknown): boolean {
-  if (res === null || res === undefined) return false;
-  if (typeof res === 'string') return false;
-  if (typeof res !== 'object') return false;
-  const r = res as Record<string, unknown>;
-  if (r.error === undefined) return false;
-  const attempts = typeof r.attempts === 'number' ? r.attempts : 0;
-  return attempts >= 3;
-}
 
 // Re-export types untuk konsumer.
 export type { LoopDeps } from './types';
