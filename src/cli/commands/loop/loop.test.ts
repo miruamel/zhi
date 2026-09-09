@@ -22,6 +22,7 @@ describe('loopCommand', () => {
 
   it('throws when goal kosong', async () => {
     await expect(loopCommand([])).rejects.toThrow('cli: goal kosong');
+    await expect(loopCommand(['   '])).rejects.toThrow('cli: goal kosong');
   });
 
   it('runs loop and prints metrics summary', async () => {
