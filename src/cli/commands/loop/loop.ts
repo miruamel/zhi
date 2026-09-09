@@ -34,9 +34,9 @@ export function toPatch(
       reason: c.findings[0] ?? 'passes without issues',
     })),
     eval: {
-      build: { name: 'build', ok: false, detail: '', durationMs: 0 },
-      test: { name: 'test', ok: false, detail: '', durationMs: 0 },
-      security: { name: 'security', ok: false, detail: '', durationMs: 0 },
+      build: { name: 'build', ok: !!ctx.eval?.passed, detail: ctx.eval?.reasons?.join(' ') ?? '', durationMs: 0 },
+      test: { name: 'test', ok: !!ctx.eval?.passed, detail: ctx.eval?.reasons?.join(' ') ?? '', durationMs: 0 },
+      security: { name: 'security', ok: !!ctx.eval?.passed, detail: ctx.eval?.reasons?.join(' ') ?? '', durationMs: 0 },
       gate: {
         name: 'gate',
         ok: !!ctx.eval?.passed,
