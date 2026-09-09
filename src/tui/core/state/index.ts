@@ -8,7 +8,7 @@ export type {
   DagStep,
   LogEntry,
   PrCiState,
-} from './types/models';
+} from './types/models/models';
 export type {
   FileEntry,
   NetworkRequest,

@@ -11,7 +11,7 @@ import {
   formatTokens,
   pad,
   truncate,
-} from '../format';
+} from '../../format';
 
 describe('formatMs', () => {
   it('returns 0ms for negative', () => {

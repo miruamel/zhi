@@ -8,7 +8,7 @@ import type {
   AgentTask,
   RuntimeEvent,
   RuntimeListener,
-} from './types';
+} from './types/types';
 import { executeTask } from './executeTask';
 
 /** @brief Default runtime. @since 0.1.9 */

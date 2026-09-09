@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'bun:test';
 import { CodeViewer } from './code-viewer';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 
 describe('CodeViewer', () => {
   it('shows empty state when no content', () => {
