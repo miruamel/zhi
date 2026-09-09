@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test';
-import { generate, generateStream } from '../core/scaffold';
+import { generate, generateStream, type GenerateInput } from '../core/scaffold';
 import {
   LocalStubInvoker,
   CloudModelInvoker,
@@ -25,6 +25,23 @@ describe('build generate', () => {
     expect(paths).toContain('engine/auth/utils/index.ts');
     expect(paths).toContain('engine/auth/constants/index.ts');
     expect(paths).toContain('engine/auth/index.ts');
+  });
+
+  it('defaults an omitted domain to app for batch and stream output', async () => {
+    const files = await generate({});
+    expect(files.map((f) => f.path)).toEqual([
+      'engine/app/index.ts',
+      'engine/app/handlers/index.ts',
+      'engine/app/services/index.ts',
+      'engine/app/utils/index.ts',
+      'engine/app/constants/index.ts',
+    ]);
+
+    const chunks: string[] = [];
+    for await (const chunk of generateStream({}, new LocalStubInvoker())) {
+      chunks.push(chunk);
+    }
+    expect(chunks.join('\n')).toContain('engine/app/handlers/index.ts');
   });
 
   it('emits Doxygen header in every file', async () => {

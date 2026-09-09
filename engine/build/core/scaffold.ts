@@ -12,7 +12,7 @@ export interface ScaffoldFile {
 
 /** @brief Generate input. @since 0.1.10 */
 export interface GenerateInput {
-  domain: string;
+  domain?: string;
 }
 
 /** @brief Generate output. @since 0.1.10 */
@@ -29,7 +29,7 @@ export async function generate(
   input: GenerateInput,
   invoker?: ModelInvoker,
 ): Promise<ScaffoldFile[]> {
-  const domain = input.domain;
+  const domain = input.domain ?? 'app';
   const files: ScaffoldFile[] = [
     {
       path: `engine/${domain}/index.ts`,
