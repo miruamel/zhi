@@ -1,7 +1,7 @@
 /**
  * @fileoverview Renderer class — manages layout dimensions and render context.
  * @since 0.1.11
- * @updated 0.2.6 — extracted from render.tsx to enforce 150-SLOC guard
+ * @updated 0.1.11 — extracted from render.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 import { RenderContext, Renderable } from './render-types';

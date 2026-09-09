@@ -1,5 +1,5 @@
 /**
- * @fileoverview Top-level TUI app state. @since 0.1.2 @updated 0.2.6
+ * @fileoverview Top-level TUI app state. @since 0.1.2 @updated 0.1.11
  * @package zhi
  */
 import type { DagStep, CriticLine, EvalReport, PrCiState, LogEntry, Fact } from './models/models';
@@ -60,7 +60,7 @@ export interface AppState {
   }>;
   selectedAgent?: string;
   configEntries: ConfigEntry[];
-  // 0.2.6 additions — dispatch/refresh patches from UI
+  // 0.1.11 additions — dispatch/refresh patches from UI
   dispatch?: { agentId: string; task: string };
   refresh?: boolean;
 }

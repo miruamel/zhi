@@ -1,7 +1,7 @@
 /**
  * @fileoverview App render tree — JSX for ZhiApp pane layout.
  * @since 0.1.2
- * @updated 0.2.6 — extracted from app.tsx to enforce 150-SLOC guard
+ * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 import { Box } from 'ink';
