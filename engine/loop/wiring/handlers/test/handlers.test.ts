@@ -63,6 +63,23 @@ describe('loop wiring', () => {
     expect(ctx.attempts).toBe(3);
     expect(ctx.error).toMatch(/recover exhausted/);
   });
+  it('EXECUTE with [local-stub] output fails with clear error (no MODEL_API_KEY)', async () => {
+    const ctx: LoopContext = { goal: 'x' };
+    const driver = new LoopDriver();
+    await driver.run(
+      buildHandlers(
+        ctx,
+        stubDeps({
+          generate: async () =>
+            '// [local-stub] OK\n/** @brief Stub. @since 0.1.10 */\nexport const x = 1;\n// verify: ok',
+        }),
+      ),
+    );
+    expect(driver.finished).toBe(true);
+    expect(ctx.error).toMatch(/stub output/);
+    expect(ctx.error).toMatch(/MODEL_API_KEY/);
+    expect(ctx.code).toBeUndefined();
+  });
 
   it('ISOLATE sets ctx.worktree+branch and COMMIT/PR_OPEN run inside worktree', async () => {
     const ctx: LoopContext = { goal: 'build auth' };

@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'bun:test';
 import { NetworkPane } from './network';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 
 describe('NetworkPane', () => {
   it('renders online status', () => {

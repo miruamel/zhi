@@ -2,8 +2,8 @@
  * @fileoverview Model router — selects invoker based on task type. @since 0.1.10
  * @package zhi
  */
-import type { ModelRequest, ModelResponse, ModelInvoker } from './invoker/types';
-import type { TaskKind } from './pricing';
+import type { ModelRequest, ModelResponse, ModelInvoker } from './invoker/types/types';
+import type { TaskKind } from './pricing/pricing';
 
 /** @brief Router options. @since 0.1.10 */
 export interface RouterOptions {
@@ -94,8 +94,8 @@ export class ModelRouter {
     return [...this.invokers.keys()];
   }
 }
-export { route } from './pricing';
-export type { TaskKind } from './pricing';
+export { route } from './pricing/pricing';
+export type { TaskKind } from './pricing/pricing';
 export function createRouter(invokers: ModelInvoker[], options?: RouterOptions): ModelRouter {
   return new ModelRouter(invokers, options);
 }

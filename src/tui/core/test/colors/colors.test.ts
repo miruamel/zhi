@@ -2,7 +2,7 @@
  * @brief Unit: color tokens — type-level smoke test. @since 0.1.2
  */
 import { describe, expect, it } from 'bun:test';
-import { colors, type ColorToken } from '../colors';
+import { colors, type ColorToken } from '../../colors';
 
 describe('colors', () => {
   it('exports all expected tokens', () => {

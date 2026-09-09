@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'bun:test';
 import { DiffViewer, parseDiff } from './diff';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 
 describe('DiffViewer', () => {
   it('shows empty state when no diff', () => {

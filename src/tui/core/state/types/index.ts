@@ -1,5 +1,5 @@
 /**
- * @fileoverview State types barrel re-export. @since 0.1.2 @updated 0.1.11
+ * @fileoverview State types barrel re-export. @since 0.1.2 @updated 0.2.6
  * @package zhi
  */
 export type {
@@ -11,7 +11,7 @@ export type {
   PrCiState,
   Fact,
   DoraMetrics,
-} from './models';
+} from './models/models';
 export type {
   FileEntry,
   NetworkRequest,

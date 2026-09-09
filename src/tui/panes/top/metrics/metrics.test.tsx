@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'bun:test';
 import { MetricsPane } from './metrics';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 
 describe('MetricsPane', () => {
   it('renders metrics data', () => {

@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'bun:test';
 import { MemoryPane } from './memory';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 
 const facts = [
   { key: 'stack.zig', value: 'Zig 0.13', tags: ['zig', 'stack'] },

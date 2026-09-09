@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'bun:test';
 import { SettingsPane } from './settings';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 
 const entries = [
   {

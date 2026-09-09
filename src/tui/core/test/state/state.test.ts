@@ -1,6 +1,6 @@
 /** @brief Test emptyState: factory for default AppState. @since 0.1.4 */
 import { describe, test, expect } from 'bun:test';
-import { emptyState } from '../state';
+import { emptyState } from '../../state';
 
 describe('emptyState', () => {
   test('returns AppState with given goal', () => {
