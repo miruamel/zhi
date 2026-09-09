@@ -127,6 +127,5 @@ export const DEFAULT_CONSTRAINTS: Record<string, LayoutConstraint> = {
   orch: { minSize: 15, maxSize: 80, resizable: true, collapsible: true },
   sessions: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
   memory: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
-  config: { minSize: 15, maxSize: 80, resizable: true, collapsible: true },
   help: { minSize: 3, maxSize: 10, resizable: false, collapsible: false },
 };

@@ -4,6 +4,7 @@
  * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
  * @package zhi
  */
+import { Box } from 'ink';
 import { useEffect, useState } from 'react';
 import {
   Dag,
