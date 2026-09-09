@@ -51,7 +51,7 @@ if (import.meta['main']) {
       }
     })
     .catch((e) => {
-      console.error(String(e));
+      console.error(e instanceof Error ? e.stack : String(e));
       process.exit(1);
     });
 }

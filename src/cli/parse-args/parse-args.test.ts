@@ -10,7 +10,8 @@ describe('parseArgs', () => {
       goal: 'build auth',
       threshold: 0.9,
     });
-    expect(parseArgs(['  '])).toEqual({ goal: '  ', threshold: 0.8 });
+    expect(parseArgs(['  '])).toEqual({ goal: '', threshold: 0.8 });
+    expect(parseArgs(['  build auth  '])).toEqual({ goal: 'build auth', threshold: 0.8 });
   });
 
   it('falls back to default threshold when flag malformed', () => {
