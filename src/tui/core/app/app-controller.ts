@@ -76,6 +76,8 @@ export function useAppController(
   const [mode, setMode] = useState<'normal' | 'command' | 'search'>('normal');
 
   const arranger = useState(() => new Arranger())[0];
+  const [, setLayoutVersion] = useState(0);
+  arranger.subscribe(() => setLayoutVersion((v) => v + 1));
   const paneOrder = arranger.visiblePanes();
   const focusHook = useFocus(paneOrder, 0);
   const nav: FocusNav = {
