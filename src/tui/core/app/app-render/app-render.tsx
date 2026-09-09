@@ -4,7 +4,7 @@
  * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
  * @package zhi
  */
-import { Box } from 'ink';
+import { useEffect, useState } from 'react';
 import {
   Dag,
   Detail,
@@ -49,13 +49,15 @@ export function AppRender({
   threshold: number;
 }): React.ReactNode {
   const { state, nav, arranger } = controller;
+  const [layoutVersion, setLayoutVersion] = useState(0);
+  useEffect(() => arranger.subscribe(() => setLayoutVersion((v) => v + 1)), [arranger]);
   const visiblePanes = arranger.visiblePanes();
   const currentStep = state.steps.find((s: DagStep) => s.id === state.currentStepId);
   const hints = ['Ctrl+K palette', 'Tab cycle', 'q quit', 'Space pause', 'h help'];
   const doneCount = state.steps.filter((s: DagStep) => s.status === 'done').length;
 
   return (
-    <Box key={controller.redrawKey} flexDirection="column" paddingX={1}>
+    <Box key={controller.redrawKey + layoutVersion} flexDirection="column" paddingX={1}>
       <AppRenderTop state={state} doneCount={doneCount} />
       <Box marginTop={1} gap={1}>
         {visiblePanes.includes('dag') && (
