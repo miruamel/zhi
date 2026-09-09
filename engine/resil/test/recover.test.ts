@@ -1,5 +1,5 @@
 /**
- * @brief Unit: classifyError() — fatal vs transient classification. @since 0.1.2 @updated 0.2.6
+ * @brief Unit: classifyError() — fatal vs transient classification. @since 0.1.2 @updated 0.1.11
  */
 import { describe, expect, it } from 'bun:test';
 import { classifyError } from '../index';

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Pane primitives — base layout components (Pane, SplitPane, ScrollablePane).
  * @since 0.1.11
- * @updated 0.2.6 — extracted from panes/index.tsx to enforce 150-SLOC guard
+ * @updated 0.1.11 — extracted from panes/index.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 import React, { useState } from 'react';

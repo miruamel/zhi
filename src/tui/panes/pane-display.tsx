@@ -1,7 +1,7 @@
 /**
  * @fileoverview Pane display components — status, log, input, chart, tree, grid panes.
  * @since 0.1.11
- * @updated 0.2.6 — extracted from panes/index.tsx to enforce 150-SLOC guard
+ * @updated 0.1.11 — extracted from panes/index.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 import React from 'react';

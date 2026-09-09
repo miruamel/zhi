@@ -63,7 +63,7 @@ export function route(kind: TaskKind): { model: string; endpoint: string; tier: 
   switch (kind) {
     case 'generate':
     case 'critique':
-      return { model: 'claude-sonnet', endpoint: 'cloud', tier: 'heavy' };
+      return { model: 'claude-3-5-sonnet', endpoint: 'cloud', tier: 'heavy' };
     case 'verify':
     case 'format':
       return { model: 'text-embedding-3', endpoint: 'cloud', tier: 'light' };

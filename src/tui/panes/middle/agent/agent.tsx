@@ -1,7 +1,7 @@
 /**
  * @fileoverview Agent pane — agent list, capabilities, dispatch, runtime control.
  * @since 0.1.11
- * @updated 0.2.6 — refactored: types/utils/table/log/dispatch split (Phase 1)
+ * @updated 0.1.11 — refactored: types/utils/table/log/dispatch split (Phase 1)
  * @package zhi
  */
 import { Box, Text, useInput } from 'ink';

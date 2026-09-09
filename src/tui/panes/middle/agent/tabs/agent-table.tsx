@@ -1,7 +1,7 @@
 /**
  * @fileoverview Agent list tab — table of agents + selected agent detail card.
  * @since 0.1.11
- * @updated 0.2.6 — extracted from agent.tsx to enforce 150-SLOC guard
+ * @updated 0.1.11 — extracted from agent.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 import { Box, Text } from 'ink';

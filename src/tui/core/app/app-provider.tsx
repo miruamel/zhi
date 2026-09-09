@@ -1,7 +1,7 @@
 /**
  * @fileoverview App input handler — key bindings, useInput wiring, and command palette.
  * @since 0.1.2
- * @updated 0.2.6 — extracted from app.tsx to enforce 150-SLOC guard
+ * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 import { useInput } from 'ink';
@@ -55,6 +55,7 @@ export function AppProvider({
     setFocusIdx,
     setRedrawKey,
     nav,
+    arranger,
     exit,
   } = controller;
 
@@ -98,6 +99,21 @@ export function AppProvider({
         case 'jumpMode':
           setMode('command');
           break;
+        case 'splitH':
+          arranger.dispatch({ type: 'split', id: nav.current, direction: 'vertical' });
+          break;
+        case 'splitV':
+          arranger.dispatch({ type: 'split', id: nav.current, direction: 'horizontal' });
+          break;
+        case 'closePane':
+          arranger.dispatch({ type: 'close', id: nav.current });
+          break;
+        case 'collapsePane':
+          arranger.dispatch({ type: 'collapse', id: nav.current });
+          break;
+        case 'expandPane':
+          arranger.dispatch({ type: 'expand', id: nav.current });
+          break;
         default:
           applyKeyAction(action, {
             setState: pushState,
@@ -114,6 +130,10 @@ export function AppProvider({
             onQuit,
             exit,
             log: state.log,
+            arranger,
+            nav,
+            setMode,
+            setPaletteOpen,
           });
       }
     },

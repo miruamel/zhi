@@ -1,7 +1,7 @@
 /**
  * @fileoverview Agent pane helpers — level colors, relative time, token formatting.
  * @since 0.1.11
- * @updated 0.2.6 — extracted from agent.tsx to enforce 150-SLOC guard
+ * @updated 0.1.11 — extracted from agent.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 import { colors } from '../../../core/colors';

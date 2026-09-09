@@ -1,7 +1,7 @@
 /**
  * @fileoverview Render functions — standalone box/text/list/table/progress/spinner/badge/divider/help helpers.
  * @since 0.1.11
- * @updated 0.2.6 — extracted from render.tsx to enforce 150-SLOC guard
+ * @updated 0.1.11 — extracted from render.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 import React from 'react';

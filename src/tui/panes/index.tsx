@@ -1,7 +1,7 @@
 /**
  * @fileoverview TUI panes — barrel re-export for all pane components.
  * @since 0.1.11
- * @updated 0.2.6 — barrel only; primitives split to pane-base.tsx + pane-display.tsx
+ * @updated 0.1.11 — barrel only; primitives split to pane-base.tsx + pane-display.tsx
  * @package zhi
  */
 export { type PaneProps, Pane, SplitPane, ScrollablePane } from './pane-base';

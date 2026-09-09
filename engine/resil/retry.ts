@@ -102,12 +102,12 @@ export function createRetryOptions(overrides: Partial<RetryOptions> = {}): Retry
   return { ...DEFAULT_RETRY_OPTIONS, ...overrides };
 }
 
-/** @brief Classified error — fatal errors skip recovery, transient errors retry. @since 0.1.1 @updated 0.2.6 */
+/** @brief Classified error — fatal errors skip recovery, transient errors retry. @since 0.1.1 @updated 0.1.11 */
 export interface ClassifiedError {
   fatal: boolean;
 }
 
-/** @brief Classify error as fatal (no recovery) or transient (retry). @since 0.1.1 @updated 0.2.6 */
+/** @brief Classify error as fatal (no recovery) or transient (retry). @since 0.1.1 @updated 0.1.11 */
 export function classifyError(err: unknown): ClassifiedError {
   const msg = String(err ?? '');
   if (/budget|timeout|fatal|quota/i.test(msg)) return { fatal: true };

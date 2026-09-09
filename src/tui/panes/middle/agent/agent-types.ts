@@ -1,7 +1,7 @@
 /**
  * @fileoverview Agent pane types — display entries, runtime log, props.
  * @since 0.1.11
- * @updated 0.2.6 — extracted from agent.tsx to enforce 150-SLOC guard
+ * @updated 0.1.11 — extracted from agent.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 

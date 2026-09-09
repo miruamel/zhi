@@ -34,9 +34,24 @@ export function toPatch(
       reason: c.findings[0] ?? 'passes without issues',
     })),
     eval: {
-      build: { name: 'build', ok: false, detail: '', durationMs: 0 },
-      test: { name: 'test', ok: false, detail: '', durationMs: 0 },
-      security: { name: 'security', ok: false, detail: '', durationMs: 0 },
+      build: {
+        name: 'build',
+        ok: !!ctx.eval?.passed,
+        detail: ctx.eval?.reasons?.join(' ') ?? '',
+        durationMs: 0,
+      },
+      test: {
+        name: 'test',
+        ok: !!ctx.eval?.passed,
+        detail: ctx.eval?.reasons?.join(' ') ?? '',
+        durationMs: 0,
+      },
+      security: {
+        name: 'security',
+        ok: !!ctx.eval?.passed,
+        detail: ctx.eval?.reasons?.join(' ') ?? '',
+        durationMs: 0,
+      },
       gate: {
         name: 'gate',
         ok: !!ctx.eval?.passed,
@@ -83,10 +98,13 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
   const metrics = new LoopMetrics();
   const logger = new LoopLogger();
   const holder = { push: null as ((p: Partial<AppState>) => void) | null };
+  const queue: Partial<AppState>[] = [];
   const driver = new LoopDriver({
     onTransition: (_from, _ev, to) => {
       logger.transition(_from, _ev, to);
-      holder.push?.(toPatch(ctx, metrics, to));
+      const patch = toPatch(ctx, metrics, to);
+      if (holder.push) holder.push(patch);
+      else queue.push(patch);
     },
   });
   const handlers = buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics);
@@ -104,6 +122,8 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
     },
     onRegister: (p) => {
       holder.push = p;
+      for (const patch of queue) holder.push(patch);
+      queue.length = 0;
     },
   });
   metrics.reset();

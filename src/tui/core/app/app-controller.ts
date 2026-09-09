@@ -1,7 +1,7 @@
 /**
  * @fileoverview App controller hook — state management, focus, and pane orchestration for ZhiApp.
  * @since 0.1.2
- * @updated 0.2.6 — extracted from app.tsx to enforce 150-SLOC guard
+ * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 import { useState } from 'react';
@@ -76,6 +76,8 @@ export function useAppController(
   const [mode, setMode] = useState<'normal' | 'command' | 'search'>('normal');
 
   const arranger = useState(() => new Arranger())[0];
+  const [, setLayoutVersion] = useState(0);
+  arranger.subscribe(() => setLayoutVersion((v) => v + 1));
   const paneOrder = arranger.visiblePanes();
   const focusHook = useFocus(paneOrder, 0);
   const nav: FocusNav = {

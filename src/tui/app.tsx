@@ -1,8 +1,8 @@
 /**
  * @fileoverview App root — the main ink <App> for Zhi TUI. @since 0.1.2
- * @updated 0.2.6 — integrated Arranger, StatusBar, CommandPalette, useFocus
- * @updated 0.2.6 — OrchPane, BudgetPane, LoopPane
- * @updated 0.2.6 — refactored: controller/commands/provider/render split (Phase 1)
+ * @updated 0.1.11 — integrated Arranger, StatusBar, CommandPalette, useFocus
+ * @updated 0.1.11 — OrchPane, BudgetPane, LoopPane
+ * @updated 0.1.11 — refactored: controller/commands/provider/render split (Phase 1)
  */
 import { AppState } from './core/state';
 import { useAppController } from './core/app/app-controller';
