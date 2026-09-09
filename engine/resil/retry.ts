@@ -102,19 +102,14 @@ export function createRetryOptions(overrides: Partial<RetryOptions> = {}): Retry
   return { ...DEFAULT_RETRY_OPTIONS, ...overrides };
 }
 
-/** @brief Recovery strategy. @since 0.1.1 */
-export type RecoveryStrategy = 'replan' | 'patch' | 'abort';
-
-/** @brief Classified error. @since 0.1.1 */
+/** @brief Classified error — fatal errors skip recovery, transient errors retry. @since 0.1.1 @updated 0.2.6 */
 export interface ClassifiedError {
-  strategy: RecoveryStrategy;
   fatal: boolean;
 }
 
-/** @brief Classify error into recovery strategy. @since 0.1.1 */
+/** @brief Classify error as fatal (no recovery) or transient (retry). @since 0.1.1 @updated 0.2.6 */
 export function classifyError(err: unknown): ClassifiedError {
   const msg = String(err ?? '');
-  if (/budget|timeout|fatal|quota/i.test(msg)) return { strategy: 'abort', fatal: true };
-  if (/cycle|ambig|parse/i.test(msg)) return { strategy: 'replan', fatal: false };
-  return { strategy: 'patch', fatal: false };
+  if (/budget|timeout|fatal|quota/i.test(msg)) return { fatal: true };
+  return { fatal: false };
 }

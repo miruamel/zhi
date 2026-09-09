@@ -12,8 +12,15 @@ export type {
   RegistryEntry,
   DependencyNode,
 } from './registry';
-export { Signer, createSigner, KeyManager, createKeyManager, signFile, verifyFile } from './signer';
-export type { SignerAlgorithm, KeyType, Signature, KeyPair, SignerOptions } from './signer';
+export {
+  Signer,
+  createSigner,
+  KeyManager,
+  createKeyManager,
+  signFile,
+  verifyFile,
+} from './signer/signer';
+export type { SignerAlgorithm, KeyType, Signature, KeyPair, SignerOptions } from './signer/signer';
 export { VerifyEngine, createVerifyEngine, verify } from './verify';
 export type { VerifyResult, ArtifactVerifyResult, VerifyOptions } from './verify';
 export { generate, generateStream } from './core/scaffold';

@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'bun:test';
 import { FileTree, buildTree } from './file-tree';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 
 describe('FileTree', () => {
   it('renders file list', () => {

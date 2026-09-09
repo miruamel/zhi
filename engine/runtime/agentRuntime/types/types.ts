@@ -2,7 +2,7 @@
  * @fileoverview Agent runtime types. @since 0.1.11
  * @package zhi
  */
-import type { TaskKind } from '../../model/router';
+import type { TaskKind } from '../../../model/router';
 
 /** @brief Agent capability declaration. @since 0.1.11 */
 export interface AgentCapability {

@@ -2,7 +2,7 @@
  * @fileoverview Built-in agent definitions. @since 0.1.11
  * @package zhi
  */
-import type { AgentCapability, AgentDefinition } from '../../runtime/agentRuntime/types';
+import type { AgentCapability, AgentDefinition } from '../../runtime/agentRuntime/types/types';
 
 /** @brief A capability builder helper. @since 0.1.11 */
 export function cap(

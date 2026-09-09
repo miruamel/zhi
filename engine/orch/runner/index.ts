@@ -2,7 +2,7 @@
  * @fileoverview Orchestrator runner barrel. @since 0.1.10
  * @package zhi
  */
-export { type OrchState, type StateMachine, createOrchState } from './state';
+export { type OrchState, type StateMachine, createOrchState } from './state/state';
 export {
   type Allocation,
   type Allocator,

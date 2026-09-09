@@ -3,7 +3,7 @@
  * Konsumer tetap import `from '../invoker'` (lihat `engine/build/generate` dll).
  * @since 0.1.2
  */
-export type { ModelInvoker } from './types';
+export type { ModelInvoker } from './types/types';
 export type { CloudInvokerOpts } from './cloud';
 export { CloudModelInvoker } from './cloud';
 export { LocalStubInvoker } from './local-stub';

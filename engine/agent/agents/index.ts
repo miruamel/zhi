@@ -1,4 +1,4 @@
-import type { AgentCapability, AgentDefinition } from '../../runtime/agentRuntime/types';
+import type { AgentCapability, AgentDefinition } from '../../runtime/agentRuntime/types/types';
 import { BUILTIN_AGENTS } from './definitions';
 export {
   ARCHITECT_AGENT,

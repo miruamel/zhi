@@ -3,7 +3,7 @@
  * @package zhi
  */
 import type { Dag, DagStep, OrchConfig } from '../types';
-import type { OrchState } from './state';
+import type { OrchState } from './state/state';
 import { topologicalSort } from './dag';
 
 export interface RunResult {

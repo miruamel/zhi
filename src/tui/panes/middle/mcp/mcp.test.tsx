@@ -2,7 +2,7 @@
  * @fileoverview McpPane tests. @since 0.1.11
  */
 import { describe, it, expect } from 'bun:test';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 import { McpPane } from './mcp';
 
 const servers = [

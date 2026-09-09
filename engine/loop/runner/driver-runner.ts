@@ -2,7 +2,7 @@
  * @fileoverview Loop driver — run loop execution. @since 0.1.10
  * @package zhi
  */
-import { LoopState, LoopEvent, isTerminal } from './states';
+import { LoopState, LoopEvent, isTerminal } from '../states';
 
 /** @brief Run loop through handler map until DONE or error. @since 0.1.10 */
 export async function runLoop(

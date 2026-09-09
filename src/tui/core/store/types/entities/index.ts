@@ -6,7 +6,7 @@ import type { DagStep } from './dag';
 import type { MetricsSummary } from './metrics-config';
 export type { StepStatus, StepType, ThemeName } from '../primitives';
 export type { DagStep, EvalCheck, EvalStage, LogEntry, CriticItem, GitStatus } from './dag';
-export type { FileNode, FileChange, DiffHunk, DiffLine } from './filetree';
+export type { FileNode, FileChange, DiffHunk, DiffLine } from './filetree/filetree';
 export type {
   NotificationAction,
   NotificationItem,
