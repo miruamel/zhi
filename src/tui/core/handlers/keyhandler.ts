@@ -4,6 +4,7 @@
  */
 import type { KeyAction } from './keymap';
 import type { AppState } from '../state';
+import type { LayoutEvent } from '../arranger/types';
 
 export interface KeyHandlerDeps {
   setState: (patch: Partial<AppState>) => void;
@@ -20,6 +21,14 @@ export interface KeyHandlerDeps {
   onQuit?: () => void;
   exit: () => void;
   log: AppState['log'];
+  /** @brief Optional arranger for pane split/close/collapse/expand actions. @since 0.1.11 */
+  arranger?: { dispatch: (event: LayoutEvent) => void };
+  /** @brief Optional nav for pane navigation actions. @since 0.1.11 */
+  nav?: { current: string; move: (delta: number) => void };
+  /** @brief Optional mode setter for search/jump mode actions. @since 0.1.11 */
+  setMode?: (m: 'normal' | 'command' | 'search') => void;
+  /** @brief Optional palette setter for open/close palette actions. @since 0.1.11 */
+  setPaletteOpen?: (v: boolean) => void;
 }
 
 /**
@@ -74,6 +83,51 @@ export function applyKeyAction(action: KeyAction, deps: KeyHandlerDeps): boolean
       break;
     case 'cycle':
       deps.setFocusIdx((i: number) => (i + 1) % 6);
+      break;
+    case 'openPalette':
+      deps.setPaletteOpen?.(true);
+      deps.setMode?.('command');
+      break;
+    case 'closePalette':
+      deps.setPaletteOpen?.(false);
+      deps.setMode?.('normal');
+      break;
+    case 'nextPane':
+      deps.nav?.move(1);
+      break;
+    case 'prevPane':
+      deps.nav?.move(-1);
+      break;
+    case 'splitH': {
+      const id = deps.nav?.current;
+      if (id) deps.arranger?.dispatch({ type: 'split', id, direction: 'vertical' });
+      break;
+    }
+    case 'splitV': {
+      const id = deps.nav?.current;
+      if (id) deps.arranger?.dispatch({ type: 'split', id, direction: 'horizontal' });
+      break;
+    }
+    case 'closePane': {
+      const id = deps.nav?.current;
+      if (id) deps.arranger?.dispatch({ type: 'close', id });
+      break;
+    }
+    case 'collapsePane': {
+      const id = deps.nav?.current;
+      if (id) deps.arranger?.dispatch({ type: 'collapse', id });
+      break;
+    }
+    case 'expandPane': {
+      const id = deps.nav?.current;
+      if (id) deps.arranger?.dispatch({ type: 'expand', id });
+      break;
+    }
+    case 'jumpMode':
+      deps.setMode?.('command');
+      break;
+    case 'searchMode':
+      deps.setMode?.('search');
       break;
     default:
       break;
