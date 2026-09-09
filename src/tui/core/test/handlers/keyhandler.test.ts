@@ -166,4 +166,149 @@ describe('applyKeyAction', () => {
     expect(exited).toBe(true);
     expect(calls.exit).toBeDefined();
   });
+
+  it('openPalette sets paletteOpen true and mode command', () => {
+    const { deps, calls } = makeDeps({
+      setPaletteOpen: (v) => {
+        calls.setPaletteOpen = [v];
+      },
+      setMode: (m) => {
+        calls.setMode = [m];
+      },
+    });
+    applyKeyAction('openPalette', deps);
+    expect(calls.setPaletteOpen).toEqual([true]);
+    expect(calls.setMode).toEqual(['command']);
+  });
+
+  it('closePalette sets paletteOpen false and mode normal', () => {
+    const { deps, calls } = makeDeps({
+      setPaletteOpen: (v) => {
+        calls.setPaletteOpen = [v];
+      },
+      setMode: (m) => {
+        calls.setMode = [m];
+      },
+    });
+    applyKeyAction('closePalette', deps);
+    expect(calls.setPaletteOpen).toEqual([false]);
+    expect(calls.setMode).toEqual(['normal']);
+  });
+
+  it('nextPane calls nav.move(1)', () => {
+    const { deps, calls } = makeDeps({
+      nav: {
+        current: 'p1',
+        move: (d) => {
+          calls.navMove = [d];
+        },
+      },
+    });
+    applyKeyAction('nextPane', deps);
+    expect(calls.navMove).toEqual([1]);
+  });
+
+  it('prevPane calls nav.move(-1)', () => {
+    const { deps, calls } = makeDeps({
+      nav: {
+        current: 'p1',
+        move: (d) => {
+          calls.navMove = [d];
+        },
+      },
+    });
+    applyKeyAction('prevPane', deps);
+    expect(calls.navMove).toEqual([-1]);
+  });
+
+  it('splitH dispatches arranger split vertical', () => {
+    const { deps, calls } = makeDeps({
+      nav: { current: 'p1', move: () => {} },
+      arranger: {
+        dispatch: (e) => {
+          calls.dispatch = [e];
+        },
+      },
+    });
+    applyKeyAction('splitH', deps);
+    expect(calls.dispatch).toEqual([{ type: 'split', id: 'p1', direction: 'vertical' }]);
+  });
+
+  it('splitV dispatches arranger split horizontal', () => {
+    const { deps, calls } = makeDeps({
+      nav: { current: 'p1', move: () => {} },
+      arranger: {
+        dispatch: (e) => {
+          calls.dispatch = [e];
+        },
+      },
+    });
+    applyKeyAction('splitV', deps);
+    expect(calls.dispatch).toEqual([{ type: 'split', id: 'p1', direction: 'horizontal' }]);
+  });
+
+  it('closePane dispatches arranger close', () => {
+    const { deps, calls } = makeDeps({
+      nav: { current: 'p1', move: () => {} },
+      arranger: {
+        dispatch: (e) => {
+          calls.dispatch = [e];
+        },
+      },
+    });
+    applyKeyAction('closePane', deps);
+    expect(calls.dispatch).toEqual([{ type: 'close', id: 'p1' }]);
+  });
+
+  it('collapsePane dispatches arranger collapse', () => {
+    const { deps, calls } = makeDeps({
+      nav: { current: 'p1', move: () => {} },
+      arranger: {
+        dispatch: (e) => {
+          calls.dispatch = [e];
+        },
+      },
+    });
+    applyKeyAction('collapsePane', deps);
+    expect(calls.dispatch).toEqual([{ type: 'collapse', id: 'p1' }]);
+  });
+
+  it('expandPane dispatches arranger expand', () => {
+    const { deps, calls } = makeDeps({
+      nav: { current: 'p1', move: () => {} },
+      arranger: {
+        dispatch: (e) => {
+          calls.dispatch = [e];
+        },
+      },
+    });
+    applyKeyAction('expandPane', deps);
+    expect(calls.dispatch).toEqual([{ type: 'expand', id: 'p1' }]);
+  });
+
+  it('jumpMode sets mode command', () => {
+    const { deps, calls } = makeDeps({
+      setMode: (m) => {
+        calls.setMode = [m];
+      },
+    });
+    applyKeyAction('jumpMode', deps);
+    expect(calls.setMode).toEqual(['command']);
+  });
+
+  it('searchMode sets mode search', () => {
+    const { deps, calls } = makeDeps({
+      setMode: (m) => {
+        calls.setMode = [m];
+      },
+    });
+    applyKeyAction('searchMode', deps);
+    expect(calls.setMode).toEqual(['search']);
+  });
+
+  it('splitH with no nav is a no-op', () => {
+    const { deps, calls } = makeDeps();
+    applyKeyAction('splitH', deps);
+    expect(calls.dispatch).toBeUndefined();
+  });
 });
