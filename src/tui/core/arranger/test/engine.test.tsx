@@ -2,7 +2,7 @@
  * @fileoverview Arranger engine tests. @since 0.1.11
  */
 import { describe, it, expect } from 'bun:test';
-import { Arranger } from './engine';
+import { Arranger } from '../engine';
 
 describe('Arranger', () => {
   it('starts with default layout', () => {

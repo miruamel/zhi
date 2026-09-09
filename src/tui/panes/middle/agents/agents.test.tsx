@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'bun:test';
 import { AgentsPane } from './agents';
-import { renderToString } from '../../../core/test/render';
+import { renderToString } from '../../../core/test/render/render';
 
 describe('AgentsPane', () => {
   it('renders empty state', () => {

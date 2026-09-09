@@ -56,7 +56,14 @@ export function buildHandlers(
         ctx.error = `generate failed after ${GENERATE_RETRY} retry: ${r.error ?? 'unknown'}`;
         return LoopEvent.BUDGET_OUT;
       }
-      ctx.code = deps.compress ? deps.compress(res as string) : (res as string);
+      // Detect stub output — LocalStubInvoker fallback without MODEL_API_KEY.
+      const codeOut = res as string;
+      if (codeOut.includes('[local-stub]')) {
+        ctx.error =
+          'generate stub output — MODEL_API_KEY not set. Set it to enable LLM code generation.';
+        return LoopEvent.FAIL;
+      }
+      ctx.code = deps.compress ? deps.compress(codeOut) : codeOut;
       return LoopEvent.EXECUTED;
     },
     [LoopState.CRITIQUE]: () => {
@@ -64,10 +71,10 @@ export function buildHandlers(
       ctx.aggregate = aggregate(ctx.critiques, deps.paretoThreshold);
       return LoopEvent.CRITIQUED;
     },
-    [LoopState.EVALUATE]: () => {
+    [LoopState.EVALUATE]: async () => {
       ctx.eval =
         deps.eval && ctx.worktree
-          ? deps.eval(ctx.worktree)
+          ? await deps.eval(ctx.worktree)
           : gate(
               { score: ctx.aggregate?.score ?? 0, criteria: [], blockers: [] },
               deps.paretoThreshold,

@@ -10,7 +10,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const WASM_PATH = join(import.meta.dir, '..', '..', 'native', 'out', 'stream.wasm');
+const WASM_PATH = join(import.meta.dir, '..', '..', '..', 'native', 'out', 'stream.wasm');
 const PAGE = 65536;
 const MEMORY_BASE = 1024;
 

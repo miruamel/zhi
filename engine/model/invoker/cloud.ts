@@ -4,7 +4,7 @@
  * @since 0.1.1
  */
 import { parseStream } from '../stream';
-import type { ModelInvoker } from './types';
+import type { ModelInvoker } from './types/types';
 
 /** @brief Batas waktu default per HTTP request (ms). @since 0.1.2 */
 const DEFAULT_TIMEOUT_MS = 30000;

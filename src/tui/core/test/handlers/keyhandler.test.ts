@@ -3,12 +3,12 @@
  * @since 0.1.4
  */
 import { describe, expect, it, mock } from 'bun:test';
-import { applyKeyAction } from '../handlers/keyhandler';
-import type { AppState } from '../state';
+import { applyKeyAction } from '../../handlers/keyhandler';
+import type { AppState } from '../../state';
 
-function makeDeps(overrides: Partial<import('../handlers/keyhandler').KeyHandlerDeps> = {}) {
+function makeDeps(overrides: Partial<import('../../handlers/keyhandler').KeyHandlerDeps> = {}) {
   const calls: Record<string, unknown[]> = {};
-  const deps: import('../handlers/keyhandler').KeyHandlerDeps = {
+  const deps: import('../../handlers/keyhandler').KeyHandlerDeps = {
     setState: (p: Partial<AppState>) => {
       calls.setState = [p];
     },
