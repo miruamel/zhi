@@ -50,4 +50,37 @@ describe('DashboardPane', () => {
     const f = renderToString(<DashboardPane {...baseProps} costTrend={-12} />);
     expect(f).toContain('-12%');
   });
+  it('renders multi-run comparison table when sessions provided', () => {
+    const sessions = [
+      {
+        id: 's1',
+        label: 'run-a',
+        createdAt: 1,
+        lastActive: 1,
+        steps: 4,
+        tokensUsed: 300,
+        finished: true,
+      },
+      {
+        id: 's2',
+        label: 'run-b',
+        createdAt: 1,
+        lastActive: 1,
+        steps: 2,
+        tokensUsed: 120,
+        finished: false,
+      },
+    ];
+    const f = renderToString(<DashboardPane {...baseProps} sessions={sessions} />);
+    expect(f).toContain('RUNS (2)');
+    expect(f).toContain('run-a');
+    expect(f).toContain('run-b');
+    expect(f).toContain('done');
+    expect(f).toContain('active');
+  });
+
+  it('hides runs table when no sessions provided', () => {
+    const f = renderToString(<DashboardPane {...baseProps} />);
+    expect(f).not.toContain('RUNS');
+  });
 });

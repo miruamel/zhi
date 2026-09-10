@@ -1,12 +1,15 @@
 /**
- * @fileoverview Dashboard pane — DORA, quality trends, cost.
+ * @fileoverview Dashboard pane — DORA, quality trends, cost, multi-run comparison.
  * @since 0.1.11
  * @updated 0.1.13 — token sparkline + real testCoverage/costTrend wiring (M1)
+ * @updated 0.1.13 — multi-run comparison table (M1, #275)
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
 import { Gauge } from '../../../widgets/gauge/gauge';
 import { Sparkline } from '../../../widgets/sparkline/sparkline';
+import { Table } from '../../../widgets/table/table';
+import type { SessionInfo } from '../../../core/state';
 
 /** @brief DORA metrics. @since 0.1.11 */
 export interface DoraMetrics {
@@ -27,6 +30,7 @@ export interface DashboardPaneProps {
   stepsCompleted: number;
   stepsTotal: number;
   tokenSparkline?: number[];
+  sessions?: SessionInfo[];
 }
 
 /** @brief Render the dashboard pane. @since 0.1.11 @updated 0.1.13 */
@@ -40,6 +44,7 @@ export function DashboardPane({
   stepsCompleted,
   stepsTotal,
   tokenSparkline,
+  sessions,
 }: DashboardPaneProps) {
   return (
     <Box
@@ -107,6 +112,24 @@ export function DashboardPane({
           )}
         </Box>
       </Box>
+      {sessions && sessions.length > 0 && (
+        <Box marginTop={1} flexDirection="column">
+          <Text color={colors.forward} bold>
+            RUNS ({sessions.length})
+          </Text>
+          <Table
+            headers={['run', 'steps', 'tokens', 'status']}
+            rows={sessions.map((s) => ({
+              run: s.label,
+              steps: s.steps,
+              tokens: s.tokensUsed,
+              status: s.finished ? 'done' : 'active',
+            }))}
+            maxRows={5}
+            highlight={(row) => row.status === 'active'}
+          />
+        </Box>
+      )}
     </Box>
   );
 }
