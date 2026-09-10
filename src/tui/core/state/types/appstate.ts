@@ -61,6 +61,16 @@ export interface AppState {
   }>;
   selectedAgent?: string;
   configEntries: ConfigEntry[];
+  notifications: Array<{
+    id: string;
+    type: 'info' | 'success' | 'warning' | 'error';
+    title: string;
+    message?: string;
+    timestamp: number;
+    read?: boolean;
+    persistent?: boolean;
+  }>;
+  unreadCount: number;
   // 0.1.11 additions — dispatch/refresh patches from UI
   dispatch?: { agentId: string; task: string };
   refresh?: boolean;

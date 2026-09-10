@@ -15,6 +15,7 @@ import {
   MemoryPane,
   SettingsPane,
   HelpPane,
+  NotificationsPane,
 } from '../../../panes';
 import { DagStep } from '../../state';
 import type { AppControllerResult } from '../app-controller';
@@ -88,6 +89,9 @@ export function AppRenderPanesMetrics({
         )}
       </Box>
       <Box marginTop={1} gap={1}>
+        {visiblePanes.includes('notifications') && (
+          <NotificationsPane notifications={state.notifications} unreadCount={state.unreadCount} />
+        )}
         {visiblePanes.includes('sessions') && (
           <SessionsPane sessions={state.sessions} activeId={state.activeSessionId} />
         )}

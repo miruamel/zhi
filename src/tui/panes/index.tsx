@@ -39,3 +39,4 @@ export { TracePane } from './middle/trace/trace';
 export { DashboardPane } from './middle/dashboard/dashboard';
 export { Pr } from './middle/pr/pr';
 export { AgentPane } from './middle/agent/agent';
+export { NotificationsPane } from './middle/notifications/notifications';
