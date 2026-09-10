@@ -53,7 +53,7 @@ export class Pipeline {
         return { ok: true, detail: `Built with ${registry.list().length} plugins` };
       }
       case 'sign': {
-        const { createSigner } = await import('./signer/signer');
+        const { createSigner } = await import('./crypto/signer');
         const signer = createSigner({ algorithm: 'sha256' });
         const sig = signer.sign(config.entry);
         return { ok: !!sig.hash, detail: `Signed (${sig.algorithm})` };
