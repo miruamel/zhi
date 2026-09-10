@@ -36,11 +36,7 @@ export interface EvalOutput {
  * @param {number} threshold - ambang lulus (default 0.7).
  * @return {EvalOutput} keputusan gate.
  * @since 0.1.1 */
-export function gate(
-  input: EvalInput,
-  threshold = 0.7,
-  stages?: EvalOutput['stages'],
-): EvalOutput {
+export function gate(input: EvalInput, threshold = 0.7, stages?: EvalOutput['stages']): EvalOutput {
   const reasons: string[] = [];
   if (input.blockers.length > 0) {
     reasons.push(`blocked: ${input.blockers.join(', ')}`);

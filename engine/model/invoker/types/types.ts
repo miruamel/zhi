@@ -56,22 +56,19 @@ export function createModelInvoker(options?: CloudInvokerOptions): ModelInvoker 
     invoke: async (prompt: string) => {
       if (!options?.apiKey) throw new Error('cloud invoker: no API key');
       const url = validateBaseUrl(options.baseUrl ?? 'https://api.openai.com/v1');
-      const res = await fetch(
-        `${url}/chat/completions`,
-        {
-          signal: AbortSignal.timeout(options?.timeoutMs ?? 30000),
+      const res = await fetch(`${url}/chat/completions`, {
+        signal: AbortSignal.timeout(options?.timeoutMs ?? 30000),
 
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            authorization: `Bearer ${options.apiKey}`,
-          },
-          body: JSON.stringify({
-            model: options.model ?? 'gpt-4o-mini',
-            messages: [{ role: 'user', content: prompt }],
-          }),
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          authorization: `Bearer ${options.apiKey}`,
         },
-      );
+        body: JSON.stringify({
+          model: options.model ?? 'gpt-4o-mini',
+          messages: [{ role: 'user', content: prompt }],
+        }),
+      });
       if (!res.ok) throw new Error(`cloud invoker: HTTP ${res.status}`);
       const data = (await res.json()) as any;
       return data.choices?.[0]?.message?.content ?? '';

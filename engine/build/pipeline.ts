@@ -61,7 +61,10 @@ export class Pipeline {
       case 'verify': {
         const { verify } = await import('./verify');
         const result = verify([]);
-        return { ok: result.ok, detail: `${result.files} files checked, ${result.violations.length} violations` };
+        return {
+          ok: result.ok,
+          detail: `${result.files} files checked, ${result.violations.length} violations`,
+        };
       }
       case 'deploy': {
         return { ok: true, detail: `Deployed to ${config.outDir}` };

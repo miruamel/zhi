@@ -84,7 +84,6 @@ export function applyKeyAction(action: KeyAction, deps: KeyHandlerDeps): boolean
     case 'cycle':
       deps.setFocusIdx((i: number) => (i + 1) % 6);
       break;
-<<<<<<< HEAD
     case 'openPalette':
       deps.setPaletteOpen?.(true);
       deps.setMode?.('command');
@@ -130,8 +129,6 @@ export function applyKeyAction(action: KeyAction, deps: KeyHandlerDeps): boolean
     case 'searchMode':
       deps.setMode?.('search');
       break;
-=======
->>>>>>> b4c1dda (merge: resolve conflicts with origin/main)
     default:
       break;
   }

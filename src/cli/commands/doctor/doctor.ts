@@ -56,10 +56,18 @@ export function doctor(_opts: DoctorOpts = {}): DoctorReport {
   } catch {
     netOk = false;
   }
-  checks.push({ name: 'network', ok: netOk, detail: netOk ? 'Fetch available' : 'Fetch not available' });
+  checks.push({
+    name: 'network',
+    ok: netOk,
+    detail: netOk ? 'Fetch available' : 'Fetch not available',
+  });
 
   const configOk = typeof process !== 'undefined' && typeof process.env === 'object';
-  checks.push({ name: 'config', ok: configOk, detail: configOk ? 'Config env present' : 'Config env missing' });
+  checks.push({
+    name: 'config',
+    ok: configOk,
+    detail: configOk ? 'Config env present' : 'Config env missing',
+  });
 
   return { checks, allOk: checks.every((c) => c.ok) };
 }

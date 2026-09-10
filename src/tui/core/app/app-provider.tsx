@@ -1,7 +1,7 @@
 /**
  * @fileoverview App input handler — key bindings, useInput wiring, and command palette.
  * @since 0.1.2
- * @updated 0.2.6 — extracted from app.tsx to enforce 150-SLOC guard
+ * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
  * @package zhi
  */
 import { useInput } from 'ink';
@@ -70,7 +70,10 @@ export function AppProvider({
       key: { ctrl?: boolean; meta?: boolean; shift?: boolean; return?: boolean; escape?: boolean },
     ) => {
       if (paletteOpenRef.current) {
-        if (key.escape) { setPaletteOpen(false); setMode('normal'); }
+        if (key.escape) {
+          setPaletteOpen(false);
+          setMode('normal');
+        }
         return;
       }
       const action = resolveKey(input, key);

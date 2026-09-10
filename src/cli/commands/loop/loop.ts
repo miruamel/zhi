@@ -75,7 +75,9 @@ export async function loopCommand(argv: string[]): Promise<LoopContext> {
   metrics.reset();
   await driver.run(buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics));
   const s = metrics.summary();
-  process.stderr.write(`[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}\n`);
+  process.stderr.write(
+    `[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}\n`,
+  );
   return ctx;
 }
 
@@ -120,6 +122,8 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
   await driver.run(handlers);
   unmount();
   const s = metrics.summary();
-  process.stderr.write(`[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}\n`);
+  process.stderr.write(
+    `[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}\n`,
+  );
   return ctx;
 }

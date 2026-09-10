@@ -18,7 +18,10 @@ interface DirentLike {
 }
 
 /** @brief Walk directory tree, skip .git + node_modules + dist. @since 0.1.2 */
-function walkDir(dir: string, onFile: (file: string, content: string) => void): { skipped: number } {
+function walkDir(
+  dir: string,
+  onFile: (file: string, content: string) => void,
+): { skipped: number } {
   let entries: DirentLike[];
   let skipped = 0;
   try {

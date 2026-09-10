@@ -111,6 +111,6 @@ export function finishLoop(
   state: FinishLoopState,
   options: FinishLoopOptions,
 ): { aborted: boolean } {
-  if (state.step >= options.maxSteps) return { aborted: false };
-  return { aborted: true };
+  if (state.step >= options.maxSteps) return { aborted: true };
+  return { aborted: false };
 }

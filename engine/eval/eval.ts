@@ -37,11 +37,9 @@ export async function evaluate(worktree: string): Promise<EvalOutput> {
   };
   if (!security.ok) {
     reasons.push('secret bocor');
-    return gate(
-      { score: 0, criteria: [], blockers: ['secret bocor'] },
-      0.7,
-      { security: securityStage },
-    );
+    return gate({ score: 0, criteria: [], blockers: ['secret bocor'] }, 0.7, {
+      security: securityStage,
+    });
   }
   const testStart = Date.now();
   const testResult = runTests(worktree);
@@ -53,18 +51,16 @@ export async function evaluate(worktree: string): Promise<EvalOutput> {
   };
   if (!testResult.allPassed) {
     reasons.push('test gagal');
-    return gate(
-      { score: 0, criteria: [], blockers: ['test gagal'] },
-      0.7,
-      { security: securityStage, test: testStage },
-    );
+    return gate({ score: 0, criteria: [], blockers: ['test gagal'] }, 0.7, {
+      security: securityStage,
+      test: testStage,
+    });
   }
   reasons.push('criteria met');
-  return gate(
-    { score: 1, criteria: ['criteria met'], blockers: [] },
-    0.7,
-    { security: securityStage, test: testStage },
-  );
+  return gate({ score: 1, criteria: ['criteria met'], blockers: [] }, 0.7, {
+    security: securityStage,
+    test: testStage,
+  });
 }
 
 function collectFiles(dir: string): Array<{ path: string; content: string }> {
