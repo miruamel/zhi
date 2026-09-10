@@ -44,7 +44,6 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 - **v0.1.11 release audit trail** — `audit-log/entries/2026-09-10-release-0.1.11.md` records PR #251, tag `v0.1.11`, workflow `34415130015`, npm `latest=0.1.11`, GitHub Release with binaries for Linux x64, macOS x64, macOS arm64, Windows x64 + SHA256. PR #252 (`2e42b8e`).
 
-
 ## [0.1.11] - 2026-09-09
 
 ### Changed
