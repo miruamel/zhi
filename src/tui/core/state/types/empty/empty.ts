@@ -41,5 +41,7 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     memoryFacts: [],
     configEntries: [],
     runtimeLog: [],
+    notifications: [],
+    unreadCount: 0,
   };
 }
