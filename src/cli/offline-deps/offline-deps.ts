@@ -1,9 +1,10 @@
 /**
  * @brief Factory deps LoopDeps offline (tanpa MODEL_API_KEY, tanpa git/gh).
  * generate() tulis scaffold ke worktree bila ada. critique() pakai plant critics.
- * compress() fallback ke no-op bila budget tidak cukup.
+ * compress() menolak input kosong atau hasil compressor tanpa entry usable.
  * @param {number} threshold - ambang Pareto (0..1).
  * @return {LoopDeps} deps siap pakai untuk buildHandlers.
+ * @throws {Error} bila code kosong atau compressor menghasilkan entry kosong.
  * @since 0.1.2
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -59,9 +60,14 @@ export function offlineDeps(threshold: number, architectureRunner?: CruiserRunne
         [{ path: 'generated.ts', content: code }],
         architectureRunner ?? (() => ({ modules: [] })),
       ),
-    compress: (code) =>
-      compress({ entries: [{ key: 'code', weight: 1, text: code }], budget: 20000 }).entries[0]
-        ?.text ?? '',
+    compress: (code) => {
+      const entry = compress({ entries: [{ key: 'code', weight: 1, text: code }], budget: 20000 })
+        .entries[0];
+      if (!entry || entry.text.length === 0) {
+        throw new Error('offline-deps: compress produced no entries');
+      }
+      return entry.text;
+    },
     paretoThreshold: threshold,
   };
 }
