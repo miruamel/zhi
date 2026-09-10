@@ -2,7 +2,7 @@
  * @fileoverview Orchestrator runner — executes DAG steps with scheduling. @since 0.1.10
  * @package zhi
  */
-import type { Dag, DagStep, OrchConfig } from '../types';
+import type { Dag, OrchConfig } from '../types';
 import type { OrchState } from './state/state';
 import { topologicalSort } from './dag';
 
@@ -51,6 +51,7 @@ export class DefaultOrchestratorRunner implements OrchestratorRunner {
       }
       try {
         await this.executeStep(step, graph);
+        stepsExecuted++;
       } catch (err) {
         this.state = 'failed';
         return {

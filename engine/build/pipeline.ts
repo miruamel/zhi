@@ -1,8 +1,7 @@
-/**
- * @fileoverview Build pipeline. @since 0.1.10
- * @package zhi
- */
 import type { BuildConfig } from './core/types';
+import { createSigner } from './signer/signer';
+import { verify } from './verify';
+import { generate } from './core/scaffold';
 
 /** @brief Pipeline stage. @since 0.1.10 */
 export type PipelineStage = 'generate' | 'build' | 'sign' | 'verify' | 'deploy';
@@ -35,7 +34,6 @@ export class Pipeline {
       try {
         switch (stage) {
           case 'generate': {
-            const { generate } = await import('./core/scaffold.js');
             const files = await generate({ entry: _config.entry, outDir: _config.outDir });
             detail = `${files.length} files generated`;
             break;
@@ -45,14 +43,12 @@ export class Pipeline {
             break;
           }
           case 'sign': {
-            const { createSigner } = await import('./signer.js');
             const signer = createSigner();
             signer.sign(_config.entry);
             detail = 'signed';
             break;
           }
           case 'verify': {
-            const { verify } = await import('./verify.js');
             verify([]);
             detail = 'verified';
             break;
@@ -68,7 +64,7 @@ export class Pipeline {
       }
       results.push({ stage, ok, durationMs: Date.now() - start, detail });
     }
-    const ok = results.every(r => r.ok);
+    const ok = results.every((r) => r.ok);
     return { ok, stages: results };
   }
 }
