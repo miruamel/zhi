@@ -50,6 +50,7 @@ export function AppRenderPanesMetrics({
             tokenSparkline={state.tokenSparkline}
             stepsTotal={state.steps.length}
             stepsCompleted={doneCount}
+            sessions={state.sessions}
           />
         )}
         {visiblePanes.includes('release') && <ReleasePane builds={[]} releases={[]} />}
