@@ -14,12 +14,12 @@ import {
   SessionsPane,
   MemoryPane,
   SettingsPane,
-  HelpPane,
+  KnowledgeInspector,
   NotificationsPane,
+  HelpPane,
 } from '../../../panes';
 import { DagStep } from '../../state';
 import type { AppControllerResult } from '../app-controller';
-
 /**
  * @brief Render metrics/status panes from controller state.
  * @param controller controller result from useAppController
@@ -96,7 +96,20 @@ export function AppRenderPanesMetrics({
         {visiblePanes.includes('sessions') && (
           <SessionsPane sessions={state.sessions} activeId={state.activeSessionId} />
         )}
-        {visiblePanes.includes('memory') && <MemoryPane facts={state.memoryFacts} />}
+        {visiblePanes.includes('memory') && (
+          <MemoryPane
+            facts={state.memoryFacts}
+            query={state.memoryQuery}
+            activeTag={state.memoryActiveTag}
+          />
+        )}
+        {visiblePanes.includes('knowledge') && (
+          <KnowledgeInspector
+            facts={state.memoryFacts}
+            query={state.memoryQuery}
+            embeddingDims={state.embeddingDims}
+          />
+        )}
         {visiblePanes.includes('config') && <SettingsPane entries={state.configEntries} />}
       </Box>
       <Box marginTop={1}>{visiblePanes.includes('help') && <HelpPane />}</Box>

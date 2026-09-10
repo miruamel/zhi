@@ -48,7 +48,8 @@ export type PaneId =
   | 'command-palette'
   | 'notifications'
   | 'status-bar'
-  | 'config';
+  | 'memory'
+  | 'knowledge';
 
 /** Pane visibility */
 export interface PaneVisibility {

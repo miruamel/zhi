@@ -39,6 +39,9 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     // 0.2.1 defaults
     sessions: [],
     memoryFacts: [],
+    memoryQuery: '',
+    memoryActiveTag: null,
+    embeddingDims: 64,
     configEntries: [],
     runtimeLog: [],
     notifications: [],
