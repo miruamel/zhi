@@ -5,7 +5,7 @@
  * @package zhi
  */
 import { Text } from 'ink';
-import { Pane } from './pane-base';
+import { Pane } from '../../base/pane-base';
 
 /** @brief Log pane. @since 0.1.11 */
 export function LogPane({

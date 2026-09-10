@@ -5,7 +5,7 @@
  * @package zhi
  */
 import { Box, Text } from 'ink';
-import { Pane } from './pane-base';
+import { Pane } from '../../base/pane-base';
 
 /** @brief Status pane. @since 0.1.11 */
 export function StatusPane({

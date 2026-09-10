@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import { Box, Text } from 'ink';
-import { Pane } from './pane-base';
+import { Pane } from '../../base/pane-base';
 
 /** @brief Tree pane. @since 0.1.11 */
 export function TreePane({

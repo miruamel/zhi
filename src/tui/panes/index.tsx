@@ -4,13 +4,13 @@
  * @updated 0.1.12 — primitives split to status-pane, log-pane, input-pane, chart-pane, tree-pane, grid-pane
  * @package zhi
  */
-export { type PaneProps, Pane, SplitPane, ScrollablePane } from './pane-base';
-export { StatusPane } from './status-pane';
-export { LogPane } from './log-pane';
-export { InputPane } from './input-pane';
-export { ChartPane } from './chart-pane';
-export { TreePane } from './tree-pane';
-export { GridPane } from './grid-pane';
+export { type PaneProps, Pane, SplitPane, ScrollablePane } from './primitives/base/pane-base';
+export { StatusPane } from './primitives/panes/simple/status-pane';
+export { LogPane } from './primitives/panes/simple/log-pane';
+export { InputPane } from './primitives/panes/simple/input-pane';
+export { ChartPane } from './primitives/panes/visual/chart-pane';
+export { TreePane } from './primitives/panes/visual/tree-pane';
+export { GridPane } from './primitives/panes/visual/grid-pane';
 export { CodeViewer, type CodeViewerProps } from './top/code-viewer/code-viewer';
 export { Header } from './top/header/header';
 export { Dag } from './top/dag/dag';

@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import { Box } from 'ink';
-import { Pane } from './pane-base';
+import { Pane } from '../../base/pane-base';
 
 /** @brief Grid pane. @since 0.1.11 */
 export function GridPane({
