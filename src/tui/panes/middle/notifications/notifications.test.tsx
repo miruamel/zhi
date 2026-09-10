@@ -25,6 +25,7 @@ const baseProps = {
     },
   ],
   unreadCount: 1,
+  onMarkRead: () => {},
 };
 
 describe('NotificationsPane', () => {
@@ -42,9 +43,8 @@ describe('NotificationsPane', () => {
     expect(out).toContain('Gate failed');
     expect(out).toContain('(1 unread)');
   });
-
-  it('renders dismiss hint', () => {
+  it('renders mark-read hint when unread', () => {
     const out = renderToString(<NotificationsPane {...baseProps} />);
-    expect(out).toContain('[d] dismiss');
+    expect(out).toContain('[r] read');
   });
 });
