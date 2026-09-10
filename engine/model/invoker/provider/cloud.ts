@@ -39,6 +39,18 @@ export function extractTokens(payload: string): string[] {
   }
 }
 
+/** @brief Daftar baseUrl yang diizinkan. @since 0.1.11 */
+const ALLOWED_BASE_URLS = ['https://api.openai.com', 'https://api.anthropic.com'];
+
+/** @brief Validasi baseUrl — tolak localhost/IP literal/SSRF. @param {string} url @return {string} @throw {Error} bila tidak diizinkan @since 0.1.11 */
+function validateBaseUrl(url: string): string {
+  const base = url.split('/v1')[0];
+  if (!ALLOWED_BASE_URLS.includes(base)) {
+    throw new Error(`cloud invoker: baseUrl not allowed: ${base}`);
+  }
+  return url;
+}
+
 /** @brief Buat AbortSignal dengan timeout (bila didukung). @param {number} ms - ms; 0 = none. @return {AbortSignal | undefined} @since 0.1.2 */
 function signalOrUndefined(ms: number): AbortSignal | undefined {
   if (ms <= 0) return undefined;
@@ -55,7 +67,7 @@ export class CloudModelInvoker implements ModelInvoker {
 
   /** @brief Bind endpoint + kredensial. @param {CloudInvokerOpts} opts - baseUrl/model/apiKey. */
   constructor(opts: CloudInvokerOpts) {
-    this.url = `${opts.baseUrl ?? 'https://api.openai.com/v1'}/chat/completions`;
+    this.url = `${validateBaseUrl(opts.baseUrl ?? 'https://api.openai.com/v1')}/chat/completions`;
     this.model = opts.model ?? 'gpt-4o-mini';
     this.apiKey = opts.apiKey;
     this.timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
@@ -77,7 +89,7 @@ export class CloudModelInvoker implements ModelInvoker {
       }),
       signal: signalOrUndefined(this.timeoutMs),
     });
-    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status} ${await res.text()}`);
+    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status}`);
     const data = (await res.json()) as {
       choices?: Array<{ message?: { content?: string } }>;
     };
@@ -104,7 +116,7 @@ export class CloudModelInvoker implements ModelInvoker {
       }),
       signal: signalOrUndefined(this.timeoutMs),
     });
-    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status} ${await res.text()}`);
+    if (!res.ok) throw new Error(`CloudModelInvoker: HTTP ${res.status}`);
     const body = res.body;
     if (!body) throw new Error('CloudModelInvoker: respons tanpa stream body');
     const reader = body.getReader();
