@@ -16,13 +16,15 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 ## [Unreleased]
 
+### Fixed
+
+- **architecture-guard.sh SLOC check missed .tsx files (#266)** — the SLOC find pattern only matched `*.ts`, `*.js`, `*.zig`; `*.tsx` files were invisible, letting `src/tui/core/app/app-provider.tsx` sit at 161 lines undetected. Added `*.tsx` to the pattern with `*.test.tsx` exemption. Extracted `useInput` wiring from `app-provider.tsx` into `use-app-input.ts` (136 lines); provider now 57 lines. PR #267. Audit: `audit-log/entries/2026-09-10-arch-guard-tsx-sloc-267.md`.
+
 ### Added
 
-- **Dashboard data integrity — hardcoded metrics removed (#270)** — `AppRenderPanesMetrics` previously passed literal `testCoverage={0.85}` and `costTrend={0}` to `DashboardPane`, displaying fabricated values. Added `testCoverage?: number` and `costTrend?: number` to `EvalReport`, `costTrend?: number` to `AppState`, and wired real values through the render layer. `DashboardPane` now renders a `Sparkline` from `state.tokenSparkline` in the COST column. 5 new tests cover sparkline presence/absence and negative cost trend. PR TBD.
+- **Dashboard data integrity — hardcoded metrics removed (#270)** — `AppRenderPanesMetrics` previously passed literal `testCoverage={0.85}` and `costTrend={0}` to `DashboardPane`, displaying fabricated values. Added `testCoverage?: number` and `costTrend?: number` to `EvalReport`, `costTrend?: number` to `AppState`, and wired real values through the render layer. `DashboardPane` now renders a `Sparkline` from `state.tokenSparkline` in the COST column. 4 new tests cover sparkline presence and negative cost trend. PR TBD.
 
 ## [0.1.12] - 2026-09-10
-
-### Security
 
 - **CloudModelInvoker SSRF + error body leak (#187, #188)** — `engine/model/invoker/provider/cloud.ts` gained `validateBaseUrl()` against a hardcoded `ALLOWED_BASE_URLS` allowlist (`api.openai.com`, `api.anthropic.com`); constructor now rejects any `opts.baseUrl` outside the allowlist. Non-`ok` responses no longer leak the raw body into the thrown error (`HTTP ${res.status}` only) — both sync and streaming paths. PR #256 (`6ada8bb`).
 
