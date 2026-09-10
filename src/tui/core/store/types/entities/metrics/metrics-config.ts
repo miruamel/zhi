@@ -2,7 +2,7 @@
  * @fileoverview Metrics, config, and theme entity types. @since 0.1.11
  * @package zhi
  */
-import type { ThemeName } from '../primitives';
+import type { ThemeName } from '../../primitives';
 
 /** Metric data point */
 export interface MetricPoint {

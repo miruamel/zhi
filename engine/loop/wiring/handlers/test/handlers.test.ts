@@ -124,8 +124,42 @@ describe('loop wiring', () => {
     const red: LoopContext = { goal: 'g' };
     const d2 = new LoopDriver();
     await d2.run(buildHandlers(red, stubDeps({ ciWatch: () => 'red' })));
-    expect(d2.finished).toBe(true);
     expect(red.attempts).toBe(3);
+  });
+  it('CI_WATCH re-polls on pending instead of regenerating code', async () => {
+    const pending: LoopContext = { goal: 'g' };
+    const d = new LoopDriver();
+    let calls = 0;
+    await d.run(buildHandlers(pending, stubDeps({ ciWatch: () => (calls++, 'pending') })));
+    // pending must NOT trigger RECOVER (which would regenerate code).
+    expect(pending.attempts).toBeUndefined();
+    // pending must terminate via BUDGET_OUT, not spin forever.
+    expect(d.finished).toBe(true);
+    expect(pending.error).toContain('CI still pending');
+    expect(calls).toBe(5);
+  });
+  it('EVALUATE awaits async deps.eval before gating', async () => {
+    const ctx: LoopContext = {
+      goal: 'g',
+      worktree: '/wt',
+      code: 'x',
+      aggregate: { score: 9, passed: true },
+    };
+    let evalCalled = false;
+    const d = new LoopDriver();
+    await d.run(
+      buildHandlers(
+        ctx,
+        stubDeps({
+          eval: async () => {
+            evalCalled = true;
+            return { passed: true, score: 9, reasons: [] };
+          },
+        }),
+      ),
+    );
+    expect(evalCalled).toBe(true);
+    expect(d.current).toBe(LoopState.DONE);
   });
 });
 

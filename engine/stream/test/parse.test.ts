@@ -2,7 +2,7 @@
  * @brief Unit: parser TS murni (parseSseTs) + dispatcher (parseStream). @since 0.1.1
  */
 import { describe, expect, it } from 'bun:test';
-import { parseSseTs } from '../parseSseTs';
+import { parseSseTs } from '../native/parseSseTs';
 import { parseStream, isWasmAvailable } from '../index';
 
 describe('parseSseTs (TS fallback)', () => {

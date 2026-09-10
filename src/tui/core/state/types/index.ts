@@ -21,4 +21,4 @@ export type {
   ConfigEntry,
 } from './extended';
 export type { AppState } from './appstate';
-export { emptyState } from './empty';
+export { emptyState } from './empty/empty';

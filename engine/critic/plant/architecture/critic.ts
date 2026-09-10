@@ -11,7 +11,7 @@ export type CruiserRunner = () => {
 /** @brief Max nesting depth before penalty. @since 0.1.10 */
 const MAX_DEPTH = 10;
 /** @brief Max files per folder. @since 0.1.10 */
-const MAX_FILES_PER_FOLDER = 4;
+const MAX_FILES_PER_FOLDER = 4; // AGENTS.md line 28: <=4 files per folder (barrel index counts)
 
 interface PathInfo {
   dir: string;

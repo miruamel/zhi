@@ -1,7 +1,7 @@
 /** @brief Test LocalStubInvoker + selectInvoker + extractTokens. @since 0.1.2 */
 import { test, expect } from 'bun:test';
 import { LocalStubInvoker, selectInvoker } from '../index';
-import { extractTokens } from '../cloud';
+import { extractTokens } from '../provider/cloud';
 
 test('LocalStubInvoker.invoke returns deterministic stub with prompt', async () => {
   const out = await new LocalStubInvoker().invoke('make a thing');

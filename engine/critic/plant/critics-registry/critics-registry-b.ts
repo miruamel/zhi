@@ -1,5 +1,5 @@
 /** @fileoverview Critic plant — registry chunk B (imports→concurrency-2). @since 0.1.10 @package zhi */
-import type { CriticDescriptor } from './types/types';
+import type { CriticDescriptor } from '../types/types';
 
 const stub = (): CriticDescriptor['check'] => () => ({ findings: [], score: 100, durationMs: 0 });
 

@@ -19,10 +19,10 @@ export {
   createKeyManager,
   signFile,
   verifyFile,
-} from './signer/signer';
-export type { SignerAlgorithm, KeyType, Signature, KeyPair, SignerOptions } from './signer/signer';
-export { VerifyEngine, createVerifyEngine, verify } from './verify';
-export type { VerifyResult, ArtifactVerifyResult, VerifyOptions } from './verify';
+} from './crypto/signer';
+export type { SignerAlgorithm, KeyType, Signature, KeyPair, SignerOptions } from './crypto/signer';
+export { VerifyEngine, createVerifyEngine, verify } from './crypto/verify';
+export type { VerifyResult, ArtifactVerifyResult, VerifyOptions } from './crypto/verify';
 export { generate, generateStream } from './core/scaffold';
 export type { GenerateInput, GenerateOutput, ScaffoldFile } from './core/scaffold';
 export {

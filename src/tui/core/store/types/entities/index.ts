@@ -3,7 +3,7 @@
  * @package zhi
  */
 import type { DagStep } from './dag';
-import type { MetricsSummary } from './metrics-config';
+import type { MetricsSummary } from './metrics/metrics-config';
 export type { StepStatus, StepType, ThemeName } from '../primitives';
 export type { DagStep, EvalCheck, EvalStage, LogEntry, CriticItem, GitStatus } from './dag';
 export type { FileNode, FileChange, DiffHunk, DiffLine } from './filetree/filetree';
@@ -15,8 +15,8 @@ export type {
   AgentInfo,
   NetworkRequest,
 } from './notification-palette';
-export type { MetricPoint, MetricsSummary } from './metrics-config';
-export type { ThemeColors, Theme, ConfigSetting, AppConfig } from './metrics-config';
+export type { MetricPoint, MetricsSummary } from './metrics/metrics-config';
+export type { ThemeColors, Theme, ConfigSetting, AppConfig } from './metrics/metrics-config';
 
 /** Search result */
 export interface SearchResult {

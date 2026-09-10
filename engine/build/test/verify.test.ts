@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test';
-import { verify } from '../verify';
+import { verify } from '../crypto/verify';
 import type { ScaffoldFile } from '../core/scaffold';
 
 /** @brief Scaffold valid: 2 file, masing-masing punya @brief. @since 0.1.1 */

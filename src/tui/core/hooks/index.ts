@@ -1,8 +1,8 @@
 /**
  * @fileoverview Hooks barrel — re-exports all custom React hooks. @since 0.1.11
  */
-export { useDebounce } from './use-debounce/useDebounce';
-export { useThrottle } from './useThrottle';
+export { useDebounce } from './debounce/useDebounce';
+export { useThrottle } from './debounce/useThrottle';
 export { useLocalStorage } from './useLocalStorage';
 export { useStream } from './stream/useStream';
 export { useFocus, type NavigationState } from './useNavigation';

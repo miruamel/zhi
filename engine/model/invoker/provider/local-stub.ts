@@ -2,7 +2,7 @@
  * @fileoverview Local stub invoker — deterministic mock for testing and offline use. @since 0.1.10
  * @package zhi
  */
-import type { ModelInvoker } from './types/types';
+import type { ModelInvoker } from '../types/types';
 
 /** @brief Local stub options. @since 0.1.10 */
 export interface LocalStubOptions {

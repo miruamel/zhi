@@ -59,7 +59,7 @@ export class Pipeline {
         return { ok: !!sig.hash, detail: `Signed (${sig.algorithm})` };
       }
       case 'verify': {
-        const { verify } = await import('./verify');
+        const { verify } = await import('./crypto/verify');
         const result = verify([]);
         return {
           ok: result.ok,

@@ -4,7 +4,7 @@
  */
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import type { ScaffoldFile } from './core/scaffold';
+import type { ScaffoldFile } from '../core/scaffold';
 
 /** @brief Verify result. @since 0.1.10 */
 export interface VerifyResult {

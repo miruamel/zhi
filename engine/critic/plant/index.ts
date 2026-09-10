@@ -2,8 +2,8 @@
  * @fileoverview Critic plant barrel. @since 0.1.9
  * @package zhi
  */
-import { CRITIC_REGISTRY_A } from './critics-registry-a';
-import { CRITIC_REGISTRY_B } from './critics-registry-b';
+import { CRITIC_REGISTRY_A } from './critics-registry/critics-registry-a';
+import { CRITIC_REGISTRY_B } from './critics-registry/critics-registry-b';
 import type { CriticDescriptor } from './types/types';
 
 export {
