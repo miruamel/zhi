@@ -14,6 +14,36 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
+## [0.1.12] - 2026-09-10
+
+### Security
+
+- **CloudModelInvoker SSRF + error body leak (#187, #188)** — `engine/model/invoker/provider/cloud.ts` gained `validateBaseUrl()` against a hardcoded `ALLOWED_BASE_URLS` allowlist (`api.openai.com`, `api.anthropic.com`); constructor now rejects any `opts.baseUrl` outside the allowlist. Non-`ok` responses no longer leak the raw body into the thrown error (`HTTP ${res.status}` only) — both sync and streaming paths. PR #256 (`6ada8bb`).
+
+### Fixed
+
+- **Pipeline.run, doctor, run command wired to real implementations (#200, #201, #202)** — `engine/build/pipeline.ts` gained a real `run()` entrypoint with static imports + step counter; `src/cli/commands/doctor/doctor.ts` (45 lines) and `src/cli/commands/run/run.ts` (19 lines) replaced stubs. PR #239 (`db38fc6`).
+- **Typecheck errors from DagStep/Step split** — `engine/orch/runner/dag.ts`, `runner.ts`, `allocator.ts`, `types.ts`, `scaffold.ts`, `pipeline.ts` and two test files updated to match the split. PR #241 (`bd697cb`).
+- **Empty offline compression rejected (#194)** — `src/cli/offline-deps/offline-deps.ts` now rejects empty compression input; tests updated. PR #253 (`b28e537`).
+- **TUI/loop P1 fixes: palette shortcut + layout ownership + lifecycle** — `src/tui/app.tsx`, `app-controller.ts`, `app-provider.tsx`, `app-render.tsx`, `arranger/engine.ts`, `handlers/keymap.ts`, `loop/runner.ts` and tests. PR #244 (`ea0c496`, `afb1fd9`).
+- **Gate: static imports + step counter in pipeline/runner** — `engine/build/pipeline.ts`, `engine/orch/runner/runner.ts`, `engine/eval/gate.ts`, `engine/eval/eval.ts`. PR #243 (`1216624`).
+
+### Removed
+
+- **Duplicate `engine/build/signer/signer.ts` (#259)** — 91-line byte-identical duplicate of `engine/build/crypto/signer.ts`. Canonical source is `crypto/signer.ts`; `pipeline.ts:56` dynamic import updated from `./signer/signer` to `./crypto/signer`. PR #259 (`ad3e219`).
+- **Three orphaned engine files with zero importers (#261)** — `engine/knowledge/search.ts` (58 lines), `engine/knowledge/summarizer.ts` (83 lines), `engine/loop/driver/driver-runner.ts` (54 lines). Full-repo grep confirmed zero references. PR #261 (`6570e33`).
+- **Dead `native/build.zig` stub (#257)** — 5-line stub claiming file-presence check, but `gate.ts` SKIP_PREFIXES never checks file existence. PR #257 (`4645f3d`).
+- **Stale `.pr-body-245.md`** — orphaned PR body for merged PR #245, left on disk after merge.
+
+### Changed
+
+- **CI: fork PR approval gate** — `.github/workflows/ci.yml` adds `gate-fork` job requiring manual approval (`environment: approval`) for fork PRs; `gate` and `build` jobs gated on `!github.event.pull_request.head.repo.fork`.
+- **Docs restructure** — `docs/marketing/` → `docs/marketing/copy/`; `audit-log/README.md` entry count updated to 106.
+
+### Docs
+
+- **v0.1.11 release audit trail** — `audit-log/entries/2026-09-10-release-0.1.11.md` records PR #251, tag `v0.1.11`, workflow `34415130015`, npm `latest=0.1.11`, GitHub Release with binaries for Linux x64, macOS x64, macOS arm64, Windows x64 + SHA256. PR #252 (`2e42b8e`).
+
 ## [0.1.11] - 2026-09-09
 
 ### Changed
@@ -238,7 +268,8 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 ## [0.1.0] - 2026-08-29
 
 First tagged baseline. See [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md) for the full 2026-08-29 → 2026-08-30 development log (15 entries; note: that history uses inconsistent version headers `[0.1.0]` duplicated and a non-monotonic `0.1.0..0.6.0` block — preserved as-is for authorial record).
-[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.11...HEAD
+[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.12...HEAD
+[0.1.12]: https://github.com/miruamel/zhi/releases/tag/v0.1.12
 [0.1.11]: https://github.com/miruamel/zhi/releases/tag/v0.1.11
 [0.1.7]: https://github.com/miruamel/zhi/releases/tag/v0.1.7
 [0.1.6]: https://github.com/miruamel/zhi/releases/tag/v0.1.6

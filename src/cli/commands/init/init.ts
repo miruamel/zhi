@@ -27,7 +27,7 @@ export async function init(opts: InitOpts = {}): Promise<InitResult> {
     await mkdir(join(process.cwd(), d), { recursive: true });
     created.push(d);
   }
-  const config = `name: ${name}\nmaturity: experimental\nversion: 0.1.11\n`;
+  const config = `name: ${name}\nmaturity: experimental\nversion: 0.1.12\n`;
   await writeFile(join(process.cwd(), '.zhi', 'config.yaml'), config);
   created.push('.zhi/config.yaml');
   const agents = `# AGENTS.md — ${name}\n\nEngineering standards for ${name}.\n`;
