@@ -4,7 +4,7 @@
  * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
  * @package zhi
  */
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useApp } from 'ink';
 import { Arranger } from '../arranger';
 import { useFocus } from '../hooks';
@@ -77,7 +77,22 @@ export function useAppController(
 
   const arranger = useState(() => new Arranger())[0];
   const [, setLayoutVersion] = useState(0);
-  arranger.subscribe(() => setLayoutVersion((v) => v + 1));
+  const onRegisterRef = useRef(onRegister);
+  const registered = useRef(false);
+  onRegisterRef.current = onRegister;
+
+  const pushState = useCallback(
+    (patch: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...patch })),
+    [],
+  );
+
+  useEffect(() => {
+    if (registered.current) return;
+    registered.current = true;
+    onRegisterRef.current?.(pushState);
+  }, [pushState]);
+
+  useEffect(() => arranger.subscribe(() => setLayoutVersion((v) => v + 1)), [arranger]);
   const paneOrder = arranger.visiblePanes();
   const focusHook = useFocus(paneOrder, 0);
   const nav: FocusNav = {
@@ -86,10 +101,6 @@ export function useAppController(
     jump: focusHook.jump,
     goBack: focusHook.goBack,
   };
-
-  onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
-
-  const pushState = (patch: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...patch }));
 
   return {
     state,

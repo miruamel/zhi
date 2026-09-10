@@ -5,9 +5,9 @@
  * @package zhi
  */
 import { useInput } from 'ink';
+import { useRef } from 'react';
 import { resolveKey } from '../handlers/keymap';
 import { applyKeyAction } from '../handlers/keyhandler';
-import { AppState } from '../state';
 import type { AppControllerResult } from './app-controller';
 import type { CommandItem } from '../../widgets/command-palette';
 import { CommandPalette } from '../../widgets/command-palette';
@@ -17,7 +17,6 @@ export interface AppProviderProps {
   commands: CommandItem[];
   onAbort?: () => void;
   onQuit?: () => void;
-  onRegister?: (push: (p: Partial<AppState>) => void) => void;
   children: React.ReactNode;
 }
 
@@ -27,7 +26,6 @@ export interface AppProviderProps {
  * @param commands command palette items
  * @param onAbort abort callback
  * @param onQuit quit callback
- * @param onRegister state push registration
  * @param children render tree
  * @since 0.1.2
  */
@@ -36,7 +34,6 @@ export function AppProvider({
   commands,
   onAbort,
   onQuit,
-  onRegister,
   children,
 }: AppProviderProps): React.ReactNode {
   const {
@@ -58,15 +55,21 @@ export function AppProvider({
     arranger,
     exit,
   } = controller;
-
-  onRegister?.((p: Partial<AppState>) => pushState(p));
+  const paletteOpenRef = useRef(paletteOpen);
+  paletteOpenRef.current = paletteOpen;
 
   useInput(
     (
       input: string,
       key: { ctrl?: boolean; meta?: boolean; shift?: boolean; return?: boolean; escape?: boolean },
     ) => {
-      if (paletteOpen) return;
+      if (paletteOpenRef.current) {
+        if (key.escape) {
+          setPaletteOpen(false);
+          setMode('normal');
+        }
+        return;
+      }
       const action = resolveKey(input, key);
       switch (action) {
         case 'quit':

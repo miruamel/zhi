@@ -43,6 +43,12 @@ describe('resolveKey', () => {
     expect(resolveKey('c', { ctrl: false })).toBe('toggleCritics');
   });
 
+  test('maps palette and pane shortcuts without duplicate Ctrl+K actions', () => {
+    expect(resolveKey('p', { ctrl: true })).toBe('openPalette');
+    expect(resolveKey('k', { ctrl: true })).toBe('prevPane');
+    expect(resolveKey('j', { ctrl: true })).toBe('nextPane');
+  });
+
   test('returns KeyAction type', () => {
     const action: KeyAction = resolveKey('q', {});
     expect(typeof action).toBe('string');

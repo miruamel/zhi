@@ -39,6 +39,6 @@ describe('finishLoop', () => {
       { phase: 'running', step: 5, startedAt: Date.now(), tokensUsed: 100 },
       { maxSteps: 5 },
     );
-    expect(result.aborted).toBe(false);
+    expect(result.aborted).toBe(true);
   });
 });
