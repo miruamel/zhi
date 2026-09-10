@@ -45,7 +45,7 @@ export interface Edge {
 /** @brief DAG rencana bebas-siklus, terurut topologis. @since 0.1.1 */
 export interface Dag {
   /** @brief Semua step. */
-  nodes: Step[];
+  nodes: DagStep[];
   /** @brief Edge dependensi. */
   edges: Edge[];
   /** @brief Urutan topologis ID step. */

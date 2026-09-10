@@ -12,7 +12,12 @@ export interface ScaffoldFile {
 
 /** @brief Generate input. @since 0.1.10 */
 export interface GenerateInput {
+  /** @brief Domain name (optional, defaults to 'app'). */
   domain?: string;
+  /** @brief Entry file path (optional, for pipeline integration). */
+  entry?: string;
+  /** @brief Output directory (optional, for pipeline integration). */
+  outDir?: string;
 }
 
 /** @brief Generate output. @since 0.1.10 */

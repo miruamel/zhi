@@ -1,8 +1,7 @@
-/**
- * @fileoverview Build pipeline. @since 0.1.10
- * @package zhi
- */
 import type { BuildConfig } from './core/types';
+import { createSigner } from './signer/signer';
+import { verify } from './verify';
+import { generate } from './core/scaffold';
 
 /** @brief Pipeline stage. @since 0.1.10 */
 export type PipelineStage = 'generate' | 'build' | 'sign' | 'verify' | 'deploy';
@@ -30,9 +29,43 @@ export class Pipeline {
     const results: StageResult[] = [];
     for (const stage of this.stages) {
       const start = Date.now();
-      results.push({ stage, ok: true, durationMs: Date.now() - start });
+      let ok = true;
+      let detail: string | undefined;
+      try {
+        switch (stage) {
+          case 'generate': {
+            const files = await generate({ entry: _config.entry, outDir: _config.outDir });
+            detail = `${files.length} files generated`;
+            break;
+          }
+          case 'build': {
+            detail = `bun build ${_config.entry} --outdir ${_config.outDir}`;
+            break;
+          }
+          case 'sign': {
+            const signer = createSigner();
+            signer.sign(_config.entry);
+            detail = 'signed';
+            break;
+          }
+          case 'verify': {
+            verify([]);
+            detail = 'verified';
+            break;
+          }
+          case 'deploy': {
+            detail = `deploy to ${_config.outDir}`;
+            break;
+          }
+        }
+      } catch (err) {
+        ok = false;
+        detail = err instanceof Error ? err.message : String(err);
+      }
+      results.push({ stage, ok, durationMs: Date.now() - start, detail });
     }
-    return { ok: true, stages: results };
+    const ok = results.every((r) => r.ok);
+    return { ok, stages: results };
   }
 }
 

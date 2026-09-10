@@ -2,7 +2,7 @@
  * @fileoverview Orchestrator runner — executes DAG steps with scheduling. @since 0.1.10
  * @package zhi
  */
-import type { Dag, DagStep, OrchConfig } from '../types';
+import type { Dag, OrchConfig } from '../types';
 import type { OrchState } from './state/state';
 import { topologicalSort } from './dag';
 
@@ -27,7 +27,7 @@ export class DefaultOrchestratorRunner implements OrchestratorRunner {
   private aborted = false;
   private paused = false;
 
-  async run(graph: Dag, config: OrchConfig): Promise<RunResult> {
+  async run(graph: Dag, _config: OrchConfig): Promise<RunResult> {
     const startedAt = Date.now();
     this.state = 'running';
     this.aborted = false;
@@ -50,7 +50,7 @@ export class DefaultOrchestratorRunner implements OrchestratorRunner {
         };
       }
       try {
-        await this.executeStep(step, graph, config);
+        await this.executeStep(step, graph);
         stepsExecuted++;
       } catch (err) {
         this.state = 'failed';
@@ -67,18 +67,16 @@ export class DefaultOrchestratorRunner implements OrchestratorRunner {
     return { success: true, state: this.state, durationMs: Date.now() - startedAt, stepsExecuted };
   }
 
-  private async executeStep(stepId: string, graph: Dag, config: OrchConfig): Promise<void> {
-    const step = graph.nodes.find((n) => n.id === stepId) as unknown as DagStep;
+  private async executeStep(stepId: string, graph: Dag): Promise<void> {
+    const step = graph.nodes.find((n) => n.id === stepId);
     if (!step) throw new Error(`orch: step ${stepId} not found`);
     step.status = 'running';
     step.startTime = Date.now();
-    const delay = Math.min(config.maxConcurrency, 1) * 10;
-    await new Promise((r) => setTimeout(r, delay));
     step.status = 'completed';
     step.endTime = Date.now();
     step.duration = step.endTime - step.startTime;
-    step.tokens = Math.floor(Math.random() * 1000);
-    step.cost = step.tokens * 0.00002;
+    step.tokens = 0;
+    step.cost = 0;
   }
 
   pause(): void {

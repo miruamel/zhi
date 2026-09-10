@@ -17,7 +17,18 @@ describe('orch allocate', () => {
 
   it('splits equally when estimates are zero', () => {
     const zero = {
-      nodes: [{ id: 'a', label: 'a', deps: [], estimate: 0, priority: 0.5 }],
+      nodes: [
+        {
+          id: 'a',
+          kind: 'task',
+          title: 'a',
+          label: 'a',
+          status: 'pending' as const,
+          deps: [],
+          estimate: 0,
+          priority: 0.5,
+        },
+      ],
       edges: [],
       order: ['a'],
     };

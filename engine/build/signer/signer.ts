@@ -47,7 +47,7 @@ export class Signer {
   }
 
   verify(data: string | Buffer, signature: Signature): boolean {
-    const hash = createHash(this.algorithm).update(data).digest('hex');
+    const hash = createHash(signature.algorithm).update(data).digest('hex');
     return hash === signature.hash;
   }
 }
