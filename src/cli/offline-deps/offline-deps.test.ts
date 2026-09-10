@@ -3,7 +3,6 @@ import { mkdtempSync, rmSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { offlineDeps } from './offline-deps';
-import { compress } from '../../../engine/build/context/compress';
 import type { CruiserReport } from '../../../engine/critic/plant/compose';
 
 /** @brief Mock cruiser runner: zero violations, no real dependency-cruiser spawn. @since 0.1.11 */
@@ -50,14 +49,9 @@ describe('offlineDeps generate', () => {
     expect(out.length).toBeLessThanOrEqual(20000);
   });
 
-  it('compress() returns empty string when budget is zero (fallback path)', () => {
-    // budget is hardcoded to 20000 in the closure; to hit the ?? '' fallback
-    // we call the underlying compress directly with an empty entries array
-    const ctx = compress({ entries: [], budget: 0 });
-    expect(ctx.entries).toHaveLength(0);
-    // Verify the ?? '' fallback pattern: empty entries → undefined → ''
-    const result = ctx.entries[0]?.text ?? '';
-    expect(result).toBe('');
+  it('compress() rejects empty input instead of returning empty string', () => {
+    const deps = offlineDeps(0.7);
+    expect(() => deps.compress!('')).toThrow('offline-deps: compress produced no entries');
   });
 
   it('ingest() trims goal string', () => {
