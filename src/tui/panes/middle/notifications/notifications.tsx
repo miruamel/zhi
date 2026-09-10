@@ -52,9 +52,7 @@ export function NotificationsPane({
             <Text color={colors.fgDim} dimColor>
               {new Date(n.timestamp).toLocaleTimeString()}
               {n.persistent && ' · persistent'}
-              {' · '}
-              <Text color={colors.forward}>[d] dismiss</Text>
-              {onMarkRead && !n.read && <Text color={colors.forward}> [r] read</Text>}
+              {onMarkRead && !n.read && <Text color={colors.forward}> · [r] read</Text>}
             </Text>
           </Box>
         ))
