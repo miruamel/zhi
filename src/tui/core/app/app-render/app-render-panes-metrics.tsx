@@ -1,0 +1,101 @@
+/**
+ * @fileoverview Metrics panes — dashboard, release, orch, budget, loop, sessions, memory, config, help.
+ * @since 0.1.12
+ * @updated 0.1.12 — extracted from app-render-panes.tsx to enforce 150-SLOC guard
+ * @package zhi
+ */
+import { Box } from 'ink';
+import {
+  DashboardPane,
+  ReleasePane,
+  OrchPane,
+  BudgetPane,
+  LoopPane,
+  SessionsPane,
+  MemoryPane,
+  SettingsPane,
+  HelpPane,
+} from '../../../panes';
+import { DagStep } from '../../state';
+import type { AppControllerResult } from '../app-controller';
+
+/**
+ * @brief Render metrics/status panes from controller state.
+ * @param controller controller result from useAppController
+ * @since 0.1.12
+ */
+export function AppRenderPanesMetrics({
+  controller,
+}: {
+  controller: AppControllerResult;
+}): React.ReactNode {
+  const { state, arranger } = controller;
+  const visiblePanes = arranger.visiblePanes();
+  const doneCount = state.steps.filter((s: DagStep) => s.status === 'done').length;
+
+  return (
+    <>
+      <Box marginTop={1} gap={1}>
+        {visiblePanes.includes('dashboard') && (
+          <DashboardPane
+            dora={
+              state.eval.dora ?? { deployFrequency: 0, leadTime: 0, changeFailureRate: 0, mttr: 0 }
+            }
+            qualityScore={state.eval.weightedAvg}
+            testCoverage={0.85}
+            costTrend={0}
+            tokensUsed={state.tokensUsed}
+            tokensBudget={state.tokensBudget}
+            stepsTotal={state.steps.length}
+            stepsCompleted={doneCount}
+          />
+        )}
+        {visiblePanes.includes('release') && <ReleasePane builds={[]} releases={[]} />}
+      </Box>
+      <Box marginTop={1} gap={1}>
+        {visiblePanes.includes('orch') && (
+          <OrchPane
+            steps={state.steps.map((s) => ({
+              id: s.id,
+              kind: s.kind,
+              title: s.detail ?? s.id,
+              status: s.status,
+              tokens: s.tokensUsed,
+            }))}
+            currentStepId={state.currentStepId}
+          />
+        )}
+        {visiblePanes.includes('budget') && (
+          <BudgetPane
+            tokensUsed={state.tokensUsed}
+            tokensBudget={state.tokensBudget}
+            costEstimate={state.costEstimate}
+            costBudget={state.costBudget}
+            stepsCompleted={doneCount}
+            stepsTotal={state.steps.length}
+            elapsedMs={Date.now() - state.startedAt}
+          />
+        )}
+        {visiblePanes.includes('loop') && (
+          <LoopPane
+            loop={state.loop}
+            paused={false}
+            aborted={state.aborted}
+            finished={state.finished}
+            partial={state.partial}
+            stepsCompleted={doneCount}
+            stepsTotal={state.steps.length}
+          />
+        )}
+      </Box>
+      <Box marginTop={1} gap={1}>
+        {visiblePanes.includes('sessions') && (
+          <SessionsPane sessions={state.sessions} activeId={state.activeSessionId} />
+        )}
+        {visiblePanes.includes('memory') && <MemoryPane facts={state.memoryFacts} />}
+        {visiblePanes.includes('config') && <SettingsPane entries={state.configEntries} />}
+      </Box>
+      <Box marginTop={1}>{visiblePanes.includes('help') && <HelpPane />}</Box>
+    </>
+  );
+}
