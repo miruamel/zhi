@@ -52,6 +52,9 @@ export interface AppState {
   sessions: SessionInfo[];
   activeSessionId?: string;
   memoryFacts: Fact[];
+  memoryQuery?: string;
+  memoryActiveTag?: string | null;
+  embeddingDims?: number;
   runtimeLog: Array<{
     id: string;
     timestamp: number;

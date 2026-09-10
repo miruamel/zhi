@@ -88,7 +88,7 @@ export const DEFAULT_LAYOUT: LayoutNode = {
         { id: 'loop', type: 'leaf', pane: 'loop', size: 12 },
         { id: 'sessions', type: 'leaf', pane: 'sessions', size: 15 },
         { id: 'memory', type: 'leaf', pane: 'memory', size: 15 },
-        { id: 'config', type: 'leaf', pane: 'config', size: 15 },
+        { id: 'knowledge', type: 'leaf', pane: 'knowledge', size: 15 },
       ],
     },
     { id: 'log', type: 'leaf', pane: 'log', size: 15 },
@@ -127,5 +127,5 @@ export const DEFAULT_CONSTRAINTS: Record<string, LayoutConstraint> = {
   orch: { minSize: 15, maxSize: 80, resizable: true, collapsible: true },
   sessions: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
   memory: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
-  help: { minSize: 3, maxSize: 10, resizable: false, collapsible: false },
+  knowledge: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
 };
