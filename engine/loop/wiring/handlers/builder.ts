@@ -7,7 +7,6 @@
  * @see docs/design/loop.md
  * @since 0.1.2 */
 import { aggregate } from '../../../critic/aggregate';
-import { isDLQ } from './is-dlq';
 
 import { gate } from '../../../eval/gate';
 import { classifyError, CircuitBreaker, withResilience } from '../../../resil';

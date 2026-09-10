@@ -2,7 +2,7 @@
  * @fileoverview Model router — selects invoker based on task type. @since 0.1.10
  * @package zhi
  */
-import type { ModelRequest, ModelResponse, ModelInvoker } from './invoker/types';
+import type { ModelRequest, ModelResponse, ModelInvoker } from './invoker/types/types';
 import type { TaskKind } from './pricing/pricing';
 
 /** @brief Router options. @since 0.1.10 */

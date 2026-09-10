@@ -5,7 +5,7 @@
  */
 import { CloudModelInvoker } from './provider/cloud';
 import { LocalStubInvoker } from './provider/local-stub';
-import type { ModelInvoker } from './types';
+import type { ModelInvoker } from './types/types';
 
 /** @brief Task kind for invoker selection. @since 0.1.10 */
 export type TaskKind = 'generate' | 'critique' | 'review' | 'embed' | 'classify' | 'tag';

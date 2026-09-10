@@ -3,7 +3,6 @@
  * @package zhi
  */
 import type { Dag, DagStep, OrchConfig } from '../../types';
-import type { Step } from '../../types';
 
 export interface Allocation {
   stepId: string;
@@ -54,7 +53,7 @@ export function createAllocator(): Allocator {
 
 /** @brief Budget allocator + serial scheduler. @since 0.1.1 */
 export function allocate(dag: Dag, budget: number): Map<string, number> {
-  const sum = dag.nodes.reduce((s, n) => s + n.estimate, 0);
+  const sum = dag.nodes.reduce((s, n) => s + (n.estimate ?? 0), 0);
   const out = new Map<string, number>();
   if (dag.nodes.length === 0) return out;
   if (sum === 0) {
@@ -62,7 +61,7 @@ export function allocate(dag: Dag, budget: number): Map<string, number> {
     for (const n of dag.nodes) out.set(n.id, even);
     return out;
   }
-  for (const n of dag.nodes) out.set(n.id, Math.round((budget * n.estimate) / sum));
+  for (const n of dag.nodes) out.set(n.id, Math.round((budget * (n.estimate ?? 0)) / sum));
   return out;
 }
 
@@ -83,7 +82,7 @@ function depthOf(dag: Dag): Map<string, number> {
  * @param {Map<string, number>} alloc - hasil allocate.
  * @return {Step[]} urutan eksekusi.
  * @since 0.1.1 */
-export function schedule(dag: Dag, alloc: Map<string, number>): Step[] {
+export function schedule(dag: Dag, alloc: Map<string, number>): DagStep[] {
   const depth = depthOf(dag);
   return [...dag.order]
     .map((id) => dag.nodes.find((n) => n.id === id)!)
