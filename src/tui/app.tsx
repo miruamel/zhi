@@ -46,13 +46,7 @@ export function ZhiApp({
   });
 
   return (
-    <AppProvider
-      controller={controller}
-      commands={commands}
-      onAbort={onAbort}
-      onQuit={onQuit}
-      onRegister={onRegister}
-    >
+    <AppProvider controller={controller} commands={commands} onAbort={onAbort} onQuit={onQuit}>
       <AppRender controller={controller} threshold={threshold} />
     </AppProvider>
   );

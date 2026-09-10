@@ -4,7 +4,7 @@
  * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
  * @package zhi
  */
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useApp } from 'ink';
 import { Arranger } from '../arranger';
 import { useFocus } from '../hooks';
@@ -28,6 +28,7 @@ export interface AppControllerResult {
   prExpanded: boolean;
   logOffset: number;
   redrawKey: number;
+  layoutVersion: number;
   paletteOpen: boolean;
   mode: 'normal' | 'command' | 'search';
   setPaletteOpen: (v: boolean) => void;
@@ -50,8 +51,7 @@ export interface AppControllerResult {
  * @brief Aggregate all app-level state and handlers into one hook call.
  * @param initialState initial AppState
  * @param onAbort abort callback
- * @param onQuit quit callback
- * @param onRegister state push callback registration
+ * @param onRegister state push callback registration; invoked once after mount
  * @return controller result consumed by ZhiApp render
  * @since 0.1.2
  */
@@ -76,8 +76,21 @@ export function useAppController(
   const [mode, setMode] = useState<'normal' | 'command' | 'search'>('normal');
 
   const arranger = useState(() => new Arranger())[0];
-  const [, setLayoutVersion] = useState(0);
-  arranger.subscribe(() => setLayoutVersion((v) => v + 1));
+  const [layoutVersion, setLayoutVersion] = useState(0);
+  const registered = useRef(false);
+
+  const pushState = useCallback(
+    (patch: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...patch })),
+    [],
+  );
+
+  useEffect(() => {
+    if (registered.current) return;
+    registered.current = true;
+    onRegister?.(pushState);
+  }, [onRegister, pushState]);
+
+  useEffect(() => arranger.subscribe(() => setLayoutVersion((v) => v + 1)), [arranger]);
   const paneOrder = arranger.visiblePanes();
   const focusHook = useFocus(paneOrder, 0);
   const nav: FocusNav = {
@@ -86,10 +99,6 @@ export function useAppController(
     jump: focusHook.jump,
     goBack: focusHook.goBack,
   };
-
-  onRegister?.((p: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...p })));
-
-  const pushState = (patch: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...patch }));
 
   return {
     state,
@@ -102,6 +111,7 @@ export function useAppController(
     prExpanded,
     logOffset,
     redrawKey,
+    layoutVersion,
     paletteOpen,
     mode,
     setPaletteOpen,

@@ -3,6 +3,7 @@
  * @package zhi
  */
 import type { LayoutNode, LayoutSnapshot, LayoutConstraint, LayoutEvent } from './types';
+import { DEFAULT_CONSTRAINTS, DEFAULT_LAYOUT } from './types';
 import { cloneNode, findNode, findParent, applyEvent } from './tree';
 
 /** @brief Arranger engine — manages layout state and notifies listeners. @since 0.1.11 */
@@ -15,7 +16,6 @@ export class Arranger {
     options: { constraints?: Record<string, LayoutConstraint> } = {},
     initial?: LayoutNode,
   ) {
-    const { DEFAULT_LAYOUT, DEFAULT_CONSTRAINTS } = require('./types');
     this.root = cloneNode(initial ?? DEFAULT_LAYOUT);
     this.constraints = { ...DEFAULT_CONSTRAINTS, ...(options.constraints ?? {}) };
   }
