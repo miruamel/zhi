@@ -72,8 +72,9 @@ export function runCritic(
         break;
       }
       case 'doc': {
+        const hasJSDoc = /\/\*\*|@brief/.test(f.content);
         for (const l of lines) {
-          if (l.match(/^export\s+(function|const|class)\s+\w+/) && !l.match(/\/\*\*|@brief/)) {
+          if (l.match(/^export\s+(function|const|class)\s+\w+/) && !hasJSDoc) {
             findings.push(`doc: ${f.path} missing JSDoc on export`);
             violations++;
           }
