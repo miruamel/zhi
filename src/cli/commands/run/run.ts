@@ -2,6 +2,9 @@
  * @fileoverview Run command — execute pipeline from config. @since 0.1.11
  * @package zhi
  */
+import { createPipeline } from '../../../../engine/build/pipeline';
+import { createBuildConfig, type BuildConfig } from '../../../../engine/build/core/types';
+
 /** @brief Run options. @since 0.1.11 */
 export interface RunOpts {
   config?: string;
@@ -20,19 +23,23 @@ export interface RunResult {
 /** @brief Run the pipeline. @since 0.1.11 */
 export async function run(opts: RunOpts = {}): Promise<RunResult> {
   const start = Date.now();
-  const steps = ['intake', 'generate', 'critique', 'eval', 'verify', 'commit', 'pr'];
   if (opts.dryRun) {
     return {
       ok: true,
-      steps: steps.length,
+      steps: 5,
       durationMs: Date.now() - start,
-      message: `Dry run: ${steps.length} steps planned`,
+      message: 'Dry run: 5 stages planned',
     };
   }
+  const config: BuildConfig = createBuildConfig();
+  const pipeline = createPipeline();
+  const result = await pipeline.run(config);
   return {
-    ok: true,
-    steps: steps.length,
+    ok: result.ok,
+    steps: result.stages.length,
     durationMs: Date.now() - start,
-    message: `Pipeline completed: ${steps.length} steps`,
+    message: result.ok
+      ? `Pipeline completed: ${result.stages.length} stages`
+      : `Pipeline failed: ${result.stages.filter((s) => !s.ok).length} stages failed`,
   };
 }

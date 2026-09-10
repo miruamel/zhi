@@ -109,9 +109,15 @@ export function applyEvent(
       const a = findNode(next, event.idA);
       const b = findNode(next, event.idB);
       if (a && b) {
-        const tmp = a.pane;
-        a.pane = b.pane;
-        b.pane = tmp;
+        const nextClone = cloneNode(next);
+        const a2 = findNode(nextClone, event.idA);
+        const b2 = findNode(nextClone, event.idB);
+        if (a2 && b2) {
+          const tmp = a2.pane;
+          a2.pane = b2.pane;
+          b2.pane = tmp;
+        }
+        return nextClone;
       }
       return next;
     }

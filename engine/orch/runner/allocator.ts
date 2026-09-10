@@ -80,7 +80,7 @@ function depthOf(dag: Dag): Map<string, number> {
 /** @brief Urutkan eksekusi (serial v1): topo, lalu by depth + token weight.
  * @param {Dag} dag - DAG rencana.
  * @param {Map<string, number>} alloc - hasil allocate.
- * @return {Step[]} urutan eksekusi.
+ * @return {DagStep[]} urutan eksekusi.
  * @since 0.1.1 */
 export function schedule(dag: Dag, alloc: Map<string, number>): DagStep[] {
   const depth = depthOf(dag);

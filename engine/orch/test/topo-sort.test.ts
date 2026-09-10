@@ -3,9 +3,9 @@
  */
 import { describe, expect, it } from 'bun:test';
 import { topoSort } from '../runner';
-import { CycleError, type Step } from '../types';
+import { CycleError, type DagStep } from '../types';
 
-const mk = (id: string, deps: string[]): Step => ({
+const mk = (id: string, deps: string[]): DagStep => ({
   id,
   label: id,
   deps,

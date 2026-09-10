@@ -33,34 +33,23 @@ export function toPatch(
       abstain: false,
       reason: c.findings[0] ?? 'passes without issues',
     })),
-    eval: {
-      build: {
-        name: 'build',
-        ok: !!ctx.eval?.passed,
-        detail: ctx.eval?.reasons?.join(' ') ?? '',
-        durationMs: 0,
-      },
-      test: {
-        name: 'test',
-        ok: !!ctx.eval?.passed,
-        detail: ctx.eval?.reasons?.join(' ') ?? '',
-        durationMs: 0,
-      },
-      security: {
-        name: 'security',
-        ok: !!ctx.eval?.passed,
-        detail: ctx.eval?.reasons?.join(' ') ?? '',
-        durationMs: 0,
-      },
-      gate: {
-        name: 'gate',
-        ok: !!ctx.eval?.passed,
-        detail: ctx.eval?.reasons?.join(' ') ?? '',
-        durationMs: 0,
-      },
-      gatePass: !!ctx.eval?.passed,
-      weightedAvg: ctx.aggregate?.score ?? 0,
-    },
+    eval: (() => {
+      const st = ctx.eval?.stages;
+      const empty = (name: string) => ({ name, ok: true, detail: '', durationMs: 0 });
+      return {
+        build: st?.build ?? empty('build'),
+        test: st?.test ?? empty('test'),
+        security: st?.security ?? empty('security'),
+        gate: {
+          name: 'gate',
+          ok: !!ctx.eval?.passed,
+          detail: ctx.eval?.reasons?.join(' ') ?? '',
+          durationMs: 0,
+        },
+        gatePass: !!ctx.eval?.passed,
+        weightedAvg: ctx.aggregate?.score ?? 0,
+      };
+    })(),
     prCi: {
       prUrl: ctx.prUrl,
       ciStatus:
@@ -86,7 +75,9 @@ export async function loopCommand(argv: string[]): Promise<LoopContext> {
   metrics.reset();
   await driver.run(buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics));
   const s = metrics.summary();
-  console.log(`[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}`);
+  process.stderr.write(
+    `[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}\n`,
+  );
   return ctx;
 }
 
@@ -97,14 +88,16 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
   const ctx: LoopContext = { goal };
   const metrics = new LoopMetrics();
   const logger = new LoopLogger();
-  const holder = { push: null as ((p: Partial<AppState>) => void) | null };
   const queue: Partial<AppState>[] = [];
+  const holder = {
+    push: (p: Partial<AppState>) => {
+      queue.push(p);
+    },
+  };
   const driver = new LoopDriver({
     onTransition: (_from, _ev, to) => {
       logger.transition(_from, _ev, to);
-      const patch = toPatch(ctx, metrics, to);
-      if (holder.push) holder.push(patch);
-      else queue.push(patch);
+      holder.push(toPatch(ctx, metrics, to));
     },
   });
   const handlers = buildHandlers(ctx, autonomousDeps(offlineDeps(threshold), ctx.goal), metrics);
@@ -121,15 +114,16 @@ export async function loopCommandTui(argv: string[]): Promise<LoopContext> {
       process.exit(0);
     },
     onRegister: (p) => {
+      for (const patch of queue.splice(0)) p(patch);
       holder.push = p;
-      for (const patch of queue) holder.push(patch);
-      queue.length = 0;
     },
   });
   metrics.reset();
   await driver.run(handlers);
   unmount();
   const s = metrics.summary();
-  console.log(`[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}`);
+  process.stderr.write(
+    `[metrics] stages=${s.stages} errors=${s.errors} totalMs=${s.totalMs.toFixed(1)}\n`,
+  );
   return ctx;
 }

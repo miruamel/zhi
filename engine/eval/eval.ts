@@ -8,6 +8,7 @@ import { spawnSync } from 'node:child_process';
 
 import { scanSecurity } from './scan';
 export { scanSecurity };
+import { gate, type EvalOutput, type EvalStageResult } from './gate';
 
 export interface EvalOpts {
   files: Array<{ path: string; content: string }>;
@@ -23,27 +24,43 @@ export interface EvalResult {
   durationMs: number;
 }
 
-export interface EvalRunResult {
-  passed: boolean;
-  score: number;
-  reasons: string[];
-}
-
-export async function evaluate(worktree: string): Promise<EvalRunResult> {
+export async function evaluate(worktree: string): Promise<EvalOutput> {
   const reasons: string[] = [];
   const files = collectFiles(worktree);
+  const securityStart = Date.now();
   const security = await scanSecurity(files);
+  const securityStage: EvalStageResult = {
+    name: 'security',
+    ok: security.ok,
+    detail: security.ok ? 'no secrets' : `${security.findings.length} findings`,
+    durationMs: Date.now() - securityStart,
+  };
   if (!security.ok) {
     reasons.push('secret bocor');
-    return { passed: false, score: 0, reasons };
+    return gate({ score: 0, criteria: [], blockers: ['secret bocor'] }, 0.7, {
+      security: securityStage,
+    });
   }
+  const testStart = Date.now();
   const testResult = runTests(worktree);
+  const testStage: EvalStageResult = {
+    name: 'test',
+    ok: testResult.allPassed,
+    detail: testResult.allPassed ? 'all passed' : 'tests failed',
+    durationMs: Date.now() - testStart,
+  };
   if (!testResult.allPassed) {
     reasons.push('test gagal');
-    return { passed: false, score: 0, reasons };
+    return gate({ score: 0, criteria: [], blockers: ['test gagal'] }, 0.7, {
+      security: securityStage,
+      test: testStage,
+    });
   }
   reasons.push('criteria met');
-  return { passed: true, score: 1, reasons };
+  return gate({ score: 1, criteria: ['criteria met'], blockers: [] }, 0.7, {
+    security: securityStage,
+    test: testStage,
+  });
 }
 
 function collectFiles(dir: string): Array<{ path: string; content: string }> {

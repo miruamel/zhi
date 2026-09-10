@@ -10,15 +10,17 @@ describe('parseArgs', () => {
       goal: 'build auth',
       threshold: 0.9,
     });
-    expect(parseArgs(['  '])).toEqual({ goal: '', threshold: 0.8 });
-    expect(parseArgs(['  build auth  '])).toEqual({ goal: 'build auth', threshold: 0.8 });
+  });
+
+  it('throws on whitespace-only goal', () => {
+    expect(() => parseArgs(['  '])).toThrow('cli: goal kosong');
   });
 
   it('falls back to default threshold when flag malformed', () => {
     expect(parseArgs(['goal', '--threshold=NaN'])).toEqual({ goal: 'goal', threshold: 0.8 });
   });
 
-  it('handles empty argv', () => {
-    expect(parseArgs([])).toEqual({ goal: '', threshold: 0.8 });
+  it('throws on empty argv', () => {
+    expect(() => parseArgs([])).toThrow('cli: goal kosong');
   });
 });

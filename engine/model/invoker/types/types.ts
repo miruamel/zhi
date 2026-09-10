@@ -40,25 +40,35 @@ export interface CloudInvokerOptions {
 }
 
 /** @brief Create a model invoker. @since 0.1.10 */
+const ALLOWED_BASE_URLS = ['https://api.openai.com', 'https://api.anthropic.com'];
+
+function validateBaseUrl(url: string): string {
+  const base = url.split('/v1')[0];
+  if (!ALLOWED_BASE_URLS.includes(base)) {
+    throw new Error(`cloud invoker: baseUrl not allowed: ${base}`);
+  }
+  return url;
+}
+
 export function createModelInvoker(options?: CloudInvokerOptions): ModelInvoker {
   return {
     name: options?.model ? `cloud:${options.model}` : 'cloud',
     invoke: async (prompt: string) => {
       if (!options?.apiKey) throw new Error('cloud invoker: no API key');
-      const res = await fetch(
-        `${options.baseUrl ?? 'https://api.openai.com/v1'}/chat/completions`,
-        {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            authorization: `Bearer ${options.apiKey}`,
-          },
-          body: JSON.stringify({
-            model: options.model ?? 'gpt-4o-mini',
-            messages: [{ role: 'user', content: prompt }],
-          }),
+      const url = validateBaseUrl(options.baseUrl ?? 'https://api.openai.com/v1');
+      const res = await fetch(`${url}/chat/completions`, {
+        signal: AbortSignal.timeout(options?.timeoutMs ?? 30000),
+
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          authorization: `Bearer ${options.apiKey}`,
         },
-      );
+        body: JSON.stringify({
+          model: options.model ?? 'gpt-4o-mini',
+          messages: [{ role: 'user', content: prompt }],
+        }),
+      });
       if (!res.ok) throw new Error(`cloud invoker: HTTP ${res.status}`);
       const data = (await res.json()) as any;
       return data.choices?.[0]?.message?.content ?? '';

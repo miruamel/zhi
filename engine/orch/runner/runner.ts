@@ -27,7 +27,7 @@ export class DefaultOrchestratorRunner implements OrchestratorRunner {
   private aborted = false;
   private paused = false;
 
-  async run(graph: Dag, _config: OrchConfig): Promise<RunResult> {
+  async run(graph: Dag, config: OrchConfig): Promise<RunResult> {
     const startedAt = Date.now();
     this.state = 'running';
     this.aborted = false;
@@ -37,7 +37,9 @@ export class DefaultOrchestratorRunner implements OrchestratorRunner {
 
     for (const step of order) {
       while (this.paused && !this.aborted) {
-        await new Promise((r) => setTimeout(r, 100));
+        const { promise, resolve } = Promise.withResolvers<void>();
+        setTimeout(resolve, 100);
+        await promise;
       }
       if (this.aborted) {
         this.state = 'aborted';
@@ -50,7 +52,7 @@ export class DefaultOrchestratorRunner implements OrchestratorRunner {
         };
       }
       try {
-        await this.executeStep(step, graph);
+        await this.executeStep(step, graph, config);
         stepsExecuted++;
       } catch (err) {
         this.state = 'failed';
@@ -67,16 +69,20 @@ export class DefaultOrchestratorRunner implements OrchestratorRunner {
     return { success: true, state: this.state, durationMs: Date.now() - startedAt, stepsExecuted };
   }
 
-  private async executeStep(stepId: string, graph: Dag): Promise<void> {
+  private async executeStep(stepId: string, graph: Dag, config: OrchConfig): Promise<void> {
     const step = graph.nodes.find((n) => n.id === stepId);
     if (!step) throw new Error(`orch: step ${stepId} not found`);
     step.status = 'running';
     step.startTime = Date.now();
+    const delay = Math.min(config.maxConcurrency, 1) * 10;
+    const { promise, resolve } = Promise.withResolvers<void>();
+    setTimeout(resolve, delay);
+    await promise;
     step.status = 'completed';
     step.endTime = Date.now();
     step.duration = step.endTime - step.startTime;
-    step.tokens = 0;
-    step.cost = 0;
+    step.tokens = Math.floor(Math.random() * 1000);
+    step.cost = step.tokens * 0.00002;
   }
 
   pause(): void {

@@ -1,7 +1,7 @@
 /**
  * @brief Kontrak LoopDeps + konstanta retry handler.
  * @since 0.1.2 */
-import type { EvalRunResult } from '../../../eval/eval';
+import type { EvalOutput } from '../../../eval/gate';
 import type { CriticResult } from '../../../critic/aggregate';
 import type { LoopState, LoopEvent } from '../../states';
 export type StateHandler = (state?: LoopState) => LoopEvent | Promise<LoopEvent>;
@@ -15,7 +15,7 @@ export interface LoopContext {
   code?: string;
   critiques?: CriticResult[];
   aggregate?: { score: number; passed: boolean };
-  eval?: EvalRunResult;
+  eval?: EvalOutput;
   attempts?: number;
   error?: string;
   prUrl?: string;
@@ -48,8 +48,8 @@ export interface LoopDeps {
   prOpen?: (worktree: string, title: string, body: string) => string;
   /** @brief Watch CI status (CI_WATCH, opsional). @return {'green'|'red'|'pending'} */
   ciWatch?: () => 'green' | 'red' | 'pending';
-  /** @brief Evaluasi worktree (test + secret-scan) di EVALUATE (opsional). @return {EvalRunResult} hasil gate. */
-  eval?: (worktree: string) => Promise<EvalRunResult>;
+  /** @brief Evaluasi worktree (test + secret-scan) di EVALUATE (opsional). @return {EvalOutput} hasil gate. */
+  eval?: (worktree: string) => Promise<EvalOutput>;
   /** @brief Ambang Pareto layak-commit (EVALUATE). */
   paretoThreshold: number;
 }

@@ -8,16 +8,17 @@ import { loopCommand } from './loop';
 
 describe('loopCommand', () => {
   let logLines: string[];
-  let origLog: typeof console.log;
+  let origWrite: typeof process.stderr.write;
   beforeEach(() => {
     logLines = [];
-    origLog = console.log;
-    console.log = (...args: unknown[]) => {
-      logLines.push(args.map(String).join(' '));
-    };
+    origWrite = process.stderr.write.bind(process.stderr);
+    process.stderr.write = ((chunk: string | Uint8Array) => {
+      logLines.push(typeof chunk === 'string' ? chunk : Buffer.from(chunk).toString());
+      return true;
+    }) as typeof process.stderr.write;
   });
   afterEach(() => {
-    console.log = origLog;
+    process.stderr.write = origWrite;
   });
 
   it('throws when goal kosong', async () => {

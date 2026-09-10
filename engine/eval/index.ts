@@ -14,4 +14,5 @@ export { Gate, createGate, runGates } from './gate';
 export { type GateResult, type GateOptions } from './gate';
 
 /** @brief Evaluate function. @since 0.1.1 */
-export { evaluate, scanSecurity, scanSecrets, type EvalRunResult } from './eval';
+export { evaluate, scanSecurity, scanSecrets } from './eval';
+export { type EvalOutput, type EvalStageResult, gate } from './gate';

@@ -8,6 +8,8 @@ export interface ResilCtx {
   breaker?: CircuitBreaker;
   /** @brief Batas retry (default 3). */
   maxAttempts?: number;
+  /** @brief Guard retry: true = retry, false = fatal. Diabaikan oleh isFatal. */
+  retryOn?: (error: Error) => boolean;
 }
 
 /** @brief Jalankan fn dengan circuit breaker + retry budget + recovery.
@@ -23,7 +25,7 @@ export async function withResilience<T>(
   if (ctx.breaker?.isOpen()) {
     return { error: 'circuit-open', attempts: 0, at: Date.now() } as DLQEntry;
   }
-  const res: RetryResult<T> = await retryWithBudget(fn, max);
+  const res: RetryResult<T> = await retryWithBudget(fn, max, ctx.retryOn);
   if (ctx.breaker) ctx.breaker.record(res.ok);
   if (res.ok) return res.value as T;
   // ponytail: classifyError result is used in builder.ts RECOVER handler to decide BUDGET_OUT vs RECOVERED.

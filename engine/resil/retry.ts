@@ -39,7 +39,14 @@ export const DEFAULT_RETRY_OPTIONS: Required<RetryOptions> = {
 /** @brief Classify error as fatal (no retry) or transient. @since 0.1.10 */
 function isFatal(error: Error): boolean {
   const msg = error.message.toLowerCase();
-  return msg.includes('fatal') || msg.includes('budget exhausted');
+  if (msg.includes('fatal') || msg.includes('budget exhausted')) return true;
+  // HTTP 4xx (except 429) are client errors — retrying burns quota
+  const httpMatch = msg.match(/http\s+(\d{3})/);
+  if (httpMatch) {
+    const status = Number(httpMatch[1]);
+    if (status >= 400 && status < 500 && status !== 429) return true;
+  }
+  return false;
 }
 
 /** @brief Sleep helper using Promise.withResolvers. @since 0.1.10 */
@@ -93,8 +100,9 @@ export async function retry<T>(
 export async function retryWithBudget<T>(
   fn: () => Promise<T>,
   maxAttempts: number = 3,
+  retryOn?: (error: Error) => boolean,
 ): Promise<RetryResult<T>> {
-  return retry(fn, { maxAttempts });
+  return retry(fn, { maxAttempts, retryOn });
 }
 
 /** @brief Create retry options with overrides. @since 0.1.10 */
