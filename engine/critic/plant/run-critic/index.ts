@@ -1,6 +1,12 @@
-import type { CruiserReport } from '../compose';
+/**
+ * @fileoverview Critic plant — single-critic runner. @since 0.1.9 @package zhi
+ */
+/** @brief Cruiser report shape (inlined to break circular dep with compose). @since 0.1.10 */
+type CruiserReport = {
+  modules: Array<{ source: string; dependencies: string[]; orphan: boolean; valid: boolean }>;
+  errors?: string[];
+};
 
-/** @fileoverview Critic plant — single-critic runner. @since 0.1.9 @package zhi */
 /** @brief Run a single critic by name. @since 0.1.10 */
 export function runCritic(
   name: string,
@@ -15,98 +21,96 @@ export function runCritic(
     switch (name) {
       case 'sloc': {
         if (loc > 150) {
+          findings.push(`sloc: ${f.path} has ${loc} lines (max 150)`);
           violations++;
-          findings.push(`${f.path}: ${loc} SLOC > 150`);
         }
         break;
       }
       case 'todo': {
         for (const l of lines) {
-          if (/\b(TODO|FIXME|XXX)\b/.test(l)) {
+          if (/(TODO|FIXME|XXX)/.test(l)) {
+            findings.push(`todo: ${f.path} has TODO/FIXME/XXX`);
             violations++;
-            findings.push(`${f.path}: ${l.trim().slice(0, 40)}`);
           }
         }
         break;
       }
       case 'imports': {
         for (const l of lines) {
-          const depth = (l.match(/\.\.\//g) || []).length;
-          if (depth >= 4) {
+          if (l.match(/^import\s.*from\s+['"]\.\.?\//)) {
+            findings.push(`imports: ${f.path} has relative import`);
             violations++;
-            findings.push(`${f.path}: deep relative import (${depth} levels)`);
           }
         }
         break;
       }
       case 'security': {
         for (const l of lines) {
-          if (/\beval\s*\(|\.innerHTML\s*=|password\s*[:=]\s*["']/.test(l)) {
+          if (/(eval\(|exec\(|password\s*=|secret\s*=|api[_-]?key\s*=)/i.test(l)) {
+            findings.push(`security: ${f.path} has potential secret`);
             violations++;
-            findings.push(`${f.path}: security risk in ${l.trim().slice(0, 40)}`);
           }
         }
         break;
       }
       case 'privacy': {
         for (const l of lines) {
-          if (/\b(password|secret|token|api[_-]?key)\b\s*[:=]\s*["'][^"']{8,}/i.test(l)) {
+          if (/(email|phone|ssn|dob|address)\s*[:=]/i.test(l)) {
+            findings.push(`privacy: ${f.path} has potential PII`);
             violations++;
-            findings.push(`${f.path}: potential secret exposure`);
           }
         }
         break;
       }
       case 'style': {
         for (const l of lines) {
-          if (l.length > 120) {
+          if (l.match(/^\s{2,}\S/) && !l.match(/^\s*\/\//)) {
+            findings.push(`style: ${f.path} has inconsistent indentation`);
             violations++;
-            findings.push(`${f.path}: line >120 chars`);
           }
         }
         break;
       }
       case 'doc': {
-        if (!f.content.trim().startsWith('/**') && !f.content.trim().startsWith('//')) {
-          violations++;
-          findings.push(`${f.path}: missing doc comment`);
+        for (const l of lines) {
+          if (l.match(/^export\s+(function|const|class)\s+\w+/) && !l.match(/\/\*\*|@brief/)) {
+            findings.push(`doc: ${f.path} missing JSDoc on export`);
+            violations++;
+          }
         }
         break;
       }
       case 'maintainability': {
-        if (loc > 300) {
+        if (loc > 400) {
+          findings.push(`maintainability: ${f.path} too large (${loc} lines)`);
           violations++;
-          findings.push(`${f.path}: ${loc} SLOC > 300 (hard to maintain)`);
         }
         break;
       }
       case 'perf': {
         for (const l of lines) {
-          if (/\b(for|while)\s*\(.*\)\s*\{[^}]*\b(find|filter|forEach|map)\b/.test(l)) {
+          if (l.match(/\.map\(|\.filter\(|\.forEach\(/)) {
+            findings.push(`perf: ${f.path} has array iteration`);
             violations++;
-            findings.push(`${f.path}: nested loop + search (O(n²))`);
           }
         }
         break;
       }
       case 'accessibility': {
         for (const l of lines) {
-          if (/<(img|input|button)[^>]*(?!.*aria-)[^>]*>/i.test(l) && !/alt\s*=/.test(l)) {
+          if (l.match(/<button|<input|<a\s/) && !l.match(/aria-|role=/)) {
+            findings.push(`accessibility: ${f.path} missing ARIA on interactive element`);
             violations++;
-            findings.push(`${f.path}: missing alt/aria attribute`);
           }
         }
         break;
       }
       case 'architecture': {
-        for (const m of cruiser.modules ?? []) {
-          if (m.orphan) {
+        if (cruiser.modules.length > 0) {
+          const orphan = cruiser.modules.filter((m) => m.orphan);
+          if (orphan.length > 0) {
+            findings.push(`architecture: ${orphan.length} orphan modules detected`);
             violations++;
-            findings.push(`${m.source}: orphan module`);
-          }
-          if (!m.valid) {
-            violations++;
-            findings.push(`${m.source}: invalid dependency`);
           }
         }
         break;
