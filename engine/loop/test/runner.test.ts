@@ -34,7 +34,7 @@ describe('createRunner', () => {
 });
 
 describe('finishLoop', () => {
-  it('returns finished when steps >= max', () => {
+  it('returns aborted when steps reach max', () => {
     const result = finishLoop(
       { phase: 'running', step: 5, startedAt: Date.now(), tokensUsed: 100 },
       { maxSteps: 5 },

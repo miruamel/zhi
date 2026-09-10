@@ -14,7 +14,7 @@ describe('resolveKey', () => {
     expect(resolveKey('g', {})).toBe('logTop');
     expect(resolveKey('G', {})).toBe('logBottom');
     expect(resolveKey(' ', {})).toBe('pauseResume');
-    expect(resolveKey('tab', {})).toBe('cycle');
+    expect(resolveKey('', { tab: true })).toBe('cycle');
   });
 
   test('maps help keys to toggleHelp', () => {
@@ -45,7 +45,8 @@ describe('resolveKey', () => {
 
   test('maps palette and pane shortcuts without duplicate Ctrl+K actions', () => {
     expect(resolveKey('p', { ctrl: true })).toBe('openPalette');
-    expect(resolveKey('k', { ctrl: true })).toBe('prevPane');
+    expect(resolveKey('k', { ctrl: true })).toBe('openPalette');
+    expect(resolveKey('', { tab: true, shift: true })).toBe('prevPane');
     expect(resolveKey('j', { ctrl: true })).toBe('nextPane');
   });
 

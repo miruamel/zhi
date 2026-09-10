@@ -5,7 +5,6 @@
  * @package zhi
  */
 import { Box } from 'ink';
-import { useEffect, useState } from 'react';
 import {
   Dag,
   Detail,
@@ -49,9 +48,7 @@ export function AppRender({
   controller: AppControllerResult;
   threshold: number;
 }): React.ReactNode {
-  const { state, nav, arranger } = controller;
-  const [layoutVersion, setLayoutVersion] = useState(0);
-  useEffect(() => arranger.subscribe(() => setLayoutVersion((v) => v + 1)), [arranger]);
+  const { state, nav, arranger, layoutVersion } = controller;
   const visiblePanes = arranger.visiblePanes();
   const currentStep = state.steps.find((s: DagStep) => s.id === state.currentStepId);
   const hints = ['Ctrl+K palette', 'Tab cycle', 'q quit', 'Space pause', 'h help'];

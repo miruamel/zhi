@@ -45,18 +45,19 @@ const map: Record<string, KeyAction> = {
   k: 'prevLog',
   g: 'logTop',
   G: 'logBottom',
-  tab: 'cycle',
   '/': 'searchMode',
 };
 
 /** @brief Map key press to action. @param {string} input - raw key string from useInput. @return {KeyAction} */
 export function resolveKey(
   input: string,
-  key: { ctrl?: boolean; meta?: boolean; shift?: boolean; escape?: boolean },
+  key: { ctrl?: boolean; meta?: boolean; shift?: boolean; tab?: boolean; escape?: boolean },
 ): KeyAction {
   if (key.ctrl && input === 'c') return 'abort';
   if (key.ctrl && input === 'p') return 'openPalette';
-  if (key.ctrl && input === 'k') return 'prevPane';
+  if (key.ctrl && input === 'k') return 'openPalette';
+  if (key.tab && key.shift) return 'prevPane';
+  if (key.tab) return 'cycle';
   if (key.escape) return 'quit';
   if (key.ctrl && input === 'h') return 'splitH';
   if (key.ctrl && input === 'v') return 'splitV';

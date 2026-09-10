@@ -28,6 +28,7 @@ export interface AppControllerResult {
   prExpanded: boolean;
   logOffset: number;
   redrawKey: number;
+  layoutVersion: number;
   paletteOpen: boolean;
   mode: 'normal' | 'command' | 'search';
   setPaletteOpen: (v: boolean) => void;
@@ -50,8 +51,7 @@ export interface AppControllerResult {
  * @brief Aggregate all app-level state and handlers into one hook call.
  * @param initialState initial AppState
  * @param onAbort abort callback
- * @param onQuit quit callback
- * @param onRegister state push callback registration
+ * @param onRegister state push callback registration; invoked once after mount
  * @return controller result consumed by ZhiApp render
  * @since 0.1.2
  */
@@ -76,10 +76,8 @@ export function useAppController(
   const [mode, setMode] = useState<'normal' | 'command' | 'search'>('normal');
 
   const arranger = useState(() => new Arranger())[0];
-  const [, setLayoutVersion] = useState(0);
-  const onRegisterRef = useRef(onRegister);
+  const [layoutVersion, setLayoutVersion] = useState(0);
   const registered = useRef(false);
-  onRegisterRef.current = onRegister;
 
   const pushState = useCallback(
     (patch: Partial<AppState>) => setState((s: AppState) => ({ ...s, ...patch })),
@@ -89,8 +87,8 @@ export function useAppController(
   useEffect(() => {
     if (registered.current) return;
     registered.current = true;
-    onRegisterRef.current?.(pushState);
-  }, [pushState]);
+    onRegister?.(pushState);
+  }, [onRegister, pushState]);
 
   useEffect(() => arranger.subscribe(() => setLayoutVersion((v) => v + 1)), [arranger]);
   const paneOrder = arranger.visiblePanes();
@@ -113,6 +111,7 @@ export function useAppController(
     prExpanded,
     logOffset,
     redrawKey,
+    layoutVersion,
     paletteOpen,
     mode,
     setPaletteOpen,
