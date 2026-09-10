@@ -39,20 +39,20 @@ Zhi ships in phases. Every release raises maturity per `AGENTS.md` §Maturity. E
 - `knowledge/docs.ts` (KB docs/API) + `knowledge/versions.ts` (OpenAPI history) — waiting for input sources (OpenAPI spec / doc corpus).
 - Cross-session learning: the ledger is used to improve prompt/route.
 
-
 ## TUI Expansion Milestones (v0.1.13 — v0.3.0)
 
 Target: 50k–120k SLOC in `src/tui/`. Current baseline: ~2,949 SLOC. Planned as **five incremental milestones**, not one release. Each milestone = one version bump + gated PR batch. See [ADR-017](../adr/ADR-017-tui-expansion-milestone.md).
 
-| Milestone | Version | TUI SLOC Target | Scope |
-|---|---|---|---|
-| M1: Dashboard | v0.1.13 | ~8k | Multi-run dashboard pane, cost/quality metrics dashboard, notification center upgrade |
-| M2: Knowledge | v0.1.14 | ~20k | KB browser pane, vector search UI, chunk inspection, embedding config |
-| M3: Critique | v0.1.15 | ~35k | Interactive critique authoring, critic result drill-down, custom critic config UI |
-| M4: Orchestration | v0.2.0 | ~60k | Multi-PR orchestration pane, parallel run view, DAG visualizer |
-| M5: Extensibility | v0.3.0 | ~80k+ | Plugin/extension marketplace UI, skill authoring panel, custom widget registry |
+| Milestone         | Version | TUI SLOC Target | Scope                                                                                 |
+| ----------------- | ------- | --------------- | ------------------------------------------------------------------------------------- |
+| M1: Dashboard     | v0.1.13 | ~8k             | Multi-run dashboard pane, cost/quality metrics dashboard, notification center upgrade |
+| M2: Knowledge     | v0.1.14 | ~20k            | KB browser pane, vector search UI, chunk inspection, embedding config                 |
+| M3: Critique      | v0.1.15 | ~35k            | Interactive critique authoring, critic result drill-down, custom critic config UI     |
+| M4: Orchestration | v0.2.0  | ~60k            | Multi-PR orchestration pane, parallel run view, DAG visualizer                        |
+| M5: Extensibility | v0.3.0  | ~80k+           | Plugin/extension marketplace UI, skill authoring panel, custom widget registry        |
 
 **Non-goals**: No ink/react major upgrade (ADR-016 defers). No Web UI (ADR-014 ink-only). No mobile/native ports. No real-time collaboration.
+
 ## v1.0.0 — Stable
 
 - Multi-PR orchestration (N parallel goals, TUI pane).
