@@ -30,6 +30,7 @@ export interface AppState {
   tokensBudget: number;
   costEstimate: number;
   costBudget: number;
+  costTrend?: number;
   startedAt: number;
   finished: boolean;
   aborted: boolean;
