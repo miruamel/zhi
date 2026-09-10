@@ -1,17 +1,14 @@
 /**
- * @fileoverview App input handler — key bindings, useInput wiring, and command palette.
+ * @fileoverview App provider — wires useInput via useAppInput, renders children + palette.
  * @since 0.1.2
- * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
+ * @updated 0.1.12 — input logic extracted to use-app-input.ts to satisfy SLOC guard
  * @package zhi
  */
-import { useInput } from 'ink';
-import { useRef } from 'react';
-import { resolveKey } from '../handlers/keymap';
-import { applyKeyAction } from '../handlers/keyhandler';
-import { AppState } from '../state';
 import type { AppControllerResult } from './app-controller';
+import { AppState } from '../state';
 import type { CommandItem } from '../../widgets/command-palette';
 import { CommandPalette } from '../../widgets/command-palette';
+import { useAppInput } from './use-app-input';
 
 export interface AppProviderProps {
   controller: AppControllerResult;
@@ -23,7 +20,7 @@ export interface AppProviderProps {
 }
 
 /**
- * @brief Wire useInput + render children with command palette overlay.
+ * @brief Render children with command palette overlay and wire input.
  * @param controller controller result from useAppController
  * @param commands command palette items
  * @param onAbort abort callback
@@ -40,109 +37,8 @@ export function AppProvider({
   onRegister,
   children,
 }: AppProviderProps): React.ReactNode {
-  const {
-    state,
-    pushState,
-    paletteOpen,
-    setPaletteOpen,
-    setMode,
-    setPaused,
-    setShowHelp,
-    setDetailExpanded,
-    setLogExpanded,
-    setCriticsExpanded,
-    setPrExpanded,
-    setLogOffset,
-    setFocusIdx,
-    setRedrawKey,
-    nav,
-    arranger,
-    exit,
-  } = controller;
-  const paletteOpenRef = useRef(paletteOpen);
-  paletteOpenRef.current = paletteOpen;
-
-  onRegister?.((p: Partial<AppState>) => pushState(p));
-
-  useInput(
-    (
-      input: string,
-      key: { ctrl?: boolean; meta?: boolean; shift?: boolean; return?: boolean; escape?: boolean },
-    ) => {
-      if (paletteOpenRef.current) {
-        if (key.escape) {
-          setPaletteOpen(false);
-          setMode('normal');
-        }
-        return;
-      }
-      const action = resolveKey(input, key);
-      switch (action) {
-        case 'quit':
-          onQuit?.();
-          exit();
-          break;
-        case 'openPalette':
-          setPaletteOpen(true);
-          setMode('command');
-          break;
-        case 'closePalette':
-          setPaletteOpen(false);
-          setMode('normal');
-          break;
-        case 'pauseResume':
-          setPaused((p) => !p);
-          break;
-        case 'abort':
-          onAbort?.();
-          break;
-        case 'nextPane':
-          nav.move(1);
-          break;
-        case 'prevPane':
-          nav.move(-1);
-          break;
-        case 'searchMode':
-          setMode('search');
-          break;
-        case 'jumpMode':
-          setMode('command');
-          break;
-        case 'splitH':
-          arranger.dispatch({ type: 'split', id: nav.current, direction: 'horizontal' });
-          break;
-        case 'splitV':
-          arranger.dispatch({ type: 'split', id: nav.current, direction: 'vertical' });
-          break;
-        case 'closePane':
-          arranger.dispatch({ type: 'close', id: nav.current });
-          break;
-        case 'collapsePane':
-          arranger.dispatch({ type: 'collapse', id: nav.current });
-          break;
-        case 'expandPane':
-          arranger.dispatch({ type: 'expand', id: nav.current });
-          break;
-        default:
-          applyKeyAction(action, {
-            setState: pushState,
-            setPaused,
-            setShowHelp,
-            setDetailExpanded,
-            setLogExpanded,
-            setCriticsExpanded,
-            setPrExpanded,
-            setLogOffset,
-            setFocusIdx,
-            setRedrawKey,
-            onAbort,
-            onQuit,
-            exit,
-            log: state.log,
-          });
-      }
-    },
-  );
+  useAppInput({ controller, onAbort, onQuit, onRegister });
+  const { paletteOpen, setPaletteOpen, setMode } = controller;
 
   return (
     <>
