@@ -40,6 +40,8 @@ export interface EvalReport {
   gatePass: boolean;
   weightedAvg: number;
   dora?: DoraMetrics;
+  testCoverage?: number;
+  costTrend?: number;
 }
 
 /** @brief One DAG step in the conductor plan. @since 0.1.2 */

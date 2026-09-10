@@ -42,17 +42,16 @@ export function AppRenderPanesMetrics({
               state.eval.dora ?? { deployFrequency: 0, leadTime: 0, changeFailureRate: 0, mttr: 0 }
             }
             qualityScore={state.eval.weightedAvg}
-            testCoverage={0.85}
-            costTrend={0}
+            testCoverage={state.eval.testCoverage ?? 0}
+            costTrend={state.costTrend ?? 0}
             tokensUsed={state.tokensUsed}
             tokensBudget={state.tokensBudget}
+            tokenSparkline={state.tokenSparkline}
             stepsTotal={state.steps.length}
             stepsCompleted={doneCount}
           />
         )}
         {visiblePanes.includes('release') && <ReleasePane builds={[]} releases={[]} />}
-      </Box>
-      <Box marginTop={1} gap={1}>
         {visiblePanes.includes('orch') && (
           <OrchPane
             steps={state.steps.map((s) => ({
