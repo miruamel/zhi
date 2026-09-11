@@ -1,45 +1,10 @@
-/** @brief Critics pane: 15-critic weighted Pareto display with filter + fix. @since 0.1.2 @updated 0.1.14 */
+/** @brief Critics pane: weighted Pareto display with filter + fix. @since 0.1.2 @updated 0.1.15 */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
-import { bar, formatScore } from '../../../core/format';
+import { formatScore } from '../../../core/format';
 import type { CriticLine } from '../../../core/state';
 import type { CriticItem } from '../../../core/store/types/entities/dag';
-
-const WEIGHTS: Record<string, number> = {
-  security: 1.5,
-  perf: 1.0,
-  architecture: 1.5,
-  testing: 1.0,
-  doc: 1.0,
-  devops: 1.0,
-  legal: 1.0,
-  privacy: 1.5,
-  style: 1.0,
-  dx: 0.8,
-  accessibility: 1.0,
-  maintainability: 1.0,
-  sloc: 1.0,
-  imports: 1.5,
-  todo: 1.0,
-};
-
-const ICONS: Record<string, string> = {
-  security: '🛡',
-  perf: '⚡',
-  architecture: '🏛',
-  testing: '✓',
-  doc: '📖',
-  devops: '⚙',
-  legal: '⚖',
-  privacy: '🔒',
-  style: '🎨',
-  dx: '✦',
-  accessibility: '♿',
-  maintainability: '🔧',
-  sloc: '⊟',
-  imports: '⇄',
-  todo: '✗',
-};
+import { CriticsBars, CRITIC_NAMES } from './critics-bars';
 
 const SEVERITY_COLOR: Record<string, string> = {
   critical: colors.failed,
@@ -61,12 +26,6 @@ export interface CriticsProps {
   onToggleFixed?: () => void;
 }
 
-function buildKnown(critics: CriticLine[]): Record<string, CriticLine> {
-  const out: Record<string, CriticLine> = {};
-  for (const c of critics) out[c.name] = c;
-  return out;
-}
-
 export function Critics({
   critics,
   weightedAvg,
@@ -79,8 +38,6 @@ export function Critics({
   onFilter,
   onToggleFixed,
 }: CriticsProps) {
-  const known = buildKnown(critics);
-  const names = Object.keys(WEIGHTS);
   const passed = weightedAvg >= threshold;
   const filter = criticsFilter.toLowerCase();
   const visibleItems = items.filter((i) => {
@@ -103,7 +60,7 @@ export function Critics({
       flexGrow={1}
     >
       <Text color={colors.scoring} bold>
-        ◉ CRITICS ({critics.length}/{names.length} reported)
+        ◉ CRITICS ({critics.length}/{CRITIC_NAMES.length} reported)
       </Text>
       {onFilter ? (
         <Text color={colors.fgDim}>
@@ -115,41 +72,7 @@ export function Critics({
           {showFixedCritics ? 'Showing fixed' : 'Hiding fixed'} [f] toggle
         </Text>
       ) : null}
-      {names.map((name) => {
-        const c = known[name];
-        const w = WEIGHTS[name] ?? 1;
-        const icon = ICONS[name] ?? '·';
-        if (!c) {
-          return (
-            <Box key={name}>
-              <Text color={colors.fgDim}>
-                {icon} {name.padEnd(16)} weight={w.toFixed(1)} — — abstain
-              </Text>
-            </Box>
-          );
-        }
-        if (c.abstain) {
-          return (
-            <Box key={name}>
-              <Text color={colors.fgDim}>
-                {icon} {name.padEnd(16)} weight={w.toFixed(1)} abstain
-              </Text>
-            </Box>
-          );
-        }
-        const color =
-          c.score >= threshold ? colors.done : c.score < 0.4 ? colors.failed : colors.warn;
-        return (
-          <Box key={name} flexDirection="column">
-            <Text color={color}>
-              {icon} {name.padEnd(16)} w={w.toFixed(1)}{' '}
-            </Text>
-            <Text color={color}>{bar(c.score, 14)}</Text>
-            <Text color={color}>{formatScore(c.score)}</Text>
-            {expanded && c.reason ? <Text color={colors.fgDim}> {c.reason}</Text> : null}
-          </Box>
-        );
-      })}
+      <CriticsBars critics={critics} threshold={threshold} expanded={expanded} />
       {visibleItems.length > 0 && (
         <Box flexDirection="column" marginTop={1}>
           <Text color={colors.scoring} bold>
