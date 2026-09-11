@@ -1,8 +1,9 @@
 /**
  * @fileoverview Settings pane — config entries, toggle, edit.
  * @since 0.1.11
+ * @updated 0.1.13 — Ink-native focusable controls via useFocus.
  */
-import { Box, Text } from 'ink';
+import { Box, Text, useFocus } from 'ink';
 import { colors } from '../../../core/colors';
 
 /** @brief One config entry. @since 0.1.11 */
@@ -24,17 +25,19 @@ const TYPE_COLOR: Record<ConfigEntry['type'], string> = {
   boolean: colors.complete,
 };
 
-/** @brief Render the settings pane. @since 0.1.11 */
+/** @brief Render the settings pane with Ink-native focusable controls. @since 0.1.11 */
 export function SettingsPane({ entries, onChange }: SettingsPaneProps) {
+  const { isFocused } = useFocus();
+
   return (
     <Box
       flexDirection="column"
       borderStyle="round"
-      borderColor={colors.warn}
+      borderColor={isFocused ? colors.accent : colors.warn}
       paddingX={1}
       flexGrow={1}
     >
-      <Text color={colors.warn} bold>
+      <Text color={isFocused ? colors.accent : colors.warn} bold>
         _SETTINGS ({entries.length})
       </Text>
       {entries.length === 0 ? (
