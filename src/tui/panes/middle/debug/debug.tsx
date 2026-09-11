@@ -109,7 +109,7 @@ export function DebugPane({
             )}
           </Box>
         </Box>
-        <Box flexDirection="column" width="50%" paddingX={1} borderLeftStyle="single" borderLeftColor={colors.fgDim}>
+        <Box flexDirection="column" width="50%" paddingX={1}>
           <Text color={colors.complete} bold>
             VARIABLES ({variables.length})
           </Text>
