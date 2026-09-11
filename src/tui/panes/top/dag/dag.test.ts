@@ -64,4 +64,24 @@ describe('Dag', () => {
     );
     expect(out).toContain('second');
   });
+
+  it('renders tree topology when parent/children present', () => {
+    const steps: DagStep[] = [
+      { id: 'root', kind: 'generate', status: 'done', children: ['a', 'b'] },
+      { id: 'a', kind: 'verify', status: 'running', parent: 'root' },
+      { id: 'b', kind: 'critique', status: 'pending', parent: 'root' },
+    ];
+    const out = renderToString(Dag({ steps, currentLoop: 'INTAKE' }) as any);
+    expect(out).toContain('tree');
+    expect(out).toContain('generate');
+    expect(out).toContain('verify');
+    expect(out).toContain('critique');
+  });
+
+  it('falls back to flat list when no topology fields', () => {
+    const steps: DagStep[] = [{ id: '1', kind: 'generate', status: 'done' }];
+    const out = renderToString(Dag({ steps, currentLoop: 'INTAKE' }) as any);
+    expect(out).not.toContain('tree');
+    expect(out).toContain('1 steps');
+  });
 });
