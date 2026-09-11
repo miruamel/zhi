@@ -9,7 +9,7 @@ import { useApp } from 'ink';
 import { Arranger } from '../arranger';
 import { useFocus } from '../hooks';
 import { AppState } from '../state';
-import { useConflictResolver } from './use-conflicts';
+import { useConflictResolver } from '../hooks/use-conflicts';
 
 export interface FocusNav {
   current: string;
