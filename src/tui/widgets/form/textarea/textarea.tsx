@@ -4,7 +4,7 @@
  * @package zhi
  */
 import { Box, Text } from 'ink';
-import { colors } from '../../core/colors';
+import { colors } from '../../../core/colors';
 
 /** @brief Textarea props. @since 0.1.12 */
 export interface TextareaProps {
