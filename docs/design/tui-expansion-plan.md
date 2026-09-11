@@ -8,13 +8,13 @@
 
 ### Widget expansion
 
+- [x] Log viewer with filtering, search, tail-follow — 2k SLOC
+- [x] Form widgets (input, textarea, select, checkbox, radio, slider) — 2k SLOC
 - [ ] Chart library (line, bar, area, pie, radar) — 3k SLOC
 - [ ] Data table with sorting, filtering, pagination — 4k SLOC
 - [ ] Rich text editor widget (markdown preview, syntax highlighting) — 3k SLOC
 - [ ] Code viewer with file tree + syntax highlighting — 3k SLOC
 - [ ] Diff viewer (unified, side-by-side, inline) — 2k SLOC
-- [ ] Log viewer with filtering, search, tail-follow — 2k SLOC
-- [ ] Form widgets (input, textarea, select, checkbox, radio, slider) — 2k SLOC
 
 ### Pane expansion
 
@@ -25,7 +25,7 @@
 
 ### Infrastructure
 
-- [ ] Theme system (light, dark, high contrast, custom) — 1k SLOC
+- [x] Theme system (light, dark, high contrast, custom) — 1k SLOC
 - [ ] Icon system (SF Symbols / Iconify integration) — 1k SLOC
 - [ ] Accessibility layer (WCAG 2.2 AA audit) — 1k SLOC
 
