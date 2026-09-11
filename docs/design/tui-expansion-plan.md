@@ -20,7 +20,7 @@
 
 - [x] Settings pane (keybindings, themes, preferences) — 2k SLOC
 - [x] Help pane (command reference, keybindings cheat sheet) — 1k SLOC
-- [ ] Inspector pane (component tree, props, state inspection) — 2k SLOC
+- [x] Inspector pane (component tree, props, state inspection) — 2k SLOC — presentational `InspectorPane` wrapping `Tree` widget, `InspectorNode` extends `TreeNode` with optional `props`/`state`. Layout-registered in `arranger/types.ts`. PR #303.
 - [ ] Debug pane (breakpoints, variables, call stack) — 2k SLOC
 
 ### Infrastructure

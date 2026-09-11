@@ -37,10 +37,8 @@ export interface LayoutSnapshot {
 
 /** Layout engine options */
 export interface ArrangerOptions {
-  defaultSplit?: SplitDirection;
-  gutter?: number;
-  minPaneSize?: number;
-  maxDepth?: number;
+  constraints?: Record<string, LayoutConstraint>;
+  initial?: LayoutNode;
 }
 
 /** Layout event kinds */
@@ -56,7 +54,7 @@ export type LayoutEvent =
 /** Layout change callback */
 export type LayoutListener = (snapshot: LayoutSnapshot) => void;
 
-/** Default layout: header | (dag | detail | critics | eval | pr) | log | status */
+/** Default layout: header | (dag | detail | critics | eval | pr | inspector) | log | status */
 export const DEFAULT_LAYOUT: LayoutNode = {
   id: 'root',
   type: 'split',
@@ -89,6 +87,7 @@ export const DEFAULT_LAYOUT: LayoutNode = {
         { id: 'sessions', type: 'leaf', pane: 'sessions', size: 15 },
         { id: 'memory', type: 'leaf', pane: 'memory', size: 15 },
         { id: 'knowledge', type: 'leaf', pane: 'knowledge', size: 15 },
+        { id: 'inspector', type: 'leaf', pane: 'inspector', size: 15 },
       ],
     },
     { id: 'log', type: 'leaf', pane: 'log', size: 15 },
@@ -128,4 +127,5 @@ export const DEFAULT_CONSTRAINTS: Record<string, LayoutConstraint> = {
   sessions: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
   memory: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
   knowledge: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
+  inspector: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
 };

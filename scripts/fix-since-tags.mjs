@@ -8,7 +8,9 @@ const STALE_PATTERNS = ['0.2.0', '0.2.1', '0.2.2', '0.2.3', '0.2.4', '0.2.5', '0
 const EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx']);
 const SCAN_DIRS = ['engine', 'src'];
 
-let changed = 0, unchanged = 0, errors = 0;
+let changed = 0,
+  unchanged = 0,
+  errors = 0;
 
 function walkDir(dir) {
   const entries = readdirSync(dir, { withFileTypes: true });
