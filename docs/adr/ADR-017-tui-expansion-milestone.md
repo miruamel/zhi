@@ -19,10 +19,10 @@ Accepted
 ### Milestone Structure
 
 | Milestone | Version | TUI SLOC Target | Scope |
-| ~~M1: Dashboard~~ | v0.1.13 | ~8k | **In progress** — DashboardPane exists (PR #276), NotificationPane exists (PR #273). Issue #282 tracks remaining M1 scope (cost/quality metrics, notification upgrade). |
+| ~~M1: Dashboard~~ | v0.1.13 | ~8k | **DONE** — DashboardPane (DORA, quality, cost, token sparkline, multi-run comparison). PR #276. NotificationsPane (unread badge, type filter, dismiss). PR #273. |
 | ~~M2: Knowledge~~ | v0.1.14 | ~20k | **DONE** — MemoryPane tag filter + KnowledgeInspector pane. PR #278. |
 | ~~M3: Critique~~ | v0.1.15 | ~35k | **DONE** — Critics pane tests + Pareto bars + fix toggle. PR #281. |
-| M4: Orchestration | v0.2.0 | ~60k | Pending — multi-PR orchestration, parallel run view, DAG visualizer |
+| M4: Orchestration | v0.2.0 | ~60k | **In progress** — Issue #284. OrchPane + SessionsPane exist (PR #273). Need: parallel run view, conflict resolver UI, DAG visualizer. |
 | M5: Extensibility | v0.3.0 | ~80k+ | Pending — plugin marketplace, skill authoring, widget registry |
 
 Each milestone:
