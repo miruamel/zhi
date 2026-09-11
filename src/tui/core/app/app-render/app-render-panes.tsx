@@ -66,6 +66,18 @@ export function AppRenderPanes({
             weightedAvg={state.eval.weightedAvg}
             threshold={threshold}
             expanded={controller.criticsExpanded}
+            items={state.criticItems}
+            criticsFilter={controller.criticsFilter}
+            showFixedCritics={controller.showFixedCritics}
+            onFix={(id: string) =>
+              controller.pushState({
+                criticItems: state.criticItems.map((ci) =>
+                  ci.id === id ? { ...ci, fixed: true } : ci,
+                ),
+              })
+            }
+            onFilter={controller.setCriticsFilter}
+            onToggleFixed={() => controller.setShowFixedCritics((p) => !p)}
           />
         )}
         {visiblePanes.includes('eval') && <Eval evalReport={state.eval} />}

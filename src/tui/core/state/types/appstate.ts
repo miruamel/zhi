@@ -3,6 +3,7 @@
  * @package zhi
  */
 import type { DagStep, CriticLine, EvalReport, PrCiState, LogEntry, Fact } from './models/models';
+import type { CriticItem } from '../../store/types/entities/dag';
 import type {
   FileEntry,
   NetworkRequest,
@@ -17,6 +18,9 @@ export interface AppState {
   steps: DagStep[];
   currentStepId?: string;
   critics: CriticLine[];
+  criticItems: CriticItem[];
+  criticsFilter: string;
+  showFixedCritics: boolean;
   eval: EvalReport;
   prCi: PrCiState;
   log: LogEntry[];

@@ -11,6 +11,9 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     goal,
     steps: [],
     critics: [],
+    criticItems: [],
+    criticsFilter: '',
+    showFixedCritics: false,
     eval: {
       build: { name: 'build', ok: false, detail: '', durationMs: 0 },
       test: { name: 'test', ok: false, detail: '', durationMs: 0 },
