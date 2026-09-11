@@ -6,6 +6,7 @@
  */
 import { Box } from 'ink';
 import { StatusBar } from '../../../widgets/status-bar';
+import { ConflictResolver } from '../../../panes';
 import { DagStep } from '../../state';
 import type { AppControllerResult } from '../app-controller';
 import { AppRenderTop } from './app-render-top';
@@ -33,6 +34,14 @@ export function AppRender({
     <Box key={controller.redrawKey + controller.layoutVersion} flexDirection="column" paddingX={1}>
       <AppRenderTop state={state} doneCount={doneCount} />
       <AppRenderPanes controller={controller} threshold={threshold} />
+      <ConflictResolver
+        open={state.conflictResolverOpen}
+        conflicts={state.conflicts}
+        selectedId={state.selectedConflictId}
+        onResolve={(id) => controller.resolveConflict?.(id)}
+        onDismiss={() => controller.setConflictResolverOpen?.(false)}
+        onClose={() => controller.setConflictResolverOpen?.(false)}
+      />
       <StatusBar
         tokensUsed={state.tokensUsed}
         tokensBudget={state.tokensBudget}

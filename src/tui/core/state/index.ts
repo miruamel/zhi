@@ -8,6 +8,7 @@ export type {
   DagStep,
   LogEntry,
   PrCiState,
+  ConflictEntry,
 } from './types/models/models';
 export type {
   FileEntry,

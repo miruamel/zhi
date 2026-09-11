@@ -56,6 +56,21 @@ export interface DagStep {
   children?: string[];
   /** @brief Parent step ID (DAG topology). @since 0.1.12 */
   parent?: string;
+  /** @brief Conflicting edge IDs (DAG conflict resolution). @since 0.1.12 */
+  conflicts?: string[];
+}
+
+/** @brief DAG conflict entry (M4c). @since 0.1.12 */
+export interface ConflictEntry {
+  id: string;
+  /** @brief The cycle path (step IDs joined by ->). @since 0.1.12 */
+  cycle: string[];
+  /** @brief Steps involved in the conflict. @since 0.1.12 */
+  steps: string[];
+  /** @brief Resolution status. @since 0.1.12 */
+  resolved: boolean;
+  /** @brief Human-readable reason. @since 0.1.12 */
+  reason?: string;
 }
 
 /** @brief Log entry from LoopLogger. @since 0.1.2 */
