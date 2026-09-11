@@ -27,7 +27,7 @@
 
 - [x] Theme system (light, dark, high contrast, custom) — 1k SLOC
 - [x] Icon system (SF Symbols / Iconify integration) — 1k SLOC
-- [ ] Accessibility layer (WCAG 2.2 AA audit) — 1k SLOC
+- [x] Accessibility layer (WCAG 2.2 AA audit) — 1k SLOC — `useFocusVisibility()` hook, `SettingsPane` presentational fix, `useNavigation` paneOrder clamp. PR #300.
 
 ## Phase 2: v0.1.14 — Integration (target: ~50k SLOC)
 
