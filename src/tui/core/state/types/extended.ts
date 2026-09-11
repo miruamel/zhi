@@ -31,7 +31,7 @@ export interface AgentInfo {
   currentTask?: string;
 }
 
-/** @brief Session info for session pane. @since 0.1.11 */
+/** @brief Session info for session pane. @since 0.1.11 @updated 0.1.12 — M4b: add parallel/concurrency fields */
 export interface SessionInfo {
   id: string;
   label: string;
@@ -40,6 +40,10 @@ export interface SessionInfo {
   steps: number;
   tokensUsed: number;
   finished: boolean;
+  /** @brief Whether this session runs in parallel mode. @since 0.1.12 */
+  parallel?: boolean;
+  /** @brief Number of concurrent sub-runs within this session. @since 0.1.12 */
+  concurrent?: number;
 }
 
 /** @brief Config entry for settings pane. @since 0.1.11 */
