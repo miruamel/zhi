@@ -18,7 +18,7 @@ Accepted
 
 ### Milestone Structure
 
-| Milestone         | Version | TUI SLOC Target | Scope                                                                                 |
+| Milestone | Version | TUI SLOC Target | Scope |
 | ~~M1: Dashboard~~ | v0.1.13 | ~8k | **In progress** — DashboardPane exists (PR #276), NotificationPane exists (PR #273). Issue #282 tracks remaining M1 scope (cost/quality metrics, notification upgrade). |
 | ~~M2: Knowledge~~ | v0.1.14 | ~20k | **DONE** — MemoryPane tag filter + KnowledgeInspector pane. PR #278. |
 | ~~M3: Critique~~ | v0.1.15 | ~35k | **DONE** — Critics pane tests + Pareto bars + fix toggle. PR #281. |
