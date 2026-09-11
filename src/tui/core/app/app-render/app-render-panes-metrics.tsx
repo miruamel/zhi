@@ -15,6 +15,7 @@ import {
   MemoryPane,
   SettingsPane,
   InspectorPane,
+  DebugPane,
   NotificationsPane,
   KnowledgeInspector,
   HelpPane,
@@ -120,6 +121,15 @@ export function AppRenderPanesMetrics({
             selected={state.inspectorSelected}
             search={state.inspectorQuery}
             isFocused={visiblePanes.includes('inspector')}
+          />
+        )}
+        {visiblePanes.includes('debug') && (
+          <DebugPane
+            breakpoints={state.debugBreakpoints}
+            variables={state.debugVariables}
+            callStack={state.debugCallStack}
+            selectedFrame={state.debugSelectedFrame}
+            isFocused={visiblePanes.includes('debug')}
           />
         )}
       </Box>
