@@ -12,6 +12,7 @@ import type {
   ConflictEntry,
 } from './extended';
 import type { InspectorNode } from '../../../panes/middle/inspector/inspector';
+import type { DebugBreakpoint, DebugVariable, DebugFrame } from '../../../panes/middle/debug/debug';
 export interface AppState {
   loop: string;
   goal: string;
@@ -72,6 +73,11 @@ export interface AppState {
   inspectorNodes: InspectorNode[];
   inspectorSelected?: string;
   inspectorQuery?: string;
+  // 0.1.13 additions — debug pane
+  debugBreakpoints: DebugBreakpoint[];
+  debugVariables: DebugVariable[];
+  debugCallStack: DebugFrame[];
+  debugSelectedFrame?: string;
   notifications: Array<{
     id: string;
     type: 'info' | 'success' | 'warning' | 'error';

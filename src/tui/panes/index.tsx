@@ -46,6 +46,13 @@ export {
   type InspectorNode,
   type InspectorPaneProps,
 } from './middle/inspector/inspector';
+export {
+  DebugPane,
+  type DebugPaneProps,
+  type DebugBreakpoint,
+  type DebugVariable,
+  type DebugFrame,
+} from './middle/debug/debug';
 
 export {
   ConflictResolver,
