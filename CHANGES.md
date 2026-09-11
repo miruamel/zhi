@@ -16,11 +16,13 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 ## [Unreleased]
 
+### Added
+
+- **M2 Knowledge UI — MemoryPane tag filter + KnowledgeInspector pane (#277)** — `MemoryPane` gained `activeTag` prop with tag filter chips (Badge row, `#all`/`#tag ✕` toggle) and tag-filtered fact rendering; `query` prop now also filters within the active tag. New `KnowledgeInspector` pane (`src/tui/panes/middle/knowledge/knowledge.tsx`) renders fact count, embedding dimension, top tags by frequency, and a cosine-similarity search box via `@engine/knowledge/query`. `AppState` extended with `memoryQuery`, `memoryActiveTag`, `embeddingDims`; `emptyState` defaults `embeddingDims: 64`. `app-render-panes-metrics.tsx` wires both panes from controller state. Tests: 6 KnowledgeInspector + 6 MemoryPane cases. Gate: 783 pass / 0 fail / 1541 expect() across 168 files. PR #278. Audit: `audit-log/entries/2026-09-10-m2-knowledge-ui-278.md`.
+
 ### Fixed
 
 - **architecture-guard.sh SLOC check missed .tsx files (#266)** — the SLOC find pattern only matched `*.ts`, `*.js`, `*.zig`; `*.tsx` files were invisible, letting `src/tui/core/app/app-provider.tsx` sit at 161 lines undetected. Added `*.tsx` to the pattern with `*.test.tsx` exemption. Extracted `useInput` wiring from `app-provider.tsx` into `use-app-input.ts` (136 lines); provider now 57 lines. PR #267. Audit: `audit-log/entries/2026-09-10-arch-guard-tsx-sloc-267.md`.
-
-- **Dashboard multi-run comparison pane (#275)** — `DashboardPane` gained an optional `sessions?: SessionInfo[]` prop. When present, a `RUNS` comparison table renders beneath the COST column using the existing `Table` widget: run label / steps / tokens / status, with the active run highlighted. Wired from `state.sessions` in `AppRenderPanesMetrics`. No new PaneId, layout entry, or widget — reuses existing `SessionInfo` and `Table`. 2 new tests cover presence and absence. PR #275.
 
 ## [0.1.12] - 2026-09-10
 

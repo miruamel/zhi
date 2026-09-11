@@ -30,9 +30,20 @@ describe('MemoryPane', () => {
     const out = renderToString(MemoryPane({ facts, query: 'zzz' }));
     expect(out).toContain('No facts match.');
   });
+  it('renders tag filter chips', () => {
+    const out = renderToString(MemoryPane({ facts }));
+    expect(out).toContain('stack');
+    expect(out).toContain('zig');
+  });
 
-  it('renders add hint when onAdd provided', () => {
-    const out = renderToString(MemoryPane({ facts, onAdd: () => {} }));
-    expect(out).toContain('[a] add');
+  it('renders active tag filter badge', () => {
+    const out = renderToString(MemoryPane({ facts, activeTag: 'stack' }));
+    expect(out).toContain('stack');
+  });
+
+  it('shows empty state with tag filter hint', () => {
+    const out = renderToString(MemoryPane({ facts, activeTag: 'nonexistent' }));
+    expect(out).toContain('No facts match.');
+    expect(out).toContain('Try clearing the tag filter');
   });
 });
