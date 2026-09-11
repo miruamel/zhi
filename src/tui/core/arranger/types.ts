@@ -88,6 +88,7 @@ export const DEFAULT_LAYOUT: LayoutNode = {
         { id: 'memory', type: 'leaf', pane: 'memory', size: 15 },
         { id: 'knowledge', type: 'leaf', pane: 'knowledge', size: 15 },
         { id: 'inspector', type: 'leaf', pane: 'inspector', size: 15 },
+        { id: 'debug', type: 'leaf', pane: 'debug', size: 15 },
       ],
     },
     { id: 'log', type: 'leaf', pane: 'log', size: 15 },
@@ -128,4 +129,5 @@ export const DEFAULT_CONSTRAINTS: Record<string, LayoutConstraint> = {
   memory: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
   knowledge: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
   inspector: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
+  debug: { minSize: 10, maxSize: 50, resizable: true, collapsible: true },
 };

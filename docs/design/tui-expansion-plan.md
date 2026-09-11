@@ -10,7 +10,7 @@
 
 - [x] Chart library (line, bar, area, pie, radar) — 3k SLOC
 - [x] Data table with sorting, filtering, pagination — 4k SLOC
-- [ ] Rich text editor widget (markdown preview, syntax highlighting) — 3k SLOC
+- [x] Rich text editor widget (markdown preview, syntax highlighting) — 3k SLOC — `Editor` component with `useInput`-driven editing (insert/delete, arrow nav, Tab indent, Ctrl+A/E/S/C/V), live word/char count, toggleable preview; `parseMarkdown()` parser (headings, code blocks, lists, paragraphs) + `MarkdownPreview` renderer with inline bold/italic/code; `Toolbar` with B/I/H/•/code/link/preview buttons. 4 files, all ≤150 SLOC, ≤4 per directory. Barrel exports in `src/tui/widgets/index.ts`. Tests: 16 cases. PR #307.
 - [x] Code viewer with file tree + syntax highlighting — 3k SLOC
 - [x] Diff viewer (unified, side-by-side, inline) — 2k SLOC
 - [x] Log viewer with filtering, search, tail-follow — 2k SLOC
@@ -21,7 +21,7 @@
 - [x] Settings pane (keybindings, themes, preferences) — 2k SLOC
 - [x] Help pane (command reference, keybindings cheat sheet) — 1k SLOC
 - [x] Inspector pane (component tree, props, state inspection) — 2k SLOC — presentational `InspectorPane` wrapping `Tree` widget, `InspectorNode` extends `TreeNode` with optional `props`/`state`. Layout-registered in `arranger/types.ts`. PR #303.
-- [ ] Debug pane (breakpoints, variables, call stack) — 2k SLOC
+- [x] Debug pane (breakpoints, variables, call stack) — 2k SLOC — presentational `DebugPane` with three sections (breakpoints Tree, call stack Tree, variable rows), `DebugBreakpoint`/`DebugFrame` extend `TreeNode`, `DebugVariable` flat record. Layout-registered in `arranger/types.ts`. PR #304.
 
 ### Infrastructure
 
