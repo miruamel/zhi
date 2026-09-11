@@ -1,8 +1,7 @@
 /**
- * @fileoverview App controller hook — state management, focus, and pane orchestration for ZhiApp.
+ * @brief App controller hook — state, focus, pane orchestration for ZhiApp.
  * @since 0.1.2
- * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
- * @updated 0.1.12 — M4c: conflict resolver wiring
+ * @updated 0.1.12 — M4c conflict resolver wiring
  * @package zhi
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -10,6 +9,7 @@ import { useApp } from 'ink';
 import { Arranger } from '../arranger';
 import { useFocus } from '../hooks';
 import { AppState } from '../state';
+import { useConflictResolver } from './use-conflicts';
 
 export interface FocusNav {
   current: string;
@@ -55,15 +55,6 @@ export interface AppControllerResult {
   exit: () => void;
 }
 
-/**
- * @brief Aggregate all app-level state and handlers into one hook call.
- * @param initialState initial AppState
- * @param onAbort abort callback
- * @param onQuit quit callback
- * @param onRegister register a pushState callback
- * @return controller result consumed by ZhiApp render
- * @since 0.1.2
- */
 export function useAppController(
   initialState: AppState,
   onAbort?: () => void,
@@ -112,16 +103,7 @@ export function useAppController(
     goBack: focusHook.goBack,
   };
 
-  const resolveConflict = useCallback((id: string) => {
-    setState((s: AppState) => ({
-      ...s,
-      conflicts: s.conflicts.map((c) =>
-        c.id === id ? { ...c, resolved: true, reason: 'resolved by user' } : c,
-      ),
-      selectedConflictId: undefined,
-    }));
-    setSelectedConflictId(undefined);
-  }, []);
+  const { resolveConflict } = useConflictResolver(setState, setSelectedConflictId);
 
   return {
     state,
