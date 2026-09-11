@@ -1,11 +1,13 @@
 # TUI Expansion Plan — v0.1.13 milestone
 
 ## Target
+
 50k-120k SLOC across `src/tui/` by end of v0.1.x series. Current: 17,379 code lines (cloc, 383 files).
 
 ## Phase 1: v0.1.13 — Foundation (target: ~25k SLOC)
 
 ### Widget expansion
+
 - [ ] Chart library (line, bar, area, pie, radar) — 3k SLOC
 - [ ] Data table with sorting, filtering, pagination — 4k SLOC
 - [ ] Rich text editor widget (markdown preview, syntax highlighting) — 3k SLOC
@@ -15,12 +17,14 @@
 - [ ] Form widgets (input, textarea, select, checkbox, radio, slider) — 2k SLOC
 
 ### Pane expansion
+
 - [ ] Settings pane (keybindings, themes, preferences) — 2k SLOC
 - [ ] Help pane (command reference, keybindings cheat sheet) — 1k SLOC
 - [ ] Inspector pane (component tree, props, state inspection) — 2k SLOC
 - [ ] Debug pane (breakpoints, variables, call stack) — 2k SLOC
 
 ### Infrastructure
+
 - [ ] Theme system (light, dark, high contrast, custom) — 1k SLOC
 - [ ] Icon system (SF Symbols / Iconify integration) — 1k SLOC
 - [ ] Accessibility layer (WCAG 2.2 AA audit) — 1k SLOC
@@ -49,6 +53,7 @@
 - [ ] AI assistant integration (inline suggestions, chat, code generation) — 15k SLOC
 
 ## Constraints
+
 - ≤150 SLOC per file (mandate §6.2)
 - ≤4 files per directory (mandate §6.10)
 - No circular dependencies (dependency-cruiser)
