@@ -44,7 +44,7 @@ export interface EvalReport {
   costTrend?: number;
 }
 
-/** @brief One DAG step in the conductor plan. @since 0.1.2 */
+/** @brief One DAG step in the conductor plan. @since 0.1.2 @updated 0.1.12 — M4a: add topology fields */
 export interface DagStep {
   id: string;
   kind: 'generate' | 'verify' | 'critique' | 'eval' | 'commit' | 'pr' | 'classify' | 'isolate';
@@ -52,6 +52,10 @@ export interface DagStep {
   tokenBudget?: number;
   tokensUsed?: number;
   detail?: string;
+  /** @brief Child step IDs (DAG topology). @since 0.1.12 */
+  children?: string[];
+  /** @brief Parent step ID (DAG topology). @since 0.1.12 */
+  parent?: string;
 }
 
 /** @brief Log entry from LoopLogger. @since 0.1.2 */

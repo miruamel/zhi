@@ -62,6 +62,8 @@ export function AppRenderPanesMetrics({
               title: s.detail ?? s.id,
               status: s.status,
               tokens: s.tokensUsed,
+              children: s.children,
+              parent: s.parent,
             }))}
             currentStepId={state.currentStepId}
           />
