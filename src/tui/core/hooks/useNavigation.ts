@@ -13,13 +13,16 @@ export interface NavigationState {
 }
 
 /** @brief Hook for managing pane focus index. @since 0.1.11 */
-export function useFocus(paneOrder: string[], initial = 0) {
+export function usePaneFocus(paneOrder: string[], initial = 0) {
   const [focusIndex, setFocusIndex] = useState(initial);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
 
-  const current = paneOrder[focusIndex] ?? paneOrder[0];
+  // Clamp focusIndex when paneOrder shrinks (pane closed/hidden).
+  const clampedIndex = Math.min(focusIndex, Math.max(0, paneOrder.length - 1));
+  if (clampedIndex !== focusIndex) setFocusIndex(clampedIndex);
 
+  const current = paneOrder[clampedIndex] ?? paneOrder[0];
   const move = useCallback(
     (delta: number) => {
       setFocusIndex((i) => Math.max(0, Math.min(paneOrder.length - 1, i + delta)));
@@ -50,3 +53,6 @@ export function useFocus(paneOrder: string[], initial = 0) {
 
   return { focusIndex, current, move, jump, goBack, history, historyIndex };
 }
+
+/** @brief Alias for usePaneFocus — legacy name kept for callers. @since 0.1.11 */
+export const useFocus = usePaneFocus;

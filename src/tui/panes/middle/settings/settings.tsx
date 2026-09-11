@@ -1,6 +1,7 @@
 /**
  * @fileoverview Settings pane — config entries, toggle, edit.
  * @since 0.1.11
+ * @updated 0.1.13 — focus state via props (presentational).
  */
 import { Box, Text } from 'ink';
 import { colors } from '../../../core/colors';
@@ -16,6 +17,7 @@ export interface ConfigEntry {
 export interface SettingsPaneProps {
   entries: ConfigEntry[];
   onChange?: (key: string, value: string) => void;
+  isFocused?: boolean;
 }
 
 const TYPE_COLOR: Record<ConfigEntry['type'], string> = {
@@ -23,18 +25,17 @@ const TYPE_COLOR: Record<ConfigEntry['type'], string> = {
   number: colors.forward,
   boolean: colors.complete,
 };
-
-/** @brief Render the settings pane. @since 0.1.11 */
-export function SettingsPane({ entries, onChange }: SettingsPaneProps) {
+/** @brief Render the settings pane. Focus state via props (presentational). @since 0.1.11 */
+export function SettingsPane({ entries, onChange, isFocused = false }: SettingsPaneProps) {
   return (
     <Box
       flexDirection="column"
       borderStyle="round"
-      borderColor={colors.warn}
+      borderColor={isFocused ? colors.accent : colors.warn}
       paddingX={1}
       flexGrow={1}
     >
-      <Text color={colors.warn} bold>
+      <Text color={isFocused ? colors.accent : colors.warn} bold>
         _SETTINGS ({entries.length})
       </Text>
       {entries.length === 0 ? (
