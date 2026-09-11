@@ -10,7 +10,7 @@
 
 - [x] Chart library (line, bar, area, pie, radar) — 3k SLOC
 - [x] Data table with sorting, filtering, pagination — 4k SLOC
-- [ ] Rich text editor widget (markdown preview, syntax highlighting) — 3k SLOC
+- [x] Rich text editor widget (markdown preview, syntax highlighting) — 3k SLOC — `Editor` component with `useInput`-driven editing (insert/delete, arrow nav, Tab indent, Ctrl+A/E/S/C/V), live word/char count, toggleable preview; `parseMarkdown()` parser (headings, code blocks, lists, paragraphs) + `MarkdownPreview` renderer with inline bold/italic/code; `Toolbar` with B/I/H/•/code/link/preview buttons. 4 files, all ≤150 SLOC, ≤4 per directory. Barrel exports in `src/tui/widgets/index.ts`. Tests: 16 cases. PR #307.
 - [x] Code viewer with file tree + syntax highlighting — 3k SLOC
 - [x] Diff viewer (unified, side-by-side, inline) — 2k SLOC
 - [x] Log viewer with filtering, search, tail-follow — 2k SLOC

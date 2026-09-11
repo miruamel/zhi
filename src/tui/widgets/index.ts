@@ -23,3 +23,6 @@ export { LogViewer, type LogViewerEntry, type LogViewerProps } from './log';
 export { TextInput, Textarea, type TextInputProps, type TextareaProps } from './form';
 export { Select, type SelectProps, type SelectOption } from './form';
 export { Toggle, type ToggleProps } from './form';
+export { Editor, type EditorProps } from './editor';
+export { MarkdownPreview, type MdNode, parseMarkdown } from './editor';
+export { Toolbar, type ToolbarProps } from './editor';
