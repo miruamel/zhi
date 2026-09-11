@@ -50,4 +50,46 @@ describe('SessionsPane', () => {
     const out = renderToString(SessionsPane({ sessions: [], onCreate: () => {} }));
     expect(out).toContain('[n] new');
   });
+
+  it('shows parallel indicator when session has parallel flag', () => {
+    const out = renderToString(
+      SessionsPane({
+        sessions: [
+          {
+            id: 's1',
+            label: 'build-auth',
+            createdAt: 0,
+            lastActive: 0,
+            steps: 3,
+            tokensUsed: 1200,
+            finished: true,
+            parallel: true,
+            concurrent: 4,
+          },
+        ],
+      }),
+    );
+    expect(out).toContain('parallel');
+    expect(out).toContain('build-auth');
+    expect(out).toContain('max×4');
+  });
+
+  it('shows no parallel indicator when session has no parallel flag', () => {
+    const out = renderToString(
+      SessionsPane({
+        sessions: [
+          {
+            id: 's1',
+            label: 'solo',
+            createdAt: 0,
+            lastActive: 0,
+            steps: 1,
+            tokensUsed: 100,
+            finished: true,
+          },
+        ],
+      }),
+    );
+    expect(out).not.toContain('parallel');
+  });
 });
