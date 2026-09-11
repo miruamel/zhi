@@ -2,13 +2,10 @@
  * @fileoverview Focus visibility tests.
  * @since 0.1.13
  */
-import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
-import { renderToString } from '../../../core/test/render/render';
+import { describe, it, expect } from 'bun:test';
+import { renderToString } from '../test/render';
 import { Text } from 'ink';
-import {
-  useFocusVisibility,
-  type FocusVisibilityResult,
-} from '../accessibility/useFocusVisibility';
+import { useFocusVisibility, type FocusVisibilityResult } from './useFocusVisibility';
 
 describe('useFocusVisibility', () => {
   it('exports a function returning FocusVisibilityResult', () => {
