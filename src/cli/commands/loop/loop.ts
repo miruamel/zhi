@@ -6,8 +6,10 @@
  * @throw {Error} bila goal kosong.
  * @since 0.1.2
  */
-import type { LoopContext } from '../../../../engine/loop/wiring/handlers/types';
 import type { CriticResult } from '../../../../engine/critic/aggregate';
+import type { LoopContext } from '../../../../engine/loop/wiring/handlers/types';
+import type { AppState } from '../../../tui/core/state';
+import { mapCriticItems } from './critic-mapper';
 import { LoopDriver } from '../../../../engine/loop/driver';
 import { LoopState } from '../../../../engine/loop/states';
 import { LoopLogger } from '../../../../engine/loop/observability/logger';
@@ -17,8 +19,7 @@ import { offlineDeps } from '../../offline-deps/offline-deps';
 import { parseArgs } from '../../parse-args/parse-args';
 import { mountTui } from '../../../tui/render';
 import { buildHandlers } from '../../../../engine/loop/wiring/handlers';
-import type { AppState } from '../../../tui/core/state';
-/** @brief Ubah ctx+metrics → partial AppState patch (tanpa TUI dependency). @since 0.1.4 */
+
 export function toPatch(
   ctx: LoopContext,
   metrics: LoopMetrics,
@@ -33,6 +34,7 @@ export function toPatch(
       abstain: false,
       reason: c.findings[0] ?? 'passes without issues',
     })),
+    criticItems: mapCriticItems(ctx.critiques ?? []),
     eval: (() => {
       const st = ctx.eval?.stages;
       const empty = (name: string) => ({ name, ok: true, detail: '', durationMs: 0 });

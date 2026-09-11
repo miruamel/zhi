@@ -25,6 +25,8 @@ export interface AppControllerResult {
   detailExpanded: boolean;
   logExpanded: boolean;
   criticsExpanded: boolean;
+  criticsFilter: string;
+  showFixedCritics: boolean;
   prExpanded: boolean;
   logOffset: number;
   redrawKey: number;
@@ -38,6 +40,8 @@ export interface AppControllerResult {
   setDetailExpanded: (v: boolean | ((p: boolean) => boolean)) => void;
   setLogExpanded: (v: boolean | ((p: boolean) => boolean)) => void;
   setCriticsExpanded: (v: boolean | ((p: boolean) => boolean)) => void;
+  setCriticsFilter: (v: string | ((p: string) => string)) => void;
+  setShowFixedCritics: (v: boolean | ((p: boolean) => boolean)) => void;
   setPrExpanded: (v: boolean | ((p: boolean) => boolean)) => void;
   setLogOffset: (v: number | ((p: number) => number)) => void;
   setFocusIdx: (v: number | ((p: number) => number)) => void;
@@ -69,6 +73,8 @@ export function useAppController(
   const [detailExpanded, setDetailExpanded] = useState(false);
   const [logExpanded, setLogExpanded] = useState(false);
   const [criticsExpanded, setCriticsExpanded] = useState(false);
+  const [criticsFilter, setCriticsFilter] = useState('');
+  const [showFixedCritics, setShowFixedCritics] = useState(false);
   const [prExpanded, setPrExpanded] = useState(false);
   const [logOffset, setLogOffset] = useState(0);
   const [redrawKey, setRedrawKey] = useState(0);
@@ -108,6 +114,8 @@ export function useAppController(
     detailExpanded,
     logExpanded,
     criticsExpanded,
+    criticsFilter,
+    showFixedCritics,
     prExpanded,
     logOffset,
     redrawKey,
@@ -121,6 +129,8 @@ export function useAppController(
     setDetailExpanded,
     setLogExpanded,
     setCriticsExpanded,
+    setCriticsFilter,
+    setShowFixedCritics,
     setPrExpanded,
     setLogOffset,
     setFocusIdx,
