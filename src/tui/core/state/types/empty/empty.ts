@@ -51,5 +51,21 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     unreadCount: 0,
     conflicts: [],
     conflictResolverOpen: false,
+    // 0.1.13 defaults
+    inspectorNodes: [
+      {
+        id: 'app',
+        label: 'App',
+        value: 'app',
+        children: [
+          { id: 'header', label: 'Header', value: 'header' },
+          { id: 'detail', label: 'Detail', value: 'detail' },
+        ],
+        props: { goal, env: 'dev' },
+        state: { ready: true, step: 'INTAKE' },
+      },
+    ],
+    inspectorSelected: 'app',
+    inspectorQuery: '',
   };
 }

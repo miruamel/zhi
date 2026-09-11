@@ -41,6 +41,11 @@ export { Pr } from './middle/pr/pr';
 export { AgentPane } from './middle/agent/agent';
 export { NotificationsPane } from './middle/notifications/notifications';
 export { KnowledgeInspector } from './middle/knowledge/knowledge';
+export {
+  InspectorPane,
+  type InspectorNode,
+  type InspectorPaneProps,
+} from './middle/inspector/inspector';
 
 export {
   ConflictResolver,

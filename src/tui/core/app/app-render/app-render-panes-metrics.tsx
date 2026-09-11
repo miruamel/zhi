@@ -14,7 +14,7 @@ import {
   SessionsPane,
   MemoryPane,
   SettingsPane,
-  KnowledgeInspector,
+  InspectorPane,
   NotificationsPane,
   HelpPane,
 } from '../../../panes';
@@ -113,6 +113,14 @@ export function AppRenderPanesMetrics({
           />
         )}
         {visiblePanes.includes('config') && <SettingsPane entries={state.configEntries} />}
+        {visiblePanes.includes('inspector') && (
+          <InspectorPane
+            nodes={state.inspectorNodes}
+            selected={state.inspectorSelected}
+            search={state.inspectorQuery}
+            isFocused={visiblePanes.includes('inspector')}
+          />
+        )}
       </Box>
       <Box marginTop={1}>{visiblePanes.includes('help') && <HelpPane />}</Box>
     </>

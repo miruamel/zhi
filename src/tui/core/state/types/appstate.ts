@@ -10,16 +10,8 @@ import type {
   LogEntry,
   Fact,
   ConflictEntry,
-} from './models/models';
-import type { CriticItem } from '../../store/types/entities/dag';
-import type {
-  FileEntry,
-  NetworkRequest,
-  AgentInfo,
-  GitState,
-  SessionInfo,
-  ConfigEntry,
 } from './extended';
+import type { InspectorNode } from '../../../panes/middle/inspector/inspector';
 export interface AppState {
   loop: string;
   goal: string;
@@ -76,6 +68,10 @@ export interface AppState {
   }>;
   selectedAgent?: string;
   configEntries: ConfigEntry[];
+  // 0.1.13 additions — inspector pane
+  inspectorNodes: InspectorNode[];
+  inspectorSelected?: string;
+  inspectorQuery?: string;
   notifications: Array<{
     id: string;
     type: 'info' | 'success' | 'warning' | 'error';
