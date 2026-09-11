@@ -2,7 +2,15 @@
  * @fileoverview Top-level TUI app state. @since 0.1.2 @updated 0.1.11
  * @package zhi
  */
-import type { DagStep, CriticLine, EvalReport, PrCiState, LogEntry, Fact } from './models/models';
+import type {
+  DagStep,
+  CriticLine,
+  EvalReport,
+  PrCiState,
+  LogEntry,
+  Fact,
+  ConflictEntry,
+} from './models/models';
 import type { CriticItem } from '../../store/types/entities/dag';
 import type {
   FileEntry,
@@ -78,6 +86,10 @@ export interface AppState {
     persistent?: boolean;
   }>;
   unreadCount: number;
+  /** @brief DAG conflict entries (M4c). @since 0.1.12 */
+  conflicts: ConflictEntry[];
+  conflictResolverOpen: boolean;
+  selectedConflictId?: string;
   // 0.1.11 additions — dispatch/refresh patches from UI
   dispatch?: { agentId: string; task: string };
   refresh?: boolean;

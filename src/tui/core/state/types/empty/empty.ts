@@ -49,5 +49,7 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     runtimeLog: [],
     notifications: [],
     unreadCount: 0,
+    conflicts: [],
+    conflictResolverOpen: false,
   };
 }

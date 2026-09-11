@@ -41,3 +41,9 @@ export { Pr } from './middle/pr/pr';
 export { AgentPane } from './middle/agent/agent';
 export { NotificationsPane } from './middle/notifications/notifications';
 export { KnowledgeInspector } from './middle/knowledge/knowledge';
+
+export {
+  ConflictResolver,
+  type ConflictResolverProps,
+} from './middle/conflict-resolver/conflict-resolver';
+export type { ConflictEntry } from './middle/conflict-resolver/conflict-resolver';

@@ -1,7 +1,7 @@
 /**
- * @fileoverview App controller hook — state management, focus, and pane orchestration for ZhiApp.
+ * @brief App controller hook — state, focus, pane orchestration for ZhiApp.
  * @since 0.1.2
- * @updated 0.1.11 — extracted from app.tsx to enforce 150-SLOC guard
+ * @updated 0.1.12 — M4c conflict resolver wiring
  * @package zhi
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -9,6 +9,7 @@ import { useApp } from 'ink';
 import { Arranger } from '../arranger';
 import { useFocus } from '../hooks';
 import { AppState } from '../state';
+import { useConflictResolver } from '../hooks/use-conflicts';
 
 export interface FocusNav {
   current: string;
@@ -33,9 +34,11 @@ export interface AppControllerResult {
   layoutVersion: number;
   paletteOpen: boolean;
   mode: 'normal' | 'command' | 'search';
-  setPaletteOpen: (v: boolean) => void;
+  setPaletteOpen: (v: boolean | ((p: boolean) => boolean)) => void;
   setMode: (v: 'normal' | 'command' | 'search') => void;
-  setPaused: (v: boolean | ((p: boolean) => boolean)) => void;
+  setConflictResolverOpen: (v: boolean | ((p: boolean) => boolean)) => void;
+  resolveConflict: (id: string) => void;
+  selectedConflictId?: string;
   setShowHelp: (v: boolean | ((p: boolean) => boolean)) => void;
   setDetailExpanded: (v: boolean | ((p: boolean) => boolean)) => void;
   setLogExpanded: (v: boolean | ((p: boolean) => boolean)) => void;
@@ -46,19 +49,12 @@ export interface AppControllerResult {
   setLogOffset: (v: number | ((p: number) => number)) => void;
   setFocusIdx: (v: number | ((p: number) => number)) => void;
   setRedrawKey: (v: number | ((p: number) => number)) => void;
+  setPaused: (v: boolean | ((p: boolean) => boolean)) => void;
   onQuit?: () => void;
   onAbort?: () => void;
   exit: () => void;
 }
 
-/**
- * @brief Aggregate all app-level state and handlers into one hook call.
- * @param initialState initial AppState
- * @param onAbort abort callback
- * @param onRegister state push callback registration; invoked once after mount
- * @return controller result consumed by ZhiApp render
- * @since 0.1.2
- */
 export function useAppController(
   initialState: AppState,
   onAbort?: () => void,
@@ -80,7 +76,8 @@ export function useAppController(
   const [redrawKey, setRedrawKey] = useState(0);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [mode, setMode] = useState<'normal' | 'command' | 'search'>('normal');
-
+  const [, setConflictResolverOpen] = useState(false);
+  const [selectedConflictId, setSelectedConflictId] = useState<string | undefined>(undefined);
   const arranger = useState(() => new Arranger())[0];
   const [layoutVersion, setLayoutVersion] = useState(0);
   const registered = useRef(false);
@@ -106,6 +103,8 @@ export function useAppController(
     goBack: focusHook.goBack,
   };
 
+  const { resolveConflict } = useConflictResolver(setState, setSelectedConflictId);
+
   return {
     state,
     pushState,
@@ -121,9 +120,12 @@ export function useAppController(
     redrawKey,
     layoutVersion,
     paletteOpen,
-    mode,
     setPaletteOpen,
+    mode,
     setMode,
+    setConflictResolverOpen,
+    resolveConflict,
+    selectedConflictId,
     setPaused,
     setShowHelp,
     setDetailExpanded,
