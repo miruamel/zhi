@@ -16,7 +16,7 @@
  * @since 0.1.4
  */
 
-import { execSync } from 'child_process';
+import { execFileSync, execSync } from 'child_process';
 
 const ROOT = process.cwd();
 
@@ -75,9 +75,15 @@ function resolveBaseRef(): string {
  */
 export function getChangedFiles(baseRef: string, cwd = ROOT): string[] | null {
   try {
-    const out = execSync(
-      `git -C "${cwd}" diff --name-only ${baseRef}...HEAD 2>/dev/null || git -C "${cwd}" diff --name-only HEAD~1 HEAD 2>/dev/null`,
-      { cwd, encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 },
+    const out = execFileSync(
+      'git',
+      ['-C', cwd, 'diff', '--name-only', '--end-of-options', `${baseRef}...HEAD`],
+      {
+        cwd,
+        encoding: 'utf-8',
+        maxBuffer: 10 * 1024 * 1024,
+        stdio: ['ignore', 'pipe', 'ignore'],
+      },
     );
     return out.trim().split('\n').filter(Boolean);
   } catch {

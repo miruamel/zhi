@@ -5,7 +5,8 @@
  */
 
 import { expect, test } from 'bun:test';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { execFileSync } from 'child_process';
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { getChangedFiles, isNonDocs } from './gate';
@@ -45,6 +46,63 @@ test('fails closed when changed-file discovery is unavailable', () => {
   const dir = mkdtempSync(join(tmpdir(), 'zhi-gate-'));
   try {
     expect(getChangedFiles('origin/main', dir)).toBeNull();
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+test('returns null for a bogus base ref in a valid repository', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'zhi-gate-'));
+  const file = join(dir, 'file.txt');
+  try {
+    execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['config', 'user.email', 'test@example.com'], {
+      cwd: dir,
+      stdio: 'ignore',
+    });
+    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: dir, stdio: 'ignore' });
+    writeFileSync(file, 'one\n');
+    execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['commit', '-m', 'one'], { cwd: dir, stdio: 'ignore' });
+    writeFileSync(file, 'two\n');
+    execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['commit', '-m', 'two'], { cwd: dir, stdio: 'ignore' });
+
+    expect(getChangedFiles('origin/does-not-exist', dir)).toBeNull();
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+test('does not execute crafted base refs', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'zhi-gate-'));
+  const marker = join(dir, 'injected');
+  try {
+    expect(getChangedFiles(`origin/main; touch ${marker} #`, dir)).toBeNull();
+    expect(existsSync(marker)).toBe(false);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+test('does not honor crafted base-ref options', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'zhi-gate-'));
+  const file = join(dir, 'file.txt');
+  try {
+    execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['config', 'user.email', 'test@example.com'], {
+      cwd: dir,
+      stdio: 'ignore',
+    });
+    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: dir, stdio: 'ignore' });
+    writeFileSync(file, 'one\n');
+    execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['commit', '-m', 'one'], { cwd: dir, stdio: 'ignore' });
+    writeFileSync(file, 'two\n');
+    execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['commit', '-m', 'two'], { cwd: dir, stdio: 'ignore' });
+
+    const marker = join(dir, 'option-output');
+    expect(getChangedFiles(`--output=${marker}`, dir)).toBeNull();
+    expect(existsSync(marker)).toBe(false);
+    expect(existsSync(`${marker}...HEAD`)).toBe(false);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
