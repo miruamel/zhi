@@ -84,7 +84,10 @@ export function InspectorPane({
           width="50%"
           paddingX={1}
           borderStyle="single"
-          borderColor={colors.fgDim}
+          borderLeftColor={colors.fgDim}
+          borderTop={false}
+          borderRight={false}
+          borderBottom={false}
         >
           {selectedNode ? (
             <>
