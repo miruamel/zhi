@@ -5,7 +5,10 @@
  */
 
 import { expect, test } from 'bun:test';
-import { isNonDocs } from './gate';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { getChangedFiles, isNonDocs } from './gate';
 
 const cases: Array<[string, boolean]> = [
   ['audit-log/README.md', false],
@@ -35,5 +38,14 @@ const cases: Array<[string, boolean]> = [
 test('runs full gate for CI workflow changes', () => {
   for (const [file, expected] of cases) {
     expect(isNonDocs(file), file).toBe(expected);
+  }
+});
+
+test('fails closed when changed-file discovery is unavailable', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'zhi-gate-'));
+  try {
+    expect(getChangedFiles('origin/main', dir)).toBeNull();
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
   }
 });
