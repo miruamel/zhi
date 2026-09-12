@@ -8,12 +8,18 @@ import { dirname, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const project = './tsconfig.build.json';
+const tscBin = join(
+  process.cwd(),
+  'node_modules',
+  '.bin',
+  process.platform === 'win32' ? 'tsc.cmd' : 'tsc',
+);
 
 console.log(`[build] rm -rf dist/`);
 rmSync('./dist', { recursive: true, force: true });
 
-console.log(`[build] bun x tsc -p ${project}`);
-const r = spawnSync('bun', ['x', 'tsc', '-p', project], { stdio: 'inherit' });
+console.log(`[build] ${tscBin} -p ${project}`);
+const r = spawnSync(tscBin, ['-p', project], { stdio: 'inherit' });
 if (r.status !== 0) {
   console.error(`[build] tsc gagal exit ${r.status}`);
   process.exit(r.status ?? 1);
