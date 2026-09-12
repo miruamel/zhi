@@ -43,17 +43,17 @@ function isDocsOnly(filePath: string): boolean {
   if (filePath.startsWith('docs/')) return true;
   if (filePath.startsWith('audit-log/')) return true;
   if (filePath === '.prettierignore') return true;
-  if (filePath.startsWith('.github/workflows/')) return true; // workflow-only changes
   return false;
 }
 
 /**
  * Returns true if `path` touches any non-docs file.
  * @param filePath
+ * @return `true` when the path requires the full gate; otherwise `false`.
  */
-function isNonDocs(filePath: string): boolean {
-  // Docs-only patterns override SKIP_PREFIXES (e.g. .github/workflows/ci.yml
-  // matches both the .github/ prefix and the docs-only check — docs-only wins).
+export function isNonDocs(filePath: string): boolean {
+  // Docs-only patterns override SKIP_PREFIXES. Workflow changes execute code
+  // and must run the full gate, so they are intentionally non-docs.
   if (isDocsOnly(filePath)) return false;
   if (SKIP_PREFIXES.some((p) => filePath === p || filePath.startsWith(p))) return true;
   return true; // unknown files default to non-docs (safe — full gate)
@@ -123,7 +123,9 @@ async function main(): Promise<void> {
   console.log('[gate] all checks passed');
 }
 
-main().catch((err) => {
-  console.error('[gate] FAILED:', err.message ?? err);
-  process.exit(1);
-});
+if (import.meta.main) {
+  main().catch((err) => {
+    console.error('[gate] FAILED:', err.message ?? err);
+    process.exit(1);
+  });
+}
