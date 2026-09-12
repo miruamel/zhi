@@ -4,37 +4,14 @@
  * @since 0.1.4
  */
 
-const SKIP_PREFIXES = [
-  'src/',
-  'engine/',
-  'native/',
-  'package.json',
-  'package-lock.json',
-  'tsconfig',
-  'scripts/',
-  'build.zig',
-  'build.zig.zon',
-  'zig.mod',
-];
+import { expect, test } from 'bun:test';
+import { execFileSync } from 'child_process';
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { getChangedFiles, isNonDocs } from './gate';
 
-function isDocsOnly(filePath: string): boolean {
-  if (filePath.endsWith('.md')) return true;
-  if (filePath.startsWith('docs/')) return true;
-  if (filePath.startsWith('audit-log/')) return true;
-  if (filePath === '.prettierignore') return true;
-  if (filePath.startsWith('.github/workflows/')) return true;
-  return false;
-}
-
-function isNonDocs(filePath: string): boolean {
-  // Docs-only patterns override SKIP_PREFIXES (e.g. .github/workflows/ci.yml
-  // matches both the .github/ prefix and the docs-only check — docs-only wins).
-  if (isDocsOnly(filePath)) return false;
-  if (SKIP_PREFIXES.some((p) => filePath === p || filePath.startsWith(p))) return true;
-  return true; // unknown files default to non-docs (safe — full gate)
-}
-
-const tests: Array<[string, boolean]> = [
+const cases: Array<[string, boolean]> = [
   ['audit-log/README.md', false],
   ['audit-log/entries/foo.md', false],
   ['README.md', false],
@@ -42,7 +19,7 @@ const tests: Array<[string, boolean]> = [
   ['docs/ARCHITECTURE.md', false],
   ['.prettierignore', false],
   ['.gitignore', true],
-  ['.github/workflows/ci.yml', false],
+  ['.github/workflows/ci.yml', true],
   ['src/cli.ts', true],
   ['package.json', true],
   ['package-lock.json', true],
@@ -59,14 +36,74 @@ const tests: Array<[string, boolean]> = [
   ['AGENTS.Style.md', false],
 ];
 
-let pass = 0,
-  fail = 0;
-for (const [file, expected] of tests) {
-  const actual = isNonDocs(file);
-  const ok = actual === expected;
-  if (ok) pass++;
-  else fail++;
-  console.log(`${ok ? 'PASS' : 'FAIL'}: ${file} => nonDocs=${actual} (expected ${expected})`);
-}
-console.log(`\n${pass} passed, ${fail} failed`);
-if (fail > 0) process.exit(1);
+test('runs full gate for CI workflow changes', () => {
+  for (const [file, expected] of cases) {
+    expect(isNonDocs(file), file).toBe(expected);
+  }
+});
+
+test('fails closed when changed-file discovery is unavailable', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'zhi-gate-'));
+  try {
+    expect(getChangedFiles('origin/main', dir)).toBeNull();
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+test('returns null for a bogus base ref in a valid repository', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'zhi-gate-'));
+  const file = join(dir, 'file.txt');
+  try {
+    execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['config', 'user.email', 'test@example.com'], {
+      cwd: dir,
+      stdio: 'ignore',
+    });
+    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: dir, stdio: 'ignore' });
+    writeFileSync(file, 'one\n');
+    execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['commit', '-m', 'one'], { cwd: dir, stdio: 'ignore' });
+    writeFileSync(file, 'two\n');
+    execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['commit', '-m', 'two'], { cwd: dir, stdio: 'ignore' });
+
+    expect(getChangedFiles('origin/does-not-exist', dir)).toBeNull();
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+test('does not execute crafted base refs', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'zhi-gate-'));
+  const marker = join(dir, 'injected');
+  try {
+    expect(getChangedFiles(`origin/main; touch ${marker} #`, dir)).toBeNull();
+    expect(existsSync(marker)).toBe(false);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+test('does not honor crafted base-ref options', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'zhi-gate-'));
+  const file = join(dir, 'file.txt');
+  try {
+    execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['config', 'user.email', 'test@example.com'], {
+      cwd: dir,
+      stdio: 'ignore',
+    });
+    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: dir, stdio: 'ignore' });
+    writeFileSync(file, 'one\n');
+    execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['commit', '-m', 'one'], { cwd: dir, stdio: 'ignore' });
+    writeFileSync(file, 'two\n');
+    execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['commit', '-m', 'two'], { cwd: dir, stdio: 'ignore' });
+
+    const marker = join(dir, 'option-output');
+    expect(getChangedFiles(`--output=${marker}`, dir)).toBeNull();
+    expect(existsSync(marker)).toBe(false);
+    expect(existsSync(`${marker}...HEAD`)).toBe(false);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
