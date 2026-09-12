@@ -26,6 +26,8 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 ### Fixed
 
+- **CI workflow changes skipped typecheck and tests (#309)** — `scripts/gate.ts` now classifies `.github/workflows/*` as non-docs and fails closed when changed-file discovery is unavailable, so `--if-changed` runs the full gate for CI changes. Added focused regression tests and guarded the gate entry point for test imports.
+
 - **architecture-guard.sh SLOC check missed .tsx files (#266)** — the SLOC find pattern only matched `*.ts`, `*.js`, `*.zig`; `*.tsx` files were invisible, letting `src/tui/core/app/app-provider.tsx` sit at 161 lines undetected. Added `*.tsx` to the pattern with `*.test.tsx` exemption. Extracted `useInput` wiring from `app-provider.tsx` into `use-app-input.ts` (136 lines); provider now 57 lines. PR #267. Audit: `audit-log/entries/2026-09-10-arch-guard-tsx-sloc-267.md`.
 
 ## [0.1.12] - 2026-09-10

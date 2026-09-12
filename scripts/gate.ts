@@ -43,17 +43,17 @@ function isDocsOnly(filePath: string): boolean {
   if (filePath.startsWith('docs/')) return true;
   if (filePath.startsWith('audit-log/')) return true;
   if (filePath === '.prettierignore') return true;
-  if (filePath.startsWith('.github/workflows/')) return true; // workflow-only changes
   return false;
 }
 
 /**
- * Returns true if `path` touches any non-docs file.
- * @param filePath
+ * @brief Menentukan apakah path memerlukan gate penuh.
+ * @param {string} filePath - path file yang diperiksa.
+ * @return {boolean} `true` jika path bukan docs-only; `false` jika docs-only.
  */
-function isNonDocs(filePath: string): boolean {
-  // Docs-only patterns override SKIP_PREFIXES (e.g. .github/workflows/ci.yml
-  // matches both the .github/ prefix and the docs-only check — docs-only wins).
+export function isNonDocs(filePath: string): boolean {
+  // Docs-only patterns override SKIP_PREFIXES. Workflow changes execute code
+  // and must run the full gate, so they are intentionally non-docs.
   if (isDocsOnly(filePath)) return false;
   if (SKIP_PREFIXES.some((p) => filePath === p || filePath.startsWith(p))) return true;
   return true; // unknown files default to non-docs (safe — full gate)
@@ -68,18 +68,20 @@ function resolveBaseRef(): string {
 }
 
 /**
- * Get list of changed files between HEAD and base ref.
- * @param baseRef
+ * @brief Mengambil daftar file berubah untuk fast-path.
+ * @param {string} baseRef - ref basis diff.
+ * @param {string} [cwd] - direktori repositori; default direktori proses.
+ * @return {string[] | null} daftar path, atau `null` saat discovery gagal.
  */
-function getChangedFiles(baseRef: string): string[] {
+export function getChangedFiles(baseRef: string, cwd = ROOT): string[] | null {
   try {
     const out = execSync(
-      `git -C "${ROOT}" diff --name-only ${baseRef}...HEAD 2>/dev/null || git -C "${ROOT}" diff --name-only HEAD~1 HEAD 2>/dev/null`,
-      { cwd: ROOT, encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 },
+      `git -C "${cwd}" diff --name-only ${baseRef}...HEAD 2>/dev/null || git -C "${cwd}" diff --name-only HEAD~1 HEAD 2>/dev/null`,
+      { cwd, encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 },
     );
     return out.trim().split('\n').filter(Boolean);
   } catch {
-    return [];
+    return null;
   }
 }
 
@@ -100,20 +102,25 @@ async function main(): Promise<void> {
   if (fastPath) {
     const baseRef = resolveBaseRef();
     const files = getChangedFiles(baseRef);
-    const nonDocs = files.filter(isNonDocs);
 
-    if (nonDocs.length === 0) {
+    if (files === null) {
+      console.log('[gate] --if-changed: changed-file discovery failed — running full gate');
+    } else {
+      const nonDocs = files.filter(isNonDocs);
+
+      if (nonDocs.length === 0) {
+        console.log(
+          `[gate] --if-changed: ${files.length} file(s) changed, all docs/markdown — skipping typecheck + test`,
+        );
+        run('lint', 'bun run lint');
+        run('format:check', 'bun run format:check');
+        console.log('[gate] fast-path passed');
+        return;
+      }
       console.log(
-        `[gate] --if-changed: ${files.length} file(s) changed, all docs/markdown — skipping typecheck + test`,
+        `[gate] --if-changed: ${nonDocs.length} non-docs file(s) changed (${nonDocs.join(', ')}) — running full gate`,
       );
-      run('lint', 'bun run lint');
-      run('format:check', 'bun run format:check');
-      console.log('[gate] fast-path passed');
-      return;
     }
-    console.log(
-      `[gate] --if-changed: ${nonDocs.length} non-docs file(s) changed (${nonDocs.join(', ')}) — running full gate`,
-    );
   }
 
   run('lint', 'bun run lint');
@@ -123,7 +130,9 @@ async function main(): Promise<void> {
   console.log('[gate] all checks passed');
 }
 
-main().catch((err) => {
-  console.error('[gate] FAILED:', err.message ?? err);
-  process.exit(1);
-});
+if (import.meta.main) {
+  main().catch((err) => {
+    console.error('[gate] FAILED:', err.message ?? err);
+    process.exit(1);
+  });
+}
