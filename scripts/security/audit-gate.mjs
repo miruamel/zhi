@@ -47,7 +47,7 @@ const summary = audit.metadata.vulnerabilities;
 const counts = {};
 for (const severity of ['critical', 'high', 'moderate', 'low']) {
   const count = summary[severity];
-  if (!Number.isFinite(count) || count < 0) {
+  if (!Number.isInteger(count) || count < 0) {
     console.error(`npm audit JSON has an invalid ${severity} vulnerability count`);
     process.exit(1);
   }

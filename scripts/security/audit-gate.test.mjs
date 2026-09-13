@@ -97,6 +97,18 @@ test('fails when a vulnerability count is malformed', () => {
   expect(runGate(0, validReport({ high: 'one' })).status).toBe(1);
 });
 
+test('fails when a vulnerability count is fractional', () => {
+  expect(runGate(0, validReport({ high: 1.5 })).status).toBe(1);
+});
+
+test('fails when the vulnerability report is an array', () => {
+  expect(runGate(0, JSON.stringify({ vulnerabilities: [], metadata: { vulnerabilities: {} } })).status).toBe(1);
+});
+
+test('fails when the metadata vulnerability summary is an array', () => {
+  expect(runGate(0, JSON.stringify({ vulnerabilities: {}, metadata: { vulnerabilities: [] } })).status).toBe(1);
+});
+
 test('fails when the audit report is empty', () => {
   const dir = mkdtempSync(join(tmpdir(), 'zhi-audit-gate-'));
   const reportPath = join(dir, 'audit.json');
