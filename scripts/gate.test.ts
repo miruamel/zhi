@@ -83,6 +83,7 @@ test('returns null for a bogus base ref in a valid repository', () => {
       cwd: dir,
       stdio: 'ignore',
     });
+    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: dir, stdio: 'ignore' });
     execFileSync('git', ['config', 'commit.gpgSign', 'false'], { cwd: dir, stdio: 'ignore' });
     writeFileSync(file, 'one\n');
     execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
@@ -115,6 +116,7 @@ test('does not honor crafted base-ref options', () => {
       cwd: dir,
       stdio: 'ignore',
     });
+    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: dir, stdio: 'ignore' });
     execFileSync('git', ['config', 'commit.gpgSign', 'false'], { cwd: dir, stdio: 'ignore' });
     writeFileSync(file, 'one\n');
     execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
