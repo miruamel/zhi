@@ -16,6 +16,7 @@ import {
   SettingsPane,
   InspectorPane,
   NotificationsPane,
+  KnowledgeInspector,
   HelpPane,
 } from '../../../panes';
 import { DagStep } from '../../state';

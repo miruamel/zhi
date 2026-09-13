@@ -83,8 +83,11 @@ export function InspectorPane({
           flexDirection="column"
           width="50%"
           paddingX={1}
-          borderLeftStyle="single"
+          borderStyle="single"
           borderLeftColor={colors.fgDim}
+          borderTop={false}
+          borderRight={false}
+          borderBottom={false}
         >
           {selectedNode ? (
             <>

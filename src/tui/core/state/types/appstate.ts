@@ -10,6 +10,15 @@ import type {
   LogEntry,
   Fact,
   ConflictEntry,
+} from './models/models';
+import type { CriticItem } from '../../store/types/entities/dag';
+import type {
+  FileEntry,
+  NetworkRequest,
+  AgentInfo,
+  GitState,
+  SessionInfo,
+  ConfigEntry,
 } from './extended';
 import type { InspectorNode } from '../../../panes/middle/inspector/inspector';
 export interface AppState {
