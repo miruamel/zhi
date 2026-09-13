@@ -53,14 +53,20 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Audit npm dependencies
-        run: npm audit --json > /tmp/audit.json || true
-
-      - name: Report audit results
         run: |
-          if [ -s /tmp/audit.json ]; then
-            echo "=== npm audit summary ==="
-            node -e 'const d=require("/tmp/audit.json");const v=d.vulnerabilities||{};for(const s of ["critical","high","moderate","low"]){const c=v[s]||0;if(c>0)console.log(s+": "+c)}'
-          fi
+          set +e
+          npm audit --json --audit-level=high > /tmp/audit.json
+          audit_status=$?
+          set -e
+          node scripts/security/audit-gate.mjs /tmp/audit.json "$audit_status"
+
+      - name: Upload npm audit report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: npm-audit-report
+          path: /tmp/audit.json
+          if-no-files-found: ignore
 
   gitleaks:
     name: Secret Detection (gitleaks)
