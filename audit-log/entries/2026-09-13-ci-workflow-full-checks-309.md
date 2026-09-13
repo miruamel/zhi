@@ -2,7 +2,12 @@
 
 ## Resolved 2026-09-13
 
-- Issue #309 fixed by PR #310. PR merged at `886a2f744d71e9d3c4c0734ca60d8e9659a00942`; issue closed at `2026-09-13T00:43:36Z`.
+- **Actor:** `miruamel`
+- **Issue:** #309
+- **Implementation PR:** #310
+- **Audit PR:** #316
+- **Impact:** CI workflow edits now run the full gate; this record preserves root cause, security hardening, verification, and repository state.
+- **Rollback:** Revert PR #316 for documentation only; implementation remains in PR #310.
 - Root cause: `scripts/gate.ts --if-changed` classified `.github/workflows/*` as documentation, so CI workflow changes skipped TypeScript typecheck and tests.
 - Fix: workflow changes now force the full gate. Missing or unusable changed-file discovery also fails closed instead of falling back to a docs-only result.
 - Security hardening: `GITHUB_BASE_REF` is passed to Git through `execFileSync` argv with `--end-of-options`; crafted shell and Git-option references are covered by regression tests.
