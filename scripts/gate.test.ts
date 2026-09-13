@@ -19,7 +19,7 @@ const cases: Array<[string, boolean]> = [
   ['docs/ARCHITECTURE.md', false],
   ['.prettierignore', false],
   ['.gitignore', true],
-  ['.github/workflows/ci.yml', true],
+  ['.github/workflows/README.md', true],
   ['src/cli.ts', true],
   ['package.json', true],
   ['package-lock.json', true],
@@ -42,6 +42,30 @@ test('runs full gate for CI workflow changes', () => {
   }
 });
 
+test('returns files for a valid base ref', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'zhi-gate-'));
+  const file = join(dir, 'file.txt');
+  try {
+    execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['config', 'user.email', 'test@example.com'], {
+      cwd: dir,
+      stdio: 'ignore',
+    });
+    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['config', 'commit.gpgSign', 'false'], { cwd: dir, stdio: 'ignore' });
+    writeFileSync(file, 'one\n');
+    execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['commit', '-m', 'one'], { cwd: dir, stdio: 'ignore' });
+    writeFileSync(file, 'two\n');
+    execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['commit', '-m', 'two'], { cwd: dir, stdio: 'ignore' });
+
+    expect(getChangedFiles('HEAD~1', dir)).toEqual(['file.txt']);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('fails closed when changed-file discovery is unavailable', () => {
   const dir = mkdtempSync(join(tmpdir(), 'zhi-gate-'));
   try {
@@ -59,7 +83,7 @@ test('returns null for a bogus base ref in a valid repository', () => {
       cwd: dir,
       stdio: 'ignore',
     });
-    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['config', 'commit.gpgSign', 'false'], { cwd: dir, stdio: 'ignore' });
     writeFileSync(file, 'one\n');
     execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
     execFileSync('git', ['commit', '-m', 'one'], { cwd: dir, stdio: 'ignore' });
@@ -91,7 +115,7 @@ test('does not honor crafted base-ref options', () => {
       cwd: dir,
       stdio: 'ignore',
     });
-    execFileSync('git', ['config', 'user.name', 'Test'], { cwd: dir, stdio: 'ignore' });
+    execFileSync('git', ['config', 'commit.gpgSign', 'false'], { cwd: dir, stdio: 'ignore' });
     writeFileSync(file, 'one\n');
     execFileSync('git', ['add', 'file.txt'], { cwd: dir, stdio: 'ignore' });
     execFileSync('git', ['commit', '-m', 'one'], { cwd: dir, stdio: 'ignore' });

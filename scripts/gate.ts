@@ -39,6 +39,7 @@ const SKIP_PREFIXES = [
  * @param filePath
  */
 function isDocsOnly(filePath: string): boolean {
+  if (filePath.startsWith('.github/workflows/')) return false;
   if (filePath.endsWith('.md')) return true;
   if (filePath.startsWith('docs/')) return true;
   if (filePath.startsWith('audit-log/')) return true;
