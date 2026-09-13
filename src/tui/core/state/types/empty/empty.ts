@@ -67,5 +67,10 @@ export function emptyState(goal: string, tokensBudget: number): AppState {
     ],
     inspectorSelected: 'app',
     inspectorQuery: '',
+    // 0.1.13 defaults — debug pane
+    debugBreakpoints: [],
+    debugVariables: [],
+    debugCallStack: [],
+    debugSelectedFrame: undefined,
   };
 }
