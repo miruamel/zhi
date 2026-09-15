@@ -1,6 +1,6 @@
 # 2026-09-16-dependabot-lint-staged-restore.md
 
-**@brief** Perbaikan dua defect dari sesi sebelumnya: (1) `lint-staged` dependabot ignore yang hilang diakibatkan oleh commit `cd2b32b` (PR #326) — dikembalikan; (2) entri audit-log `2026-09-15-release-0.1.13-closing.md` baris 24 menyatukan annotated tag object `7818d28` dengan commit-nya `94ed145` — diperbaiki. Issue #315 komentar pertama yang cacakarena backtick dieksekusi oleh shell — dihapus.
+**@brief** Perbaikan tiga defect dari sesi sebelumnya: (1) `lint-staged` dependabot ignore yang hilang diakibatkan oleh commit `cd2b32b` (PR #326) — dikembalikan; (2) entri audit-log `2026-09-15-release-0.1.13-closing.md` baris 24 menyatukan annotated tag object `7818d28` dengan commit-nya `94ed145` — diperbaiki; (3) Issue #315 komentar pertama yang cacat karena backtick dieksekusi oleh shell — di-delete.
 
 **@param** none
 
