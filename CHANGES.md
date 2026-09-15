@@ -14,7 +14,7 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
-## [Unreleased]
+## [0.1.13] - 2026-09-15
 
 ### Added
 
@@ -29,6 +29,8 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 ### Fixed
 
 - **CI workflow changes skipped typecheck and tests (#309)** — `scripts/gate.ts` now classifies `.github/workflows/*` as non-docs and fails closed when changed-file discovery is unavailable, so `--if-changed` runs the full gate for CI changes. Added focused regression tests and guarded the gate entry point for test imports.
+- **npm audit fail-closed on high findings (#312)** — `.github/workflows/security.yml` now preserves `/tmp/audit.json`, invokes a fail-closed gate, blocks high/critical findings, and keeps moderate/low visible. Gate tests cover malformed, missing, empty, array-shaped, fractional, and severity reports; real audit reported zero findings. Follow-up #313 enforces integer counts.
+- **Harden npm audit validation (#314)** — security audit path hardened against bypass; CI green on both `ci` and `security` jobs.
 - **CI build uses pinned TypeScript and builds WASM first (#308)** — CI installs locked dependencies with `npm ci`, invokes the repository-pinned TypeScript compiler through `scripts/build.ts`, and runs `native:build` before TypeScript packaging so `dist/native/out/stream.wasm` is present. PR #308.
 
 - **architecture-guard.sh SLOC check missed .tsx files (#266)** — the SLOC find pattern only matched `*.ts`, `*.js`, `*.zig`; `*.tsx` files were invisible, letting `src/tui/core/app/app-provider.tsx` sit at 161 lines undetected. Added `*.tsx` to the pattern with `*.test.tsx` exemption. Extracted `useInput` wiring from `app-provider.tsx` into `use-app-input.ts` (136 lines); provider now 57 lines. PR #267. Audit: `audit-log/entries/2026-09-10-arch-guard-tsx-sloc-267.md`.
@@ -285,7 +287,8 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 ## [0.1.0] - 2026-08-29
 
 First tagged baseline. See [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md) for the full 2026-08-29 → 2026-08-30 development log (15 entries; note: that history uses inconsistent version headers `[0.1.0]` duplicated and a non-monotonic `0.1.0..0.6.0` block — preserved as-is for authorial record).
-[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.12...HEAD
+[0.1.13]: https://github.com/miruamel/zhi/releases/tag/v0.1.13
+[Unreleased]: https://github.com/miruamel/zhi/compare/v0.1.13...HEAD
 [0.1.12]: https://github.com/miruamel/zhi/releases/tag/v0.1.12
 [0.1.11]: https://github.com/miruamel/zhi/releases/tag/v0.1.11
 [0.1.7]: https://github.com/miruamel/zhi/releases/tag/v0.1.7
