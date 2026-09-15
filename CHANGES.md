@@ -16,6 +16,8 @@ Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs
 
 ## [0.1.13] - 2026-09-15
 
+> **Tag exception**: GitHub Release uses `v0.1.13-1` (non-canonical pre-release suffix) because remote tag `v0.1.13` (annotated object `7818d28` → commit `94ed145`) does not include fix `8d5c8e0` (`WebAssembly.Global` crash on Bun 1.4.0) and cannot be force-updated per owner decision. Creating a canonical Release on `v0.1.13` would ship binaries that crash on Bun 1.4.0. npm package `@miruamel/zhi@0.1.13` is published from the correct commit (`0660719`, includes `8d5c8e0`) and is unaffected. No canonical GitHub Release `v0.1.13` exists. See `audit-log/entries/2026-09-15-release-0.1.13-closing.md` § Exception.
+
 ### Added
 
 - **M2 Knowledge UI — MemoryPane tag filter + KnowledgeInspector pane (#277)** — `MemoryPane` gained `activeTag` prop with tag filter chips (Badge row, `#all`/`#tag ✕` toggle) and tag-filtered fact rendering; `query` prop now also filters within the active tag. New `KnowledgeInspector` pane (`src/tui/panes/middle/knowledge/knowledge.tsx`) renders fact count, embedding dimension, top tags by frequency, and a cosine-similarity search box via `@engine/knowledge/query`. `AppState` extended with `memoryQuery`, `memoryActiveTag`, `embeddingDims`; `emptyState` defaults `embeddingDims: 64`. `app-render-panes-metrics.tsx` wires both panes from controller state. Tests: 6 KnowledgeInspector + 6 MemoryPane cases. Gate: 783 pass / 0 fail / 1541 expect() across 168 files. PR #278. Audit: `audit-log/entries/2026-09-10-m2-knowledge-ui-278.md`.
