@@ -14,7 +14,6 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
-
 ## [0.1.13] - 2026-09-15
 
 > **Tag exception**: GitHub Release uses `v0.1.13-1` (non-canonical pre-release suffix) because remote tag `v0.1.13` (annotated object `7818d28` → commit `94ed145`) does not include fix `8d5c8e0` (`WebAssembly.Global` crash on Bun 1.4.0) and cannot be force-updated per owner decision. Creating a canonical Release on `v0.1.13` would ship binaries that crash on Bun 1.4.0. npm package `@miruamel/zhi@0.1.13` is published from the correct commit (`0660719`, includes `8d5c8e0`) and is unaffected. No canonical GitHub Release `v0.1.13` exists. See `audit-log/entries/2026-09-15-release-0.1.13-closing.md` § Exception.
