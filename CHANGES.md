@@ -14,11 +14,6 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
-## [Unreleased]
-
-### Fixed
-
-- **`MaxListenersExceededWarning` in TUI tests (#336)** — `renderToString` in `src/tui/core/test/render/render.ts` called `TestRenderer.create(el)` but never `renderer.unmount()`, so Ink's `useInput` cleanup never ran and every test render leaked a listener onto the singleton `StdinContext` `internal_eventEmitter` until the default cap (10) was exceeded. Wrapped `toJSON()` + `extractText()` in `try/finally { renderer.unmount(); }`, dropped the `as any` cast (accepts `ReactNode` per `.d.ts`), and tightened `extractText(node: any)` → `extractText(node: unknown)` with a `'children' in node` guard. Same fix applied to the only other unmounted `TestRenderer` in the repo: direct `TestRenderer.create(InspectorPane({ nodes }))` in `src/tui/panes/middle/inspector/inspector.test.tsx`. No source changes to `useInput`/`StdinContext` (already correct); no `bunfig.toml`, no `defaultMaxListeners` bump. Gate: 937 pass / 0 fail, no `MaxListenersExceededWarning` in stderr. PR #337.
 
 ## [0.1.13] - 2026-09-15
 
