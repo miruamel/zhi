@@ -14,7 +14,7 @@
 | `audit-log/entries/2026-09-15-release-0.1.13-closing.md` | Baris 24 diubah: "annotated tag object `7818d28` whose target commit is `94ed145`". |
 | Issue #315 | Komentar `5683393769` dihapus (backtick commands dieksekusi shell, SHA values di-strip). Komentar `5683425039` sudah benar. |
 | PR #329 | Dibuat dari branch `chore/restore-lint-staged-ignore`, semua 9 checks hijau, di-merge ke `main` di `3f86f07`. |
-| PR #327 | Di-close sebagai superseded (lint-staged ignore sudah dipulihkan). |
+| PR #327 | Di-merge di `cdb7dc5` (2026-09-15T17:38:12Z) — bump `lint-staged` `17.5.0` → `17.5.1`. Ignore restoration (PR #329) datang setelah merge; PR #327 tidak di-close. |
 
 **@see** https://github.com/miruamel/zhi/pull/329
 
@@ -26,7 +26,7 @@
 
 Commit `cd2b32b` (PR #326, `chore(deps): add react-test-renderer to dependabot ignore`) menggantikan entri `- dependency-name: "lint-staged"` dengan entri `react-test-renderer` baru. Entri triage asli (`audit-log/entries/2026-09-04-dependabot-pr-triage.md`) mencatat `lint-staged` sebagai salah satu dari 9 dependensi yang di-ignore dengan alasan.
 
-Regresi ini menyebabkan Dependabot mengusulkan update `lint-staged` — PR #327 (`17.5.0` → `17.5.1`) adalah konsekuensi langsung dan di-merge sebelum ignore dipulihkan.
+Regresi ini menyebabkan Dependabot mengusulkan update `lint-staged` — PR #327 (`17.5.0` → `17.5.1`) adalah konsekuensi langsung dan di-merge di `cdb7dc5` (2026-09-15T17:38:12Z) sebelum ignore dipulihkan. Ignore restoration (PR #329) datang setelah merge; PR #327 tidak di-close.
 
 **Perbaikan**: `lint-staged` ignore dikembalikan sebagai entri terpisah, berdampingan dengan `react-test-renderer` yang di-scope ke `update-types: ["version-update:semver-major"]`.
 
