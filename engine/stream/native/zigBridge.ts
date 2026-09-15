@@ -17,7 +17,6 @@ const MEMORY_BASE = 1024;
 export type Loaded = {
   instance: WebAssembly.Instance;
   memory: WebAssembly.Memory;
-  stack: WebAssembly.Global;
 };
 
 let cached: Loaded | null = null;
@@ -26,7 +25,7 @@ let wasmAvailable = true;
 
 /**
  * @brief Load instance WASM (singleton) dengan ABI import Zig.
- * @return {Promise<Loaded>} instance + memory + stack pointer.
+ * @return {Promise<Loaded>} instance + memory (no global — parse.zig is global-free).
  * @throw {Error} bila WASM file hilang atau instantiate gagal.
  */
 async function load(): Promise<Loaded> {
@@ -45,11 +44,7 @@ async function load(): Promise<Loaded> {
     const bytes = readFileSync(WASM_PATH);
     const { instance } = await WebAssembly.instantiate(bytes, {});
     const memory = instance.exports.memory as WebAssembly.Memory;
-    const stack = new WebAssembly.Global(
-      { value: 'i32', mutable: true },
-      memory.buffer.byteLength - 16,
-    );
-    cached = { instance, memory, stack };
+    cached = { instance, memory };
     resolve(cached);
   } catch (e) {
     reject(e as Error);
@@ -89,7 +84,7 @@ export async function parseSseWasm(chunk: string): Promise<string[]> {
   } catch {
     return [];
   }
-  const { instance, memory, stack } = inst;
+  const { instance, memory } = inst;
   const parse = (instance.exports as Record<string, unknown>).parse_sse as (
     i: number,
     il: number,
@@ -104,7 +99,6 @@ export async function parseSseWasm(chunk: string): Promise<string[]> {
   const curPages = memory.buffer.byteLength / PAGE;
   if (curPages < needPages) {
     memory.grow(needPages - curPages);
-    stack.value = memory.buffer.byteLength - 16;
   }
 
   const buf = memory.buffer;
