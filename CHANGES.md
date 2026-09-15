@@ -14,6 +14,12 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
+## [Unreleased]
+
+### Fixed
+
+- **`MaxListenersExceededWarning` in TUI tests (#336)** — `renderToString` in `src/tui/core/test/render/render.ts` called `TestRenderer.create(el)` but never `renderer.unmount()`, so Ink's `useInput` cleanup never ran and every test render leaked a listener onto the singleton `StdinContext` `internal_eventEmitter` until the default cap (10) was exceeded. Wrapped `toJSON()` + `extractText()` in `try/finally { renderer.unmount(); }`, dropped the `as any` cast (accepts `ReactNode` per `.d.ts`), and tightened `extractText(node: any)` → `extractText(node: unknown)` with a `'children' in node` guard. Same fix applied to the only other unmounted `TestRenderer` in the repo: direct `TestRenderer.create(InspectorPane({ nodes }))` in `src/tui/panes/middle/inspector/inspector.test.tsx`. No source changes to `useInput`/`StdinContext` (already correct); no `bunfig.toml`, no `defaultMaxListeners` bump. Gate: 937 pass / 0 fail, no `MaxListenersExceededWarning` in stderr. PR #337.
+
 ## [0.1.13] - 2026-09-15
 
 > **Tag exception**: GitHub Release uses `v0.1.13-1` (non-canonical pre-release suffix) because remote tag `v0.1.13` (annotated object `7818d28` → commit `94ed145`) does not include fix `8d5c8e0` (`WebAssembly.Global` crash on Bun 1.4.0) and cannot be force-updated per owner decision. Creating a canonical Release on `v0.1.13` would ship binaries that crash on Bun 1.4.0. npm package `@miruamel/zhi@0.1.13` is published from the correct commit (`0660719`, includes `8d5c8e0`) and is unaffected. No canonical GitHub Release `v0.1.13` exists. See `audit-log/entries/2026-09-15-release-0.1.13-closing.md` § Exception.
