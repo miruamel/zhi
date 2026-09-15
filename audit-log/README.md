@@ -1,5 +1,6 @@
 # audit-log
 
+- `2026-09-15-release-0.1.13.md` — Rilis `v0.1.13` dipromosikan di branch `release/v0.1.13` (commit `56b40e1`) dengan bump metadata, tag `v0.1.13` lokal, dan entri audit ini (entry ke-119). `package-lock.json` direkonstruksi dari `v0.1.12` dengan mengganti hanya dua string `version` — diff 2 baris, prettier kini lulus. Publish ke GitHub Release + npm masih menunggu `publish.yml`.
 - `2026-09-13-security-npm-audit-311.md` — Issue #311 and PR #312 closed the npm audit bypass: workflow now preserves `/tmp/audit.json`, invokes a fail-closed gate, blocks high/critical findings, and keeps moderate/low visible. Gate tests cover malformed, missing, empty, array-shaped, fractional, and severity reports; real audit reported zero findings. Follow-up #313 enforces integer counts.
 - `2026-09-13-ci-workflow-full-checks-309.md` — Issue #309 and PR #310 made CI workflow changes fail closed through the full gate, added safe `GITHUB_BASE_REF` argv handling, and verified 937 passing tests with zero audit findings.
 - `2026-09-13-architecture-repair-306.md` — PR #306 architecture repair moved the editor test under `test/`, extracted pure cursor/edit actions, and removed helpers from `editor.tsx` without behavior change. Repair commit `94584da`; merge commit `e8f6543`.
