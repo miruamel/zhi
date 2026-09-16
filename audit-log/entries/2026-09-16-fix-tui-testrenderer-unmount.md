@@ -43,8 +43,8 @@ Issue #335 dilaporkan sebagai duplicate dari #336 (sama akar penyebab). #335 dit
 
 - `bun test --isolate` (rerun 2026-09-16, `set -o pipefail`, full stdout/stderr di `/tmp/suite.out` + `/tmp/suite.err`): **937 pass, 0 fail, 1866 expect() calls, Ran 937 tests across 184 files**. Exit 0.
 - Zero `MaxListenersExceededWarning` di `/tmp/suite.err` (11 baris, tidak ada match).
-- `git diff f939836 HEAD --stat`: 3 file. Detail add/delete: `render.ts` +9/-5, `inspector.test.tsx` +13/-8, `audit-log/entries/2026-09-16-fix-tui-testrenderer-unmount.md` +55/-0. CHANGES.md tidak muncul.
-- `gh api repos/miruamel/zhi/pulls/337/files`: 3 file (setelah commit audit entry `16395ab`), CHANGES.md tidak ada.
+- `gh api repos/miruamel/zhi/pulls/337/files`: 3 file. Detail add/delete: `render.ts` +9/-5, `inspector.test.tsx` +13/-8, `audit-log/entries/2026-09-16-fix-tui-testrenderer-unmount.md` +55/-0. CHANGES.md tidak muncul.
+- `git diff f939836 HEAD --stat`: 3 file (audit entry +55, `render.ts` +14/-5, `inspector.test.tsx` +21/-8). CHANGES.md tidak muncul. Catatan: `git diff --stat` menggabungkan add+delete per file; angka add/delete di atas berasal dari GitHub API, bukan `git diff --stat`.
 
 ## Security
 
@@ -52,4 +52,4 @@ Tidak ada secret, tidak ada perubahan dependensi, tidak ada akses baru. Test-onl
 
 ## Status
 
-- PR #337 open di branch `fix/tui-testrenderer-unmount`, head `16395ab`. `gh pr checks 337`: Build TypeScript + Native WASM **pass**, CodeQL **pass**, Dependency Vulnerability Scan **pass**, Gate (lint + format + typecheck + test + arch) **pass**, Secret Detection (gitleaks) **pass**, invariants **pass**, Devin Review **pass**, Kilo Code Review **pass**. Siap untuk merge.
+- PR #337 open di branch `fix/tui-testrenderer-unmount`, head `8c197f1`. `gh pr checks 337`: Build TypeScript + Native WASM **pass**, CodeQL **pass**, CodeQL Analysis **pass**, Dependency Vulnerability Scan **pass**, Gate (lint + format + typecheck + test + arch) **pass**, Secret Detection (gitleaks) **pass**, invariants **pass**, Devin Review **pass**, Kilo Code Review **pass**. Satu "Gate (fork PR approval)" skipping (tidak berlaku untuk fork). Semua required checks hijau, `mergeable: MERGEABLE`. Siap untuk merge.
