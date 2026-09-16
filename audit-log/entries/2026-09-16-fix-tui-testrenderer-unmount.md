@@ -30,7 +30,7 @@ Issue #335 dilaporkan sebagai duplicate dari #336 (sama akar penyebab). #335 dit
 | Verifikasi caller | Semua `TestRenderer.create` di `src/tui/` (2 caller) sudah punya `unmount` yang match. |
 | Full suite | 937 pass, 0 fail, 1866 expect() across 184 files, zero `MaxListenersExceededWarning` di stderr. |
 | `tsc --noEmit` | Clean, exit 0. |
-| CHANGES.md | Net diff nol vs base `f939836`. Unreleased section ditambahkan lalu di-drop; sisa satu blank line yang di-commit (`8ef8bd9`). |
+| CHANGES.md | Net diff nol vs base `f939836` — Unreleased section ditambahkan lalu di-drop di PR #337. **Diperbaiki 2026-09-16 (commit `fdaf7a7`)**: `## [Unreleased]` + `### Fixed` entry ditambahkan di atas `[0.1.13]`, menggambarkan fix #336/#337 beserta referensi ke commit `ece9989` (squash merge #337).
 | PR #337 | Body di-update via `gh api -X PATCH` (workaround `gh pr edit` yang gagal karena Projects classic tidak didukung). Stat diperbaiki: 2 file, bukan 3. |
 
 ## Alternatives Rejected
@@ -52,4 +52,6 @@ Tidak ada secret, tidak ada perubahan dependensi, tidak ada akses baru. Test-onl
 
 ## Status
 
-- PR #337 open di branch `fix/tui-testrenderer-unmount`, head `8c197f1`. `gh pr checks 337`: Build TypeScript + Native WASM **pass**, CodeQL **pass**, CodeQL Analysis **pass**, Dependency Vulnerability Scan **pass**, Gate (lint + format + typecheck + test + arch) **pass**, Secret Detection (gitleaks) **pass**, invariants **pass**, Devin Review **pass**, Kilo Code Review **pass**. Satu "Gate (fork PR approval)" skipping (tidak berlaku untuk fork). Semua required checks hijau, `mergeable: MERGEABLE`. Siap untuk merge.
+- PR #337 **merged** 2026-09-16 `ece9989` (squash, `--delete-branch`). `gh pr checks 337` sebelum merge: Build TypeScript + Native WASM **pass**, CodeQL **pass**, CodeQL Analysis **pass**, Dependency Vulnerability Scan **pass**, Gate (lint + format + typecheck + test + arch) **pass**, Secret Detection (gitleaks) **pass**, invariants **pass**, Devin Review **pass**, Kilo Code Review **pass** (4 snapshots, recommendation: Merge). Satu "Gate (fork PR approval)" skipping (tidak berlaku untuk fork). Semua required checks hijau, `mergeable: MERGEABLE`.
+- Issue #336 **closed** otomatis oleh GitHub setelah merge.
+- Branch `fix/tui-testrenderer-unmount` di-delete oleh `--delete-branch`. Branch lokal tersisa: `main` only.
