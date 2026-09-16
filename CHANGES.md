@@ -14,6 +14,11 @@ Version bumps follow Conventional Commits aggregated per release:
 
 Historical entries (pre-rename) live in [`docs/archive/EXPLAIN-CHANGES.md`](docs/archive/EXPLAIN-CHANGES.md).
 
+## [Unreleased]
+
+### Fixed
+
+- **TUI test suite `MaxListenersExceededWarning` (#336, #337)** — `TestRenderer.create()` instances were never unmounted, so React `useInput` listeners accumulated across renders and Node emitted `MaxListenersExceededWarning`. `src/tui/core/test/render/render.ts` now wraps `renderer.toJSON()` + `extractText()` in `try/finally { renderer.unmount(); }`; `extractText(node: any)` → `extractText(node: unknown)` with `'children' in node` guard (dropped the `as any` cast). `src/tui/panes/middle/inspector/inspector.test.tsx` direct `TestRenderer.create` call also wrapped in `try/finally`. Full suite: 937 pass / 0 fail / 1866 expect() across 184 files, zero warnings in stderr. `tsc --noEmit` clean. Test-only change, no dependency or behavior impact.
 ## [0.1.13] - 2026-09-15
 
 > **Tag exception**: GitHub Release uses `v0.1.13-1` (non-canonical pre-release suffix) because remote tag `v0.1.13` (annotated object `7818d28` → commit `94ed145`) does not include fix `8d5c8e0` (`WebAssembly.Global` crash on Bun 1.4.0) and cannot be force-updated per owner decision. Creating a canonical Release on `v0.1.13` would ship binaries that crash on Bun 1.4.0. npm package `@miruamel/zhi@0.1.13` is published from the correct commit (`0660719`, includes `8d5c8e0`) and is unaffected. No canonical GitHub Release `v0.1.13` exists. See `audit-log/entries/2026-09-15-release-0.1.13-closing.md` § Exception.
