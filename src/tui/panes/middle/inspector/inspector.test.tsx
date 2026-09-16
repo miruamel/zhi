@@ -75,14 +75,19 @@ describe('InspectorPane', () => {
   });
 
   it('keeps only the left divider on the detail pane', () => {
-    const props = findSingleBorderProps(TestRenderer.create(InspectorPane({ nodes })).toJSON());
+    const renderer = TestRenderer.create(InspectorPane({ nodes }));
+    try {
+      const props = findSingleBorderProps(renderer.toJSON());
 
-    expect(props).toBeDefined();
-    expect(props?.borderStyle).toBe('single');
-    expect(props?.borderLeftColor).toBe(colors.fgDim);
-    expect(props?.borderLeft).not.toBe(false);
-    expect(props?.borderTop).toBe(false);
-    expect(props?.borderRight).toBe(false);
-    expect(props?.borderBottom).toBe(false);
+      expect(props).toBeDefined();
+      expect(props?.borderStyle).toBe('single');
+      expect(props?.borderLeftColor).toBe(colors.fgDim);
+      expect(props?.borderLeft).not.toBe(false);
+      expect(props?.borderTop).toBe(false);
+      expect(props?.borderRight).toBe(false);
+      expect(props?.borderBottom).toBe(false);
+    } finally {
+      renderer.unmount();
+    }
   });
 });
